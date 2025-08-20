@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-ro
 
 import { Layout } from '@/components/layout'
 import Authentication from '@/pages/Authentication'
+import NormalInvoicePage from '@/pages/NormalInvoice'
 
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
@@ -16,6 +17,21 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         index: true,
         element: <Authentication />,
+      },
+    ],
+  },
+  {
+    path: '/dashboard',
+    element: (
+      <>
+        <ScrollRestoration />
+        <Layout />
+      </>
+    ),
+    children: [
+      {
+        path: '/dashboard/invoice',
+        element: <NormalInvoicePage />,
       },
     ],
   },
