@@ -13,7 +13,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
   return (
     <>
       {/* Mobile overlay */}
-      {isOpen && <div className="bg-theme-gray-50/80 fixed inset-0 z-40" onClick={onClose} />}
+      {isOpen && <div className="bg-theme-night/80 fixed inset-0 z-40" onClick={onClose} />}
 
       {/* Sidebar */}
       <div
@@ -27,10 +27,10 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
             <div className="bg-theme-primary-600 flex h-8 w-8 items-center justify-center rounded-lg">
               <span className="text-theme-white text-heading-4">A</span>
             </div>
-            <span className="text-heading-4 text-theme-gray-50">Rentora</span>
+            <span className="text-heading-4 text-theme-night-50">Rentora</span>
           </div>
           <button
-            className="hover:bg-theme-gray-800 hover:text-theme-gray-50 rounded-md p-2 text-gray-400 lg:hidden"
+            className="hover:bg-theme-night-800 hover:text-theme-night-50 text-theme-night-400 cursor-pointer rounded-md p-2 lg:hidden"
             onClick={onClose}
           >
             <X className="h-5 w-5" />
