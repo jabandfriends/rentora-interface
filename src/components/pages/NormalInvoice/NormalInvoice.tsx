@@ -7,8 +7,8 @@ const NormalInvoice = () => {
   return (
     <>
       <PageTableHeader
-        title="All Invoices"
-        description="View and manage all invoices in one place. Check paid, unpaid, and overdue bills with clear details for easy tracking."
+        title="Invoices Management"
+        description="Manage and track all custom invoices and payments"
         stats={NORMAL_INVOICE_STATS}
         actionButton={<Button>New Invoice</Button>}
       />
