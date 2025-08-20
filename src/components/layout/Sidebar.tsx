@@ -1,13 +1,13 @@
-import { BarChart3, ChevronDown, Home, Settings, User, X } from 'lucide-react'
+import { ChevronDown, FileMinus2, Home, User, X } from 'lucide-react'
+import { NavLink } from 'react-router-dom'
 
+import { ROUTES } from '@/constants'
 import { cn } from '@/utilities'
 
 const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const menuItems = [
-    { icon: Home, label: 'Dashboard', href: '#', active: true },
-    { icon: User, label: 'Users', href: '#', active: false },
-    { icon: BarChart3, label: 'Analytics', href: '#', active: false },
-    { icon: Settings, label: 'Settings', href: '#', active: false },
+    { icon: Home, label: 'Dashboard', href: ROUTES.home.path },
+    { icon: FileMinus2, label: 'Invoices', href: ROUTES.normalInvoice.path },
   ]
 
   return (
@@ -44,17 +44,21 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
               const Icon = item.icon
               return (
                 <li key={index}>
-                  <a
-                    href={item.href}
-                    className={cn(`text-body-2 flex items-center rounded-lg px-4 py-3 duration-200`, [
-                      item.active
-                        ? 'border-theme-primary-600 bg-theme-primary-50 text-theme-primary-700 border-r-2'
-                        : 'hover:bg-theme-gray-900 text-theme-gray-50 hover:text-theme-gray-50',
-                    ])}
+                  <NavLink
+                    to={item.href}
+                    onClick={onClose}
+                    className={({ isActive }) =>
+                      cn(
+                        'text-body-2 flex items-center rounded-lg px-4 py-3 duration-200',
+                        isActive
+                          ? 'border-theme-primary-600 bg-theme-primary-50 text-theme-primary-700 border-r-2'
+                          : 'hover:bg-theme-gray-900 text-theme-gray-50 hover:text-theme-gray-50',
+                      )
+                    }
                   >
                     <Icon className="mr-3 h-5 w-5" />
                     {item.label}
-                  </a>
+                  </NavLink>
                 </li>
               )
             })}
