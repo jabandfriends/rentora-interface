@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-router-dom'
 
 import { Layout } from '@/components/layout'
+import { ROUTES } from '@/constants'
 import Authentication from '@/pages/Authentication'
 import NormalInvoicePage from '@/pages/NormalInvoice'
 
@@ -30,7 +31,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ),
     children: [
       {
-        path: '/dashboard/invoice',
+        path: ROUTES.normalInvoice.path,
         element: <NormalInvoicePage />,
       },
     ],
