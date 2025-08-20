@@ -19,7 +19,7 @@ const PageTableSearch = () => {
       <div className="flex gap-x-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button variant="outlineSecondary" className="flex items-center gap-2">
               <ChevronDown size={18} /> Status
             </Button>
           </DropdownMenuTrigger>
@@ -33,7 +33,7 @@ const PageTableSearch = () => {
         {/* Sort By */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button variant="outlineSecondary" className="flex items-center gap-2">
               <ChevronDown size={18} /> Sort By
             </Button>
           </DropdownMenuTrigger>

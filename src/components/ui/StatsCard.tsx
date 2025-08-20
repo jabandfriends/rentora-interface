@@ -1,14 +1,10 @@
+import { Card } from '@/components/common'
 import type { IStatsCardProps } from '@/types'
 import { cn } from '@/utilities'
 
 export const StatsCard = ({ title, count, icon, type, className }: IStatsCardProps) => {
   return (
-    <div
-      className={cn(
-        'bg-theme-light rounded-4xl w-78 duration-400 flex h-40 flex-col justify-center gap-y-2 px-6 hover:shadow-lg',
-        className,
-      )}
-    >
+    <Card className={cn('rounded-4xl w-78 h-40', className)}>
       <h3>{count}</h3>
       <p className="text-theme-secondary">{title}</p>
       <div className="flex items-center justify-end">
@@ -23,6 +19,6 @@ export const StatsCard = ({ title, count, icon, type, className }: IStatsCardPro
           {icon}
         </div>
       </div>
-    </div>
+    </Card>
   )
 }
