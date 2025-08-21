@@ -67,7 +67,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "focus:bg-theme-night-600/40 data-[variant=destructive]:text-disabled data-[variant=destructive]:focus:bg-theme-gray-500 dark:data-[variant=destructive]:focus:bg-theme-gray-500 data-[variant=destructive]:focus:text-disabled data-[variant=destructive]:*:[svg]:!text-disabled [&_svg:not([class*='text-'])]:text-disabled outline-hidden text-body-2 text-primary w-26 relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 data-[disabled]:pointer-events-none data-[inset]:pl-8 data-[disabled]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "focus:bg-theme-night-600/40 data-[variant=destructive]:text-disabled data-[variant=destructive]:focus:bg-theme-gray-500 dark:data-[variant=destructive]:focus:bg-theme-gray-500 data-[variant=destructive]:focus:text-disabled data-[variant=destructive]:*:[svg]:!text-disabled [&_svg:not([class*='text-'])]:text-disabled outline-hidden text-body-2 text-primary relative flex w-full cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 data-[disabled]:pointer-events-none data-[inset]:pl-8 data-[disabled]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}
