@@ -19,7 +19,7 @@ const NavBar = ({ onSidebarToggle }: { onSidebarToggle: () => void }) => {
 
         {/* Right icons */}
         <div className="flex items-center space-x-4">
-          <div className="bg-theme-night-600 flex h-8 w-8 items-center justify-center rounded-full">
+          <div className="bg-theme-night-600 flex size-8 items-center justify-center rounded-full">
             <span className="text-theme-gray-50 text-bodoy-2">JD</span>
           </div>
           <ChevronDown className="text-theme-gray-50 hidden h-4 w-4 md:block" />
