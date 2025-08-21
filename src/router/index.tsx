@@ -5,6 +5,7 @@ import { ROUTES } from '@/constants'
 import Authentication from '@/pages/Authentication'
 import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
 import NormalInvoicePage from '@/pages/NormalInvoice'
+import OverviewPage from '@/pages/Overview'
 
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       </>
     ),
     children: [
+      {
+        path: ROUTES.overview.path,
+        element: <OverviewPage />,
+      },
       {
         path: ROUTES.normalInvoice.path,
         element: <NormalInvoicePage />,

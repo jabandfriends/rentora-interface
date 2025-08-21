@@ -1,4 +1,5 @@
 export * from './Badge'
+export * from './Chart'
 export * from './PageTable'
 export * from './Pagination'
 export * from './PaginationBar'
