@@ -1,0 +1,35 @@
+import type { ReactNode } from 'react'
+
+import { StatsCard } from '@/components/ui'
+import type { IStatsCardProps } from '@/types'
+
+type IPageTableHeaderProps = {
+  title: string
+  description: string
+  stats: Array<IStatsCardProps>
+  actionButton?: ReactNode
+}
+
+const PageTableHeader = ({ title, description, stats, actionButton }: IPageTableHeaderProps) => {
+  return (
+    <div className="flex flex-col gap-8">
+      <div className="desktop:px-0 flex flex-col gap-1 px-4">
+        <div className="flex items-center justify-between">
+          <h2>{title}</h2>
+          {actionButton}
+        </div>
+
+        <p className="text-theme-secondary">{description}</p>
+      </div>
+
+      {/* Stats Card */}
+      <div className="desktop:flex-row desktop:justify-start flex flex-col items-center justify-center gap-3">
+        {stats.map((item: IStatsCardProps) => (
+          <StatsCard key={item.title} {...item} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default PageTableHeader

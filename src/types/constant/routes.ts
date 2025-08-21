@@ -5,4 +5,5 @@ type IRoute = {
 
 export type IRoutes = {
   home: Omit<IRoute, 'getURL'>
+  normalInvoice: Omit<IRoute, 'getURL'>
 }
