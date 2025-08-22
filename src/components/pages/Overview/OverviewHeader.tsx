@@ -26,7 +26,7 @@ const OverviewHeader = () => {
       </div>
 
       {/* stats card */}
-      <div className="flex items-center justify-center gap-x-12">
+      <div className="desktop:flex-row flex flex-col items-center justify-center gap-x-12 gap-y-6">
         {STAT_CARDS.map((item, index) => (
           <StatsCard className="justify-start py-5" key={index} {...item} />
         ))}
