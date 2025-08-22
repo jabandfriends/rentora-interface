@@ -1,4 +1,4 @@
-import { FileMinus2, Home } from 'lucide-react'
+import { Home } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 import { ROUTES } from '@/constants'
@@ -8,7 +8,6 @@ type SidebarItem = {
   label: string
   to: string
 }
-export const menuItems: Array<SidebarItem> = [
-  { icon: <Home />, label: 'Dashboard', to: ROUTES.home.path },
-  { icon: <FileMinus2 />, label: 'Invoices', to: ROUTES.normalInvoice.path },
+export const SIDEBAR_ITEMS: Array<SidebarItem> = [
+  { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.home.path },
 ]
