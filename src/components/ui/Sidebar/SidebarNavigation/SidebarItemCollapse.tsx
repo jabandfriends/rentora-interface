@@ -11,7 +11,7 @@ type ISidebarItemCollapseProps = {
   Pick<SidebarNavMenu, 'title' | 'icon' | 'menu'>
 const SidebarItemCollapse = ({ onClose, title, icon, menu, className, ...props }: ISidebarItemCollapseProps) => {
   return (
-    <Collapsible className={cn('flex flex-col gap-y-2', className)} {...props}>
+    <Collapsible className={cn('flex flex-col gap-y-1', className)} {...props}>
       <CollapsibleTrigger className="text-body-2 duration-20 hover:bg-theme-night-800/20 text-theme-night-50 hover:text-theme-gray-50 flex items-center gap-x-2 rounded-lg px-2 py-1.5">
         {icon}
         {title}
@@ -26,14 +26,14 @@ const SidebarItemCollapse = ({ onClose, title, icon, menu, className, ...props }
                 onClick={onClose}
                 className={({ isActive }) =>
                   cn(
-                    'text-body-2 flex items-center gap-x-2 rounded-lg px-2 py-1.5 duration-200',
+                    'flex items-center gap-x-2 rounded-lg px-2 py-1.5 duration-200',
                     isActive
                       ? 'border-theme-primary-600 bg-theme-primary-50 text-theme-primary-700 border-r-2'
                       : 'hover:bg-theme-night-800/20 text-theme-night-50 hover:text-theme-gray-50',
                   )
                 }
               >
-                {item.label}
+                <span className="text-body-2">{item.label}</span>
               </NavLink>
             )
           })}
