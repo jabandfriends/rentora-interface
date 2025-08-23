@@ -1,4 +1,12 @@
-import { ChevronDown, Menu } from 'lucide-react'
+import { LogOut, Menu, Settings, User } from 'lucide-react'
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/common'
 
 const NavBar = ({ onSidebarToggle }: { onSidebarToggle: () => void }) => {
   // hooks
@@ -17,13 +25,38 @@ const NavBar = ({ onSidebarToggle }: { onSidebarToggle: () => void }) => {
           </h4>
         </div>
 
-        {/* Right icons */}
-        <div className="flex items-center space-x-4">
-          <div className="bg-theme-night-600 flex size-8 items-center justify-center rounded-full">
-            <span className="text-body-2">JD</span>
-          </div>
-          <ChevronDown className="text-theme-night-50 desktop:block hidden size-4" />
-        </div>
+        {/* Right Profile*/}
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <div className="hover:bg-theme-night-800/15 flex cursor-pointer items-center space-x-4 rounded-lg px-2 py-1">
+              <div className="bg-theme-night-600 flex size-8 items-center justify-center rounded-full">
+                <span className="text-body-2">JD</span>
+              </div>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-62 flex flex-col" align="end">
+            <div className="flex items-center gap-x-2 p-2">
+              <div className="flex size-8 items-center justify-center rounded-lg border">
+                <User className="text-theme-primary size-4" />
+              </div>
+              <div className="text-theme-night-300">
+                <h5>John Doe</h5>
+                <p className="text-body-3 text-theme-secondary">john@example.com</p>
+              </div>
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <User className="text-theme-secondary-400" /> Account
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Settings className="text-theme-secondary-400" /> Settings
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-theme-error">
+              <LogOut className="text-theme-error" /> Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   )
