@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-ro
 
 import { Layout } from '@/components/layout'
 import { ROUTES } from '@/constants'
+import ApartmentCreatePage from '@/pages/ApartmentCreate'
 import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
 import NormalInvoicePage from '@/pages/NormalInvoice'
 import OverviewPage from '@/pages/Overview'
@@ -19,6 +20,21 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         index: true,
         element: <OverviewPage />,
+      },
+    ],
+  },
+  {
+    path: '/setup',
+    element: (
+      <>
+        <ScrollRestoration />
+        <Layout />
+      </>
+    ),
+    children: [
+      {
+        path: ROUTES.apartmentCreate.path,
+        element: <ApartmentCreatePage />,
       },
     ],
   },

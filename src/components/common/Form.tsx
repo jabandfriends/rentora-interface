@@ -84,7 +84,7 @@ function FormLabel({ className, ...props }: ComponentProps<typeof Label>) {
     <Label
       data-slot="form-label"
       data-error={!!error}
-      className={cn('data-[error=true]:text-destructive', className)}
+      className={cn('data-[error=true]:text-theme-error text-body-2 font-semibold', className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -112,7 +112,7 @@ function FormDescription({ className, ...props }: ComponentProps<'p'>) {
     <p
       data-slot="form-description"
       id={formDescriptionId}
-      className={cn('text-muted-foreground text-sm', className)}
+      className={cn('text-theme-secondary text-body-2', className)}
       {...props}
     />
   )
@@ -127,7 +127,7 @@ function FormMessage({ className, ...props }: ComponentProps<'p'>) {
   }
 
   return (
-    <p data-slot="form-message" id={formMessageId} className={cn('text-destructive text-sm', className)} {...props}>
+    <p data-slot="form-message" id={formMessageId} className={cn('text-theme-error text-body-2', className)} {...props}>
       {body}
     </p>
   )
