@@ -4,22 +4,20 @@ import { Card } from '@/components/common'
 import { type ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui'
 
 const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
+  { month: 'May', total: 209 },
+  { month: 'June', total: 214 },
+  { month: 'July', total: 186 },
+  { month: 'August', total: 305 },
+  { month: 'September', total: 237 },
+  { month: 'October', total: 73 },
+  { month: 'November', total: 209 },
+  { month: 'December', total: 214 },
 ]
 
 const chartConfig = {
-  desktop: {
-    label: 'Desktop',
+  total: {
+    label: 'total',
     color: '#2563eb',
-  },
-  mobile: {
-    label: 'Mobile',
-    color: '#60a5fa',
   },
 } satisfies ChartConfig
 
@@ -34,10 +32,9 @@ const RentChart = () => {
         <BarChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />
           <XAxis dataKey="month" />
-          <YAxis dataKey="desktop" />
+          <YAxis dataKey="total" />
           <ChartTooltip />
-          <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-          <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+          <Bar dataKey="total" fill="var(--color-total)" radius={4} />
         </BarChart>
       </ChartContainer>
     </Card>
