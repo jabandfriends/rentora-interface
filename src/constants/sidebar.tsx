@@ -10,9 +10,9 @@ export const SIDEBAR_ITEMS: Array<SidebarMenu> = [
 
 //sidebar invoice collapse menu
 export const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
-  { label: 'Normal Invoice', to: ROUTES.normalInvoice.path },
-  { label: 'Monthly Invoice', to: ROUTES.monthlyInvoice.path },
-  { label: 'Overdue Invoice', to: ROUTES.overdueInvoice.path },
+  { label: 'Normal Invoices', to: ROUTES.normalInvoice.path },
+  { label: 'Monthly Invoices', to: ROUTES.monthlyInvoice.path },
+  { label: 'Overdue Invoices', to: ROUTES.overdueInvoice.path },
 ]
 
 //sidebar bottom items
