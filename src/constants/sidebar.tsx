@@ -8,10 +8,11 @@ export const SIDEBAR_ITEMS: Array<SidebarMenu> = [
   { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.home.path },
 ]
 
-//sidebar collapse menu
+//sidebar invoice collapse menu
 export const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
   { label: 'Normal Invoice', to: ROUTES.normalInvoice.path },
   { label: 'Monthly Invoice', to: ROUTES.monthlyInvoice.path },
+  { label: 'Overdue Invoice', to: ROUTES.overdueInvoice.path },
 ]
 
 //sidebar bottom items
