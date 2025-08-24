@@ -1,6 +1,5 @@
 export * from './device'
 export * from './invoice'
-export * from './question'
 export * from './reqexp'
 export * from './routes'
 export * from './sidebar'

@@ -1,4 +1,5 @@
 export * from './Accordion'
+export * from './Collapsible'
 export * from './Dialog'
 export * from './Drawer'
 export * from './InputOTP'
