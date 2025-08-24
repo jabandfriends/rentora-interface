@@ -12,7 +12,7 @@ export const SIDEBAR_ITEMS: Array<SidebarMenu> = [
 export const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
   { label: 'Normal Invoices', to: ROUTES.normalInvoice.path },
   { label: 'Monthly Invoices', to: ROUTES.monthlyInvoice.path },
-  { label: 'Overdue Invoicesasd', to: ROUTES.overdueInvoice.path },
+  { label: 'Overdue Invoices', to: ROUTES.overdueInvoice.path },
 ]
 
 //sidebar bottom items
