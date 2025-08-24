@@ -30,7 +30,7 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
   },
   {
     type: 'collapsible',
-    title: 'Invoice',
+    title: 'Invoices',
     icon: <FileSpreadsheet size={16} />,
     menu: SIDEBAR_COLLAPSE_ITEMS,
   },
