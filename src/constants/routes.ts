@@ -4,4 +4,5 @@ export const ROUTES: IRoutes = {
   home: { path: '/' },
   normalInvoice: { path: '/dashboard/normal-invoice' },
   monthlyInvoice: { path: '/dashboard/monthly-invoice' },
+  overview: { path: '/dashboard/overview' },
 }

@@ -1,15 +1,18 @@
 import { X } from 'lucide-react'
 import type { HTMLAttributes } from 'react'
+import { Link } from 'react-router-dom'
 
 import { cn } from '@/utilities'
 
-type ISidebarHeaderProps = HTMLAttributes<HTMLDivElement> & {
+type ISidebarHeaderProps = HTMLAttributes<HTMLAnchorElement> & {
   onClose: () => void
   title: string
 }
 const SidebarHeader = ({ onClose, title, className, ...props }: ISidebarHeaderProps) => {
   return (
-    <div
+    <Link
+      to="/"
+      onClick={onClose}
       {...props}
       className={cn(
         'hover:bg-theme-night-800/20 border-theme-secondary-300 flex h-16 cursor-pointer items-center justify-between border-b px-4 duration-200',
@@ -28,7 +31,7 @@ const SidebarHeader = ({ onClose, title, className, ...props }: ISidebarHeaderPr
       >
         <X className="size-5" />
       </button>
-    </div>
+    </Link>
   )
 }
 
