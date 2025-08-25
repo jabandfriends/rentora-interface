@@ -5,7 +5,7 @@ import type { SidebarMenu, SidebarNavMenu } from '@/types'
 
 //sidebar menu
 export const SIDEBAR_ITEMS: Array<SidebarMenu> = [
-  { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.home.path },
+  { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.overview.path },
 ]
 
 //sidebar collapse menu
