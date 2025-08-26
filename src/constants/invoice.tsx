@@ -2,28 +2,28 @@ import { CircleAlert, CircleCheckBig, Clock, DollarSign } from 'lucide-react'
 
 import type { IStatsCardProps } from '@/types'
 
-export const INVOICE_STATS: Array<IStatsCardProps> = [
-  {
-    title: 'Total Bills',
-    count: 5,
-    icon: <DollarSign size={22} />,
-  },
-  {
-    title: 'Paid',
-    count: 2,
-    icon: <DollarSign size={22} />,
-  },
-  {
-    title: 'Unpaid',
-    count: 3,
-    icon: <DollarSign size={22} />,
-  },
-  {
-    title: 'Overdue',
-    count: 1,
-    icon: <DollarSign size={22} />,
-  },
-]
+// export const INVOICE_STATS: Array<IStatsCardProps> = [
+//   {
+//     title: 'Total Bills',
+//     count: 5,
+//     icon: <DollarSign size={22} />,
+//   },
+//   {
+//     title: 'Paid',
+//     count: 2,
+//     icon: <DollarSign size={22} />,
+//   },
+//   {
+//     title: 'Unpaid',
+//     count: 3,
+//     icon: <DollarSign size={22} />,
+//   },
+//   {
+//     title: 'Overdue',
+//     count: 1,
+//     icon: <DollarSign size={22} />,
+//   },
+// ]
 
 export const INVOICE_STATUS: Array<string> = ['All', 'Paid', 'Unpaid', 'Overdue']
 export const INVOICE_SORT: Array<string> = ['Date', 'Amount', 'Status']
