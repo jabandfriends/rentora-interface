@@ -3,10 +3,9 @@ import { Plus } from 'lucide-react'
 
 //components
 import { Button } from '@/components/common'
+import NormalInvoiceTable from '@/components/pages/NormalInvoice/NormalInvoiceTable'
 import { PageTableHeader, PageTableSearch } from '@/components/ui'
 import { NORMAL_INVOICE_DATA, ROOM_REPORT_STATS } from '@/constants'
-
-import NormalInvoiceTable from '../../NormalInvoice/NormalInvoiceTable'
 
 export const RoomReport = () => {
     return (
