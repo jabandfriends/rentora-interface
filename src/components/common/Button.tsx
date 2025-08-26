@@ -9,10 +9,11 @@ import { Skeleton } from './Skeleton'
 const MAP_SKELETON_SIZE: Record<IButtonVariants['size'], ISkeletonProps['size']> = {
   default: 'md',
   sm: 'sm',
+  icon: 'md',
 }
 
 const buttonVariants: ICompVariantConfig<IButtonVariants> = tv({
-  base: 'border-theme-primary text-secondary disabled:bg-button-disabled disabled:text-disabled box-border whitespace-nowrap rounded-md border transition-colors hover:cursor-pointer focus-visible:outline-none disabled:pointer-events-none disabled:border-none disabled:border-transparent data-[disabled=true]:pointer-events-none',
+  base: `focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-theme-error/20 dark:aria-invalid:ring-theme-error/40 aria-invalid:border-theme-error [&_svg:not([class*='size- '])]:size-4 text-body-2 inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold outline-none duration-200 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`,
   variants: {
     block: {
       true: 'block w-full',
@@ -21,14 +22,18 @@ const buttonVariants: ICompVariantConfig<IButtonVariants> = tv({
     variant: {
       primary: 'bg-theme-primary hover:bg-theme-primary-400 text-theme-white',
       secondary: 'text-theme-primary bg-theme-white hover:bg-theme-primary-400 hover:text-secondary',
-      outlineSecondary: 'border-theme-secondary-400 hover:bg-theme-secondary-400 hover:text-theme-white bg-transparent',
+      outlineSecondary:
+        'border-theme-secondary-400 hover:bg-theme-secondary-400 hover:text-theme-white border bg-transparent',
       vanilla: 'hover:bg-theme-white/10 border-transparent',
-      outline: 'text-theme-primary hover:bg-theme-primary-400 hover:text-secondary bg-transparent',
+      outline: 'text-theme-primary hover:bg-theme-primary-400 hover:text-secondary border bg-transparent',
       error: 'text-theme-white bg-theme-error hover:bg-theme-error-400 border-transparent',
+      ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+      link: 'text-primary underline-offset-4 hover:underline',
     },
     size: {
       default: '!text-heading-5 h-11 px-7 py-3',
       sm: '!text-heading-6 h-8 rounded-lg px-7 py-2',
+      icon: 'size-9',
     },
   },
   defaultVariants: {
