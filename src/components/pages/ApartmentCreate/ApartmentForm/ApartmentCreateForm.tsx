@@ -15,14 +15,14 @@ const ApartmentCreateForm = () => {
       address: '',
       phone: '',
       taxId: '',
-      paymentDueDate: '',
+      paymentDueDate: new Date().toISOString(),
       lateFee: '',
     },
   })
 
   const onSubmit = (data: APARTMENT_FORM_VALUES) => {
     //implement API
-    console.log(data)
+    alert(JSON.stringify(data, null, 2))
   }
 
   return (

@@ -20,8 +20,8 @@ export const APARTMENT_FORM_SCHEMA = z.object({
   taxId: z.string().min(13, {
     message: 'Tax ID must have at least 13 characters',
   }),
-  paymentDueDate: z.string().min(1, {
-    message: 'Payment due date is required',
+  paymentDueDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: 'Invalid date',
   }),
   lateFee: z.string().min(1, {
     message: 'Late fee is required',
@@ -63,6 +63,7 @@ export const APARTMENT_FORM_SECTIONS: Array<FORM_SECTION<APARTMENT_FORM_FIELD>> 
         description: 'This is your phone number.',
         prefix: <Phone size={16} />,
         type: 'number',
+        maxChars: 10,
       },
       {
         key: APARTMENT_FORM_FIELD_KEY_ENUM.taxId,
@@ -71,6 +72,7 @@ export const APARTMENT_FORM_SECTIONS: Array<FORM_SECTION<APARTMENT_FORM_FIELD>> 
         description: 'This is your tax ID.',
         prefix: <DollarSign size={16} />,
         type: 'number',
+        maxChars: 13,
       },
     ],
   },
@@ -94,6 +96,7 @@ export const APARTMENT_FORM_SECTIONS: Array<FORM_SECTION<APARTMENT_FORM_FIELD>> 
         description: 'This is your late fee.',
         prefix: <DollarSign size={16} />,
         type: 'number',
+        decimal: true,
       },
     ],
   },
