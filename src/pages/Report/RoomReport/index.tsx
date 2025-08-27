@@ -1,4 +1,4 @@
-import RoomReport from '@/components/pages/Report/RoomReport/RoomReport'
+import { RoomReport } from '@/components/pages/Report/RoomReport/'
 
 const RoomReportPage = () => {
   return (
