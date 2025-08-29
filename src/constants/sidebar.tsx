@@ -8,6 +8,11 @@ export const SIDEBAR_ITEMS: Array<SidebarMenu> = [
   { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.home.path },
 ]
 
+//sidebar all rooms menu
+export const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
+  { icon: <Home size={16} />, label: 'All Rooms', to: ROUTES.allRoom.path },
+]
+
 //sidebar collapse menu
 export const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
   { label: 'Normal Invoice', to: ROUTES.normalInvoice.path },
@@ -32,6 +37,12 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
     title: 'Invoice',
     icon: <FileSpreadsheet size={16} />,
     menu: SIDEBAR_COLLAPSE_ITEMS,
+  },
+  {
+    type: 'item',
+    title: 'All Room',
+    icon: <FileSpreadsheet size={16} />,
+    menu: SIDEBAR_ALL_ROOMS,
   },
 ]
 

@@ -1,3 +1,4 @@
+export * from './allroom'
 export * from './device'
 export * from './invoice'
 export * from './overview'
