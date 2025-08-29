@@ -1,1 +1,1 @@
-export { default as Authentication_body } from './Authentication'
+export { default as AuthenticationBody } from './Authentication'
