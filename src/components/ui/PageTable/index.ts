@@ -1,2 +1,4 @@
+export { default as PageTableBar } from './PageTableBar'
+export { default as PageTableBody } from './PageTableBody'
 export { default as PageTableHeader } from './PageTableHeader'
 export { default as PageTableSearch } from './PageTableSearch'
