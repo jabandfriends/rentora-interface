@@ -1,4 +1,4 @@
-import { FileSpreadsheet, Home, Settings } from 'lucide-react'
+import { FileSpreadsheet, Home, Settings, Table } from 'lucide-react'
 
 import { ROUTES } from '@/constants'
 import type { SidebarMenu, SidebarNavMenu } from '@/types'
@@ -10,7 +10,7 @@ export const SIDEBAR_ITEMS: Array<SidebarMenu> = [
 
 //sidebar all rooms menu
 export const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
-  { icon: <Home size={16} />, label: 'All Rooms', to: ROUTES.allRoom.path },
+  { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.path },
 ]
 
 //sidebar collapse menu
@@ -41,7 +41,7 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
   {
     type: 'item',
     title: 'All Room',
-    icon: <FileSpreadsheet size={16} />,
+    icon: <Table size={16} />,
     menu: SIDEBAR_ALL_ROOMS,
   },
 ]
