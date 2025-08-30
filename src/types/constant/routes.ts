@@ -10,9 +10,6 @@ export type IRoutes = {
   monthlyInvoice: Omit<IRoute, 'getURL'>
   overdueInvoice: Omit<IRoute, 'getURL'>
   overview: Omit<IRoute, 'getURL'>
-<<<<<<< HEAD
   allRoom: Omit<IRoute, 'getURL'>
-=======
   roomReport: Omit<IRoute, 'getURL'>
->>>>>>> develop
 }
