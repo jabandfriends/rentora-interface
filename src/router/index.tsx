@@ -8,6 +8,7 @@ import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
 import NormalInvoicePage from '@/pages/NormalInvoice'
 import OverdueInvoicePage from '@/pages/OverdueInvoice'
 import OverviewPage from '@/pages/Overview'
+import RoomReport from '@/pages/Report/RoomReport'
 
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.monthlyInvoice.path,
         element: <MonthlyInvoicePage />,
+      },
+      {
+        path: ROUTES.roomReport.path,
+        element: <RoomReport />,
       },
       {
         path: ROUTES.overdueInvoice.path,
