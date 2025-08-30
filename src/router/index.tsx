@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-ro
 
 import { Layout } from '@/components/layout'
 import { ROUTES } from '@/constants'
+import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
 import Authentication from '@/pages/Authentication'
 import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
@@ -61,6 +62,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.monthlyInvoice.path,
         element: <MonthlyInvoicePage />,
+      },
+      {
+        path: ROUTES.allRoom.path,
+        element: <AllRoomsPage />,
       },
       {
         path: ROUTES.roomReport.path,

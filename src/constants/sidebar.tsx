@@ -1,4 +1,4 @@
-import { FileSpreadsheet, FileText, Home, Settings } from 'lucide-react'
+import { FileSpreadsheet, FileText, Home, Settings, Table } from 'lucide-react'
 
 import { ROUTES } from '@/constants'
 import type { SidebarMenu, SidebarNavMenu } from '@/types'
@@ -8,6 +8,12 @@ export const SIDEBAR_ITEMS: Array<SidebarMenu> = [
   { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.overview.path },
 ]
 
+//sidebar all rooms menu
+export const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
+  { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.path },
+]
+
+//sidebar collapse menu
 //sidebar collapse report menu
 export const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [{ label: 'Room Report', to: ROUTES.roomReport.path }]
 
@@ -36,6 +42,12 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
     title: 'Invoices',
     icon: <FileSpreadsheet size={16} />,
     menu: SIDEBAR_COLLAPSE_ITEMS,
+  },
+  {
+    type: 'item',
+    title: 'All Room',
+    icon: <Table size={16} />,
+    menu: SIDEBAR_ALL_ROOMS,
   },
   {
     type: 'collapsible',

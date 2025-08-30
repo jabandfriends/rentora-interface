@@ -1,3 +1,4 @@
+export * from './allroom'
 export * from './apartment-form'
 export * from './device'
 export * from './invoice'
