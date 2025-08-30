@@ -17,24 +17,18 @@ const SidebarBottom = ({ onClose, className, ...props }: ISidebarBottomProps) =>
         {SIDEBAR_BOTTOM_ITEMS_MENU?.map((item: SidebarNavMenu, index: number) => {
           if (item.type === 'item') {
             return (
-              <>
+              <div className="space-y-1" key={`sidebar-item-${item.menu}-${index}`}>
                 {item.topic && <h6 className="text-theme-secondary px-2 font-semibold">{item.topic}</h6>}
-                <SidebarItem key={'sidebar-item-' + index} menu={item.menu} onClose={onClose} />
-              </>
+                <SidebarItem menu={item.menu} onClose={onClose} />
+              </div>
             )
           }
           if (item.type === 'collapsible') {
             return (
-              <>
+              <div key={`sidebar-item-collapse-${item.menu}-${index}`}>
                 {item.topic && <h6 className="text-theme-secondary px-2 font-semibold">{item.topic}</h6>}
-                <SidebarItemCollapse
-                  title={item.title}
-                  icon={item.icon}
-                  key={'sidebar-item-collapse-' + index}
-                  menu={item.menu}
-                  onClose={onClose}
-                />
-              </>
+                <SidebarItemCollapse title={item.title} icon={item.icon} menu={item.menu} onClose={onClose} />
+              </div>
             )
           }
         })}

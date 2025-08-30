@@ -2,8 +2,11 @@ import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-ro
 
 import { Layout } from '@/components/layout'
 import { ROUTES } from '@/constants'
+import ApartmentCreatePage from '@/pages/ApartmentCreate'
+import Authentication from '@/pages/Authentication'
 import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
 import NormalInvoicePage from '@/pages/NormalInvoice'
+import OverdueInvoicePage from '@/pages/OverdueInvoice'
 import OverviewPage from '@/pages/Overview'
 import RoomReport from '@/pages/Report/RoomReport'
 
@@ -19,7 +22,22 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <OverviewPage />,
+        element: <Authentication />,
+      },
+    ],
+  },
+  {
+    path: '/setup',
+    element: (
+      <>
+        <ScrollRestoration />
+        <Layout />
+      </>
+    ),
+    children: [
+      {
+        path: ROUTES.apartmentCreate.path,
+        element: <ApartmentCreatePage />,
       },
     ],
   },
@@ -33,6 +51,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ),
     children: [
       {
+        path: ROUTES.overview.path,
+        element: <OverviewPage />,
+      },
+      {
         path: ROUTES.normalInvoice.path,
         element: <NormalInvoicePage />,
       },
@@ -43,6 +65,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.roomReport.path,
         element: <RoomReport />,
+      },
+      {
+        path: ROUTES.overdueInvoice.path,
+        element: <OverdueInvoicePage />,
       },
     ],
   },
