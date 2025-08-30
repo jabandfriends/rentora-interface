@@ -1,11 +1,11 @@
-import { FileSpreadsheet, Home, Settings, Table } from 'lucide-react'
+import { FileSpreadsheet, FileText, Home, Settings, Table } from 'lucide-react'
 
 import { ROUTES } from '@/constants'
 import type { SidebarMenu, SidebarNavMenu } from '@/types'
 
 //sidebar menu
 export const SIDEBAR_ITEMS: Array<SidebarMenu> = [
-  { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.home.path },
+  { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.overview.path },
 ]
 
 //sidebar all rooms menu
@@ -14,9 +14,14 @@ export const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
 ]
 
 //sidebar collapse menu
+//sidebar collapse report menu
+export const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [{ label: 'Room Report', to: ROUTES.roomReport.path }]
+
+//sidebar invoice collapse menu
 export const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
-  { label: 'Normal Invoice', to: ROUTES.normalInvoice.path },
-  { label: 'Monthly Invoice', to: ROUTES.monthlyInvoice.path },
+  { label: 'Normal Invoices', to: ROUTES.normalInvoice.path },
+  { label: 'Monthly Invoices', to: ROUTES.monthlyInvoice.path },
+  { label: 'Overdue Invoices', to: ROUTES.overdueInvoice.path },
 ]
 
 //sidebar bottom items
@@ -34,7 +39,7 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
   },
   {
     type: 'collapsible',
-    title: 'Invoice',
+    title: 'Invoices',
     icon: <FileSpreadsheet size={16} />,
     menu: SIDEBAR_COLLAPSE_ITEMS,
   },
@@ -43,6 +48,12 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
     title: 'All Room',
     icon: <Table size={16} />,
     menu: SIDEBAR_ALL_ROOMS,
+  },
+  {
+    type: 'collapsible',
+    title: 'Reports',
+    icon: <FileText size={16} />,
+    menu: SIDEBAR_COLLAPSE_ROOMS_REPORT,
   },
 ]
 
