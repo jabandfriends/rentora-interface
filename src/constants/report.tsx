@@ -88,13 +88,13 @@ export const ELECTRIC_WATER_REPORT_STATS: Array<IStatsCardProps> = [
 ]
 
 export const ELECTRIC_WATER_REPORT_TABLE_HEADER: Array<string> = [
-  'room',
-  'tenant',
-  'electricUsage',
-  'electricBills',
-  'waterUsage',
-  'waterBills',
-  'totalBills',
+  'Room',
+  'Tenant',
+  'Electric Usage',
+  'Electric Bills',
+  'Water Usage',
+  'Water Bills',
+  'Total Bills',
 ]
 
 export const ELECTRIC_WATER_REPORT_DATA = [
