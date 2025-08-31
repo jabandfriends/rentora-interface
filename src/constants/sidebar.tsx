@@ -15,7 +15,10 @@ export const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
 
 //sidebar collapse menu
 //sidebar collapse report menu
-export const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [{ label: 'Room Report', to: ROUTES.roomReport.path }]
+export const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [
+  { label: 'Room Report', to: ROUTES.roomReport.path },
+  { label: 'Receipt Report', to: ROUTES.receiptReport.path },
+]
 
 //sidebar invoice collapse menu
 export const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [

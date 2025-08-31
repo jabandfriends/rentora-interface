@@ -12,4 +12,5 @@ export type IRoutes = {
   overview: Omit<IRoute, 'getURL'>
   allRoom: Omit<IRoute, 'getURL'>
   roomReport: Omit<IRoute, 'getURL'>
+  receiptReport: Omit<IRoute, 'getURL'>
 }

@@ -9,4 +9,5 @@ export const ROUTES: IRoutes = {
   overview: { path: '/dashboard/overview' },
   allRoom: { path: '/dashboard/all-room' },
   roomReport: { path: '/dashboard/report/room' },
+  receiptReport: { path: '/dashboard/report/receipt' },
 }
