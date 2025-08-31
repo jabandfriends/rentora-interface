@@ -31,10 +31,8 @@ const ReceiptReportTable = ({ data }: IReceiptReportTableProps) => {
               <TableCell>
                 <Badge variant="success">{item.status}</Badge>
               </TableCell>
-              <TableCell>
+              <TableCell className="flex gap-2">
                 <SquarePen size={20} />
-              </TableCell>
-              <TableCell>
                 <Trash size={20} />
               </TableCell>
             </TableRow>
