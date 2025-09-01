@@ -1,5 +1,6 @@
 export * from './allroom'
 export * from './apartment-form'
+export * from './apartment-setup'
 export * from './authentication-form'
 export * from './device'
 export * from './invoice'
