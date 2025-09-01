@@ -1,5 +1,6 @@
 export * from './button'
 export * from './datetimepicker'
+export * from './image'
 export * from './input'
 export * from './popover'
 export * from './skeleton'
