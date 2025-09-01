@@ -9,6 +9,7 @@ export type IRoutes = {
   apartmentSetup: Omit<IRoute, 'getURL'>
   normalInvoice: Omit<IRoute, 'getURL'>
   monthlyInvoice: Omit<IRoute, 'getURL'>
+  maintenance: Omit<IRoute, 'getURL'>
   overdueInvoice: Omit<IRoute, 'getURL'>
   overview: Omit<IRoute, 'getURL'>
   allRoom: Omit<IRoute, 'getURL'>

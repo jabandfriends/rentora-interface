@@ -1,4 +1,4 @@
-import { FileSpreadsheet, FileText, Home, Settings, Table } from 'lucide-react'
+import { FileSpreadsheet, FileText, Home, Settings, Table, Wrench } from 'lucide-react'
 
 import { ROUTES } from '@/constants'
 import type { SidebarMenu, SidebarNavMenu } from '@/types'
@@ -32,6 +32,9 @@ export const SIDEBAR_BOTTOM_ITEMS: Array<SidebarMenu> = [
   { icon: <Settings size={16} />, label: 'Settings', to: ROUTES.home.path },
 ]
 
+//sidebar maintenance menu
+export const SIDEBAR_MAINTENANCE: Array<SidebarMenu> = [{ icon: <Wrench size={16} />, label: 'Maintenance', to: ROUTES.maintenance.path }]
+
 //sidebar menu items
 export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
   {
@@ -57,6 +60,12 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
     title: 'Reports',
     icon: <FileText size={16} />,
     menu: SIDEBAR_COLLAPSE_REPORT_ITEMS,
+  },
+  {
+    type: 'item',
+    title: 'Maintenance',
+    icon: <Wrench size={16} />,
+    menu: SIDEBAR_MAINTENANCE,
   },
 ]
 
