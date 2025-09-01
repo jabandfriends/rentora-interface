@@ -25,7 +25,7 @@ const buttonVariants: ICompVariantConfig<IButtonVariants> = tv({
       outlineSecondary:
         'border-theme-secondary-400 hover:bg-theme-secondary-400 hover:text-theme-white border bg-transparent',
       vanilla: 'hover:bg-theme-white/10 border-transparent',
-      outline: 'text-theme-primary hover:bg-theme-primary-400 hover:text-secondary border bg-transparent',
+      outline: 'text-theme-primary hover:bg-theme-primary hover:text-theme-white border bg-transparent',
       error: 'text-theme-white bg-theme-error hover:bg-theme-error-400 border-transparent',
       ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
       link: 'text-primary underline-offset-4 hover:underline',

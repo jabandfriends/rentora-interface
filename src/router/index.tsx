@@ -4,12 +4,14 @@ import { Layout } from '@/components/layout'
 import { ROUTES } from '@/constants'
 import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
+import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication'
 import MaintenancePage from '@/pages/Maintenance'
 import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
 import NormalInvoicePage from '@/pages/NormalInvoice'
 import OverdueInvoicePage from '@/pages/OverdueInvoice'
 import OverviewPage from '@/pages/Overview'
+import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import RoomReport from '@/pages/Report/RoomReport'
 
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
@@ -40,6 +42,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.apartmentCreate.path,
         element: <ApartmentCreatePage />,
+      },
+      {
+        path: ROUTES.apartmentSetup.path,
+        element: <ApartmentSetup />,
       },
     ],
   },
@@ -75,6 +81,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.roomReport.path,
         element: <RoomReport />,
+      },
+      {
+        path: ROUTES.electricWaterReport.path,
+        element: <ElectricWaterReportPage />,
       },
       {
         path: ROUTES.overdueInvoice.path,

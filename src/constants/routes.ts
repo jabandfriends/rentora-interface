@@ -3,6 +3,7 @@ import type { IRoutes } from '@/types'
 export const ROUTES: IRoutes = {
   home: { path: '/' },
   apartmentCreate: { path: '/setup/apartment-create' },
+  apartmentSetup: { path: '/setup/apartment-setup' },
   normalInvoice: { path: '/dashboard/normal-invoice' },
   monthlyInvoice: { path: '/dashboard/monthly-invoice' },
   maintenance: { path: '/dashboard/maintenance' },
@@ -10,4 +11,5 @@ export const ROUTES: IRoutes = {
   overview: { path: '/dashboard/overview' },
   allRoom: { path: '/dashboard/all-room' },
   roomReport: { path: '/dashboard/report/room' },
+  electricWaterReport: { path: '/dashboard/report/electric-water' },
 }

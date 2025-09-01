@@ -7,7 +7,7 @@ function Progress({ className, value, ...props }: ComponentProps<typeof Root>) {
   return (
     <Root
       data-slot="progress"
-      className={cn('bg-theme-primary relative h-2 w-full overflow-hidden rounded-full', className)}
+      className={cn('bg-theme-secondary-300 relative h-2 w-full overflow-hidden rounded-full', className)}
       {...props}
     >
       <Indicator

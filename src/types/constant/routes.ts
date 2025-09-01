@@ -6,6 +6,7 @@ type IRoute = {
 export type IRoutes = {
   home: Omit<IRoute, 'getURL'>
   apartmentCreate: Omit<IRoute, 'getURL'>
+  apartmentSetup: Omit<IRoute, 'getURL'>
   normalInvoice: Omit<IRoute, 'getURL'>
   monthlyInvoice: Omit<IRoute, 'getURL'>
   maintenance: Omit<IRoute, 'getURL'>
@@ -13,4 +14,5 @@ export type IRoutes = {
   overview: Omit<IRoute, 'getURL'>
   allRoom: Omit<IRoute, 'getURL'>
   roomReport: Omit<IRoute, 'getURL'>
+  electricWaterReport: Omit<IRoute, 'getURL'>
 }
