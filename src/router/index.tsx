@@ -4,6 +4,7 @@ import { Layout } from '@/components/layout'
 import { ROUTES } from '@/constants'
 import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
+import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication'
 import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
 import NormalInvoicePage from '@/pages/NormalInvoice'
@@ -40,6 +41,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.apartmentCreate.path,
         element: <ApartmentCreatePage />,
+      },
+      {
+        path: ROUTES.apartmentSetup.path,
+        element: <ApartmentSetup />,
       },
     ],
   },

@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 import { Button, Card, Form } from '@/components/common'
 import { ApartmentFormField, ApartmentUpload } from '@/components/pages/ApartmentCreate'
-import { APARTMENT_FORM_SCHEMA, APARTMENT_FORM_SECTIONS } from '@/constants'
+import { APARTMENT_FORM_SCHEMA, APARTMENT_FORM_SECTIONS, ROUTES } from '@/constants'
 import type { APARTMENT_FORM_FIELD, APARTMENT_FORM_VALUES } from '@/types'
 
 const ApartmentCreateForm = () => {
@@ -19,10 +20,11 @@ const ApartmentCreateForm = () => {
       lateFee: '',
     },
   })
-
+  const navigate = useNavigate()
   const onSubmit = (data: APARTMENT_FORM_VALUES) => {
     //implement API
-    alert(JSON.stringify(data, null, 2))
+    console.log(data)
+    navigate(ROUTES.apartmentSetup.path)
   }
 
   return (

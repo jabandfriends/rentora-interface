@@ -21,7 +21,7 @@ const Authentication = () => {
 
   const onSubmit = (data: AUTHENTICATION_FORM_SCHEMA_TYPE) => {
     console.log(data)
-    navigate(ROUTES.home.path)
+    navigate(ROUTES.apartmentCreate.path)
   }
 
   return (
