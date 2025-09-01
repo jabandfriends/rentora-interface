@@ -1,6 +1,6 @@
 import { Button } from '@/components/common'
-import { PageTableHeader } from '@/components/ui'
-import { MAINTENANCE_REPORTS, MAINTENANCE_STATS } from '@/constants'
+import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { MAINTENANCE_STATS, MAINTENANCE_TABLE_DATA } from '@/constants'
 
 import MaintenanceTable from './MaintenanceTable'
 
@@ -13,7 +13,8 @@ const Maintenance = () => {
         stats={MAINTENANCE_STATS}
         actionButton={<Button>New Report</Button>}
       />
-      <MaintenanceTable data={MAINTENANCE_REPORTS} />
+      <PageTableSearch />
+      <MaintenanceTable data={MAINTENANCE_TABLE_DATA} />
     </>
   )
 }

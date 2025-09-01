@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { Badge, PaginationBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { MAINTENANCE_TABLE_HEADER } from '@/constants'
 
 type IMaintenanceTableProps = {
@@ -21,14 +21,16 @@ const MaintenanceTable = ({ data }: IMaintenanceTableProps) => {
             <TableRow key={idex}>
               <TableCell>{item.room}</TableCell>
               <TableCell>{item.buildings}</TableCell>
-              <TableCell>{item.issueDate}</TableCell>
+              <TableCell>{item.issuesDate} </TableCell>
               <TableCell>{item.appointmentDate}</TableCell>
               <TableCell>{item.servicerequest}</TableCell>
-              <TableCell>{item.status}</TableCell>
+              <TableCell>
+                <Badge variant={item.type}>{item.status}</Badge></TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <PaginationBar />
     </div>
   )
 }
