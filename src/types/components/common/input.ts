@@ -6,3 +6,8 @@ export type IInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix'> 
     suffix?: ReactNode
     error?: string
   }
+
+export type IInputNumberProps = Omit<IInputProps, 'type'> & {
+  decimal?: boolean
+  maxChars?: number
+}

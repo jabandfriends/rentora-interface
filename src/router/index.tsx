@@ -2,10 +2,15 @@ import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-ro
 
 import { Layout } from '@/components/layout'
 import { ROUTES } from '@/constants'
+import AllRoomsPage from '@/pages/AllRooms'
+import ApartmentCreatePage from '@/pages/ApartmentCreate'
 import Authentication from '@/pages/Authentication'
 import MaintenancePage from '@/pages/Maintenance'
 import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
 import NormalInvoicePage from '@/pages/NormalInvoice'
+import OverdueInvoicePage from '@/pages/OverdueInvoice'
+import OverviewPage from '@/pages/Overview'
+import RoomReport from '@/pages/Report/RoomReport'
 
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
@@ -24,6 +29,21 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ],
   },
   {
+    path: '/setup',
+    element: (
+      <>
+        <ScrollRestoration />
+        <Layout />
+      </>
+    ),
+    children: [
+      {
+        path: ROUTES.apartmentCreate.path,
+        element: <ApartmentCreatePage />,
+      },
+    ],
+  },
+  {
     path: '/dashboard',
     element: (
       <>
@@ -32,6 +52,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       </>
     ),
     children: [
+      {
+        path: ROUTES.overview.path,
+        element: <OverviewPage />,
+      },
       {
         path: ROUTES.normalInvoice.path,
         element: <NormalInvoicePage />,
@@ -43,6 +67,18 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.maintenance.path,
         element: <MaintenancePage />,
+      },
+      {
+        path: ROUTES.allRoom.path,
+        element: <AllRoomsPage />,
+      },
+      {
+        path: ROUTES.roomReport.path,
+        element: <RoomReport />,
+      },
+      {
+        path: ROUTES.overdueInvoice.path,
+        element: <OverdueInvoicePage />,
       },
     ],
   },
