@@ -4,11 +4,14 @@ import { Layout } from '@/components/layout'
 import { ROUTES } from '@/constants'
 import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
+import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication'
+import MaintenancePage from '@/pages/Maintenance'
 import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
 import NormalInvoicePage from '@/pages/NormalInvoice'
 import OverdueInvoicePage from '@/pages/OverdueInvoice'
 import OverviewPage from '@/pages/Overview'
+import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import ReceiptReport from '@/pages/Report/ReceiptReport'
 import RoomReport from '@/pages/Report/RoomReport'
 
@@ -18,7 +21,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     element: (
       <>
         <ScrollRestoration />
-        <Layout />
+        <Layout isNavbar={false} />
       </>
     ),
     children: [
@@ -40,6 +43,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.apartmentCreate.path,
         element: <ApartmentCreatePage />,
+      },
+      {
+        path: ROUTES.apartmentSetup.path,
+        element: <ApartmentSetup />,
       },
     ],
   },
@@ -65,6 +72,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <MonthlyInvoicePage />,
       },
       {
+        path: ROUTES.maintenance.path,
+        element: <MaintenancePage />,
+      },
+      {
         path: ROUTES.allRoom.path,
         element: <AllRoomsPage />,
       },
@@ -75,6 +86,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.receiptReport.path,
         element: <ReceiptReport />,
+      },
+      {
+        path: ROUTES.electricWaterReport.path,
+        element: <ElectricWaterReportPage />,
       },
       {
         path: ROUTES.overdueInvoice.path,

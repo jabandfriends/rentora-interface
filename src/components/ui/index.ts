@@ -1,5 +1,6 @@
 export * from './Badge'
 export * from './Chart'
+export * from './MultiStepForm'
 export * from './PageTable'
 export * from './Pagination'
 export * from './PaginationBar'
