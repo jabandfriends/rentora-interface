@@ -62,7 +62,7 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
     type: 'collapsible',
     title: 'Reports',
     icon: <FileText size={16} />,
-    menu: SIDEBAR_COLLAPSE_REPORT_ITEMS,
+    menu: SIDEBAR_COLLAPSE_ROOMS_REPORT,
   },
   {
     type: 'item',
