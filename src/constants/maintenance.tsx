@@ -7,19 +7,19 @@ export const MAINTENANCE_STATS: Array<IStatsCardProps> = [
     title: 'Total Reports',
     count: 10,
     icon: <ScrollText size={22} />,
-    type: 'primary'
+    type: 'primary',
   },
   {
     title: 'Done',
     count: 6,
     icon: <CircleCheckBig size={22} />,
-    type: 'success'
+    type: 'success',
   },
   {
     title: 'Unpaid',
     count: 4,
     icon: <Clock size={22} />,
-    type: 'warning'
+    type: 'warning',
   },
 ]
 

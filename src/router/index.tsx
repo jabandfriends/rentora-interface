@@ -14,6 +14,7 @@ import OverviewPage from '@/pages/Overview'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import ReceiptReport from '@/pages/Report/ReceiptReport'
 import RoomReport from '@/pages/Report/RoomReport'
+import ServiceInvoicePage from '@/pages/ServiceInvoice'
 
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
@@ -94,6 +95,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.overdueInvoice.path,
         element: <OverdueInvoicePage />,
+      },
+      {
+        path: ROUTES.serviceInvoice.path,
+        element: <ServiceInvoicePage />,
       },
     ],
   },

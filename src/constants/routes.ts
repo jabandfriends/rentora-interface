@@ -13,4 +13,5 @@ export const ROUTES: IRoutes = {
   roomReport: { path: '/dashboard/report/room' },
   receiptReport: { path: '/dashboard/report/receipt' },
   electricWaterReport: { path: '/dashboard/report/electric-water' },
+  serviceInvoice: { path: '/dashboard/service-invoice' },
 }

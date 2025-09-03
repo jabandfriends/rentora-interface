@@ -25,7 +25,8 @@ const MaintenanceTable = ({ data }: IMaintenanceTableProps) => {
               <TableCell>{item.appointmentDate}</TableCell>
               <TableCell>{item.servicerequest}</TableCell>
               <TableCell>
-                <Badge variant={item.type}>{item.status}</Badge></TableCell>
+                <Badge variant={item.type}>{item.status}</Badge>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

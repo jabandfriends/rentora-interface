@@ -26,6 +26,7 @@ export const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
   { label: 'Normal Invoices', to: ROUTES.normalInvoice.path },
   { label: 'Monthly Invoices', to: ROUTES.monthlyInvoice.path },
   { label: 'Overdue Invoices', to: ROUTES.overdueInvoice.path },
+  { label: 'Service Invoices', to: ROUTES.serviceInvoice.path },
 ]
 
 //sidebar bottom items

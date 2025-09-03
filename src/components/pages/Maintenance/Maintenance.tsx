@@ -1,8 +1,7 @@
 import { Button } from '@/components/common'
+import { MaintenanceTable } from '@/components/pages/Maintenance'
 import { PageTableHeader, PageTableSearch } from '@/components/ui'
 import { MAINTENANCE_STATS, MAINTENANCE_TABLE_DATA } from '@/constants'
-
-import { MaintenanceTable } from '@/components/pages/Maintenance'
 
 const Maintenance = () => {
   return (
