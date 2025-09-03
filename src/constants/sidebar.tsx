@@ -15,8 +15,9 @@ export const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
 
 //sidebar collapse menu
 //sidebar collapse report menu
-export const SIDEBAR_COLLAPSE_REPORT_ITEMS: Array<SidebarMenu> = [
+export const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [
   { label: 'Room Report', to: ROUTES.roomReport.path },
+  { label: 'Receipt Report', to: ROUTES.receiptReport.path },
   { label: 'Electric & Water Report', to: ROUTES.electricWaterReport.path },
 ]
 
@@ -62,7 +63,7 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
     type: 'collapsible',
     title: 'Reports',
     icon: <FileText size={16} />,
-    menu: SIDEBAR_COLLAPSE_REPORT_ITEMS,
+    menu: SIDEBAR_COLLAPSE_ROOMS_REPORT,
   },
   {
     type: 'item',
