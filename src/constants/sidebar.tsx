@@ -71,12 +71,6 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
     icon: <Wrench size={16} />,
     menu: SIDEBAR_MAINTENANCE,
   },
-  {
-    type: 'collapsible',
-    title: 'Invoices',
-    icon: <FileSpreadsheet size={16} />,
-    menu: SIDEBAR_COLLAPSE_ITEMS,
-  },
 ]
 
 //sidebar bottom menu items

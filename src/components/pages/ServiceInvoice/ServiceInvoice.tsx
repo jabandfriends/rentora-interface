@@ -1,7 +1,7 @@
 import { Button } from '@/components/common'
 import { ServiceInvoiceTable } from '@/components/pages/ServiceInvoice'
 import { PageTableHeader, PageTableSearch } from '@/components/ui'
-import { SERVICE_INVOICE_DATA, SERVICE_INVOICE_STATS } from '@/constants/invoice'
+import { SERVICE_INVOICE_DATA, SERVICE_INVOICE_STATS } from '@/constants'
 
 const ServiceInvoice = () => {
   return (
