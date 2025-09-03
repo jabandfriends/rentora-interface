@@ -25,6 +25,7 @@ export const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
   { label: 'Normal Invoices', to: ROUTES.normalInvoice.path },
   { label: 'Monthly Invoices', to: ROUTES.monthlyInvoice.path },
   { label: 'Overdue Invoices', to: ROUTES.overdueInvoice.path },
+  { label: 'Service Invoices', to: ROUTES.serviceInvoice.path },
 ]
 
 //sidebar bottom items
@@ -33,7 +34,9 @@ export const SIDEBAR_BOTTOM_ITEMS: Array<SidebarMenu> = [
 ]
 
 //sidebar maintenance menu
-export const SIDEBAR_MAINTENANCE: Array<SidebarMenu> = [{ icon: <Wrench size={16} />, label: 'Maintenance', to: ROUTES.maintenance.path }]
+export const SIDEBAR_MAINTENANCE: Array<SidebarMenu> = [
+  { icon: <Wrench size={16} />, label: 'Maintenance', to: ROUTES.maintenance.path },
+]
 
 //sidebar menu items
 export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
@@ -66,6 +69,12 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
     title: 'Maintenance',
     icon: <Wrench size={16} />,
     menu: SIDEBAR_MAINTENANCE,
+  },
+  {
+    type: 'collapsible',
+    title: 'Invoices',
+    icon: <FileSpreadsheet size={16} />,
+    menu: SIDEBAR_COLLAPSE_ITEMS,
   },
 ]
 
