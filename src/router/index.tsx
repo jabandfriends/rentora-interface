@@ -6,7 +6,8 @@ import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
 import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication'
-import MaintenancePage from '@/pages/Maintenance'
+import MaintenanceCreate from '@/pages/Maintenance/MaintenanceCreate'
+import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
 import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
 import NormalInvoicePage from '@/pages/NormalInvoice'
 import OverdueInvoicePage from '@/pages/OverdueInvoice'
@@ -75,6 +76,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.maintenance.path,
         element: <MaintenancePage />,
+      },
+      {
+        path: ROUTES.maintenanceCreate.path,
+        element: <MaintenanceCreate />,
       },
       {
         path: ROUTES.allRoom.path,
