@@ -6,6 +6,7 @@ import { z } from 'zod'
 import {
   Button,
   Card,
+  DateTimePicker,
   Form,
   FormField,
   FormMessage,
@@ -18,22 +19,12 @@ import {
   SelectValue,
   Textarea,
 } from '@/components/common'
-import { DateTimePicker } from '@/components/common/DateTimePicker'
+import { MAINTENANCE_FORM_SCHEMA } from '@/constants'
 
-const MaintenanceFormSchema = z.object({
-  unit_id: z.string({ error: 'Room number is required.' }).min(1, 'Room number is required.'),
-  title: z.string({ error: 'Task title is required.' }).optional(),
-  description: z.string({ error: 'Task description is required.' }).min(1, 'Task description is required.'),
-  status: z.string({ error: 'Task status is required.' }).min(1, 'Task status is required.'),
-  priority: z.string({ error: 'Task priority is required.' }).min(1, 'Task priority is required.'),
-  appointment_date: z.string({ error: 'Appointment date is required.' }).min(1, 'Appointment date is required.'),
-  due_date: z.string({ error: 'Due date is required.' }).optional(),
-  estimated_hours: z.string().optional(),
-})
-
+type MAINTENANCE_FORM_SCHEMA_TYPE = z.infer<typeof MAINTENANCE_FORM_SCHEMA>
 const MaintenanceForm = () => {
-  const form = useForm({
-    resolver: zodResolver(MaintenanceFormSchema),
+  const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
+    resolver: zodResolver(MAINTENANCE_FORM_SCHEMA),
     defaultValues: {
       unit_id: '',
       title: '',
@@ -45,9 +36,10 @@ const MaintenanceForm = () => {
       estimated_hours: '',
     },
   })
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: MAINTENANCE_FORM_SCHEMA_TYPE) => {
     console.log(data)
   }
+
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
