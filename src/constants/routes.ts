@@ -7,6 +7,7 @@ export const ROUTES: IRoutes = {
   normalInvoice: { path: '/dashboard/normal-invoice' },
   monthlyInvoice: { path: '/dashboard/monthly-invoice' },
   maintenance: { path: '/dashboard/maintenance' },
+  maintenanceCreate: { path: '/dashboard/maintenance/create' },
   overdueInvoice: { path: '/dashboard/overdue-invoice' },
   overview: { path: '/dashboard/overview' },
   allRoom: { path: '/dashboard/all-room' },

@@ -17,4 +17,5 @@ export type IRoutes = {
   receiptReport: Omit<IRoute, 'getURL'>
   electricWaterReport: Omit<IRoute, 'getURL'>
   serviceInvoice: Omit<IRoute, 'getURL'>
+  maintenanceCreate: Omit<IRoute, 'getURL'>
 }
