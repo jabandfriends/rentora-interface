@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 import {
   Button,
@@ -20,12 +19,7 @@ import {
   Textarea,
 } from '@/components/common'
 import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
-
-type MAINTENANCE_FORM_SCHEMA_TYPE = z.infer<typeof MAINTENANCE_FORM_SCHEMA>
-
-type IMaintenanceFormProps = {
-  onSubmit: (data: MAINTENANCE_FORM_SCHEMA_TYPE) => void
-}
+import type { IMaintenanceFormProps, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 
 const MaintenanceForm = ({ onSubmit }: IMaintenanceFormProps) => {
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
