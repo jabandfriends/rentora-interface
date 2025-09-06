@@ -60,7 +60,7 @@ const MaintenanceForm = () => {
                         control={form.control}
                         name={item.key}
                         render={({ field, fieldState }) => (
-                          <div>
+                          <div className="space-y-1">
                             <p>{item.label}</p>
 
                             {item.inputType === 'number' ? (
@@ -91,7 +91,7 @@ const MaintenanceForm = () => {
                         control={form.control}
                         name={item.key}
                         render={({ field }) => (
-                          <div>
+                          <div className="space-y-1">
                             <p>{item.label}</p>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <SelectTrigger>
@@ -112,7 +112,7 @@ const MaintenanceForm = () => {
                     return (
                       <div
                         key={'form-maintenance-field' + item.key + index}
-                        className="desktop:grid-cols-2 grid gap-x-4"
+                        className="desktop:grid-cols-2 grid gap-x-4 gap-y-1"
                       >
                         {item.fields.map((fieldItem, index) => (
                           <FormField
@@ -120,7 +120,7 @@ const MaintenanceForm = () => {
                             control={form.control}
                             name={fieldItem.key}
                             render={({ field, fieldState }) => (
-                              <div>
+                              <div className="space-y-1">
                                 <p>{fieldItem.label}</p>
                                 <DateTimePicker
                                   id={field.name}
