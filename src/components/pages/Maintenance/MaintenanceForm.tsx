@@ -19,7 +19,7 @@ import {
   SelectValue,
   Textarea,
 } from '@/components/common'
-import { MAINTENANCE_FORM_SCHEMA } from '@/constants'
+import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
 
 type MAINTENANCE_FORM_SCHEMA_TYPE = z.infer<typeof MAINTENANCE_FORM_SCHEMA>
 const MaintenanceForm = () => {
@@ -44,147 +44,108 @@ const MaintenanceForm = () => {
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         {/* Task Detail */}
-        <Card className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
-          <div>
-            <h3>Task Detail</h3>
-            <p className="text-theme-secondary">Basic information about the maintenance task</p>
-          </div>
-          <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <div>
-                  <p>Title</p>
-                  <Input {...field} placeholder="Enter task title" />
-                  <FormMessage />
-                </div>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <div>
-                  <p>Description</p>
-                  <Textarea {...field} placeholder="Enter task description" />
-                  <FormMessage />
-                </div>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="priority"
-              render={({ field }) => (
-                <div>
-                  <p>Priority</p>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a priority" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="low">Low</SelectItem>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="high">High</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </div>
-              )}
-            />
-          </div>
-        </Card>
-
-        {/* Scheduling */}
-        <Card className="desktop:grid-cols-2 grid gap-x-4 space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
-          <div className="space-y-4">
+        {MAINTENANCE_FORM_FIELDS.map(({ title, description, fields }) => (
+          <Card key={'form-section' + title + description} className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
             <div>
-              <h3>Scheduling</h3>
-              <p className="text-theme-secondary">When and how often this task should be completed</p>
+              <h3>{title}</h3>
+              <p className="text-theme-secondary">{description}</p>
             </div>
             <div className="space-y-2">
-              <div className="desktop:flex-row flex flex-col gap-x-4">
-                <FormField
-                  control={form.control}
-                  name="appointment_date"
-                  render={({ field }) => (
-                    <div className="flex-1">
-                      <p>Appointment date</p>
-                      <DateTimePicker
-                        onChange={(val) => field.onChange(val?.toISOString())}
-                        onBlur={field.onBlur}
-                        name={field.name}
-                        required
-                      />
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="due_date"
-                  render={({ field }) => (
-                    <div className="flex-1">
-                      <p>Due date</p>
-                      <DateTimePicker
-                        onChange={(val) => field.onChange(val?.toISOString())}
-                        onBlur={field.onBlur}
-                        name={field.name}
-                        required
-                      />
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-              </div>
+              {fields.map((item, index) => {
+                switch (item.fieldType) {
+                  case 'input':
+                    return (
+                      <FormField
+                        key={'form-maintenance-field' + item.key + index}
+                        control={form.control}
+                        name={item.key}
+                        render={({ field, fieldState }) => (
+                          <div>
+                            <p>{item.label}</p>
 
-              <FormField
-                control={form.control}
-                name="estimated_hours"
-                render={({ field }) => (
-                  <div>
-                    <p>Estimated hours</p>
-                    <InputNumber {...field} placeholder="Enter estimated hours" />
-                    <FormMessage />
-                  </div>
-                )}
-              />
+                            {item.inputType === 'number' ? (
+                              <InputNumber {...field} placeholder={item.placeholder} />
+                            ) : item.inputType === 'textarea' ? (
+                              <Textarea {...field} placeholder={item.placeholder} />
+                            ) : item.inputType === 'datetime' ? (
+                              <DateTimePicker
+                                id={field.name}
+                                onChange={(val) => field.onChange(val?.toISOString())}
+                                onBlur={field.onBlur}
+                                name={field.name}
+                                error={!!fieldState.error}
+                                required
+                              />
+                            ) : (
+                              <Input {...field} placeholder={item.placeholder} />
+                            )}
+                            <FormMessage />
+                          </div>
+                        )}
+                      />
+                    )
+                  case 'select':
+                    return (
+                      <FormField
+                        key={'form-maintenance-field' + item.key + index}
+                        control={form.control}
+                        name={item.key}
+                        render={({ field }) => (
+                          <div>
+                            <p>{item.label}</p>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <SelectTrigger>
+                                <SelectValue placeholder={item.placeholder} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {item.options.map((item) => (
+                                  <SelectItem value={item.value}>{item.label}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </div>
+                        )}
+                      />
+                    )
+                  case 'layout':
+                    return (
+                      <div
+                        key={'form-maintenance-field' + item.key + index}
+                        className="desktop:grid-cols-2 grid gap-x-4"
+                      >
+                        {item.fields.map((fieldItem, index) => (
+                          <FormField
+                            key={'form-maintenance-field' + fieldItem.key + index}
+                            control={form.control}
+                            name={fieldItem.key}
+                            render={({ field, fieldState }) => (
+                              <div>
+                                <p>{fieldItem.label}</p>
+                                <DateTimePicker
+                                  id={field.name}
+                                  onChange={(val) => field.onChange(val?.toISOString())}
+                                  onBlur={field.onBlur}
+                                  name={field.name}
+                                  error={!!fieldState.error}
+                                  required
+                                />
+                                <FormMessage />
+                              </div>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    )
+                }
+              })}
             </div>
-          </div>
+          </Card>
+        ))}
 
-          {/* Location */}
-          <div className="space-y-4">
-            <div>
-              <h3>Location</h3>
-              <p className="text-theme-secondary">Select the room where this task should be completed</p>
-            </div>
-            <div className="space-y-2">
-              <FormField
-                name="unit_id"
-                control={form.control}
-                render={({ field }) => (
-                  <div>
-                    <p>Room number</p>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a room" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="room1">Room 1</SelectItem>
-                        <SelectItem value="room2">Room 2</SelectItem>
-                        <SelectItem value="room3">Room 3</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </div>
-                )}
-              />
-            </div>
-          </div>
-        </Card>
         <div className="flex justify-end">
           <Button className="flex items-center gap-2" type="submit">
-            <Plus /> Add Task
+            <Plus /> Create a task
           </Button>
         </div>
       </form>

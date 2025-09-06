@@ -95,6 +95,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         label: 'Title',
         description: 'Basic information about the maintenance task',
         fieldType: 'input',
+        placeholder: 'Enter task title',
       },
       {
         key: 'description',
@@ -102,6 +103,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         description: 'Basic information about the maintenance task',
         fieldType: 'input',
         inputType: 'textarea',
+        placeholder: 'Enter task description',
       },
       {
         key: 'priority',
@@ -113,6 +115,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
           { value: 'medium', label: 'Medium' },
           { value: 'high', label: 'High' },
         ],
+        placeholder: 'Select priority',
       },
     ],
   },
@@ -125,7 +128,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         layout: 'row',
         label: 'Scheduling',
         description: 'When and how often this task should be completed',
-        key: 'scheduling',
+        key: 'appointment_date',
         fields: [
           {
             key: 'appointment_date',
@@ -149,6 +152,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         description: 'Basic information about the maintenance task',
         fieldType: 'input',
         inputType: 'number',
+        placeholder: 'Enter Estimated Hours',
       },
     ],
   },
@@ -159,6 +163,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
       {
         key: 'unit_id',
         label: 'Room number',
+        placeholder: 'Select Room Number',
         description: 'Basic information about the maintenance task',
         fieldType: 'select',
         options: [

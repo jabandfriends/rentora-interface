@@ -1,7 +1,7 @@
 import type { IInputNumberProps } from '@/types'
 
 type MAINTENANCE_FORM_FIELDS_TYPE_BASE = {
-  key: string
+  key: 'unit_id' | 'title' | 'description' | 'status' | 'priority' | 'appointment_date' | 'due_date' | 'estimated_hours'
   label?: string
   description?: string
 }
@@ -12,6 +12,7 @@ type MAINTENANCE_FORM_FIELDS_TYPE_INPUT = MAINTENANCE_FORM_FIELDS_TYPE_BASE & {
 
 type MAINTENANCE_FORM_FIELDS_TYPE_SELECT = MAINTENANCE_FORM_FIELDS_TYPE_BASE & {
   fieldType: 'select'
+  placeholder?: string
   options: Array<{ value: string; label: string }> // only for select
 }
 
