@@ -98,8 +98,10 @@ const MaintenanceForm = () => {
                                 <SelectValue placeholder={item.placeholder} />
                               </SelectTrigger>
                               <SelectContent>
-                                {item.options.map((item) => (
-                                  <SelectItem value={item.value}>{item.label}</SelectItem>
+                                {item.options.map((item, index) => (
+                                  <SelectItem key={'select-value' + item.value + index} value={item.value}>
+                                    {item.label}
+                                  </SelectItem>
                                 ))}
                               </SelectContent>
                             </Select>
