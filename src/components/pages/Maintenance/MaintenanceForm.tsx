@@ -22,7 +22,12 @@ import {
 import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
 
 type MAINTENANCE_FORM_SCHEMA_TYPE = z.infer<typeof MAINTENANCE_FORM_SCHEMA>
-const MaintenanceForm = () => {
+
+type IMaintenanceFormProps = {
+  onSubmit: (data: MAINTENANCE_FORM_SCHEMA_TYPE) => void
+}
+
+const MaintenanceForm = ({ onSubmit }: IMaintenanceFormProps) => {
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(MAINTENANCE_FORM_SCHEMA),
     defaultValues: {
@@ -36,9 +41,6 @@ const MaintenanceForm = () => {
       estimated_hours: '',
     },
   })
-  const onSubmit = (data: MAINTENANCE_FORM_SCHEMA_TYPE) => {
-    console.log(data)
-  }
 
   return (
     <Form {...form}>
