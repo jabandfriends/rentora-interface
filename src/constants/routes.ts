@@ -15,4 +15,5 @@ export const ROUTES: IRoutes = {
   receiptReport: { path: '/dashboard/report/receipt' },
   electricWaterReport: { path: '/dashboard/report/electric-water' },
   serviceInvoice: { path: '/dashboard/service-invoice' },
+  updateTenant: { getURL: (slug: string) => `/dashboard/tenant/update/${slug}`, path: '/dashboard/tenant/update/:id' },
 }
