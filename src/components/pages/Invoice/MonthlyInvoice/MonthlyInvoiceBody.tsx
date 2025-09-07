@@ -1,4 +1,4 @@
-import RoomCard from '@/components/pages/MonthlyInvoice/RoomCard'
+import { RoomCard } from '@/components/pages/Invoice'
 import { PaginationBar } from '@/components/ui'
 import { PageTableBody } from '@/components/ui/PageTable'
 

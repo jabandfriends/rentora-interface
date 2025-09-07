@@ -10,7 +10,7 @@ import type { MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 const MaintenanceCreate = () => {
   const navigate = useNavigate()
   const onSubmit = useCallback((data: MAINTENANCE_FORM_SCHEMA_TYPE) => {
-    console.log(data)
+    alert(data)
   }, [])
 
   //navigate before page

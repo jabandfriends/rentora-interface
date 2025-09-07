@@ -1,7 +1,7 @@
 import { Plus } from 'lucide-react'
 
 import { Button } from '@/components/common'
-import NormalInvoiceTable from '@/components/pages/NormalInvoice/NormalInvoiceTable'
+import { NormalInvoiceTable } from '@/components/pages/Invoice'
 import { PageTableHeader, PageTableSearch } from '@/components/ui'
 import { NORMAL_INVOICE_DATA, NORMAL_INVOICE_STATS } from '@/constants'
 

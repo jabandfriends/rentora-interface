@@ -1,4 +1,4 @@
-import { MonthlyInvoiceDetail } from '@/components/pages/MonthlyInvoiceDetail'
+import { MonthlyInvoiceDetail } from '@/components/pages/Invoice'
 
 const MonthlyInvoiceDetailPage = () => {
   return (
