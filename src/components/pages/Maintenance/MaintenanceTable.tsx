@@ -1,11 +1,23 @@
+import { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import { Badge, PaginationBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { MAINTENANCE_TABLE_HEADER } from '@/constants'
+import { MAINTENANCE_TABLE_HEADER, ROUTES } from '@/constants'
 
 type IMaintenanceTableProps = {
   data: Array<any>
 }
 
 const MaintenanceTable = ({ data }: IMaintenanceTableProps) => {
+  const navigate = useNavigate()
+
+  const handleRowClick = useCallback(
+    (index: string) => {
+      navigate(ROUTES.maintenanceDetail.getURL(index))
+    },
+    [navigate],
+  )
+
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
       <Table>
@@ -17,8 +29,8 @@ const MaintenanceTable = ({ data }: IMaintenanceTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item, idex) => (
-            <TableRow key={idex}>
+          {data.map((item, index) => (
+            <TableRow className="cursor-pointer" onClick={() => handleRowClick(index.toString())} key={index}>
               <TableCell>{item.room}</TableCell>
               <TableCell>{item.buildings}</TableCell>
               <TableCell>{item.issuesDate} </TableCell>

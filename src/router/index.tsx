@@ -14,6 +14,7 @@ import NormalInvoicePage from '@/pages/Invoice/NormalInvoice'
 import OverdueInvoicePage from '@/pages/Invoice/OverdueInvoice'
 import ServiceInvoicePage from '@/pages/Invoice/ServiceInvoice'
 import MaintenanceCreate from '@/pages/Maintenance/MaintenanceCreate'
+import MaintenanceDetailPage from '@/pages/Maintenance/MaintenanceDetailPage'
 import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
 import OverviewPage from '@/pages/Overview'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
@@ -87,6 +88,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.maintenanceCreate.path,
         element: <MaintenanceCreate />,
+      },
+      {
+        path: ROUTES.maintenanceDetail.path,
+        element: <MaintenanceDetailPage />,
       },
       {
         path: ROUTES.allRoom.path,
