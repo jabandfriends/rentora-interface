@@ -35,7 +35,7 @@ const FirstTimePasswordReset = ({ className, onSubmit }: IFirstTimePasswordReset
 
   return (
     <div className={cn('w-full max-w-md', className)}>
-      <div className="border-theme-secondary-300 space-y-4 rounded-2xl border bg-white p-8 shadow-xl">
+      <div className="border-theme-secondary-300 bg-theme-white space-y-4 rounded-2xl border p-8 shadow-xl">
         <div className="space-y-2 text-center">
           <div className="bg-theme-primary text-theme-white mx-auto flex size-10 items-center justify-center rounded-lg p-2">
             <LockIcon className="h-8 w-8 text-blue-600" />
