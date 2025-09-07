@@ -1,4 +1,4 @@
-import { NormalInvoice } from '@/components/pages/NormalInvoice'
+import { NormalInvoice } from '@/components/pages/Invoice'
 
 const NormalInvoicePage = () => {
   return (

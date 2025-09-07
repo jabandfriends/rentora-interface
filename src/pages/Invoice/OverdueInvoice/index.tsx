@@ -1,4 +1,4 @@
-import { OverdueInvoice } from '@/components/pages/OverdueInvoice'
+import { OverdueInvoice } from '@/components/pages/Invoice'
 
 const OverdueInvoicePage = () => {
   return (
