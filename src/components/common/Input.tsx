@@ -10,7 +10,7 @@ function Input({ className, type, prefix, suffix, ref, error, ...props }: IInput
       <div
         className={cn(
           'border-default border-theme-night-600 bg-theme-night-600/10 flex items-center gap-x-2 rounded-md border focus:ring-2',
-          [error && 'border-error', prefix && 'px-2'],
+          [error && 'border-error', prefix && 'px-2', suffix && 'pr-2'],
           className,
         )}
       >

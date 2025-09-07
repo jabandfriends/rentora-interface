@@ -2,6 +2,7 @@ import type { IRoutes } from '@/types'
 
 export const ROUTES: IRoutes = {
   home: { path: '/' },
+  firstTimePasswordReset: { path: '/first-time-password-reset' },
   apartmentCreate: { path: '/setup/apartment-create' },
   apartmentSetup: { path: '/setup/apartment-setup' },
   normalInvoice: { path: '/dashboard/normal-invoice' },
