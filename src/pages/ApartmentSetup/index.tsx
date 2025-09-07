@@ -7,7 +7,7 @@ const ApartmentSetup = () => {
   const navigate = useNavigate()
   //RECHECK : API
   const handleSubmit = (data: any) => {
-    console.log(data)
+    alert(data)
     navigate(ROUTES.overview.path)
   }
   return (

@@ -128,7 +128,7 @@ const MultiStepForm = ({
         await onStepSubmit(currentStepData, currentStep)
         setCompletedSteps((prev) => new Set([...prev, currentStep]))
       } catch (error) {
-        console.error('Step submission failed:', error)
+        alert('Step submission failed:' + error)
         setIsSubmitting(false)
         return
       }
@@ -171,7 +171,7 @@ const MultiStepForm = ({
       }
       setCompletedSteps((prev) => new Set([...prev, currentStep]))
     } catch (error) {
-      console.error('Final submission failed:', error)
+      alert('Final submission failed:' + error)
       setIsSubmitting(false)
       return
     }

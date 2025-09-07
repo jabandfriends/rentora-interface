@@ -1,11 +1,14 @@
 import type { HTMLAttributes } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { Button, Card } from '@/components/common'
 import { Badge } from '@/components/ui'
+import { ROUTES } from '@/constants'
 import { cn } from '@/utilities'
 
 type IRoomCardProps = HTMLAttributes<HTMLDivElement>
 const RoomCard = ({ className, ...props }: IRoomCardProps) => {
+  const navigate = useNavigate()
   return (
     <Card className={cn('border-theme-secondary-300 w-92 rounded-2xl border py-5', className)} {...props}>
       <div>
@@ -36,7 +39,9 @@ const RoomCard = ({ className, ...props }: IRoomCardProps) => {
         </div>
         <span className="text-theme-secondary">Invoice : INV-2024-06-101</span>
       </div>
-      <Button block>View</Button>
+      <Button onClick={() => navigate(ROUTES.monthlyInvoiceDetail.getURL('1'))} block>
+        View
+      </Button>
     </Card>
   )
 }
