@@ -1,4 +1,4 @@
-import OverdueInvoiceTable from '@/components/pages/OverdueInvoice/OverdueInvoiceTable'
+import { OverdueInvoiceTable } from '@/components/pages/Invoice'
 import { PageTableHeader, PageTableSearch, PaginationBar } from '@/components/ui'
 import { OVERDUE_INVOICE_DATA, OVERDUE_INVOICE_STATS } from '@/constants'
 

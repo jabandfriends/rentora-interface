@@ -2,7 +2,7 @@ import { ArrowLeft, Download, Send } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/common'
-import { BillSection, MonthlyInvoiceDetailTable } from '@/components/pages/MonthlyInvoiceDetail'
+import { BillSection, MonthlyInvoiceDetailTable } from '@/components/pages/Invoice'
 
 const MonthlyInvoiceDetail = () => {
   const navigate = useNavigate()

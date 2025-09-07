@@ -2,7 +2,7 @@ import { Plus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/common'
-import MonthlyInvoiceBody from '@/components/pages/MonthlyInvoice/MonthlyInvoiceBody'
+import { MonthlyInvoiceBody } from '@/components/pages/Invoice'
 import { PageTableBar, PageTableHeader, PageTableSearch } from '@/components/ui'
 import { NORMAL_INVOICE_STATS, ROUTES } from '@/constants'
 

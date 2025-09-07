@@ -1,4 +1,4 @@
-import ServiceInvoice from '@/components/pages/ServiceInvoice/ServiceInvoice'
+import { ServiceInvoice } from '@/components/pages/Invoice'
 
 const ServiceInvoicePage = () => {
   return (
