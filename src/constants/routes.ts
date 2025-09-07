@@ -16,4 +16,8 @@ export const ROUTES: IRoutes = {
   electricWaterReport: { path: '/dashboard/report/electric-water' },
   serviceInvoice: { path: '/dashboard/service-invoice' },
   monthlyInvoiceCreate: { path: '/dashboard/monthly-invoice/create' },
+  monthlyInvoiceDetail: {
+    path: '/dashboard/monthly-invoice/detail/:id',
+    getURL: (id: string) => `/dashboard/monthly-invoice/detail/${id}`,
+  },
 }
