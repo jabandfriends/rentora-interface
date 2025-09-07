@@ -5,7 +5,8 @@ import { ROUTES } from '@/constants'
 import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
 import ApartmentSetup from '@/pages/ApartmentSetup'
-import Authentication from '@/pages/Authentication'
+import Authentication from '@/pages/Authentication/Authentication'
+import FirstTimePasswordResetPage from '@/pages/Authentication/FirstTimePasswordReset'
 import MonthlyInvoicePage from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoice'
 import MonthlyInvoiceCreate from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoiceCreate'
 import MonthlyInvoiceDetail from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoiceDetail'
@@ -32,6 +33,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         index: true,
         element: <Authentication />,
+      },
+      {
+        path: ROUTES.firstTimePasswordReset.path,
+        element: <FirstTimePasswordResetPage />,
       },
     ],
   },
