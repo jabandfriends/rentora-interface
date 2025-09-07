@@ -10,6 +10,7 @@ import MaintenanceCreate from '@/pages/Maintenance/MaintenanceCreate'
 import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
 import MonthlyInvoicePage from '@/pages/MonthlyInvoice'
 import MonthlyInvoiceCreate from '@/pages/MonthlyInvoiceCreate'
+import MonthlyInvoiceDetail from '@/pages/MonthlyInvoiceDetail'
 import NormalInvoicePage from '@/pages/NormalInvoice'
 import OverdueInvoicePage from '@/pages/OverdueInvoice'
 import OverviewPage from '@/pages/Overview'
@@ -109,6 +110,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.monthlyInvoiceCreate.path,
         element: <MonthlyInvoiceCreate />,
+      },
+      {
+        path: ROUTES.monthlyInvoiceDetail.path,
+        element: <MonthlyInvoiceDetail />,
       },
     ],
   },
