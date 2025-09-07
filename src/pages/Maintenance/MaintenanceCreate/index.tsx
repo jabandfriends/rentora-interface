@@ -16,7 +16,7 @@ const MaintenanceCreate = () => {
   //navigate before page
   const navigateBefore = useCallback(() => navigate(ROUTES.maintenance.path), [navigate])
   return (
-    <PageSection>
+    <PageSection className="space-y-4">
       <PageHeader
         title="Create Maintenance"
         description="Create a new maintenance task"

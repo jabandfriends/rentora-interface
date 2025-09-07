@@ -1,5 +1,6 @@
 import {
   AlertTriangle,
+  ArrowLeft,
   Calendar,
   Check,
   CheckCircle,
@@ -14,6 +15,7 @@ import {
   XCircle,
 } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
   Button,
@@ -110,9 +112,14 @@ const MaintenanceDetail = () => {
   }
 
   const StatusIcon = statusConfig[status as keyof typeof statusConfig].icon
-
+  const navigate = useNavigate()
   return (
     <div className="space-y-4">
+      <Button className="flex items-center gap-x-2" onClick={() => navigate(-1)}>
+        <ArrowLeft className="size-4" />
+        Back
+      </Button>
+
       <div className="desktop:flex-row flex flex-col items-start justify-between gap-y-2">
         <div>
           <h2>{maintenanceRequest.title}</h2>
