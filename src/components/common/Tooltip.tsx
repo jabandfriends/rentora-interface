@@ -12,7 +12,7 @@ import {
 
 import { cn } from '@/utilities'
 
-const TooltipRoot = (props: TooltipProps) => {
+const Tooltip = (props: TooltipProps) => {
   return (
     <Provider delayDuration={150}>
       <Root data-slot="tooltip" {...props} />
@@ -43,4 +43,4 @@ const TooltipContent = ({ children, sideOffset = 0, className, ...props }: Toolt
   )
 }
 
-export { TooltipContent, TooltipRoot, TooltipTrigger }
+export { Tooltip, TooltipContent, TooltipTrigger }

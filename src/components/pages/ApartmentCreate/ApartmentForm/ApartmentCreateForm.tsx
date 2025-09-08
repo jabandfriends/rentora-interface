@@ -23,7 +23,7 @@ const ApartmentCreateForm = () => {
   const navigate = useNavigate()
   const onSubmit = (data: APARTMENT_FORM_VALUES) => {
     //implement API
-    console.log(data)
+    alert(data)
     navigate(ROUTES.apartmentSetup.path)
   }
 
