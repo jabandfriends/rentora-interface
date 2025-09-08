@@ -63,7 +63,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     element: (
       <>
         <ScrollRestoration />
-        <Layout />
+        <Layout isSidebar={false} />
       </>
     ),
     children: [

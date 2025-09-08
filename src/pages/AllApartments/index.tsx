@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { PageHeader, PageSection } from '@/components/layout'
+import { PageHeader } from '@/components/layout'
 import { AllApartments } from '@/components/pages/AllApartments'
 
 const data = [
@@ -38,13 +38,13 @@ const AllApartmentPage = () => {
     }, 1500)
   }, [])
   return (
-    <PageSection className="space-y-4">
+    <div className="container mx-auto space-y-4 px-4 py-4">
       <PageHeader title="All Apartments" description="A quick overview of the apartments you manage." />
       <AllApartments data={data} loading={loading} />
       <p className="text-body-2 text-theme-secondary text-center">
         © 2025 Rentora. Simplifying property management for landlords everywhere.
       </p>
-    </PageSection>
+    </div>
   )
 }
 

@@ -11,7 +11,7 @@ const RoomCard = ({ className, ...props }: IRoomCardProps) => {
   const navigate = useNavigate()
   const { apartmentId } = useParams<{ apartmentId: string }>()
   return (
-    <Card className={cn('border-theme-secondary-300 w-92 rounded-2xl border py-5', className)} {...props}>
+    <Card className={cn('border-theme-secondary-300 w-84 rounded-2xl border py-5', className)} {...props}>
       <div>
         <div className="flex items-center justify-between">
           <h4>Room 101</h4>

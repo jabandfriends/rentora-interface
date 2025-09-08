@@ -7,7 +7,7 @@ import { BillSection, MonthlyInvoiceDetailTable } from '@/components/pages/Invoi
 const MonthlyInvoiceDetail = () => {
   const navigate = useNavigate()
   return (
-    <div className="container mx-auto flex flex-col gap-y-5 space-y-4 py-5">
+    <div className="flex w-full flex-col gap-y-4">
       <div className="flex items-center gap-4">
         <Button className="flex items-center gap-x-2" onClick={() => navigate(-1)}>
           <ArrowLeft className="size-5" />
@@ -50,7 +50,7 @@ const MonthlyInvoiceDetail = () => {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               <Button className="flex items-center gap-x-2">
                 <Download className="h-4 w-4" />
                 Download PDF

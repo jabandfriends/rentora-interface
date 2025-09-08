@@ -28,7 +28,7 @@ const RentChart = () => {
         <h3>Rent Report</h3>
         <p className="text-theme-secondary">Monthly rent report</p>
       </div>
-      <ChartContainer config={chartConfig} className="min-h-[300px] rounded-2xl">
+      <ChartContainer config={chartConfig} className="min-h-44 rounded-2xl">
         <BarChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />
           <XAxis dataKey="month" />

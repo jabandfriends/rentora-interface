@@ -22,11 +22,9 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
   useDeviceWatcher()
   return (
     <div className="relative min-h-screen">
-      <>
-        {isSidebar && <Sidebar isOpen={sidebarOpen} onClose={setSidebar} />}
-        {isNavbar && <NavBar onSidebarToggle={setSidebar} isSidebar={isSidebar} />}
-      </>
+      <>{isNavbar && <NavBar onSidebarToggle={setSidebar} isSidebar={isSidebar} />}</>
       <OutletWrapper>
+        {isSidebar && <Sidebar isOpen={sidebarOpen} onClose={setSidebar} />}
         <Outlet />
       </OutletWrapper>
     </div>

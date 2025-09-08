@@ -1,4 +1,5 @@
 import { LogOut, Menu, Settings, User } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 import {
   DropdownMenu,
@@ -7,26 +8,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/common'
+import { ROUTES } from '@/constants'
 
 const NavBar = ({ onSidebarToggle, isSidebar }: { onSidebarToggle: () => void; isSidebar: boolean }) => {
   // hooks
 
   return (
-    <header className="bg-theme-white border-theme-night-600 sticky top-0 z-30 border-b shadow-sm">
+    <header className="bg-theme-white border-theme-night-600 sticky top-0 z-50 border-b shadow-sm">
       <div className="flex h-16 items-center justify-between px-6">
         {/* Left button */}
         <div className="flex items-center gap-x-2">
-          {!isSidebar && (
-            <>
-              <h5 className="bg-theme-primary text-theme-white flex size-8 items-center justify-center rounded-lg">
-                R
-              </h5>
-              <h3>Rentora</h3>
-            </>
-          )}
+          <Link className="flex items-center gap-x-2" to={ROUTES.allApartment.path}>
+            <h5 className="bg-theme-primary text-theme-white flex size-8 items-center justify-center rounded-lg">R</h5>
+            <h3>Rentora</h3>
+          </Link>
 
           {isSidebar && (
-            <button onClick={onSidebarToggle} className="flex cursor-pointer items-center">
+            <button onClick={onSidebarToggle} className="desktop:hidden flex cursor-pointer items-center">
               <Menu size={20} />
             </button>
           )}

@@ -1,10 +1,11 @@
+import { PageSection } from '@/components/layout'
 import { OverdueInvoice } from '@/components/pages/Invoice'
 
 const OverdueInvoicePage = () => {
   return (
-    <div className="container mx-auto flex flex-col gap-y-5 py-5">
+    <PageSection>
       <OverdueInvoice />
-    </div>
+    </PageSection>
   )
 }
 

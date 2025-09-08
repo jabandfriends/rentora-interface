@@ -5,7 +5,7 @@ import { PageTableBody } from '@/components/ui/PageTable'
 const MonthlyInvoiceBody = () => {
   return (
     <PageTableBody className="flex flex-col gap-y-4 py-10">
-      <div className="grid grid-cols-3 place-items-center gap-5">
+      <div className="desktop:grid-cols-3 grid place-items-center gap-5">
         {[...Array(12)].map((_, index) => (
           <RoomCard key={index} />
         ))}
