@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
@@ -18,13 +19,16 @@ const Authentication = () => {
     },
   })
 
-  const onSubmit = (data: AUTHENTICATION_FORM_SCHEMA_TYPE) => {
-    alert(data)
-    navigate(ROUTES.apartmentCreate.path)
-  }
+  const onSubmit = useCallback(
+    (data: AUTHENTICATION_FORM_SCHEMA_TYPE) => {
+      alert(data)
+      navigate(ROUTES.allApartment.path)
+    },
+    [navigate],
+  )
 
   return (
-    <Card className="desktop:size-3/5 desktop:flex-col flex size-4/5 flex-col justify-center gap-y-4 rounded-3xl px-10 py-8 shadow">
+    <Card className="desktop:size-3/5 desktop:flex-col flex flex-col justify-center gap-y-4 rounded-3xl p-6 shadow">
       <div className="flex flex-col">
         <h2>Guess Who's Back</h2>
         <p>Let's Get You Signed in</p>
@@ -34,7 +38,7 @@ const Authentication = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col items-start gap-5 rounded-3xl px-5 py-5 shadow"
+              className="desktop:shadow desktop:p-4 flex flex-col items-start gap-5 rounded-3xl"
             >
               {AUTHENTICATION_FIELDS.map(({ key, label, placeholder, type }) => (
                 <FormField
@@ -55,7 +59,9 @@ const Authentication = () => {
                 />
               ))}
 
-              <Button block>Login</Button>
+              <Button type="submit" block>
+                Login
+              </Button>
             </form>
           </Form>
         </div>
