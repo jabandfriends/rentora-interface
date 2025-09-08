@@ -9,9 +9,6 @@ export const AUTHENTICATION_FORM_SCHEMA = z.object({
   password: z.string().min(2, {
     message: 'Password must be at least 2 characters long',
   }),
-  acceptTerms: z.literal(true, {
-    message: 'You must accept the terms',
-  }),
 })
 
 export const AUTHENTICATION_FIELDS: Array<AUTHENTICATION_FORM_FIELD> = [

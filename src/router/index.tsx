@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-ro
 
 import { Layout } from '@/components/layout'
 import { ROUTES } from '@/constants'
+import AllApartmentPage from '@/pages/AllApartments'
 import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
 import ApartmentSetup from '@/pages/ApartmentSetup'
@@ -16,6 +17,7 @@ import ServiceInvoicePage from '@/pages/Invoice/ServiceInvoice'
 import MaintenanceCreate from '@/pages/Maintenance/MaintenanceCreate'
 import MaintenanceDetailPage from '@/pages/Maintenance/MaintenanceDetailPage'
 import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
+import MaintenanceUpdate from '@/pages/Maintenance/MaintenanceUpdate'
 import OverviewPage from '@/pages/Overview'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import ReceiptReport from '@/pages/Report/ReceiptReport'
@@ -27,7 +29,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     element: (
       <>
         <ScrollRestoration />
-        <Layout isNavbar={false} />
+        <Layout isSidebar={false} isNavbar={false} />
       </>
     ),
     children: [
@@ -38,6 +40,21 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.firstTimePasswordReset.path,
         element: <FirstTimePasswordResetPage />,
+      },
+    ],
+  },
+  {
+    path: '/apartment',
+    element: (
+      <>
+        <ScrollRestoration />
+        <Layout isSidebar={false} />
+      </>
+    ),
+    children: [
+      {
+        index: true,
+        element: <AllApartmentPage />,
       },
     ],
   },
@@ -92,6 +109,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.maintenanceDetail.path,
         element: <MaintenanceDetailPage />,
+      },
+      {
+        path: ROUTES.maintenanceUpdate.path,
+        element: <MaintenanceUpdate />,
       },
       {
         path: ROUTES.allRoom.path,
