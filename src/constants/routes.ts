@@ -25,4 +25,5 @@ export const ROUTES: IRoutes = {
     path: '/dashboard/monthly-invoice/detail/:id',
     getURL: (id: string) => `/dashboard/monthly-invoice/detail/${id}`,
   },
+  allApartment: { path: '/apartment' },
 }

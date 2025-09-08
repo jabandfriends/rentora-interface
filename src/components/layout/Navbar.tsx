@@ -8,21 +8,28 @@ import {
   DropdownMenuTrigger,
 } from '@/components/common'
 
-const NavBar = ({ onSidebarToggle }: { onSidebarToggle: () => void }) => {
+const NavBar = ({ onSidebarToggle, isSidebar }: { onSidebarToggle: () => void; isSidebar: boolean }) => {
   // hooks
 
   return (
     <header className="bg-theme-white border-theme-night-600 sticky top-0 z-30 border-b shadow-sm">
       <div className="flex h-16 items-center justify-between px-6">
         {/* Left button */}
-        <button onClick={onSidebarToggle} className="flex cursor-pointer items-center">
-          <Menu size={20} />
-        </button>
+        <div className="flex items-center gap-x-2">
+          {!isSidebar && (
+            <>
+              <h5 className="bg-theme-primary text-theme-white flex size-8 items-center justify-center rounded-lg">
+                R
+              </h5>
+              <h3>Rentora</h3>
+            </>
+          )}
 
-        <div className="flex-1 text-center">
-          <h4 className="text-heading-4 desktop:text-heading-4 text-theme-gray-50 font-medium">
-            อพาร์ตเมนต์ : Testing Apartment
-          </h4>
+          {isSidebar && (
+            <button onClick={onSidebarToggle} className="flex cursor-pointer items-center">
+              <Menu size={20} />
+            </button>
+          )}
         </div>
 
         {/* Right Profile*/}
