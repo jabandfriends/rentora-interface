@@ -20,6 +20,7 @@ export type IRoutes = {
   serviceInvoice: Omit<IRoute, 'getURL'>
   maintenanceCreate: Omit<IRoute, 'getURL'>
   maintenanceDetail: IRoute
+  maintenanceUpdate: IRoute
   monthlyInvoiceCreate: Omit<IRoute, 'getURL'>
   monthlyInvoiceDetail: IRoute
   allApartment: Omit<IRoute, 'getURL'>
