@@ -42,8 +42,18 @@ export const getSidebarItems = (
     { icon: <Settings size={16} />, label: 'Settings', to: ROUTES.home.path },
   ]
 
+  const SIDEBAR_ALL_APARTMENTS: Array<SidebarMenu> = [
+    { icon: <Table size={16} />, label: 'All Apartments', to: ROUTES.allApartment.path },
+  ]
+
   return {
     topNav: [
+      {
+        type: 'item',
+        topic: 'All Apartments',
+        icon: <Table size={16} />,
+        menu: SIDEBAR_ALL_APARTMENTS,
+      },
       {
         type: 'item',
         topic: 'Dashboard',
