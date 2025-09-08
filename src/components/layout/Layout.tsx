@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { useDeviceWatcher } from '@/hooks'
@@ -13,16 +13,21 @@ type ILayoutProps = {
 }
 const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const toggleRef = useRef(false)
 
-  // set sidebar open
   const setSidebar = useCallback(() => {
-    setSidebarOpen(!sidebarOpen)
-  }, [sidebarOpen])
+    if (toggleRef.current) return
+    toggleRef.current = true
+    setSidebarOpen((prevOpen) => !prevOpen)
+    setTimeout(() => {
+      toggleRef.current = false
+    }, 300)
+  }, [])
 
   useDeviceWatcher()
   return (
     <div className="relative min-h-screen">
-      <>{isNavbar && <NavBar onSidebarToggle={setSidebar} isSidebar={isSidebar} />}</>
+      <>{isNavbar && <NavBar sidebarOpen={sidebarOpen} onSidebarToggle={setSidebar} isSidebar={isSidebar} />}</>
       <OutletWrapper>
         {isSidebar && <Sidebar isOpen={sidebarOpen} onClose={setSidebar} />}
         <Outlet />

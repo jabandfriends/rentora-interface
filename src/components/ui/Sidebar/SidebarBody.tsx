@@ -9,7 +9,7 @@ const SidebarBody = ({ children, className, isOpen, onClose, ...props }: ISideba
     <div>
       <div
         className={cn('desktop:static bg-theme-white desktop:translate-x-0 fixed z-50 h-full w-64 py-2 duration-200', [
-          isOpen ? 'translate-x-0' : '-translate-x-full',
+          [isOpen ? 'translate-x-0' : '-translate-x-full'],
         ])}
       >
         <div {...props} className={cn(`inset-y-0 left-0 flex h-full flex-col gap-y-2`, className)}>

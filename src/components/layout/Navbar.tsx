@@ -1,4 +1,4 @@
-import { LogOut, Menu, Settings, User } from 'lucide-react'
+import { LogOut, Menu, Settings, User, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import {
@@ -10,24 +10,35 @@ import {
 } from '@/components/common'
 import { ROUTES } from '@/constants'
 
-const NavBar = ({ onSidebarToggle, isSidebar }: { onSidebarToggle: () => void; isSidebar: boolean }) => {
+const NavBar = ({
+  onSidebarToggle,
+  isSidebar,
+  sidebarOpen,
+}: {
+  onSidebarToggle: () => void
+  isSidebar: boolean
+  sidebarOpen: boolean
+}) => {
   // hooks
 
   return (
     <header className="bg-theme-white border-theme-night-600 sticky top-0 z-50 border-b shadow-sm">
       <div className="flex h-16 items-center justify-between px-6">
-        {/* Left button */}
         <div className="flex items-center gap-x-2">
-          <Link className="flex items-center gap-x-2" to={ROUTES.allApartment.path}>
-            <h5 className="bg-theme-primary text-theme-white flex size-8 items-center justify-center rounded-lg">R</h5>
-            <h3>Rentora</h3>
-          </Link>
-
+          {/* Left button */}
           {isSidebar && (
             <button onClick={onSidebarToggle} className="desktop:hidden flex cursor-pointer items-center">
-              <Menu size={20} />
+              {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           )}
+          <div className="flex items-center gap-x-2">
+            <Link className="flex items-center gap-x-2" to={ROUTES.allApartment.path}>
+              <h5 className="bg-theme-primary text-theme-white flex size-8 items-center justify-center rounded-lg">
+                R
+              </h5>
+              <h3 className="desktop:block hidden">Rentora</h3>
+            </Link>
+          </div>
         </div>
 
         {/* Right Profile*/}
