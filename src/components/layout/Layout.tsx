@@ -9,8 +9,9 @@ import Sidebar from './Sidebar'
 
 type ILayoutProps = {
   isNavbar?: boolean
+  isSidebar?: boolean
 }
-const Layout = ({ isNavbar = true }: ILayoutProps) => {
+const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // set sidebar open
@@ -21,12 +22,10 @@ const Layout = ({ isNavbar = true }: ILayoutProps) => {
   useDeviceWatcher()
   return (
     <div className="relative min-h-screen">
-      {isNavbar && (
-        <>
-          <Sidebar isOpen={sidebarOpen} onClose={setSidebar} />
-          <NavBar onSidebarToggle={setSidebar} />
-        </>
-      )}
+      <>
+        {isSidebar && <Sidebar isOpen={sidebarOpen} onClose={setSidebar} />}
+        {isNavbar && <NavBar onSidebarToggle={setSidebar} isSidebar={isSidebar} />}
+      </>
       <OutletWrapper>
         <Outlet />
       </OutletWrapper>
