@@ -17,6 +17,7 @@ type IApartmentCard = {
   tenants: string
 }
 const ApartmentCard = ({
+  id,
   apartmentName,
   imageUrl,
   address,
@@ -30,7 +31,7 @@ const ApartmentCard = ({
 
   const handleViewApartment = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    navigate(ROUTES.overview.path)
+    navigate(ROUTES.overview.getPath(id))
   }
   return (
     <Card className="w-full rounded-xl">
