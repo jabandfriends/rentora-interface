@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 import type { HTMLAttributes } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import { ROUTES } from '@/constants'
 import { cn } from '@/utilities'
@@ -10,9 +10,10 @@ type ISidebarHeaderProps = HTMLAttributes<HTMLAnchorElement> & {
   title: string
 }
 const SidebarHeader = ({ onClose, title, className, ...props }: ISidebarHeaderProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   return (
     <Link
-      to={ROUTES.overview.path}
+      to={ROUTES.overview.getPath(apartmentId)}
       onClick={onClose}
       {...props}
       className={cn(

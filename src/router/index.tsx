@@ -61,7 +61,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ],
   },
   {
-    path: '/dashboard',
+    path: '/dashboard/:apartmentId',
     element: (
       <>
         <ScrollRestoration />

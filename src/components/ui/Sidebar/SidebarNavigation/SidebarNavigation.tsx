@@ -1,6 +1,7 @@
-import type { HTMLAttributes } from 'react'
+import { type HTMLAttributes, useMemo } from 'react'
+import { useParams } from 'react-router-dom'
 
-import { SIDEBAR_ITEMS_MENU } from '@/constants'
+import { getSidebarItems } from '@/constants'
 import type { SidebarNavMenu } from '@/types'
 import { cn } from '@/utilities'
 
@@ -11,10 +12,13 @@ type ISidebarNavigationProps = HTMLAttributes<HTMLDivElement> & {
   onClose: () => void
 }
 const SidebarNavigation = ({ onClose, className, ...props }: ISidebarNavigationProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const SIDEBAR_ITEMS_MENU = useMemo(() => getSidebarItems(apartmentId), [apartmentId])
+
   return (
     <nav {...props} className={cn('flex flex-col gap-y-2 p-4 py-2', className)}>
       <ul className="space-y-1">
-        {SIDEBAR_ITEMS_MENU?.map((item: SidebarNavMenu, index: number) => {
+        {SIDEBAR_ITEMS_MENU?.topNav?.map((item: SidebarNavMenu, index: number) => {
           if (item.type === 'item') {
             return (
               <li className="space-y-1" key={`sidebar-item-${item.menu}-${index}`}>
