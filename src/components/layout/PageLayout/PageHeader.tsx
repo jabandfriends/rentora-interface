@@ -15,7 +15,11 @@ const PageHeader = ({ title, description, isAction, actionLabel, actionIcon, act
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-center justify-between">
-        <h2>{title}</h2>
+        <div>
+          <h2>{title}</h2>
+          <p className="text-theme-secondary">{description}</p>
+        </div>
+
         {isAction && (
           <Button className="flex items-center gap-2" onClick={actionOnClick}>
             {actionIcon}
@@ -23,8 +27,6 @@ const PageHeader = ({ title, description, isAction, actionLabel, actionIcon, act
           </Button>
         )}
       </div>
-
-      <p className="text-theme-secondary">{description}</p>
     </div>
   )
 }

@@ -9,9 +9,6 @@ export const AUTHENTICATION_FORM_SCHEMA = z.object({
   password: z.string().min(2, {
     message: 'Password must be at least 2 characters long',
   }),
-  acceptTerms: z.literal(true, {
-    message: 'You must accept the terms',
-  }),
 })
 
 export const AUTHENTICATION_FIELDS: Array<AUTHENTICATION_FORM_FIELD> = [
@@ -28,3 +25,19 @@ export const AUTHENTICATION_FIELDS: Array<AUTHENTICATION_FORM_FIELD> = [
     type: 'password',
   },
 ]
+
+//first time password reset
+export const FIRST_TIME_PASSWORD_RESET_SCHEMA = z
+  .object({
+    newPassword: z.string().min(8, 'Password must be at least 8 characters long'),
+    confirmPassword: z.string().min(8, 'Password must be at least 8 characters long'),
+  })
+  .superRefine((data, ctx) => {
+    if (data.newPassword !== data.confirmPassword) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Passwords do not match',
+        path: ['confirmPassword'],
+      })
+    }
+  })

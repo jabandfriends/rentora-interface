@@ -1,83 +1,96 @@
 import { FileSpreadsheet, FileText, Home, Settings, Table, Wrench } from 'lucide-react'
 
 import { ROUTES } from '@/constants'
-import type { SidebarMenu, SidebarNavMenu } from '@/types'
+import type { Maybe, SidebarMenu, SidebarNavMenu } from '@/types'
 
-//sidebar menu
-export const SIDEBAR_ITEMS: Array<SidebarMenu> = [
-  { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.overview.path },
-]
+export const getSidebarItems = (
+  apartmentId: Maybe<string>,
+): { topNav: Array<SidebarNavMenu>; bottomNav: Array<SidebarNavMenu> } => {
+  if (!apartmentId) return { topNav: [], bottomNav: [] }
+  // sidebar main items
+  const SIDEBAR_ITEMS: Array<SidebarMenu> = [
+    { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.overview.getPath(apartmentId) },
+  ]
 
-//sidebar all rooms menu
-export const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
-  { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.path },
-]
+  // sidebar all rooms
+  const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
+    { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.getPath(apartmentId) },
+  ]
 
-//sidebar collapse menu
-//sidebar collapse report menu
-export const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [
-  { label: 'Room Report', to: ROUTES.roomReport.path },
-  { label: 'Receipt Report', to: ROUTES.receiptReport.path },
-  { label: 'Electric & Water Report', to: ROUTES.electricWaterReport.path },
-]
+  // sidebar reports
+  const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [
+    { label: 'Room Report', to: ROUTES.roomReport.getPath(apartmentId) },
+    { label: 'Receipt Report', to: ROUTES.receiptReport.getPath(apartmentId) },
+    { label: 'Electric & Water Report', to: ROUTES.electricWaterReport.getPath(apartmentId) },
+  ]
 
-//sidebar invoice collapse menu
-export const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
-  { label: 'Normal Invoices', to: ROUTES.normalInvoice.path },
-  { label: 'Monthly Invoices', to: ROUTES.monthlyInvoice.path },
-  { label: 'Overdue Invoices', to: ROUTES.overdueInvoice.path },
-  { label: 'Service Invoices', to: ROUTES.serviceInvoice.path },
-]
+  // sidebar invoices
+  const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
+    { label: 'Normal Invoices', to: ROUTES.normalInvoice.getPath(apartmentId) },
+    { label: 'Monthly Invoices', to: ROUTES.monthlyInvoice.getPath(apartmentId) },
+    { label: 'Overdue Invoices', to: ROUTES.overdueInvoice.getPath(apartmentId) },
+    { label: 'Service Invoices', to: ROUTES.serviceInvoice.getPath(apartmentId) },
+  ]
 
-//sidebar bottom items
-export const SIDEBAR_BOTTOM_ITEMS: Array<SidebarMenu> = [
-  { icon: <Settings size={16} />, label: 'Settings', to: ROUTES.home.path },
-]
+  // sidebar maintenance
+  const SIDEBAR_MAINTENANCE: Array<SidebarMenu> = [
+    { icon: <Wrench size={16} />, label: 'Maintenance', to: ROUTES.maintenance.getPath(apartmentId) },
+  ]
 
-//sidebar maintenance menu
-export const SIDEBAR_MAINTENANCE: Array<SidebarMenu> = [
-  { icon: <Wrench size={16} />, label: 'Maintenance', to: ROUTES.maintenance.path },
-]
+  // sidebar bottom items (static)
+  const SIDEBAR_BOTTOM_ITEMS: Array<SidebarMenu> = [
+    { icon: <Settings size={16} />, label: 'Settings', to: ROUTES.home.path },
+  ]
 
-//sidebar menu items
-export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
-  {
-    type: 'item',
-    topic: 'Dashboard',
-    icon: <Home size={16} />,
-    menu: SIDEBAR_ITEMS,
-  },
-  {
-    type: 'collapsible',
-    title: 'Invoices',
-    icon: <FileSpreadsheet size={16} />,
-    menu: SIDEBAR_COLLAPSE_ITEMS,
-  },
-  {
-    type: 'item',
-    title: 'All Room',
-    icon: <Table size={16} />,
-    menu: SIDEBAR_ALL_ROOMS,
-  },
-  {
-    type: 'collapsible',
-    title: 'Reports',
-    icon: <FileText size={16} />,
-    menu: SIDEBAR_COLLAPSE_ROOMS_REPORT,
-  },
-  {
-    type: 'item',
-    title: 'Maintenance',
-    icon: <Wrench size={16} />,
-    menu: SIDEBAR_MAINTENANCE,
-  },
-]
+  const SIDEBAR_ALL_APARTMENTS: Array<SidebarMenu> = [
+    { icon: <Table size={16} />, label: 'All Apartments', to: ROUTES.allApartment.path },
+  ]
 
-//sidebar bottom menu items
-export const SIDEBAR_BOTTOM_ITEMS_MENU: Array<SidebarNavMenu> = [
-  {
-    type: 'item',
-    icon: <Home size={16} />,
-    menu: SIDEBAR_BOTTOM_ITEMS,
-  },
-]
+  return {
+    topNav: [
+      {
+        type: 'item',
+        topic: 'All Apartments',
+        icon: <Table size={16} />,
+        menu: SIDEBAR_ALL_APARTMENTS,
+      },
+      {
+        type: 'item',
+        topic: 'Dashboard',
+        icon: <Home size={16} />,
+        menu: SIDEBAR_ITEMS,
+      },
+      {
+        type: 'collapsible',
+        title: 'Invoices',
+        icon: <FileSpreadsheet size={16} />,
+        menu: SIDEBAR_COLLAPSE_ITEMS,
+      },
+      {
+        type: 'item',
+        title: 'All Room',
+        icon: <Table size={16} />,
+        menu: SIDEBAR_ALL_ROOMS,
+      },
+      {
+        type: 'collapsible',
+        title: 'Reports',
+        icon: <FileText size={16} />,
+        menu: SIDEBAR_COLLAPSE_ROOMS_REPORT,
+      },
+      {
+        type: 'item',
+        title: 'Maintenance',
+        icon: <Wrench size={16} />,
+        menu: SIDEBAR_MAINTENANCE,
+      },
+    ],
+    bottomNav: [
+      {
+        type: 'item',
+        icon: <Home size={16} />,
+        menu: SIDEBAR_BOTTOM_ITEMS,
+      },
+    ],
+  }
+}

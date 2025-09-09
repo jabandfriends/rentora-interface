@@ -5,6 +5,7 @@ type MAINTENANCE_FORM_FIELDS_TYPE_BASE = {
   label?: string
   description?: string
 }
+
 type MAINTENANCE_FORM_FIELDS_TYPE_INPUT = MAINTENANCE_FORM_FIELDS_TYPE_BASE & {
   fieldType: 'input'
   inputType?: 'text' | 'number' | 'date' | 'datetime' | 'textarea'
