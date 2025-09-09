@@ -29,7 +29,7 @@ export const getSidebarItems = (
     { label: 'Normal Invoices', to: ROUTES.normalInvoice.getPath(apartmentId) },
     { label: 'Monthly Invoices', to: ROUTES.monthlyInvoice.getPath(apartmentId) },
     { label: 'Overdue Invoices', to: ROUTES.overdueInvoice.getPath(apartmentId) },
-    { label: 'Service Invoices', to: ROUTES.serviceInvoice.getPath(apartmentId) },
+    // { label: 'Service Invoices', to: ROUTES.serviceInvoice.getPath(apartmentId) },
   ]
 
   // sidebar maintenance
