@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -21,7 +20,7 @@ import {
 import { TENANT_FORM_FIELDS, TENANT_FORM_SCHEMA } from '@/constants'
 import type { ITenantFormProps, TENANT_FORM_SCHEMA_TYPE } from '@/types'
 
-const TenantForm = ({ onSubmit }: ITenantFormProps) => {
+const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
   const form = useForm<TENANT_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(TENANT_FORM_SCHEMA),
     defaultValues: {
@@ -144,7 +143,7 @@ const TenantForm = ({ onSubmit }: ITenantFormProps) => {
 
         <div className="flex justify-end">
           <Button className="flex items-center gap-2" type="submit">
-            <Plus /> Create a tenant
+            {iconLabel} {buttonLabel}
           </Button>
         </div>
       </form>

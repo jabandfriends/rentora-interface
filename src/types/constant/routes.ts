@@ -30,4 +30,5 @@ export type IRoutes = {
   monthlyInvoiceDetail: IRoute
   invoiceCreate: IRoute
   tenantCreate: IRoute
+  tenantUpdate: IRoute
 }
