@@ -14,7 +14,7 @@ const PageTableHeader = ({ title, description, stats, actionButton }: IPageTable
   return (
     <div className="flex flex-col gap-8">
       <div className="desktop:px-0 flex flex-col gap-1 px-4">
-        <div className="flex items-center justify-between">
+        <div className="desktop:flex-row flex flex-col justify-between gap-y-2">
           <h2>{title}</h2>
           {actionButton}
         </div>

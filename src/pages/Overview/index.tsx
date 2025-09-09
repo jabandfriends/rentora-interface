@@ -1,11 +1,12 @@
+import { PageSection } from '@/components/layout'
 import { OverviewBody, OverviewHeader } from '@/components/pages/Overview'
 
 const Overview = () => {
   return (
-    <div className="container mx-auto flex flex-col gap-y-8 py-5">
+    <PageSection>
       <OverviewHeader />
       <OverviewBody />
-    </div>
+    </PageSection>
   )
 }
 

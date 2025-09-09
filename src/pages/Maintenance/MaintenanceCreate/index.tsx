@@ -1,6 +1,6 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Plus } from 'lucide-react'
 import { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { PageHeader, PageSection } from '@/components/layout'
 import { MaintenanceForm } from '@/components/pages/Maintenance'
@@ -9,12 +9,13 @@ import type { MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 
 const MaintenanceCreate = () => {
   const navigate = useNavigate()
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   const onSubmit = useCallback((data: MAINTENANCE_FORM_SCHEMA_TYPE) => {
     alert(data)
   }, [])
 
   //navigate before page
-  const navigateBefore = useCallback(() => navigate(ROUTES.maintenance.path), [navigate])
+  const navigateBefore = useCallback(() => navigate(ROUTES.maintenance.getPath(apartmentId)), [navigate, apartmentId])
   return (
     <PageSection className="space-y-4">
       <PageHeader
@@ -25,7 +26,7 @@ const MaintenanceCreate = () => {
         actionIcon={<ArrowLeft />}
         actionOnClick={navigateBefore}
       />
-      <MaintenanceForm onSubmit={onSubmit} />
+      <MaintenanceForm onSubmit={onSubmit} buttonIcon={<Plus />} buttonLabel="Create a Task" />
     </PageSection>
   )
 }

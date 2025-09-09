@@ -1,10 +1,11 @@
+import { PageSection } from '@/components/layout'
 import { MonthlyInvoiceDetail } from '@/components/pages/Invoice'
 
 const MonthlyInvoiceDetailPage = () => {
   return (
-    <div className="container mx-auto">
+    <PageSection>
       <MonthlyInvoiceDetail />
-    </div>
+    </PageSection>
   )
 }
 

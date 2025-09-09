@@ -2,7 +2,6 @@ import { AlertCircle, ArrowLeft, Building, CheckCircle, FileText } from 'lucide-
 import { useNavigate } from 'react-router-dom'
 
 import { Button, Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
-import { ROUTES } from '@/constants'
 
 import MonthlyInvoiceCreateTable from './MonthlyInvoiceCreateTable'
 
@@ -11,7 +10,7 @@ const MonthlyInvoiceCreate = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
-        <Button className="flex items-center gap-x-2" onClick={() => navigate(ROUTES.monthlyInvoice.path)}>
+        <Button className="flex items-center gap-x-2" onClick={() => navigate(-1)}>
           <ArrowLeft className="size-5" />
           Back to Monthly Invoices
         </Button>

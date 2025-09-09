@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-ro
 import { Layout } from '@/components/layout'
 import { TenantsManagement } from '@/components/pages/TenantsManagement'
 import { ROUTES } from '@/constants'
+import AllApartmentPage from '@/pages/AllApartments'
 import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
 import ApartmentSetup from '@/pages/ApartmentSetup'
@@ -17,10 +18,12 @@ import ServiceInvoicePage from '@/pages/Invoice/ServiceInvoice'
 import MaintenanceCreate from '@/pages/Maintenance/MaintenanceCreate'
 import MaintenanceDetailPage from '@/pages/Maintenance/MaintenanceDetailPage'
 import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
+import MaintenanceUpdate from '@/pages/Maintenance/MaintenanceUpdate'
 import OverviewPage from '@/pages/Overview'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import ReceiptReport from '@/pages/Report/ReceiptReport'
 import RoomReport from '@/pages/Report/RoomReport'
+import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
@@ -28,7 +31,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     element: (
       <>
         <ScrollRestoration />
-        <Layout isNavbar={false} />
+        <Layout isSidebar={false} isNavbar={false} />
       </>
     ),
     children: [
@@ -43,11 +46,26 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ],
   },
   {
+    path: '/apartment',
+    element: (
+      <>
+        <ScrollRestoration />
+        <Layout isSidebar={false} />
+      </>
+    ),
+    children: [
+      {
+        index: true,
+        element: <AllApartmentPage />,
+      },
+    ],
+  },
+  {
     path: '/setup',
     element: (
       <>
         <ScrollRestoration />
-        <Layout />
+        <Layout isSidebar={false} />
       </>
     ),
     children: [
@@ -62,7 +80,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ],
   },
   {
-    path: '/dashboard',
+    path: '/dashboard/:apartmentId',
     element: (
       <>
         <ScrollRestoration />
@@ -93,6 +111,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.maintenanceDetail.path,
         element: <MaintenanceDetailPage />,
+      },
+      {
+        path: ROUTES.maintenanceUpdate.path,
+        element: <MaintenanceUpdate />,
       },
       {
         path: ROUTES.allRoom.path,
@@ -129,6 +151,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.tenantsManagement.path,
         element: <TenantsManagement />,
+      },
+      {
+        path: ROUTES.tenantCreate.path,
+        element: <TenantCreatePage />,
       },
     ],
   },
