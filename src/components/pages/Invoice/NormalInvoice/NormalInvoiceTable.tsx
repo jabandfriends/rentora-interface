@@ -1,7 +1,8 @@
 import { SquarePen } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Badge, PaginationBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { NORMAL_INVOICE_TABLE_HEADER } from '@/constants'
+import { NORMAL_INVOICE_TABLE_HEADER, ROUTES } from '@/constants'
 
 //RECHECK : api type
 type INormalInvoiceTableProps = {
@@ -9,6 +10,11 @@ type INormalInvoiceTableProps = {
 }
 //RECHECK : API TYPE
 const NormalInvoiceTable = ({ data }: INormalInvoiceTableProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const navigate = useNavigate()
+  const handleRowClick = (invoiceId: string) => {
+    navigate(ROUTES.invoiceDetail.getPath(apartmentId, invoiceId))
+  }
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
       <Table>
@@ -22,7 +28,7 @@ const NormalInvoiceTable = ({ data }: INormalInvoiceTableProps) => {
         <TableBody>
           {/* RECHECK : API TYPE */}
           {data.map((item, index) => (
-            <TableRow key={index}>
+            <TableRow onClick={() => handleRowClick(index.toString())} key={index}>
               <TableCell>{item.invoice}</TableCell>
               <TableCell>{item.tenant}</TableCell>
               <TableCell>{item.room}</TableCell>
