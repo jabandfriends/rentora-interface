@@ -20,6 +20,7 @@ import OverviewPage from '@/pages/Overview'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import ReceiptReport from '@/pages/Report/ReceiptReport'
 import RoomReport from '@/pages/Report/RoomReport'
+import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
@@ -124,6 +125,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.monthlyInvoiceDetail.path,
         element: <MonthlyInvoiceDetail />,
+      },
+      {
+        path: ROUTES.tenantCreate.path,
+        element: <TenantCreatePage />,
       },
     ],
   },
