@@ -97,9 +97,9 @@ export const TENANT_FORM_FIELDS: Array<FORM_SECTION<TENANT_FORM_FIELDS_TYPE>> = 
           },
           {
             key: 'unit_id',
-            label: 'Room',
+            label: 'Room number',
             fieldType: 'select',
-            placeholder: 'Select Room',
+            placeholder: 'Select Room number',
             options: [
               { value: 'room1', label: 'Room 1' },
               { value: 'room2', label: 'Room 2' },

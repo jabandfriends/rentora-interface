@@ -35,7 +35,7 @@ const TenantForm = ({ onSubmit }: ITenantFormProps) => {
       national_id: '',
       birth_date: '',
       floor: '',
-      room: '',
+      unit_id: '',
     },
   })
   return (
