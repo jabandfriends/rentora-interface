@@ -87,7 +87,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ),
     children: [
       {
-        index: true,
+        path: ROUTES.overview.path,
         element: <OverviewPage />,
       },
       {
