@@ -13,6 +13,10 @@ export const ROUTES: IRoutes = {
     path: '/dashboard/maintenance/detail/:id',
     getURL: (id: string) => `/dashboard/maintenance/detail/${id}`,
   },
+  maintenanceUpdate: {
+    path: '/dashboard/maintenance/update/:id',
+    getURL: (id: string) => `/dashboard/maintenance/update/${id}`,
+  },
   overdueInvoice: { path: '/dashboard/overdue-invoice' },
   overview: { path: '/dashboard/overview' },
   allRoom: { path: '/dashboard/all-room' },
@@ -26,4 +30,5 @@ export const ROUTES: IRoutes = {
     getURL: (id: string) => `/dashboard/monthly-invoice/detail/${id}`,
   },
   tenantCreate: { path: '/dashboard/tenant/create' },
+  allApartment: { path: '/apartment' },
 }

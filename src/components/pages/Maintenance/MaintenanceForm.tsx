@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -21,7 +20,7 @@ import {
 import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
 import type { IMaintenanceFormProps, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 
-const MaintenanceForm = ({ onSubmit }: IMaintenanceFormProps) => {
+const MaintenanceForm = ({ onSubmit, buttonLabel, buttonIcon }: IMaintenanceFormProps) => {
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(MAINTENANCE_FORM_SCHEMA),
     defaultValues: {
@@ -143,7 +142,7 @@ const MaintenanceForm = ({ onSubmit }: IMaintenanceFormProps) => {
 
         <div className="flex justify-end">
           <Button className="flex items-center gap-2" type="submit">
-            <Plus /> Create a task
+            {buttonIcon} {buttonLabel}
           </Button>
         </div>
       </form>
