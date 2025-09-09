@@ -29,7 +29,7 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
     <div className="relative min-h-screen">
       <>{isNavbar && <NavBar sidebarOpen={sidebarOpen} onSidebarToggle={setSidebar} isSidebar={isSidebar} />}</>
       <OutletWrapper>
-        {isSidebar && <Sidebar isOpen={sidebarOpen} onClose={setSidebar} />}
+        {isSidebar && <Sidebar className="h-full" isOpen={sidebarOpen} onClose={setSidebar} />}
         <Outlet />
       </OutletWrapper>
     </div>

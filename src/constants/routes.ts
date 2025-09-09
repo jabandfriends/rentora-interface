@@ -34,4 +34,5 @@ export const ROUTES: IRoutes = {
   monthlyInvoiceCreate: apartmentRoute('/monthly-invoice/create'),
   monthlyInvoiceDetail: apartmentRoute('/monthly-invoice/detail/:id'),
   invoiceCreate: apartmentRoute('/invoice/create'),
+  tenantCreate: apartmentRoute('/tenant/create'),
 }
