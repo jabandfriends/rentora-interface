@@ -1,10 +1,11 @@
+import { PageSection } from '@/components/layout'
 import { ServiceInvoice } from '@/components/pages/Invoice'
 
 const ServiceInvoicePage = () => {
   return (
-    <div className="container mx-auto flex flex-col gap-y-8 py-5">
+    <PageSection className="desktop:px-8 flex w-full flex-col gap-y-5 px-4 py-5">
       <ServiceInvoice />
-    </div>
+    </PageSection>
   )
 }
 

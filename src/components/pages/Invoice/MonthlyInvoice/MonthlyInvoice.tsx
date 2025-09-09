@@ -1,5 +1,5 @@
 import { Plus } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { MonthlyInvoiceBody } from '@/components/pages/Invoice'
@@ -8,6 +8,7 @@ import { NORMAL_INVOICE_STATS, ROUTES } from '@/constants'
 
 const MonthlyInvoice = () => {
   const navigate = useNavigate()
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   return (
     <>
       <PageTableHeader
@@ -15,7 +16,10 @@ const MonthlyInvoice = () => {
         description="Manage monthly rent invoices"
         stats={NORMAL_INVOICE_STATS}
         actionButton={
-          <Button onClick={() => navigate(ROUTES.monthlyInvoiceCreate.path)} className="flex items-center gap-2">
+          <Button
+            onClick={() => navigate(ROUTES.monthlyInvoiceCreate.getPath(apartmentId))}
+            className="flex items-center gap-2"
+          >
             <Plus size={18} /> New Invoice
           </Button>
         }

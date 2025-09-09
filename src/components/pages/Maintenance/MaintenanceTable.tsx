@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Badge, PaginationBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { MAINTENANCE_TABLE_HEADER, ROUTES } from '@/constants'
@@ -10,12 +10,13 @@ type IMaintenanceTableProps = {
 
 const MaintenanceTable = ({ data }: IMaintenanceTableProps) => {
   const navigate = useNavigate()
+  const { apartmentId } = useParams<{ apartmentId: string }>()
 
   const handleRowClick = useCallback(
     (index: string) => {
-      navigate(ROUTES.maintenanceDetail.getURL(index))
+      navigate(ROUTES.maintenanceDetail.getPath(apartmentId, index))
     },
-    [navigate],
+    [navigate, apartmentId],
   )
 
   return (

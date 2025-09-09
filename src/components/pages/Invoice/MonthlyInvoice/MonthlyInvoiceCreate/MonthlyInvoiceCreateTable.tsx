@@ -1,5 +1,5 @@
 import { CheckCircle, Droplets, Eye, Zap } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
@@ -7,6 +7,7 @@ import { ROUTES } from '@/constants'
 
 const MonthlyInvoiceCreateTable = () => {
   const navigate = useNavigate()
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   return (
     <Table className="w-full">
       <TableHeader>
@@ -63,7 +64,7 @@ const MonthlyInvoiceCreateTable = () => {
             <div className="flex gap-2">
               <Button
                 size="sm"
-                onClick={() => navigate(ROUTES.monthlyInvoiceDetail.getURL('1'))}
+                onClick={() => navigate(ROUTES.monthlyInvoiceDetail.getPath(apartmentId, '1'))}
                 className="bg-theme-success-100 text-theme-success-500 hover:bg-theme-success-200 flex items-center gap-x-2"
               >
                 <Eye className="size-3" />
