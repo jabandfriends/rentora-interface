@@ -12,7 +12,7 @@ type TENANT_FORM_FIELDS_TYPE_BASE = {
     | 'national_id'
     | 'birth_date'
     | 'floor'
-    | 'room'
+    | 'unit_id'
   label?: string
   description?: string
 }

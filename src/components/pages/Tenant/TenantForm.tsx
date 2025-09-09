@@ -11,6 +11,11 @@ import {
   FormMessage,
   Input,
   InputNumber,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Textarea,
 } from '@/components/common'
 import { TENANT_FORM_FIELDS, TENANT_FORM_SCHEMA } from '@/constants'
@@ -107,6 +112,22 @@ const TenantForm = ({ onSubmit }: ITenantFormProps) => {
                                   ) : (
                                     <Input {...field} placeholder={fieldItem.placeholder} />
                                   )
+                                ) : fieldItem.fieldType === 'select' ? (
+                                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder={fieldItem.placeholder} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {fieldItem.options.map((fieldItem, index) => (
+                                        <SelectItem
+                                          key={'select-value' + fieldItem.value + index}
+                                          value={fieldItem.value}
+                                        >
+                                          {fieldItem.label}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
                                 ) : null}
                                 <FormMessage />
                               </div>

@@ -13,7 +13,7 @@ export const TENANT_FORM_SCHEMA = z.object({
   national_id: z.string({ error: 'National ID is required.' }).min(1, 'National ID is required.'),
   birth_date: z.string({ error: 'Birth date is required.' }).min(1, 'Birth date is required.'),
   floor: z.string({ error: 'Floor is required.' }).min(1, 'Floor is required.'),
-  room: z.string({ error: 'Room is required.' }).min(1, 'Room is required.'),
+  unit_id: z.string({ error: 'Room is required.' }).min(1, 'Room is required.'),
 })
 
 export const TENANT_FORM_FIELDS: Array<FORM_SECTION<TENANT_FORM_FIELDS_TYPE>> = [
@@ -87,14 +87,24 @@ export const TENANT_FORM_FIELDS: Array<FORM_SECTION<TENANT_FORM_FIELDS_TYPE>> = 
           {
             key: 'floor',
             label: 'Floor',
-            fieldType: 'input',
-            inputType: 'number',
+            fieldType: 'select',
+            placeholder: 'Select Floor',
+            options: [
+              { value: 'floor1', label: 'Floor 1' },
+              { value: 'floor2', label: 'Floor 2' },
+              { value: 'floor3', label: 'Floor 3' },
+            ],
           },
           {
-            key: 'room',
+            key: 'unit_id',
             label: 'Room',
-            fieldType: 'input',
-            inputType: 'number',
+            fieldType: 'select',
+            placeholder: 'Select Room',
+            options: [
+              { value: 'room1', label: 'Room 1' },
+              { value: 'room2', label: 'Room 2' },
+              { value: 'room3', label: 'Room 3' },
+            ],
           },
         ],
       },
