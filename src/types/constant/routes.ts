@@ -29,5 +29,5 @@ export type IRoutes = {
   maintenanceUpdate: IRoute
   monthlyInvoiceDetail: IRoute
   tenantCreate: IRoute
-  tenantsManagement: IRoute
+  tenant: IRoute
 }

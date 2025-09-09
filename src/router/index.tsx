@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-router-dom'
 
 import { Layout } from '@/components/layout'
-import { TenantsManagement } from '@/components/pages/TenantsManagement'
 import { ROUTES } from '@/constants'
 import AllApartmentPage from '@/pages/AllApartments'
 import AllRoomsPage from '@/pages/AllRooms'
@@ -23,6 +22,7 @@ import OverviewPage from '@/pages/Overview'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import ReceiptReport from '@/pages/Report/ReceiptReport'
 import RoomReport from '@/pages/Report/RoomReport'
+import TenantPage from '@/pages/Tenant/Tenant'
 import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
@@ -149,8 +149,8 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <MonthlyInvoiceDetail />,
       },
       {
-        path: ROUTES.tenantsManagement.path,
-        element: <TenantsManagement />,
+        path: ROUTES.tenant.path,
+        element: <TenantPage />,
       },
       {
         path: ROUTES.tenantCreate.path,
