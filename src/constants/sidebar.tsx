@@ -12,6 +12,10 @@ export const SIDEBAR_ITEMS: Array<SidebarMenu> = [
 export const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
   { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.path },
 ]
+//sidebar teneants management menu
+export const SIDEBAR_TENANTS_MANAGEMENT: Array<SidebarMenu> = [
+  { icon: <Table size={16} />, label: 'Tenants Management', to: ROUTES.tenantsManagement.path },
+]
 
 //sidebar collapse menu
 //sidebar collapse report menu
@@ -70,6 +74,12 @@ export const SIDEBAR_ITEMS_MENU: Array<SidebarNavMenu> = [
     title: 'Maintenance',
     icon: <Wrench size={16} />,
     menu: SIDEBAR_MAINTENANCE,
+  },
+  {
+    type: 'item',
+    title: 'Tenants Management',
+    icon: <Wrench size={16} />,
+    menu: SIDEBAR_TENANTS_MANAGEMENT,
   },
 ]
 

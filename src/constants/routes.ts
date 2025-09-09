@@ -16,6 +16,7 @@ export const ROUTES: IRoutes = {
   overdueInvoice: { path: '/dashboard/overdue-invoice' },
   overview: { path: '/dashboard/overview' },
   allRoom: { path: '/dashboard/all-room' },
+  tenantsManagement: { path: '/dashboard/tenants-management' },
   roomReport: { path: '/dashboard/report/room' },
   receiptReport: { path: '/dashboard/report/receipt' },
   electricWaterReport: { path: '/dashboard/report/electric-water' },
