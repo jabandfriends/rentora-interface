@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 
 import { PageHeader, PageSection } from '@/components/layout'
 import { TenantForm } from '@/components/pages/Tenant'
-import { ROUTES } from '@/constants'
 import type { TENANT_FORM_SCHEMA_TYPE } from '@/types'
 
 const TenantCreate = () => {
@@ -14,7 +13,7 @@ const TenantCreate = () => {
   }, [])
 
   //navigate before page
-  const navigateBefore = useCallback(() => navigate(ROUTES.home.path), [navigate])
+  const navigateBefore = useCallback(() => navigate(-1), [navigate])
   return (
     <PageSection className="space-y-4">
       <PageHeader

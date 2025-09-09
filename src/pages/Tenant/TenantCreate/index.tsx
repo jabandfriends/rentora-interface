@@ -1,10 +1,11 @@
+import { PageSection } from '@/components/layout'
 import { TenantCreate } from '@/components/pages/Tenant/'
 
 const TenantCreatePage = () => {
   return (
-    <div className="container mx-auto flex flex-col gap-y-5 py-5">
+    <PageSection>
       <TenantCreate />
-    </div>
+    </PageSection>
   )
 }
 
