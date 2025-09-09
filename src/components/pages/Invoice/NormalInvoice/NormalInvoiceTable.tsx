@@ -28,7 +28,7 @@ const NormalInvoiceTable = ({ data }: INormalInvoiceTableProps) => {
         <TableBody>
           {/* RECHECK : API TYPE */}
           {data.map((item, index) => (
-            <TableRow onClick={() => handleRowClick(index.toString())} key={index}>
+            <TableRow className="cursor-pointer" onClick={() => handleRowClick(index.toString())} key={index}>
               <TableCell>{item.invoice}</TableCell>
               <TableCell>{item.tenant}</TableCell>
               <TableCell>{item.room}</TableCell>
