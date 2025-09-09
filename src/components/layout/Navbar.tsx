@@ -31,12 +31,12 @@ const NavBar = ({
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           )}
-          <div className="flex items-center gap-x-2">
+          <div className="desktop:flex hidden items-center gap-x-2">
             <Link className="flex items-center gap-x-2" to={ROUTES.allApartment.path}>
               <h5 className="bg-theme-primary text-theme-white flex size-8 items-center justify-center rounded-lg">
                 R
               </h5>
-              <h3 className="desktop:block hidden">Rentora</h3>
+              <h3>Rentora</h3>
             </Link>
           </div>
         </div>

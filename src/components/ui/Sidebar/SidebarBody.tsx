@@ -6,10 +6,10 @@ type ISidebarBodyProps = PropsWithChildren<{ isOpen: boolean; onClose: () => voi
 
 const SidebarBody = ({ children, className, isOpen, onClose, ...props }: ISidebarBodyProps) => {
   return (
-    <>
+    <div>
       <div
         className={cn(
-          'bg-theme-white desktop:static desktop:translate-x-0 fixed left-0 top-0 z-50 h-screen w-64 py-2 duration-200',
+          'bg-theme-white desktop:translate-x-0 desktop:static fixed left-0 top-0 z-50 h-full w-64 py-2 duration-200',
           isOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
@@ -18,7 +18,7 @@ const SidebarBody = ({ children, className, isOpen, onClose, ...props }: ISideba
         </div>
       </div>
       {isOpen && <div className="desktop:hidden bg-theme-night/80 fixed inset-0 z-40" onClick={onClose} />}
-    </>
+    </div>
   )
 }
 
