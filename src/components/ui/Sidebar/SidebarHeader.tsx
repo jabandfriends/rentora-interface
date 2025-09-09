@@ -17,7 +17,7 @@ const SidebarHeader = ({ onClose, title, className, ...props }: ISidebarHeaderPr
       onClick={onClose}
       {...props}
       className={cn(
-        'hover:bg-theme-night-800/20 border-theme-secondary-300 flex h-16 cursor-pointer items-center justify-between border-b px-4 duration-200',
+        'desktop:hidden hover:bg-theme-night-800/20 border-theme-secondary-300 flex h-16 cursor-pointer items-center justify-between border-b px-4 duration-200',
         className,
       )}
     >
