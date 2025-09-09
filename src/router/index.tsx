@@ -9,6 +9,7 @@ import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication/Authentication'
 import FirstTimePasswordResetPage from '@/pages/Authentication/FirstTimePasswordReset'
 import InvoiceCreatePage from '@/pages/Invoice/InvoiceCreate'
+import InvoiceDetailPage from '@/pages/Invoice/InvoiceDetail'
 import MonthlyInvoicePage from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoice'
 import MonthlyInvoiceCreate from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoiceCreate'
 import MonthlyInvoiceDetail from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoiceDetail'
@@ -160,6 +161,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.tenantCreate.path,
         element: <TenantCreatePage />,
+      },
+      {
+        path: ROUTES.invoiceDetail.path,
+        element: <InvoiceDetailPage />,
       },
     ],
   },
