@@ -1,28 +1,32 @@
-type IRoute = {
+import type { Maybe } from '@/types'
+
+export type IRoute = {
   path: string
-  getURL: (slug: string) => string
+  getPath: (apartmentId: Maybe<string>, id?: string) => string
 }
 
 export type IRoutes = {
-  home: Omit<IRoute, 'getURL'>
-  firstTimePasswordReset: Omit<IRoute, 'getURL'>
-  apartmentCreate: Omit<IRoute, 'getURL'>
-  apartmentSetup: Omit<IRoute, 'getURL'>
-  normalInvoice: Omit<IRoute, 'getURL'>
-  monthlyInvoice: Omit<IRoute, 'getURL'>
-  maintenance: Omit<IRoute, 'getURL'>
-  overdueInvoice: Omit<IRoute, 'getURL'>
-  overview: Omit<IRoute, 'getURL'>
-  allRoom: Omit<IRoute, 'getURL'>
-  roomReport: Omit<IRoute, 'getURL'>
-  receiptReport: Omit<IRoute, 'getURL'>
-  electricWaterReport: Omit<IRoute, 'getURL'>
-  serviceInvoice: Omit<IRoute, 'getURL'>
-  maintenanceCreate: Omit<IRoute, 'getURL'>
+  home: Omit<IRoute, 'getPath'>
+  firstTimePasswordReset: Omit<IRoute, 'getPath'>
+  apartmentCreate: Omit<IRoute, 'getPath'>
+  apartmentSetup: Omit<IRoute, 'getPath'>
+  allApartment: Omit<IRoute, 'getPath'>
+
+  // dashboard "/dashboard/:apartmentId/${subpath}"
+  normalInvoice: IRoute
+  monthlyInvoice: IRoute
+  maintenance: IRoute
+  overdueInvoice: IRoute
+  overview: IRoute
+  allRoom: IRoute
+  roomReport: IRoute
+  receiptReport: IRoute
+  electricWaterReport: IRoute
+  serviceInvoice: IRoute
+  maintenanceCreate: IRoute
   maintenanceDetail: IRoute
+  monthlyInvoiceCreate: IRoute
   maintenanceUpdate: IRoute
-  monthlyInvoiceCreate: Omit<IRoute, 'getURL'>
   monthlyInvoiceDetail: IRoute
-  tenantCreate: Omit<IRoute, 'getURL'>
-  allApartment: Omit<IRoute, 'getURL'>
+  tenantCreate: IRoute
 }

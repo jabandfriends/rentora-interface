@@ -8,7 +8,7 @@ const ApartmentSetup = () => {
   //RECHECK : API
   const handleSubmit = (data: any) => {
     alert(data)
-    navigate(ROUTES.overview.path)
+    navigate(ROUTES.allApartment.path)
   }
   return (
     <div className="flex flex-col items-center justify-center px-4">

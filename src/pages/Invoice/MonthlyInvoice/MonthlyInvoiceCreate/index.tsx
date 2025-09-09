@@ -1,10 +1,11 @@
+import { PageSection } from '@/components/layout'
 import { MonthlyInvoiceCreate } from '@/components/pages/Invoice'
 
 const MonthlyInvoiceCreatePage = () => {
   return (
-    <div className="container mx-auto flex flex-col gap-y-5 py-5">
+    <PageSection>
       <MonthlyInvoiceCreate />
-    </div>
+    </PageSection>
   )
 }
 
