@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Plus } from 'lucide-react'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -24,7 +24,7 @@ const TenantCreate = () => {
         actionIcon={<ArrowLeft />}
         actionOnClick={navigateBefore}
       />
-      <TenantForm onSubmit={onSubmit} />
+      <TenantForm onSubmit={onSubmit} iconLabel={<Plus />} buttonLabel="Create Tenant" />
     </PageSection>
   )
 }

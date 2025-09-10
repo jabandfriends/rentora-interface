@@ -8,6 +8,8 @@ import ApartmentCreatePage from '@/pages/ApartmentCreate'
 import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication/Authentication'
 import FirstTimePasswordResetPage from '@/pages/Authentication/FirstTimePasswordReset'
+import InvoiceCreatePage from '@/pages/Invoice/InvoiceCreate'
+import InvoiceDetailPage from '@/pages/Invoice/InvoiceDetail'
 import MonthlyInvoicePage from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoice'
 import MonthlyInvoiceCreate from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoiceCreate'
 import MonthlyInvoiceDetail from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoiceDetail'
@@ -24,6 +26,7 @@ import ReceiptReport from '@/pages/Report/ReceiptReport'
 import RoomReport from '@/pages/Report/RoomReport'
 import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
+import TenantUpdatePage from '@/pages/Tenant/TenantUpdate'
 
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
@@ -101,6 +104,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <MonthlyInvoicePage />,
       },
       {
+        path: ROUTES.invoiceCreate.path,
+        element: <InvoiceCreatePage />,
+      },
+      {
         path: ROUTES.maintenance.path,
         element: <MaintenancePage />,
       },
@@ -141,6 +148,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <ServiceInvoicePage />,
       },
       {
+        path: ROUTES.tenantUpdate.path,
+        element: <TenantUpdatePage />,
+      },
+      {
         path: ROUTES.monthlyInvoiceCreate.path,
         element: <MonthlyInvoiceCreate />,
       },
@@ -154,7 +165,11 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       },
       {
         path: ROUTES.tenantUpdatePassword.path,
-        element: <TenantUpdatePassword />,
+        element: <TenantUpdatePassword />
+      }
+      {
+        path: ROUTES.invoiceDetail.path,
+        element: <InvoiceDetailPage />,
       },
     ],
   },
