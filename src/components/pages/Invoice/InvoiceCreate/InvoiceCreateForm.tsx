@@ -1,5 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 import {
   Button,
@@ -17,31 +19,21 @@ import {
   SelectValue,
   Textarea,
 } from '@/components/common'
-import { TENANT_FORM_FIELDS, TENANT_FORM_SCHEMA } from '@/constants'
-import type { ITenantFormProps, TENANT_FORM_SCHEMA_TYPE } from '@/types'
+import { AdhocInvoiceSchema, INVOICE_FORM_FIELDS } from '@/constants'
+import type { AdhocInvoice } from '@/types'
 
-const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
-  const form = useForm<TENANT_FORM_SCHEMA_TYPE>({
-    resolver: zodResolver(TENANT_FORM_SCHEMA),
-    defaultValues: {
-      full_name: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      confirm_password: '',
-      phone: '',
-      national_id: '',
-      birth_date: '',
-      floor: '',
-      unit_id: '',
-    },
+type IInvoiceCreateFormProps = {
+  onSubmit: (data: AdhocInvoice) => void
+}
+const InvoiceCreateForm = ({ onSubmit }: IInvoiceCreateFormProps) => {
+  const form = useForm<z.infer<typeof AdhocInvoiceSchema>>({
+    resolver: zodResolver(AdhocInvoiceSchema),
   })
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         {/* Task Detail */}
-        {TENANT_FORM_FIELDS.map(({ title, description, fields }) => (
+        {INVOICE_FORM_FIELDS.map(({ title, description, fields }) => (
           <Card key={'form-section' + title + description} className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
             <div>
               <h3>{title}</h3>
@@ -50,6 +42,35 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
             <div className="space-y-2">
               {fields.map((item, index) => {
                 switch (item.fieldType) {
+                  case 'select':
+                    return (
+                      <FormField
+                        key={'form-tenant-field' + item.key + index}
+                        control={form.control}
+                        name={item.key}
+                        render={({ field }) => (
+                          <div className="space-y-1">
+                            <p>{item.label}</p>
+                            <Select onValueChange={field.onChange} defaultValue={field.value?.toString() || ''}>
+                              <SelectTrigger>
+                                <SelectValue placeholder={item.placeholder} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {item.options.map((fieldItem, index) => (
+                                  <SelectItem
+                                    key={'select-value' + fieldItem.value + index}
+                                    value={fieldItem.value.toString()}
+                                  >
+                                    {fieldItem.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </div>
+                        )}
+                      />
+                    )
                   case 'input':
                     return (
                       <FormField
@@ -60,9 +81,17 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
                           <div className="space-y-1">
                             <p>{item.label}</p>
                             {item.inputType === 'number' ? (
-                              <InputNumber {...field} placeholder={item.placeholder} />
+                              <InputNumber
+                                {...field}
+                                value={field.value?.toString() || ''}
+                                placeholder={item.placeholder}
+                              />
                             ) : item.inputType === 'textarea' ? (
-                              <Textarea {...field} placeholder={item.placeholder} />
+                              <Textarea
+                                {...field}
+                                value={field.value?.toString() || ''}
+                                placeholder={item.placeholder}
+                              />
                             ) : item.inputType === 'datetime' ? (
                               <DateTimePicker
                                 id={field.name}
@@ -73,7 +102,7 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
                                 required
                               />
                             ) : (
-                              <Input {...field} placeholder={item.placeholder} />
+                              <Input {...field} value={field.value?.toString() || ''} placeholder={item.placeholder} />
                             )}
                             <FormMessage />
                           </div>
@@ -96,9 +125,17 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
                                 <p>{fieldItem.label}</p>
                                 {fieldItem.fieldType === 'input' ? (
                                   fieldItem.inputType === 'number' ? (
-                                    <InputNumber {...field} placeholder={fieldItem.placeholder} />
+                                    <InputNumber
+                                      {...field}
+                                      value={field.value?.toString() || ''}
+                                      placeholder={fieldItem.placeholder}
+                                    />
                                   ) : fieldItem.inputType === 'textarea' ? (
-                                    <Textarea {...field} placeholder={fieldItem.placeholder} />
+                                    <Textarea
+                                      {...field}
+                                      value={field.value?.toString() || ''}
+                                      placeholder={fieldItem.placeholder}
+                                    />
                                   ) : fieldItem.inputType === 'datetime' ? (
                                     <DateTimePicker
                                       id={field.name}
@@ -109,10 +146,14 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
                                       required
                                     />
                                   ) : (
-                                    <Input {...field} placeholder={fieldItem.placeholder} />
+                                    <Input
+                                      {...field}
+                                      value={field.value?.toString() || ''}
+                                      placeholder={fieldItem.placeholder}
+                                    />
                                   )
                                 ) : fieldItem.fieldType === 'select' ? (
-                                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <Select onValueChange={field.onChange} defaultValue={field.value?.toString() || ''}>
                                     <SelectTrigger>
                                       <SelectValue placeholder={fieldItem.placeholder} />
                                     </SelectTrigger>
@@ -120,7 +161,7 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
                                       {fieldItem.options.map((fieldItem, index) => (
                                         <SelectItem
                                           key={'select-value' + fieldItem.value + index}
-                                          value={fieldItem.value}
+                                          value={fieldItem.value.toString()}
                                         >
                                           {fieldItem.label}
                                         </SelectItem>
@@ -142,8 +183,8 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
         ))}
 
         <div className="flex justify-end">
-          <Button className="flex items-center gap-2" type="submit">
-            {iconLabel} {buttonLabel}
+          <Button type="submit" className="flex items-center gap-2">
+            <Plus /> Create a invoice
           </Button>
         </div>
       </form>
@@ -151,4 +192,4 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
   )
 }
 
-export default TenantForm
+export default InvoiceCreateForm
