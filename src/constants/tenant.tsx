@@ -1,7 +1,12 @@
 import { CircleAlert, CircleCheckBig, DollarSign } from 'lucide-react'
 import z from 'zod'
 
-import type { FORM_SECTION, IStatsCardProps, TENANT_FORM_FIELDS_TYPE } from '@/types'
+import type {
+  FORM_SECTION,
+  IStatsCardProps,
+  TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_BASE,
+  TENANT_FORM_FIELDS_TYPE,
+} from '@/types'
 
 export const TENANT_FORM_SCHEMA = z.object({
   full_name: z.string(),
@@ -15,6 +20,11 @@ export const TENANT_FORM_SCHEMA = z.object({
   birth_date: z.string({ error: 'Birth date is required.' }).min(1, 'Birth date is required.'),
   floor: z.string({ error: 'Floor is required.' }).min(1, 'Floor is required.'),
   unit_id: z.string({ error: 'Room is required.' }).min(1, 'Room is required.'),
+})
+
+export const TENANT_PASSWORD_UPDATE_SCHEMA = z.object({
+  password: z.string({ error: 'Password is required.' }).min(6, 'Password must be at least 6 characters long.'),
+  confirmpassword: z.string({ error: 'Confirm password is required.' }).min(1, 'Confirm password is required.'),
 })
 
 export const TENANT_FORM_FIELDS: Array<FORM_SECTION<TENANT_FORM_FIELDS_TYPE>> = [
@@ -166,3 +176,23 @@ export const TENANT_TABLE_HEADER = [
 ]
 
 export const TENANT_ACTION: Array<string> = ['Update Tenant', 'Password Update']
+export const TENANT_PASSWORD_UPDATE_FORM: Array<FORM_SECTION<TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_BASE>> = [
+  {
+    title: 'Tenant Password Update',
+    description: 'Update tenant password',
+    fields: [
+      {
+        fieldType: 'input',
+        key: 'password',
+        label: 'New Password',
+        placeholder: 'Enter the password',
+      },
+      {
+        fieldType: 'input',
+        key: 'confirmpassword',
+        label: 'Confirm Password',
+        placeholder: 'Confirm the Password',
+      },
+    ],
+  },
+]

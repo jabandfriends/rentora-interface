@@ -16,6 +16,16 @@ type TENANT_FORM_FIELDS_TYPE_BASE = {
   label?: string
   description?: string
 }
+
+export type TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_BASE = {
+  fieldType: 'input'
+  key: 'password' | 'confirmpassword'
+  label?: string
+  description?: string
+  inputType?: 'text'
+  placeholder?: string
+}
+
 type TENANT_FORM_FIELDS_TYPE_INPUT = TENANT_FORM_FIELDS_TYPE_BASE & {
   fieldType: 'input'
   inputType?: 'text' | 'number' | 'date' | 'datetime' | 'textarea'
