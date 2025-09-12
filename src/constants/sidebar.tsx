@@ -1,4 +1,4 @@
-import { FileSpreadsheet, FileText, Home, Settings, Table, Wrench } from 'lucide-react'
+import { BookUser, FileSpreadsheet, FileText, Home, Settings, Table, Wrench } from 'lucide-react'
 
 import { ROUTES } from '@/constants'
 import type { Maybe, SidebarMenu, SidebarNavMenu } from '@/types'
@@ -17,7 +17,7 @@ export const getSidebarItems = (
     { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.getPath(apartmentId) },
   ]
   const SIDEBAR_TENANTS_MANAGEMENT: Array<SidebarMenu> = [
-    { icon: <Table size={16} />, label: 'Tenants Management', to: ROUTES.tenant.getPath(apartmentId) },
+    { icon: <BookUser size={16} />, label: 'Tenants Management', to: ROUTES.tenant.getPath(apartmentId) },
   ]
   // sidebar reports
   const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [
