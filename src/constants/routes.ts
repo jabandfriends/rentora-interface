@@ -33,6 +33,7 @@ export const ROUTES: IRoutes = {
   serviceInvoice: apartmentRoute('/service-invoice'),
   monthlyInvoiceCreate: apartmentRoute('/monthly-invoice/create'),
   monthlyInvoiceDetail: apartmentRoute('/monthly-invoice/detail/:id'),
+  tenant: apartmentRoute('/tenant'),
   invoiceCreate: apartmentRoute('/invoice/create'),
   tenantCreate: apartmentRoute('/tenant/create'),
   tenantUpdatePassword: apartmentRoute('/tenant/update-password/:id'),

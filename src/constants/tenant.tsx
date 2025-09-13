@@ -1,6 +1,12 @@
+import { CircleAlert, CircleCheckBig, DollarSign } from 'lucide-react'
 import z from 'zod'
 
-import type { FORM_SECTION, TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_BASE, TENANT_FORM_FIELDS_TYPE } from '@/types'
+import type {
+  FORM_SECTION,
+  IStatsCardProps,
+  TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_BASE,
+  TENANT_FORM_FIELDS_TYPE,
+} from '@/types'
 
 export const TENANT_FORM_SCHEMA = z.object({
   full_name: z.string(),
@@ -117,6 +123,59 @@ export const TENANT_FORM_FIELDS: Array<FORM_SECTION<TENANT_FORM_FIELDS_TYPE>> = 
   },
 ]
 
+export const TENANT_STATS: Array<IStatsCardProps> = [
+  {
+    title: 'Total Tenant',
+    count: 5,
+    type: 'primary',
+    icon: <DollarSign size={22} />,
+  },
+  {
+    title: 'Occupied Tenants',
+    count: 2,
+    type: 'success',
+    icon: <CircleCheckBig size={22} />,
+  },
+  {
+    title: 'Unoccupied Tenants',
+    count: 2,
+    type: 'warning',
+    icon: <CircleAlert size={22} />,
+  },
+]
+export const TENANT_DATA = [
+  {
+    tenantsid: 'TENANT-001',
+    name: 'Andre Onana',
+    email: 'ThegoatOnana@gmail.com',
+    floor: '1',
+    unit: '102',
+    createdate: '30/08/2024',
+    status: 'Occupied',
+  },
+  {
+    tenantsid: 'TENANT-002',
+    name: 'Jadon Sancho',
+    email: 'ThefreedomSancho@gmail.com',
+    floor: '-',
+    unit: '-',
+    createdate: '30/08/2024',
+    status: 'Occupied',
+  },
+]
+
+export const TENANT_TABLE_HEADER = [
+  'TENANT ID',
+  'Full Name',
+  'Email Address',
+  'Floor',
+  'Unit',
+  'Created Date',
+  'Status',
+  'Action',
+]
+
+export const TENANT_ACTION: Array<string> = ['Update Tenant', 'Password Update']
 export const TENANT_PASSWORD_UPDATE_FORM: Array<FORM_SECTION<TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_BASE>> = [
   {
     title: 'Tenant Password Update',

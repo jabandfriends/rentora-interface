@@ -24,6 +24,7 @@ import OverviewPage from '@/pages/Overview'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import ReceiptReport from '@/pages/Report/ReceiptReport'
 import RoomReport from '@/pages/Report/RoomReport'
+import TenantPage from '@/pages/Tenant/Tenant'
 import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
 import TenantUpdatePage from '@/pages/Tenant/TenantUpdate'
@@ -158,6 +159,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.monthlyInvoiceDetail.path,
         element: <MonthlyInvoiceDetail />,
+      },
+      {
+        path: ROUTES.tenant.path,
+        element: <TenantPage />,
       },
       {
         path: ROUTES.tenantCreate.path,
