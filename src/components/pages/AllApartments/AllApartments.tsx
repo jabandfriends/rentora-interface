@@ -1,36 +1,42 @@
-import { Plus, Search } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-import { Button, Input } from '@/components/common'
-import { AllApartmentEmpty, AllApartmentLoading, ApartmentCard } from '@/components/pages/AllApartments'
+import { Button } from '@/components/common'
+import {
+  AllApartmentEmpty,
+  AllApartmentLoading,
+  ApartmentCard,
+  ApartmentNotFound,
+} from '@/components/pages/AllApartments'
 import { ROUTES } from '@/constants'
-import type { Maybe } from '@/types'
+import type { IApartment } from '@/types'
 
 type IAllApartments = {
-  data: Maybe<Array<any>>
-  loading: boolean
+  data: Array<IApartment>
+  isLoading: boolean
+  isSearched: boolean
 }
 
-const AllApartments = ({ data, loading }: IAllApartments) => {
+const AllApartments = ({ data, isLoading, isSearched }: IAllApartments) => {
   const navigate = useNavigate()
 
   const handleCreateApartment = () => {
     navigate(ROUTES.apartmentCreate.path)
   }
 
-  if (loading) {
+  if (isLoading) {
     return <AllApartmentLoading />
   }
-  if (!data) {
+  if (data.length === 0) {
+    if (isSearched) {
+      return <ApartmentNotFound />
+    }
     return <AllApartmentEmpty />
   }
 
   return (
     <div className="w-full space-y-4">
-      <div className="flex items-center gap-x-2">
-        <Input className="bg-theme-light" prefix={<Search />} placeholder="Search apartments" />
-      </div>
-      {data.map((item: any, index: number) => (
+      {data.map((item: IApartment, index: number) => (
         <ApartmentCard key={index} {...item} />
       ))}
       <div className="flex justify-end">

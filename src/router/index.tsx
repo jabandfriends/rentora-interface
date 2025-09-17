@@ -1,7 +1,9 @@
 import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-router-dom'
 
 import { Layout } from '@/components/layout'
+import { RENTORA_API_BASE_URL } from '@/config'
 import { ROUTES } from '@/constants'
+import { RentoraApiQueryClient } from '@/hooks'
 import AllApartmentPage from '@/pages/AllApartments'
 import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
@@ -28,7 +30,27 @@ import TenantPage from '@/pages/Tenant/Tenant'
 import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
 import TenantUpdatePage from '@/pages/Tenant/TenantUpdate'
+import type { Maybe } from '@/types'
+import { parseStorageKey } from '@/utilities'
 
+import RequireAuthWrapper from './RequireAuthWrapper'
+
+const authLoader = async (): Promise<{ valid: boolean }> => {
+  const rentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
+  const auth: Maybe<string> = localStorage.getItem(parseStorageKey('auth'))
+  if (!auth) {
+    return { valid: false }
+  }
+  const { accessToken }: { accessToken: string } = JSON.parse(auth)
+
+  try {
+    await rentoraApiQueryClient.checkAuth(accessToken)
+    return { valid: true }
+    //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_: unknown) {
+    return { valid: false }
+  }
+}
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
     path: '/',
@@ -50,12 +72,29 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ],
   },
   {
-    path: '/apartment',
+    path: '/',
+    loader: authLoader,
     element: (
-      <>
+      <RequireAuthWrapper>
         <ScrollRestoration />
         <Layout isSidebar={false} />
-      </>
+      </RequireAuthWrapper>
+    ),
+    children: [
+      {
+        path: ROUTES.firstTimePasswordReset.path,
+        element: <FirstTimePasswordResetPage />,
+      },
+    ],
+  },
+  {
+    path: '/apartment',
+    loader: authLoader,
+    element: (
+      <RequireAuthWrapper>
+        <ScrollRestoration />
+        <Layout isSidebar={false} />
+      </RequireAuthWrapper>
     ),
     children: [
       {
@@ -66,11 +105,12 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   },
   {
     path: '/setup',
+    loader: authLoader,
     element: (
-      <>
+      <RequireAuthWrapper>
         <ScrollRestoration />
         <Layout isSidebar={false} />
-      </>
+      </RequireAuthWrapper>
     ),
     children: [
       {
@@ -85,11 +125,12 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   },
   {
     path: '/dashboard/:apartmentId',
+    loader: authLoader,
     element: (
-      <>
+      <RequireAuthWrapper>
         <ScrollRestoration />
         <Layout />
-      </>
+      </RequireAuthWrapper>
     ),
     children: [
       {

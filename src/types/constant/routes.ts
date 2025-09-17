@@ -6,7 +6,7 @@ export type IRoute = {
 }
 
 export type IRoutes = {
-  home: Omit<IRoute, 'getPath'>
+  auth: Omit<IRoute, 'getPath'>
   firstTimePasswordReset: Omit<IRoute, 'getPath'>
   apartmentCreate: Omit<IRoute, 'getPath'>
   apartmentSetup: Omit<IRoute, 'getPath'>

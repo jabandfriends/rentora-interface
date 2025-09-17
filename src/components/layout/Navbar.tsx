@@ -1,5 +1,6 @@
 import { LogOut, Menu, Settings, User, X } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { useCallback } from 'react'
+import { Link, type NavigateFunction, useNavigate } from 'react-router-dom'
 
 import {
   DropdownMenu,
@@ -20,6 +21,10 @@ const NavBar = ({
   sidebarOpen: boolean
 }) => {
   // hooks
+  const navigate: NavigateFunction = useNavigate()
+  const handleLogout = useCallback(() => {
+    navigate(ROUTES.auth.path)
+  }, [navigate])
 
   return (
     <header className="bg-theme-white border-theme-night-600 sticky top-0 z-50 border-b shadow-sm">
@@ -68,7 +73,7 @@ const NavBar = ({
               <Settings className="text-theme-secondary-400" /> Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-theme-error">
+            <DropdownMenuItem className="text-theme-error" onClick={handleLogout}>
               <LogOut className="text-theme-error" /> Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
