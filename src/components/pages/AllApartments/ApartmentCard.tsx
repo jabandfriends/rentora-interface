@@ -17,6 +17,7 @@ type IApartmentCard = {
   tenants: string
 }
 const ApartmentCard = ({
+  id,
   apartmentName,
   imageUrl,
   address,
@@ -30,7 +31,7 @@ const ApartmentCard = ({
 
   const handleViewApartment = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    navigate(ROUTES.overview.path)
+    navigate(ROUTES.overview.getPath(id))
   }
   return (
     <Card className="w-full rounded-xl">
@@ -44,7 +45,7 @@ const ApartmentCard = ({
           />
         </div>
         <div className="flex flex-col justify-between gap-y-2">
-          <div className="bg-theme-secondary-200/40 grid grid-cols-2 gap-y-2 rounded-sm p-2">
+          <div className="bg-theme-secondary-200/30 desktop:px-8 grid grid-cols-2 gap-y-2 rounded-xl px-4 py-4">
             <div>
               <h5>Address </h5>
               <p className="text-body-2">{address}</p>

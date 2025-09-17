@@ -4,7 +4,7 @@ import { cn } from '@/utilities'
 
 export const StatsCard = ({ title, count, icon, type, className }: IStatsCardProps) => {
   return (
-    <Card className={cn('rounded-4xl w-78 h-40', className)}>
+    <Card className={cn('rounded-4xl w-68 h-40', className)}>
       <div>
         <h3>{count}</h3>
         <p className="text-theme-secondary">{title}</p>

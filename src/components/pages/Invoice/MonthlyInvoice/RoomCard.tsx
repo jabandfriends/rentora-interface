@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Card } from '@/components/common'
 import { Badge } from '@/components/ui'
@@ -9,8 +9,9 @@ import { cn } from '@/utilities'
 type IRoomCardProps = HTMLAttributes<HTMLDivElement>
 const RoomCard = ({ className, ...props }: IRoomCardProps) => {
   const navigate = useNavigate()
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   return (
-    <Card className={cn('border-theme-secondary-300 w-92 rounded-2xl border py-5', className)} {...props}>
+    <Card className={cn('border-theme-secondary-300 w-84 rounded-2xl border py-5', className)} {...props}>
       <div>
         <div className="flex items-center justify-between">
           <h4>Room 101</h4>
@@ -39,7 +40,7 @@ const RoomCard = ({ className, ...props }: IRoomCardProps) => {
         </div>
         <span className="text-theme-secondary">Invoice : INV-2024-06-101</span>
       </div>
-      <Button onClick={() => navigate(ROUTES.monthlyInvoiceDetail.getURL('1'))} block>
+      <Button onClick={() => navigate(ROUTES.monthlyInvoiceDetail.getPath(apartmentId, '1'))} block>
         View
       </Button>
     </Card>

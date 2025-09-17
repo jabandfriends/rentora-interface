@@ -1,6 +1,3 @@
-import { Plus } from 'lucide-react'
-
-import { Button } from '@/components/common'
 import { ElectricWaterReportTable } from '@/components/pages/Report/ElectricWaterReport'
 import { PageTableBar, PageTableHeader, PageTableSearch } from '@/components/ui'
 import { ELECTRIC_WATER_REPORT_DATA, ELECTRIC_WATER_REPORT_STATS } from '@/constants'
@@ -12,11 +9,6 @@ const ElectricWaterReport = () => {
         title="Electric & Water Usage"
         description="Manage and view electric & water usage and bills"
         stats={ELECTRIC_WATER_REPORT_STATS}
-        actionButton={
-          <Button className="flex items-center gap-2">
-            <Plus size={18} />
-          </Button>
-        }
       />
       <PageTableBar title="Total Amount" count="฿13,090,009" />
       <PageTableSearch />

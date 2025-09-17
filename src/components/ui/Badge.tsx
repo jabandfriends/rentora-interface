@@ -9,6 +9,7 @@ const badgeVariants = tv({
   variants: {
     variant: {
       default: 'bg-theme-primary-50 text-theme-primary-500 [a&]:hover:bg-theme-primary/90 border-transparent',
+      secondary: 'bg-theme-secondary-50 text-theme-secondary-500 [a&]:hover:bg-theme-secondary/90 border-transparent',
       success: 'bg-theme-success-50 text-theme-success-500 [a&]:hover:bg-theme-success/90 border-transparent',
       error: 'bg-theme-error-50 text-theme-error-500 [a&]:hover:bg-theme-error/90 border-transparent',
       warning: 'bg-theme-warning-50 text-theme-warning-500 [a&]:hover:bg-theme-warning/90 border-transparent',

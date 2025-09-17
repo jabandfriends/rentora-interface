@@ -1,0 +1,195 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+
+import {
+  Button,
+  Card,
+  DateTimePicker,
+  Form,
+  FormField,
+  FormMessage,
+  Input,
+  InputNumber,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Textarea,
+} from '@/components/common'
+import { AdhocInvoiceSchema, INVOICE_FORM_FIELDS } from '@/constants'
+import type { AdhocInvoice } from '@/types'
+
+type IInvoiceCreateFormProps = {
+  onSubmit: (data: AdhocInvoice) => void
+}
+const InvoiceCreateForm = ({ onSubmit }: IInvoiceCreateFormProps) => {
+  const form = useForm<z.infer<typeof AdhocInvoiceSchema>>({
+    resolver: zodResolver(AdhocInvoiceSchema),
+  })
+  return (
+    <Form {...form}>
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        {/* Task Detail */}
+        {INVOICE_FORM_FIELDS.map(({ title, description, fields }) => (
+          <Card key={'form-section' + title + description} className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
+            <div>
+              <h3>{title}</h3>
+              <p className="text-theme-secondary">{description}</p>
+            </div>
+            <div className="space-y-2">
+              {fields.map((item, index) => {
+                switch (item.fieldType) {
+                  case 'select':
+                    return (
+                      <FormField
+                        key={'form-tenant-field' + item.key + index}
+                        control={form.control}
+                        name={item.key}
+                        render={({ field }) => (
+                          <div className="space-y-1">
+                            <p>{item.label}</p>
+                            <Select onValueChange={field.onChange} defaultValue={field.value?.toString() || ''}>
+                              <SelectTrigger>
+                                <SelectValue placeholder={item.placeholder} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {item.options.map((fieldItem, index) => (
+                                  <SelectItem
+                                    key={'select-value' + fieldItem.value + index}
+                                    value={fieldItem.value.toString()}
+                                  >
+                                    {fieldItem.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </div>
+                        )}
+                      />
+                    )
+                  case 'input':
+                    return (
+                      <FormField
+                        key={'form-tenant-field' + item.key + index}
+                        control={form.control}
+                        name={item.key}
+                        render={({ field, fieldState }) => (
+                          <div className="space-y-1">
+                            <p>{item.label}</p>
+                            {item.inputType === 'number' ? (
+                              <InputNumber
+                                {...field}
+                                value={field.value?.toString() || ''}
+                                placeholder={item.placeholder}
+                              />
+                            ) : item.inputType === 'textarea' ? (
+                              <Textarea
+                                {...field}
+                                value={field.value?.toString() || ''}
+                                placeholder={item.placeholder}
+                              />
+                            ) : item.inputType === 'datetime' ? (
+                              <DateTimePicker
+                                id={field.name}
+                                onChange={(val) => field.onChange(val?.toISOString())}
+                                onBlur={field.onBlur}
+                                name={field.name}
+                                error={!!fieldState.error}
+                                required
+                              />
+                            ) : (
+                              <Input {...field} value={field.value?.toString() || ''} placeholder={item.placeholder} />
+                            )}
+                            <FormMessage />
+                          </div>
+                        )}
+                      />
+                    )
+                  case 'layout':
+                    return (
+                      <div
+                        key={'form-tenant-field' + item.key + index}
+                        className="desktop:grid-cols-2 grid gap-x-4 gap-y-1"
+                      >
+                        {item.fields.map((fieldItem, index) => (
+                          <FormField
+                            key={'form-tenant-field' + fieldItem.key + index}
+                            control={form.control}
+                            name={fieldItem.key}
+                            render={({ field, fieldState }) => (
+                              <div className="space-y-1">
+                                <p>{fieldItem.label}</p>
+                                {fieldItem.fieldType === 'input' ? (
+                                  fieldItem.inputType === 'number' ? (
+                                    <InputNumber
+                                      {...field}
+                                      value={field.value?.toString() || ''}
+                                      placeholder={fieldItem.placeholder}
+                                    />
+                                  ) : fieldItem.inputType === 'textarea' ? (
+                                    <Textarea
+                                      {...field}
+                                      value={field.value?.toString() || ''}
+                                      placeholder={fieldItem.placeholder}
+                                    />
+                                  ) : fieldItem.inputType === 'datetime' ? (
+                                    <DateTimePicker
+                                      id={field.name}
+                                      onChange={(val) => field.onChange(val?.toISOString())}
+                                      onBlur={field.onBlur}
+                                      name={field.name}
+                                      error={!!fieldState.error}
+                                      required
+                                    />
+                                  ) : (
+                                    <Input
+                                      {...field}
+                                      value={field.value?.toString() || ''}
+                                      placeholder={fieldItem.placeholder}
+                                    />
+                                  )
+                                ) : fieldItem.fieldType === 'select' ? (
+                                  <Select onValueChange={field.onChange} defaultValue={field.value?.toString() || ''}>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder={fieldItem.placeholder} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {fieldItem.options.map((fieldItem, index) => (
+                                        <SelectItem
+                                          key={'select-value' + fieldItem.value + index}
+                                          value={fieldItem.value.toString()}
+                                        >
+                                          {fieldItem.label}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                ) : null}
+                                <FormMessage />
+                              </div>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    )
+                }
+              })}
+            </div>
+          </Card>
+        ))}
+
+        <div className="flex justify-end">
+          <Button type="submit" className="flex items-center gap-2">
+            <Plus /> Create a invoice
+          </Button>
+        </div>
+      </form>
+    </Form>
+  )
+}
+
+export default InvoiceCreateForm
