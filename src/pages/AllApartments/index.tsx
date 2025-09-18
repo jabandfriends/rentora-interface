@@ -1,15 +1,19 @@
 import { useDebounce } from '@uidotdev/usehooks'
+import { Plus } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import type { NavigateFunction } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { SearchBar } from '@/components/feature'
 import { PageHeader } from '@/components/layout'
 import { AllApartments } from '@/components/pages/AllApartments'
-import { DEFAULT_APARTMENT_LIST_DATA } from '@/constants'
+import { DEFAULT_APARTMENT_LIST_DATA, ROUTES } from '@/constants'
 import { useRentoraApiApartmentList } from '@/hooks'
 import type { ISearchBarProps } from '@/types'
 
 const AllApartmentPage = () => {
+  const navigate: NavigateFunction = useNavigate()
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState<number>(
     DEFAULT_APARTMENT_LIST_DATA.page,
   )
@@ -22,7 +26,11 @@ const AllApartmentPage = () => {
   const [search]: [string] = watch(['search'])
 
   const debouncedSearch = useDebounce(search ? search : undefined, 500)
-  const { data: apartments, isLoading } = useRentoraApiApartmentList({
+  const {
+    data: apartments,
+    pagination: { totalPages, totalElements },
+    isLoading,
+  } = useRentoraApiApartmentList({
     params: {
       page: currentPage,
       size: DEFAULT_APARTMENT_LIST_DATA.size,
@@ -42,11 +50,38 @@ const AllApartmentPage = () => {
     return !!debouncedSearch
   }, [debouncedSearch])
 
+  const handlePageChange = useCallback(
+    (page: number) => {
+      if (page < 1) return
+      setCurrentPage(page)
+    },
+    [setCurrentPage],
+  )
+
+  const handleCreateApartment = useCallback(() => {
+    navigate(ROUTES.apartmentCreate.path)
+  }, [navigate])
+
   return (
     <div className="container mx-auto space-y-4 px-4 py-4">
-      <PageHeader title="All Apartments" description="A quick overview of the apartments you manage." />
+      <PageHeader
+        title="All Apartments"
+        description="A quick overview of the apartments you manage."
+        isAction
+        actionLabel="Create Apartment"
+        actionIcon={<Plus />}
+        actionOnClick={handleCreateApartment}
+      />
       <SearchBar onChange={handleSearchChange} />
-      <AllApartments data={apartments} isLoading={isLoading} isSearched={isSearched} />
+      <AllApartments
+        data={apartments}
+        isLoading={isLoading}
+        isSearched={isSearched}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalElements={totalElements}
+        onPageChange={handlePageChange}
+      />
       <p className="text-body-2 text-theme-secondary text-center">
         © 2025 Rentora. Simplifying property management for landlords everywhere.
       </p>

@@ -1,8 +1,16 @@
 import { PackageOpen, Plus } from 'lucide-react'
+import { useCallback } from 'react'
+import type { NavigateFunction } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/common'
+import { ROUTES } from '@/constants'
 
 const AllApartmentEmpty = () => {
+  const navigate: NavigateFunction = useNavigate()
+  const handleCreateApartment = useCallback(() => {
+    navigate(ROUTES.apartmentCreate.path)
+  }, [navigate])
   return (
     <div className="h-110 flex flex-col items-center justify-center gap-y-4">
       <PackageOpen size={56} />
@@ -13,7 +21,7 @@ const AllApartmentEmpty = () => {
         </p>
       </div>
 
-      <Button className="flex items-center gap-x-2">
+      <Button className="flex items-center gap-x-2" onClick={handleCreateApartment}>
         <Plus /> Create an Apartment
       </Button>
     </div>

@@ -1,10 +1,13 @@
-import { Eye, Image as ImageIcon, User } from 'lucide-react'
+import { Building, Eye, Image as ImageIcon, Sofa, User } from 'lucide-react'
 import type { MouseEvent } from 'react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import type { VariantProps } from 'tailwind-variants'
 
 import { Button, Card, Image } from '@/components/common'
+import { Badge } from '@/components/ui'
 import { ROUTES } from '@/constants'
+import { APARTMENT_STATUS } from '@/enum'
 import type { IApartment } from '@/types'
 import { formatTimestamp } from '@/utilities'
 
@@ -30,12 +33,45 @@ const ApartmentCard = ({
     navigate(ROUTES.overview.getPath(id))
   }
 
+  const statusBadgeVariant: VariantProps<typeof Badge>['variant'] = useMemo(() => {
+    switch (status) {
+      case APARTMENT_STATUS.INCOMPLETE:
+        return 'warning'
+      case APARTMENT_STATUS.IN_PROGRESS:
+        return 'default'
+      case APARTMENT_STATUS.ACTIVE:
+        return 'success'
+      case APARTMENT_STATUS.INACTIVE:
+        return 'error'
+      default:
+        return 'secondary'
+    }
+  }, [status])
+
+  const apartmentStatusMessage: string = useMemo(() => {
+    switch (status) {
+      case APARTMENT_STATUS.INCOMPLETE:
+        return 'Setup Incomplete'
+      case APARTMENT_STATUS.IN_PROGRESS:
+        return 'Setup In Progress'
+      case APARTMENT_STATUS.ACTIVE:
+        return 'Active'
+      case APARTMENT_STATUS.INACTIVE:
+        return 'Inactive'
+      default:
+        return 'Unknown'
+    }
+  }, [status])
+
   const createdAtTime = useMemo(() => formatTimestamp(createdAt, 'YYYY-MM-DD HH:mm:ss', 'Asia/Bangkok'), [createdAt])
   const updatedAtTime = useMemo(() => formatTimestamp(updatedAt, 'YYYY-MM-DD HH:mm:ss', 'Asia/Bangkok'), [updatedAt])
   return (
     <Card className="w-full space-y-1 rounded-xl">
       <div className="flex flex-col justify-between">
-        <h4>{name}</h4>
+        <div className="flex items-center justify-between">
+          <h4>{name}</h4>
+          <Badge variant={statusBadgeVariant}>{apartmentStatusMessage}</Badge>
+        </div>
         <div className="desktop:flex-row desktop:items-center flex flex-col justify-between">
           <p className="text-body-2 text-theme-secondary">Created at : {createdAtTime}</p>
           <p className="text-body-2 text-theme-secondary">Last updated at : {updatedAtTime}</p>
@@ -70,20 +106,17 @@ const ApartmentCard = ({
               <h5>Phone Number </h5>
               <p className="text-body-2">{phoneNumber}</p>
             </div>
-            <div>
-              <h5>Status </h5>
-              <p className="text-body-2">{status}</p>
-            </div>
+
             <div>
               <h5> Building Count </h5>
               <p className="text-body-2 flex items-center gap-x-2">
-                <User size={16} /> {buildingCount}
+                <Building size={16} /> {buildingCount}
               </p>
             </div>
             <div>
               <h5> Unit Count </h5>
               <p className="text-body-2 flex items-center gap-x-2">
-                <User size={16} /> {unitCount}
+                <Sofa size={16} /> {unitCount}
               </p>
             </div>
             <div>

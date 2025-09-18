@@ -1,29 +1,31 @@
-import { Plus } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-
-import { Button } from '@/components/common'
+import { PaginationBar } from '@/components/feature'
 import {
   AllApartmentEmpty,
   AllApartmentLoading,
   ApartmentCard,
   ApartmentNotFound,
 } from '@/components/pages/AllApartments'
-import { ROUTES } from '@/constants'
 import type { IApartment } from '@/types'
 
 type IAllApartments = {
   data: Array<IApartment>
   isLoading: boolean
   isSearched: boolean
+  currentPage: number
+  totalPages: number
+  totalElements: number
+  onPageChange: (page: number) => void
 }
 
-const AllApartments = ({ data, isLoading, isSearched }: IAllApartments) => {
-  const navigate = useNavigate()
-
-  const handleCreateApartment = () => {
-    navigate(ROUTES.apartmentCreate.path)
-  }
-
+const AllApartments = ({
+  data,
+  isLoading,
+  isSearched,
+  currentPage,
+  totalPages,
+  totalElements,
+  onPageChange,
+}: IAllApartments) => {
   if (isLoading) {
     return <AllApartmentLoading />
   }
@@ -36,13 +38,20 @@ const AllApartments = ({ data, isLoading, isSearched }: IAllApartments) => {
 
   return (
     <div className="w-full space-y-4">
-      {data.map((item: IApartment, index: number) => (
-        <ApartmentCard key={index} {...item} />
-      ))}
+      <div className="desktop:grid-cols-2 grid gap-4">
+        {data.map((item: IApartment, index: number) => (
+          <ApartmentCard key={index} {...item} />
+        ))}
+      </div>
+
       <div className="flex justify-end">
-        <Button className="flex items-center gap-x-2" onClick={handleCreateApartment}>
-          <Plus /> Create an Apartment
-        </Button>
+        <PaginationBar
+          isLoading={isLoading}
+          page={currentPage}
+          totalElements={totalElements}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
       </div>
     </div>
   )
