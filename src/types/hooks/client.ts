@@ -1,1 +1,2 @@
-export type RentoraApiQueryClientKey = 'apartmentList'
+export type RentoraApiQueryClientKey = 'me' | 'apartmentList'
+export type RentoraApiExecuteClientKey = 'authenticate'

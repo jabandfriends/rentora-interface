@@ -1,42 +1,57 @@
-import { Plus, Search } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-
-import { Button, Input } from '@/components/common'
-import { AllApartmentEmpty, AllApartmentLoading, ApartmentCard } from '@/components/pages/AllApartments'
-import { ROUTES } from '@/constants'
-import type { Maybe } from '@/types'
+import { PaginationBar } from '@/components/feature'
+import {
+  AllApartmentEmpty,
+  AllApartmentLoading,
+  ApartmentCard,
+  ApartmentNotFound,
+} from '@/components/pages/AllApartments'
+import type { IApartment } from '@/types'
 
 type IAllApartments = {
-  data: Maybe<Array<any>>
-  loading: boolean
+  data: Array<IApartment>
+  isLoading: boolean
+  isSearched: boolean
+  currentPage: number
+  totalPages: number
+  totalElements: number
+  onPageChange: (page: number) => void
 }
 
-const AllApartments = ({ data, loading }: IAllApartments) => {
-  const navigate = useNavigate()
-
-  const handleCreateApartment = () => {
-    navigate(ROUTES.apartmentCreate.path)
-  }
-
-  if (loading) {
+const AllApartments = ({
+  data,
+  isLoading,
+  isSearched,
+  currentPage,
+  totalPages,
+  totalElements,
+  onPageChange,
+}: IAllApartments) => {
+  if (isLoading) {
     return <AllApartmentLoading />
   }
-  if (!data) {
+  if (data.length === 0) {
+    if (isSearched) {
+      return <ApartmentNotFound />
+    }
     return <AllApartmentEmpty />
   }
 
   return (
     <div className="w-full space-y-4">
-      <div className="flex items-center gap-x-2">
-        <Input className="bg-theme-light" prefix={<Search />} placeholder="Search apartments" />
+      <div className="desktop:grid-cols-2 grid gap-4">
+        {data.map((item: IApartment, index: number) => (
+          <ApartmentCard key={index} {...item} />
+        ))}
       </div>
-      {data.map((item: any, index: number) => (
-        <ApartmentCard key={index} {...item} />
-      ))}
+
       <div className="flex justify-end">
-        <Button className="flex items-center gap-x-2" onClick={handleCreateApartment}>
-          <Plus /> Create an Apartment
-        </Button>
+        <PaginationBar
+          isLoading={isLoading}
+          page={currentPage}
+          totalElements={totalElements}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
       </div>
     </div>
   )

@@ -14,7 +14,7 @@ type IPageHeaderProps = {
 const PageHeader = ({ title, description, isAction, actionLabel, actionIcon, actionOnClick }: IPageHeaderProps) => {
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center justify-between">
+      <div className="desktop:flex-row desktop:items-center flex flex-col justify-between gap-y-2">
         <div>
           <h2>{title}</h2>
           <p className="text-theme-secondary">{description}</p>

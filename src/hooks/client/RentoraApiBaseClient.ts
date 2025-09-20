@@ -7,7 +7,8 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from 'axios'
 
-import { camelizeKeys } from '@/utilities'
+import type { Maybe } from '@/types'
+import { camelizeKeys, parseStorageKey } from '@/utilities'
 
 const { create }: AxiosStatic = axios
 export class RentoraApiBaseClient {
@@ -47,13 +48,12 @@ export class RentoraApiBaseClient {
     )
     this.axiosWithAuthInstance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        // TODO: implement auth
-        // const auth: Maybe<string> = localStorage.getItem(parseStorageKey('auth'))
+        const auth: Maybe<string> = localStorage.getItem(parseStorageKey('auth'))
 
-        // if (auth) {
-        //   const { accessToken }: { accessToken: string } = JSON.parse(auth)
-        //   config.headers.set('X-Private-Rentora-Token', accessToken)
-        // }
+        if (auth) {
+          const { accessToken }: { accessToken: string } = JSON.parse(auth)
+          config.headers.set('Rentora-Auth-Token', accessToken)
+        }
 
         return config
       },
@@ -63,15 +63,6 @@ export class RentoraApiBaseClient {
     )
     this.axiosWithAuthInstance.interceptors.response.use(
       (response: AxiosResponse<any, any>) => {
-        // Do something before request is sent
-        //  e.g. add authorization header
-        // TODO: implement auth
-        // const auth: Maybe<string> = localStorage.getItem(parseStorageKey('auth'))
-
-        // if (auth) {
-        //   const { accessToken }: { accessToken: string } = JSON.parse(auth)
-        //   config.headers.set('X-Private-Rentora-Token', accessToken)
-        // }
         return camelizeKeys(response) as AxiosResponse<any, any>
       },
       (error: AxiosError) => {

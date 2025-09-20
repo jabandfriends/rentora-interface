@@ -1,16 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useCallback } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useSetAtom } from 'jotai'
+import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
+import { type SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { type NavigateFunction, useNavigate } from 'react-router-dom'
 
-import { Button, Card, Form, FormField, FormMessage, Image, Input } from '@/components/common'
+import { authAtom, type AuthState } from '@/atoms'
+import { Button, Card, Form, FormField, FormMessage, Image, Input, Spinner } from '@/components/common'
 import { AUTHENTICATION_FIELDS, AUTHENTICATION_FORM_SCHEMA, ROUTES } from '@/constants'
-import type { AUTHENTICATION_FORM_SCHEMA_TYPE } from '@/types'
-import { cn } from '@/utilities'
+import { useRentoraApiAuthenticate } from '@/hooks'
+import type { AUTHENTICATION_FORM_SCHEMA_TYPE, IRentoraApiClientAuthenticateResponse, SetAtom } from '@/types'
+import { cn, getErrorMessage } from '@/utilities'
 
 const Authentication = () => {
-  const navigate = useNavigate()
-
+  const [apiErrorMsg, setApiErrorMsg]: [string, Dispatch<SetStateAction<string>>] = useState('')
+  const navigate: NavigateFunction = useNavigate()
+  const [isNavigate, setIsNavigate]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
   const form = useForm<AUTHENTICATION_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(AUTHENTICATION_FORM_SCHEMA),
     defaultValues: {
@@ -19,16 +24,40 @@ const Authentication = () => {
     },
   })
 
-  const onSubmit = useCallback(
-    (data: AUTHENTICATION_FORM_SCHEMA_TYPE) => {
-      alert(data)
-      navigate(ROUTES.allApartment.path)
+  //hooks
+  const { mutateAsync: authenticate, isPending } = useRentoraApiAuthenticate()
+
+  //atom
+  const setAuth: SetAtom<AuthState> = useSetAtom(authAtom)
+
+  const buttonDisabled: boolean = useMemo(() => {
+    return isPending || !form.formState.isValid || isNavigate
+  }, [isPending, form.formState.isValid, isNavigate])
+
+  const onSubmit: SubmitHandler<AUTHENTICATION_FORM_SCHEMA_TYPE> = useCallback(
+    async ({ email, password }: AUTHENTICATION_FORM_SCHEMA_TYPE) => {
+      try {
+        setIsNavigate(true)
+
+        const { accessToken }: IRentoraApiClientAuthenticateResponse['data'] = await authenticate({ email, password })
+        setAuth({ accessToken })
+
+        toast.success('Login Successfully')
+        setTimeout(() => {
+          navigate(ROUTES.allApartment.path)
+          setIsNavigate(false)
+        }, 500)
+      } catch (error: unknown) {
+        setApiErrorMsg(getErrorMessage(error))
+        toast.error(getErrorMessage(error))
+        setIsNavigate(false)
+      }
     },
-    [navigate],
+    [authenticate, navigate, setAuth],
   )
 
   return (
-    <Card className="desktop:size-3/5 desktop:flex-col flex flex-col justify-center gap-y-4 rounded-3xl p-6 shadow">
+    <Card className="desktop:size-3/5 desktop:flex-col desktop:px-16 flex flex-col justify-center gap-y-4 rounded-3xl px-8 shadow">
       <div className="flex flex-col">
         <h2>Guess Who's Back</h2>
         <p>Let's Get You Signed in</p>
@@ -40,27 +69,31 @@ const Authentication = () => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="desktop:shadow desktop:p-4 flex flex-col items-start gap-5 rounded-3xl"
             >
-              {AUTHENTICATION_FIELDS.map(({ key, label, placeholder, type }) => (
-                <FormField
-                  control={form.control}
-                  name={key}
-                  render={({ field, fieldState }) => (
-                    <div className="w-full">
-                      <p className="font-semibold">{label}</p>
-                      <Input
-                        className={cn(fieldState.error && 'border-theme-error')}
-                        placeholder={placeholder}
-                        type={type}
-                        {...field}
-                      />
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-              ))}
+              <div className="w-full">
+                {AUTHENTICATION_FIELDS.map(({ key, label, placeholder, type }) => (
+                  <FormField
+                    key={'form-field-' + key}
+                    control={form.control}
+                    name={key}
+                    render={({ field, fieldState }) => (
+                      <div className="w-full">
+                        <p className="font-semibold">{label}</p>
+                        <Input
+                          className={cn(fieldState.error && 'border-theme-error')}
+                          placeholder={placeholder}
+                          type={type}
+                          {...field}
+                        />
+                        <FormMessage />
+                      </div>
+                    )}
+                  />
+                ))}
+                {apiErrorMsg && <p className="text-theme-error text-body-2">{apiErrorMsg}</p>}
+              </div>
 
-              <Button type="submit" block>
-                Login
+              <Button disabled={buttonDisabled} type="submit" block>
+                {isPending ? <Spinner /> : 'Login'}
               </Button>
             </form>
           </Form>

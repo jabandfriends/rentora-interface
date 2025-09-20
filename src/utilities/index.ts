@@ -1,3 +1,5 @@
 export * from './camelize'
 export * from './classname'
+export * from './error'
 export * from './storage'
+export * from './time'

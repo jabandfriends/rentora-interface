@@ -11,7 +11,8 @@ const apartmentRoute = (subPath: string): IRoute => ({
 
 export const ROUTES: IRoutes = {
   //static
-  home: { path: '/' },
+  auth: { path: '/' },
+
   allApartment: { path: '/apartment' },
   firstTimePasswordReset: { path: '/first-time-password-reset' },
   apartmentCreate: { path: '/setup/apartment-create' },
