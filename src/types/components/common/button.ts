@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, RefAttributes } from 'react'
 
 type IButtonVariants = {
-  variant: 'primary' | 'secondary' | 'vanilla' | 'outline' | 'error' | 'outlineSecondary' | 'link' | 'ghost'
+  variant: 'primary' | 'secondary' | 'vanilla' | 'outline' | 'error' | 'outlineSecondary' | 'link' | 'ghost' | 'warning'
   size: 'default' | 'sm' | 'icon'
   block: boolean
 }

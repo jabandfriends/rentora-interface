@@ -5,11 +5,15 @@ export type IRoute = {
   getPath: (apartmentId: Maybe<string>, id?: string) => string
 }
 
+export type IRouteWithUrl = IRoute & {
+  getUrl: (apartmentId: Maybe<string>) => string
+}
+
 export type IRoutes = {
   auth: Omit<IRoute, 'getPath'>
   firstTimePasswordReset: Omit<IRoute, 'getPath'>
   apartmentCreate: Omit<IRoute, 'getPath'>
-  apartmentSetup: Omit<IRoute, 'getPath'>
+  apartmentSetup: Omit<IRouteWithUrl, 'getPath'>
   allApartment: Omit<IRoute, 'getPath'>
 
   // dashboard "/dashboard/:apartmentId/${subpath}"
