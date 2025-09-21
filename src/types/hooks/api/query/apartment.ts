@@ -18,6 +18,7 @@ export type IApartment = {
   buildingCount: number
   unitCount: number
   activeContractCount: number
+  logoPresignedUrl: string
 }
 
 //response

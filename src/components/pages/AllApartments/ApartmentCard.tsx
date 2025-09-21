@@ -15,6 +15,7 @@ const ApartmentCard = ({
   id,
   name,
   logoUrl,
+  logoPresignedUrl,
   phoneNumber,
   address,
   city,
@@ -80,7 +81,11 @@ const ApartmentCard = ({
       <div className="desktop:grid-cols-2 grid gap-4">
         <div>
           {logoUrl ? (
-            <Image className="h-56 w-full rounded-lg object-cover" src={logoUrl} alt={'Apartment Image of ' + name} />
+            <Image
+              className="h-56 w-full rounded-lg object-cover"
+              src={logoPresignedUrl}
+              alt={'Apartment Image of ' + name}
+            />
           ) : (
             <div className="bg-theme-secondary-200/70 flex h-56 w-full flex-col items-center justify-center rounded-lg">
               <ImageIcon size={48} className="text-theme-secondary" />
