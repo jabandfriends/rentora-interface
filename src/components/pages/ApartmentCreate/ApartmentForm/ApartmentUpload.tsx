@@ -22,7 +22,7 @@ const ApartmentUpload = ({ control, form }: IApartUploadProps) => {
   return (
     <FormField
       control={control}
-      name="files"
+      name="logoFile"
       render={({ field }) => (
         <FormItem className="space-y-2">
           <div>
@@ -42,7 +42,7 @@ const ApartmentUpload = ({ control, form }: IApartUploadProps) => {
               maxFiles={1}
               maxSize={5 * 1024 * 1024}
               onFileReject={(_, message) => {
-                form.setError('files', {
+                form.setError('logoFile', {
                   message,
                 })
               }}
