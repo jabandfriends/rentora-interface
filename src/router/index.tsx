@@ -53,7 +53,7 @@ const authLoader = async (): Promise<{ valid: boolean }> => {
 }
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
-    path: '/',
+    path: '/authentication',
     element: (
       <>
         <ScrollRestoration />
@@ -65,14 +65,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         index: true,
         element: <Authentication />,
       },
-      {
-        path: ROUTES.firstTimePasswordReset.path,
-        element: <FirstTimePasswordResetPage />,
-      },
     ],
   },
   {
-    path: '/',
+    path: '/authentication',
     loader: authLoader,
     element: (
       <RequireAuthWrapper>
@@ -88,7 +84,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ],
   },
   {
-    path: '/apartment',
+    path: '/',
     loader: authLoader,
     element: (
       <RequireAuthWrapper>
