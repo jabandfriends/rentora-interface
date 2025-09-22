@@ -1,4 +1,4 @@
-import { EllipsisVertical, LogOut, Settings, User } from 'lucide-react'
+import { EllipsisVertical, LogOut, User } from 'lucide-react'
 import { useCallback } from 'react'
 import { type NavigateFunction, useNavigate } from 'react-router-dom'
 
@@ -48,9 +48,7 @@ const SidebarUserProfile = () => {
         <DropdownMenuItem>
           <User className="text-theme-secondary-400" /> Account
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Settings className="text-theme-secondary-400" /> Settings
-        </DropdownMenuItem>
+
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-theme-error" onClick={handleLogout}>
           <LogOut className="text-theme-error" /> Logout

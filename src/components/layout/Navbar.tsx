@@ -1,4 +1,4 @@
-import { LogOut, Menu, Settings, User, X } from 'lucide-react'
+import { LogOut, Menu, User, X } from 'lucide-react'
 import { useCallback } from 'react'
 import { Link, type NavigateFunction, useNavigate } from 'react-router-dom'
 
@@ -68,9 +68,6 @@ const NavBar = ({
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <User className="text-theme-secondary-400" /> Account
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="text-theme-secondary-400" /> Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-theme-error" onClick={handleLogout}>
