@@ -1,2 +1,2 @@
-export type RentoraApiQueryClientKey = 'me' | 'apartmentList'
+export type RentoraApiQueryClientKey = 'me' | 'apartmentList' | 'apartmentDetail'
 export type RentoraApiExecuteClientKey = 'authenticate' | 'createApartment' | 'putPresignedUrl'

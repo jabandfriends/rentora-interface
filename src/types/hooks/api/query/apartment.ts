@@ -1,4 +1,10 @@
-import type { IBasePaginateQueryResult, IRentoraApiClientBasePaginateResponse, Maybe } from '@/types'
+import type {
+  IBasePaginateQueryResult,
+  IBaseUseQuery,
+  IRentoraApiClientBasePaginateResponse,
+  IRentoraApiClientBaseResponse,
+  Maybe,
+} from '@/types'
 
 //hooks type useRentoraApiApartmentList
 export type IUseRentoraApiApartmentList = IBasePaginateQueryResult<IRentoraApiClientApartmentListResponse['data']>
@@ -21,6 +27,19 @@ export type IApartment = {
   logoPresignedUrl: string
 }
 
+export type IApartmentDetail = IApartment & {
+  taxId: string
+  paymentDueDay: number
+  lateFee: number
+  lateFeeType: string
+  gracePeriodDays: number
+  postalCode: string
+  country: string
+  timezone: string
+  currency: string
+  totalTenants: number
+}
+
 //response
 export type IRentoraApiClientApartmentListResponse = IRentoraApiClientBasePaginateResponse<IApartment>
 
@@ -31,4 +50,12 @@ export type IRentoraApiApartmentListParams = {
   search?: string
   sortBy?: 'name' | 'createdAt' | 'updatedAt'
   sortDir?: 'asc' | 'desc'
+}
+
+export type IUseRentoraApiApartmentDetail = IBaseUseQuery<IRentoraApiClientApartmentDetailResponse['data']>
+
+export type IRentoraApiClientApartmentDetailResponse = IRentoraApiClientBaseResponse<IApartmentDetail>
+
+export type IRentoraApiApartmentDetailParams = {
+  apartmentId: string
 }

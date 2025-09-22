@@ -33,6 +33,7 @@ import TenantUpdatePage from '@/pages/Tenant/TenantUpdate'
 import type { Maybe } from '@/types'
 import { parseStorageKey } from '@/utilities'
 
+import RequireApartmentWrapper from './RequireApartmentWrapper'
 import RequireAuthWrapper from './RequireAuthWrapper'
 
 const authLoader = async (): Promise<{ valid: boolean }> => {
@@ -51,6 +52,29 @@ const authLoader = async (): Promise<{ valid: boolean }> => {
     return { valid: false }
   }
 }
+
+//apartmentStatusCheck
+const apartmentStatusLoader = async ({
+  params,
+}: {
+  params: { apartmentId?: string }
+}): Promise<{ status: Maybe<string>; id: Maybe<string> }> => {
+  const rentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
+
+  try {
+    if (!params.apartmentId) {
+      return { status: null, id: null }
+    }
+
+    const response = await rentoraApiQueryClient.apartmentDetail({ apartmentId: params.apartmentId })
+
+    return { status: response.status, id: params.apartmentId }
+    //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_: unknown) {
+    return { status: null, id: null }
+  }
+}
+
 const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
     path: '/authentication',
@@ -100,7 +124,23 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ],
   },
   {
-    path: '/setup',
+    path: '/setup/:apartmentId',
+    loader: authLoader,
+    element: (
+      <RequireAuthWrapper>
+        <ScrollRestoration />
+        <Layout isSidebar={false} />
+      </RequireAuthWrapper>
+    ),
+    children: [
+      {
+        index: true,
+        element: <ApartmentSetup />,
+      },
+    ],
+  },
+  {
+    path: '/create',
     loader: authLoader,
     element: (
       <RequireAuthWrapper>
@@ -113,19 +153,23 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         path: ROUTES.apartmentCreate.path,
         element: <ApartmentCreatePage />,
       },
-      {
-        path: ROUTES.apartmentSetup.path,
-        element: <ApartmentSetup />,
-      },
     ],
   },
+
   {
     path: '/dashboard/:apartmentId',
-    loader: authLoader,
+    loader: async (args) => {
+      const { valid } = await authLoader()
+      const { status, id } = await apartmentStatusLoader(args)
+
+      return { valid, status, id }
+    },
     element: (
       <RequireAuthWrapper>
-        <ScrollRestoration />
-        <Layout />
+        <RequireApartmentWrapper>
+          <ScrollRestoration />
+          <Layout />
+        </RequireApartmentWrapper>
       </RequireAuthWrapper>
     ),
     children: [

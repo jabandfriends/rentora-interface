@@ -1,5 +1,5 @@
-import { Building, Eye, Image as ImageIcon, Sofa, User } from 'lucide-react'
-import type { MouseEvent } from 'react'
+import { Building, Eye, FileDown, Image as ImageIcon, Sofa, User } from 'lucide-react'
+import type { MouseEvent, ReactNode } from 'react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
@@ -8,7 +8,7 @@ import { Button, Card, Image } from '@/components/common'
 import { Badge } from '@/components/ui'
 import { ROUTES } from '@/constants'
 import { APARTMENT_STATUS } from '@/enum'
-import type { IApartment } from '@/types'
+import type { IApartment, Maybe } from '@/types'
 import { formatTimestamp } from '@/utilities'
 
 const ApartmentCard = ({
@@ -33,6 +33,40 @@ const ApartmentCard = ({
     e.stopPropagation()
     navigate(ROUTES.overview.getPath(id))
   }
+
+  const { isButtonDisabled, buttonText, buttonVariant, buttonIcon } = useMemo(() => {
+    let text: string = ''
+    let disabled: boolean = false
+    let variant: VariantProps<typeof Button>['variant'] = 'primary'
+    let icon: Maybe<ReactNode> = <Eye size={16} />
+
+    switch (status) {
+      case APARTMENT_STATUS.ACTIVE:
+        text = 'View'
+        disabled = false
+        variant = 'primary'
+        break
+      case APARTMENT_STATUS.INACTIVE:
+        text = 'Inactive Apartment'
+        disabled = true
+        variant = 'error'
+        icon = null
+        break
+      case APARTMENT_STATUS.IN_PROGRESS:
+      case APARTMENT_STATUS.INCOMPLETE:
+        text = 'Continue setup'
+        disabled = false
+        variant = 'warning'
+        icon = <FileDown size={16} />
+        break
+      default:
+        text = 'View'
+        disabled = false
+        variant = 'primary'
+    }
+
+    return { isButtonDisabled: disabled, buttonText: text, buttonVariant: variant, buttonIcon: icon }
+  }, [status])
 
   const statusBadgeVariant: VariantProps<typeof Badge>['variant'] = useMemo(() => {
     switch (status) {
@@ -97,19 +131,19 @@ const ApartmentCard = ({
           <div className="bg-theme-secondary-200/30 desktop:px-8 grid grid-cols-2 gap-y-2 rounded-xl px-4 py-4">
             <div>
               <h5>Address </h5>
-              <p className="text-body-2">{address}</p>
+              <p className="text-body-2">{address || 'N/A'}</p>
             </div>
             <div>
               <h5>City </h5>
-              <p className="text-body-2">{city}</p>
+              <p className="text-body-2">{city || 'N/A'}</p>
             </div>
             <div>
               <h5>State </h5>
-              <p className="text-body-2">{state}</p>
+              <p className="text-body-2">{state || 'N/A'}</p>
             </div>
             <div>
               <h5>Phone Number </h5>
-              <p className="text-body-2">{phoneNumber}</p>
+              <p className="text-body-2">{phoneNumber || 'N/A'}</p>
             </div>
 
             <div>
@@ -132,9 +166,15 @@ const ApartmentCard = ({
             </div>
           </div>
 
-          <Button onClick={handleViewApartment} className="flex items-center gap-x-2" block>
-            <Eye size={16} />
-            View
+          <Button
+            variant={buttonVariant}
+            disabled={isButtonDisabled}
+            onClick={handleViewApartment}
+            className="flex items-center gap-x-2"
+            block
+          >
+            {buttonIcon}
+            {buttonText}
           </Button>
         </div>
       </div>

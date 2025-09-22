@@ -1,17 +1,26 @@
-import { useNavigate } from 'react-router-dom'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
+import { PageSection } from '@/components/layout'
 import { Field, FormStep, MultiStepForm } from '@/components/ui'
 import { apartmentDetailSchema, buildingSchema, paymentInformationSchema, ROUTES, serviceSchema } from '@/constants'
+import { useRentoraApiApartmentDetail } from '@/hooks'
 
 const ApartmentSetup = () => {
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const { data } = useRentoraApiApartmentDetail({ apartmentId: apartmentId ?? '' })
+
+  if (!data) {
+    navigate(ROUTES.allApartment.path)
+  }
+
   //RECHECK : API
   const handleSubmit = (data: any) => {
     alert(data)
     navigate(ROUTES.allApartment.path)
   }
   return (
-    <div className="flex flex-col items-center justify-center px-4">
+    <PageSection className="flex flex-col items-center justify-center px-4">
       <MultiStepForm onSubmit={handleSubmit} title="Apartment Setup">
         <FormStep value="0" title="Extra Services" schema={serviceSchema}>
           <Field
@@ -131,7 +140,7 @@ const ApartmentSetup = () => {
           />
         </FormStep>
       </MultiStepForm>
-    </div>
+    </PageSection>
   )
 }
 
