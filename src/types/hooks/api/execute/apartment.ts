@@ -36,6 +36,7 @@ export type IUseRentoraApiCreateApartment = IBaseUseMutation<
   IRentoraApiClientCreateApartmentResponse['data'],
   ICreateApartmentRequestPayload
 >
+export type IUseRentoraApiSetupApartment = IBaseUseMutation<void, ISetupApartmentRequestPayload>
 
 //response type
 export type IRentoraApiClientCreateApartmentResponse = IRentoraApiClientBaseResponse<{
@@ -43,3 +44,24 @@ export type IRentoraApiClientCreateApartmentResponse = IRentoraApiClientBaseResp
   presignedUrl: string
   logoUrl: string
 }>
+
+export type ISetupApartmentRequestPayload = {
+  apartmentId: string
+  bankName: string
+  bankAccountHolder: string
+  bankAccountNumber: string
+  buildings: Array<{
+    buildingName: string
+    totalFloors: number
+  }>
+  electricityFlat: number
+  electricityPrice: number
+  electricityType: string
+  services: Array<{
+    name: string
+    price: number
+  }>
+  waterFlat: number
+  waterPrice: number
+  waterType: string
+}

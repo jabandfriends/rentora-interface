@@ -6,6 +6,7 @@ import type {
   IPutPresignedUrlRequest,
   IRentoraApiClientAuthenticateResponse,
   IRentoraApiClientCreateApartmentResponse,
+  ISetupApartmentRequestPayload,
   RentoraApiExecuteClientKey,
 } from '@/types'
 
@@ -16,6 +17,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     authenticate: 'AUTHENTICATE',
     createApartment: 'CREATE_APARTMENT',
     putPresignedUrl: 'PUT_PRESigned_URL',
+    setupApartment: 'SETUP_APARTMENT',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -35,5 +37,12 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   //presigned url put
   async putPresignedUrl(payload: IPutPresignedUrlRequest): Promise<void> {
     await this.axiosInstance.put(payload.presignedUrl, payload.imgFile)
+  }
+
+  //setup
+  async setupApartment(payload: ISetupApartmentRequestPayload): Promise<void> {
+    const { apartmentId, ...rest } = payload
+    const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/setup/${apartmentId}`, rest)
+    return response.data
   }
 }

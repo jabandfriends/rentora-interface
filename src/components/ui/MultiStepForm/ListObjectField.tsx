@@ -133,6 +133,7 @@ export const ListObjectField = ({
                       </Label>
                       {objField.type === 'number' ? (
                         <InputNumber
+                          decimal
                           id={`${name}-${objField.name}`}
                           placeholder={objField.placeholder}
                           value={objectInputs[objField.name] || ''}
