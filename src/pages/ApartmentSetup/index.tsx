@@ -1,24 +1,62 @@
+import { useEffect } from 'react'
+import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { PageSection } from '@/components/layout'
 import { Field, FormStep, MultiStepForm } from '@/components/ui'
 import { apartmentDetailSchema, buildingSchema, paymentInformationSchema, ROUTES, serviceSchema } from '@/constants'
-import { useRentoraApiApartmentDetail } from '@/hooks'
+import { useRentoraApiApartmentDetail, useRentoraApiSetupApartment } from '@/hooks'
+import type { ISetupApartmentRequestPayload } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
 const ApartmentSetup = () => {
   const navigate: NavigateFunction = useNavigate()
   const { apartmentId } = useParams<{ apartmentId: string }>()
-  const { data } = useRentoraApiApartmentDetail({ apartmentId: apartmentId ?? '' })
+  const { data, isLoading } = useRentoraApiApartmentDetail({ apartmentId: apartmentId ?? '' })
+  const { mutateAsync: setupApartment } = useRentoraApiSetupApartment()
+  useEffect(() => {
+    if (!isLoading && data) {
+      return
+    }
+  }, [data, navigate, isLoading])
 
-  if (!data) {
+  if (!apartmentId) {
     navigate(ROUTES.allApartment.path)
+    return null
   }
 
-  //RECHECK : API
-  const handleSubmit = (data: any) => {
-    alert(data)
-    navigate(ROUTES.allApartment.path)
+  const handleSubmit = async (data: any) => {
+    const payload: ISetupApartmentRequestPayload = convertFormDataToPayload(apartmentId, data)
+    try {
+      await setupApartment(payload)
+      toast.success('Setup apartment successfully')
+      setTimeout(() => navigate(ROUTES.overview.getPath(apartmentId)), 1000)
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error))
+    }
   }
+
+  const convertFormDataToPayload = (id: string, formData: any): ISetupApartmentRequestPayload => ({
+    apartmentId: id,
+    bankName: formData.bankName,
+    bankAccountHolder: formData.bankAccountHolder,
+    bankAccountNumber: formData.bankAccountNumber,
+    buildings: formData.buildings.map((b: { buildingName: string; totalFloors: string }) => ({
+      buildingName: b.buildingName,
+      totalFloors: Number(b.totalFloors),
+    })),
+    electricityFlat: Number(formData.electricityFlat),
+    electricityPrice: Number(formData.electricityPrice),
+    electricityType: formData.electricityType,
+    services: formData.services.map((s: { name: string; price: string }) => ({
+      name: s.name,
+      price: Number(s.price),
+    })),
+    waterFlat: Number(formData.waterFlat),
+    waterPrice: Number(formData.waterPrice),
+    waterType: formData.waterType,
+  })
+
   return (
     <PageSection className="flex flex-col items-center justify-center px-4">
       <MultiStepForm onSubmit={handleSubmit} title="Apartment Setup">
@@ -44,8 +82,8 @@ const ApartmentSetup = () => {
                 type="select"
                 placeholder="Select Water Type"
                 options={[
-                  { value: 'unit', label: 'Per Unit' },
-                  { value: 'flat', label: 'Flat' },
+                  { value: 'fixed', label: 'Fixed' },
+                  { value: 'meter', label: 'Meter' },
                 ]}
                 required
               />
@@ -68,8 +106,8 @@ const ApartmentSetup = () => {
                 type="select"
                 placeholder="Select Electricity Type"
                 options={[
-                  { value: 'unit', label: 'Per Unit' },
-                  { value: 'flat', label: 'Flat' },
+                  { value: 'fixed', label: 'Fixed' },
+                  { value: 'meter', label: 'Meter' },
                 ]}
                 required
               />

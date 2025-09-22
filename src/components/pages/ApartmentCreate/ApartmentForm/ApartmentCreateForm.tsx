@@ -9,7 +9,12 @@ import { ApartmentFormField, ApartmentUpload } from '@/components/pages/Apartmen
 import { APARTMENT_FORM_SCHEMA, APARTMENT_FORM_SECTIONS, ROUTES } from '@/constants'
 import { LateFeeType } from '@/enum'
 import { useRentoraApiCreateApartment } from '@/hooks'
-import type { APARTMENT_FORM_FIELD, APARTMENT_FORM_VALUES, ICreateApartmentRequestPayload } from '@/types'
+import type {
+  APARTMENT_FORM_FIELD,
+  APARTMENT_FORM_VALUES,
+  ICreateApartmentRequestPayload,
+  IRentoraApiClientCreateApartmentResponse,
+} from '@/types'
 import { getErrorMessage } from '@/utilities'
 
 const ApartmentCreateForm = () => {
@@ -56,10 +61,10 @@ const ApartmentCreateForm = () => {
       }
 
       try {
-        await createApartment(dataPayload)
+        const response: IRentoraApiClientCreateApartmentResponse['data'] = await createApartment(dataPayload)
         toast.success('Apartment created successfully')
         setTimeout(() => {
-          navigate(ROUTES.apartmentSetup.path)
+          navigate(ROUTES.apartmentSetup.getUrl(response.apartmentId))
         }, 1000)
       } catch (error) {
         toast.error(getErrorMessage(error))

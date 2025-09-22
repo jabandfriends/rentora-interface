@@ -77,7 +77,7 @@ export const Field = ({
             ) : type === 'textarea' ? (
               <Textarea placeholder={placeholder} {...field} value={field.value || ''} />
             ) : type === 'number' ? (
-              <InputNumber placeholder={placeholder} {...field} value={field.value || ''} />
+              <InputNumber decimal placeholder={placeholder} {...field} value={field.value || ''} />
             ) : (
               <Input type={type} placeholder={placeholder} {...field} value={field.value || ''} />
             )}
