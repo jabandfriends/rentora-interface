@@ -1,8 +1,19 @@
 export enum APARTMENT_FORM_FIELD_KEY_ENUM {
   name = 'name',
   address = 'address',
-  phone = 'phone',
+  phoneNumber = 'phoneNumber',
   taxId = 'taxId',
-  paymentDueDate = 'paymentDueDate',
+  paymentDueDay = 'paymentDueDay',
   lateFee = 'lateFee',
+  lateFeeType = 'lateFeeType',
+  gracePeriodDays = 'gracePeriodDays',
+  city = 'city',
+  state = 'state',
+  postalCode = 'postalCode',
+  country = 'country',
+}
+
+export enum LateFeeType {
+  FIXED = 'fixed',
+  PERCENTAGE = 'percentage',
 }
