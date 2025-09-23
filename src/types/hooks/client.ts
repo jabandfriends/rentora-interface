@@ -1,2 +1,7 @@
 export type RentoraApiQueryClientKey = 'me' | 'apartmentList' | 'apartmentDetail'
-export type RentoraApiExecuteClientKey = 'authenticate' | 'createApartment' | 'putPresignedUrl' | 'setupApartment'
+export type RentoraApiExecuteClientKey =
+  | 'authenticate'
+  | 'createApartment'
+  | 'putPresignedUrl'
+  | 'setupApartment'
+  | 'firstTimePasswordReset'

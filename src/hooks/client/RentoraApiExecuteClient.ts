@@ -3,6 +3,7 @@ import type { AxiosResponse } from 'axios'
 import type {
   IAuthRequest,
   ICreateApartmentRequestApi,
+  IFirsttimePasswordResetRequestPayload,
   IPutPresignedUrlRequest,
   IRentoraApiClientAuthenticateResponse,
   IRentoraApiClientCreateApartmentResponse,
@@ -18,6 +19,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createApartment: 'CREATE_APARTMENT',
     putPresignedUrl: 'PUT_PRESigned_URL',
     setupApartment: 'SETUP_APARTMENT',
+    firstTimePasswordReset: 'FIRST_TIME_PASSWORD_RESET',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -43,6 +45,11 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   async setupApartment(payload: ISetupApartmentRequestPayload): Promise<void> {
     const { apartmentId, ...rest } = payload
     const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/setup/${apartmentId}`, rest)
+    return response.data
+  }
+
+  async firstTimePasswordReset(payload: IFirsttimePasswordResetRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(`/api/auth/first-password`, payload)
     return response.data
   }
 }
