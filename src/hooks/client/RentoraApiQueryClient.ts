@@ -5,6 +5,7 @@ import type {
   IRentoraApiApartmentListParams,
   IRentoraApiClientApartmentDetailResponse,
   IRentoraApiClientApartmentListResponse,
+  IRentoraApiClientUserResponse,
   RentoraApiQueryClientKey,
 } from '@/types'
 
@@ -17,13 +18,14 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     apartmentDetail: 'APARTMENT_DETAIL',
   }
 
-  async checkAuth(accessToken: string): Promise<void> {
-    const { data }: AxiosResponse<void, unknown> = await this.axiosInstance.get<void>(`/api/auth/me`, {
-      headers: {
-        'Rentora-Auth-Token': accessToken,
-      },
-    })
-    return data
+  async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientUserResponse, unknown> =
+      await this.axiosInstance.get<IRentoraApiClientUserResponse>(`/api/auth/me`, {
+        headers: {
+          'Rentora-Auth-Token': accessToken,
+        },
+      })
+    return response.data.data
   }
 
   async apartmentList(params: IRentoraApiApartmentListParams): Promise<IRentoraApiClientApartmentListResponse['data']> {

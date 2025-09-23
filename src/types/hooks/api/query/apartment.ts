@@ -40,6 +40,19 @@ export type IApartmentDetail = IApartment & {
   totalTenants: number
 }
 
+export type IUser = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  phoneNumber: Maybe<string>
+  profileImageUrl: Maybe<string>
+  mustChangePassword: boolean
+  lastLogin: string
+}
+
+export type IRentoraApiClientUserResponse = IRentoraApiClientBaseResponse<IUser>
+
 //response
 export type IRentoraApiClientApartmentListResponse = IRentoraApiClientBasePaginateResponse<IApartment>
 

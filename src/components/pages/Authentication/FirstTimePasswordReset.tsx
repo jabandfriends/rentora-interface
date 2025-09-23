@@ -1,22 +1,42 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, LockIcon } from 'lucide-react'
-import { type HTMLAttributes, useCallback, useState } from 'react'
+import { type HTMLAttributes, useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { type NavigateFunction, useNavigate } from 'react-router-dom'
 import z from 'zod'
 
-import { Button, Form, FormField, FormLabel, FormMessage, Input } from '@/components/common'
-import { FIRST_TIME_PASSWORD_RESET_SCHEMA } from '@/constants'
-import { cn } from '@/utilities'
+import { Button, Form, FormField, FormLabel, FormMessage, Input, Spinner } from '@/components/common'
+import { FIRST_TIME_PASSWORD_RESET_SCHEMA, ROUTES } from '@/constants'
+import { useRentoraApiFirstTimeResetPassword } from '@/hooks'
+import { cn, getErrorMessage } from '@/utilities'
 
 type FormSchema = z.infer<typeof FIRST_TIME_PASSWORD_RESET_SCHEMA>
 
-type IFirstTimePasswordResetProps = {
-  onSubmit: (data: FormSchema) => void
-} & HTMLAttributes<HTMLDivElement>
+type IFirstTimePasswordResetProps = HTMLAttributes<HTMLDivElement>
 
-const FirstTimePasswordReset = ({ className, onSubmit }: IFirstTimePasswordResetProps) => {
+const FirstTimePasswordReset = ({ className }: IFirstTimePasswordResetProps) => {
+  const navigate: NavigateFunction = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const { mutateAsync: firstTimePasswordReset, isPending, isSuccess } = useRentoraApiFirstTimeResetPassword()
+
+  const onSubmit = useCallback(
+    (data: FormSchema) => {
+      const { newPassword }: { newPassword: string } = data
+      //handle submit with api
+      try {
+        firstTimePasswordReset({ newPassword })
+        toast.success('Password reset successfully')
+        setTimeout(() => {
+          navigate(ROUTES.allApartment.path)
+        }, 1000)
+      } catch (error) {
+        toast.error(getErrorMessage(error))
+      }
+    },
+    [firstTimePasswordReset, navigate],
+  )
   const handleShowPassword = useCallback(() => {
     setShowPassword((prev) => !prev)
   }, [])
@@ -32,6 +52,10 @@ const FirstTimePasswordReset = ({ className, onSubmit }: IFirstTimePasswordReset
       confirmPassword: '',
     },
   })
+
+  const isButtonDisabled: boolean = useMemo(() => {
+    return !form.formState.isDirty || !form.formState.isValid || isPending || isSuccess
+  }, [form.formState.isDirty, form.formState.isValid, isPending, isSuccess])
 
   return (
     <div className={cn('w-full max-w-md', className)}>
@@ -104,8 +128,8 @@ const FirstTimePasswordReset = ({ className, onSubmit }: IFirstTimePasswordReset
               </div>
             </div>
 
-            <Button type="submit" block>
-              Update Password
+            <Button disabled={isButtonDisabled} type="submit" block>
+              {isPending ? <Spinner /> : 'Update Password'}
             </Button>
           </form>
         </Form>

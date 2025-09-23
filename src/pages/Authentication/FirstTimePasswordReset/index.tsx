@@ -1,17 +1,11 @@
-import { useCallback } from 'react'
-
+import { PageSection } from '@/components/layout'
 import { FirstTimePasswordReset } from '@/components/pages/Authentication'
 
 const FirstTimePasswordResetPage = () => {
-  const handleSubmit = useCallback(() => {
-    //handle submit with api
-    alert('API CALL')
-  }, [])
-
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <FirstTimePasswordReset onSubmit={handleSubmit} />
-    </div>
+    <PageSection className="items-center justify-center">
+      <FirstTimePasswordReset />
+    </PageSection>
   )
 }
 

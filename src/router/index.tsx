@@ -36,20 +36,21 @@ import { parseStorageKey } from '@/utilities'
 import RequireApartmentWrapper from './RequireApartmentWrapper'
 import RequireAuthWrapper from './RequireAuthWrapper'
 
-const authLoader = async (): Promise<{ valid: boolean }> => {
+const authLoader = async (): Promise<{ valid: boolean; mustChangePassword: boolean }> => {
   const rentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
   const auth: Maybe<string> = localStorage.getItem(parseStorageKey('auth'))
   if (!auth) {
-    return { valid: false }
+    return { valid: false, mustChangePassword: false }
   }
   const { accessToken }: { accessToken: string } = JSON.parse(auth)
 
   try {
-    await rentoraApiQueryClient.checkAuth(accessToken)
-    return { valid: true }
+    const { mustChangePassword }: { mustChangePassword: boolean } = await rentoraApiQueryClient.checkAuth(accessToken)
+
+    return { valid: true, mustChangePassword }
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_: unknown) {
-    return { valid: false }
+    return { valid: false, mustChangePassword: false }
   }
 }
 
@@ -159,10 +160,12 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
     path: '/dashboard/:apartmentId',
     loader: async (args) => {
-      const { valid } = await authLoader()
-      const { status, id } = await apartmentStatusLoader(args)
+      const [authData, apartmentData] = await Promise.all([authLoader(), apartmentStatusLoader(args)])
 
-      return { valid, status, id }
+      return {
+        ...authData,
+        ...apartmentData,
+      }
     },
     element: (
       <RequireAuthWrapper>
