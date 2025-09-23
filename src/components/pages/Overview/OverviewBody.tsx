@@ -3,7 +3,7 @@ import OverviewTab from '@/components/pages/Overview/OverviewTab'
 
 const OverviewBody = () => {
   return (
-    <div className="flex flex-col">
+    <div>
       <Tabs defaultValue="monthly" className="flex flex-col gap-y-8">
         <div className="flex items-center justify-center gap-x-12">
           <TabsList className="desktop:w-2/6 h-16 rounded-2xl">

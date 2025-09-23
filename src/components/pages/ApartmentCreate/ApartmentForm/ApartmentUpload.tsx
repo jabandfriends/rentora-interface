@@ -27,11 +27,9 @@ const ApartmentUpload = ({ control, form }: IApartUploadProps) => {
         <FormItem className="space-y-2">
           <div>
             <FormLabel>
-              <Upload size={20} className="text-theme-primary" /> <h3>Upload Image</h3>
+              <Upload size={20} className="text-theme-primary" /> <h3>Upload Apartment Image</h3>
             </FormLabel>
-            <FormDescription>
-              Add your apartments logo to personalize documents, receipts, and tenant communications.
-            </FormDescription>
+            <FormDescription>Add your apartment image.</FormDescription>
           </div>
 
           <FormControl>
