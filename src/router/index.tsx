@@ -126,11 +126,20 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   },
   {
     path: '/setup/:apartmentId',
-    loader: authLoader,
+    loader: async (args) => {
+      const [authData, apartmentData] = await Promise.all([authLoader(), apartmentStatusLoader(args)])
+
+      return {
+        ...authData,
+        ...apartmentData,
+      }
+    },
     element: (
       <RequireAuthWrapper>
-        <ScrollRestoration />
-        <Layout isSidebar={false} />
+        <RequireApartmentWrapper>
+          <ScrollRestoration />
+          <Layout isSidebar={false} />
+        </RequireApartmentWrapper>
       </RequireAuthWrapper>
     ),
     children: [
