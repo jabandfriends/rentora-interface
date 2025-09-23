@@ -5,7 +5,7 @@ import { Progress } from '@/components/ui'
 const OverviewTab = () => {
   return (
     <div className="flex items-center justify-center">
-      <div className="desktop:flex-row h-110 flex w-3/4 flex-col gap-8 rounded-2xl">
+      <div className="desktop:flex-row flex w-3/4 flex-col gap-8 rounded-2xl">
         {/* Chart */}
         <RentChart />
         {/* Stats */}
