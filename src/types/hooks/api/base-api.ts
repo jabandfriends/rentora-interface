@@ -28,3 +28,10 @@ export type IRentoraApiClientBasePaginateResponse<T> = IRentoraApiClientBaseResp
   data: Array<T>
   pagination: IPaginate
 }>
+
+//base paginate with metadata response
+export type IRentoraApiClientBasePaginateWithMetadataResponse<T, M> = IRentoraApiClientBaseResponse<{
+  data: Array<T>
+  pagination: IPaginate
+  metadata: M
+}>
