@@ -2,7 +2,7 @@ import type { Category, Priority, RecurringSchedule, Status } from '@/enum'
 
 import type { IBaseUseMutation, IRentoraApiClientBaseResponse } from '../base-api'
 
-//payload type
+//create payload type
 type ICreateMaintenanceRequestBase = {
   unitId: string
   tenantUserId: string
@@ -25,15 +25,16 @@ type ICreateMaintenanceRequestBase = {
   recurringSchedule: RecurringSchedule
 }
 
+//create payload type
 export type ICreateMaintenanceRequestPayload = ICreateMaintenanceRequestBase
 
-//hook type
+//create hook type
 export type IUseRentoraApiCreateMaintenance = IBaseUseMutation<
   IRentoraApiClientCreateMaintenanceResponse['data'],
   { apartmentId: string; payload: ICreateMaintenanceRequestPayload }
 >
 
-//response type
+//create response type
 export type IRentoraApiClientCreateMaintenanceResponse = IRentoraApiClientBaseResponse<{
   maintenanceId: string
 }>
