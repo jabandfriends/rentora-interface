@@ -5,3 +5,4 @@ export type RentoraApiExecuteClientKey =
   | 'putPresignedUrl'
   | 'setupApartment'
   | 'firstTimePasswordReset'
+  | 'createMaintenance'

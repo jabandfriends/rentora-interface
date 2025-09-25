@@ -3,10 +3,12 @@ import type { AxiosResponse } from 'axios'
 import type {
   IAuthRequest,
   ICreateApartmentRequestApi,
+  ICreateMaintenanceRequestPayload,
   IFirsttimePasswordResetRequestPayload,
   IPutPresignedUrlRequest,
   IRentoraApiClientAuthenticateResponse,
   IRentoraApiClientCreateApartmentResponse,
+  IRentoraApiClientCreateMaintenanceResponse,
   ISetupApartmentRequestPayload,
   RentoraApiExecuteClientKey,
 } from '@/types'
@@ -17,9 +19,10 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   readonly key: Record<RentoraApiExecuteClientKey, string> = {
     authenticate: 'AUTHENTICATE',
     createApartment: 'CREATE_APARTMENT',
-    putPresignedUrl: 'PUT_PRESigned_URL',
+    putPresignedUrl: 'PUT_PRESIGNED_URL',
     setupApartment: 'SETUP_APARTMENT',
     firstTimePasswordReset: 'FIRST_TIME_PASSWORD_RESET',
+    createMaintenance: 'CREATE_MAINTENANCE',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -51,5 +54,17 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   async firstTimePasswordReset(payload: IFirsttimePasswordResetRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(`/api/auth/first-password`, payload)
     return response.data
+  }
+
+  async createMaintenance(
+    apartmentId: string,
+    payload: ICreateMaintenanceRequestPayload,
+  ): Promise<IRentoraApiClientCreateMaintenanceResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientCreateMaintenanceResponse, unknown> =
+      await this.axiosWithAuthInstance.post<IRentoraApiClientCreateMaintenanceResponse>(
+        `/api/apartment/${apartmentId}/maintenance`,
+        payload,
+      )
+    return response.data.data
   }
 }
