@@ -196,3 +196,9 @@ export const TENANT_PASSWORD_UPDATE_FORM: Array<FORM_SECTION<TENANT_FORM_FIELDS_
     ],
   },
 ]
+
+export enum TENANT_STATUS {
+  All = '',
+  Active = 'active',
+  Inactive = 'inactive',
+}
