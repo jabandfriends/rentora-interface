@@ -76,7 +76,7 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
           ))}
         </TableBody>
       </Table>
-      <div>
+      <div className="flex items-center justify-between">
         <p className="text-theme-secondary text-body-2">
           Showing {data.length} of {totalElements} items
         </p>
