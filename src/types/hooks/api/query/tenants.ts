@@ -1,4 +1,9 @@
-import type { IBasePaginateQueryResult, IRentoraApiClientBasePaginateWithMetadataResponse } from '@/types'
+import type {
+  IBasePaginateQueryResult,
+  IBaseUseQuery,
+  IRentoraApiClientBasePaginateWithMetadataResponse,
+  IRentoraApiClientBaseResponse,
+} from '@/types'
 
 export type ITenant = {
   userId: string
@@ -13,6 +18,19 @@ export type ITenant = {
   unitName: string
 }
 
+export type ITenantDetail = Omit<
+  ITenant,
+  'apartmentUserId' | 'accountStatus' | 'occupiedStatus' | 'unitName' | 'role'
+> & {
+  firstName: string
+  lastName: string
+  nationalId: string
+  dateOfBirth: string
+  email: string
+  emergencyContactName: string
+  emergencyContactPhone: string
+}
+
 export type ITenantListMetadata = {
   totalTenants: number
   totalOccupiedTenants: number
@@ -22,11 +40,14 @@ export type ITenantListMetadata = {
 
 //hook
 export type IUseRentoraApiTenantList = IBasePaginateQueryResult<IRentoraApiClientTenantListResponse['data']>
+export type IUseRentoraApiTenantDetail = IBaseUseQuery<IRentoraApiClientTenantDetailResponse['data']>
 
+//response
 export type IRentoraApiClientTenantListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
   ITenant,
   ITenantListMetadata
 >
+export type IRentoraApiClientTenantDetailResponse = IRentoraApiClientBaseResponse<ITenantDetail>
 
 //param
 export type IRentoraApiTenantListParams = {

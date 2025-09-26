@@ -3,18 +3,19 @@ import { useDebounce } from '@uidotdev/usehooks'
 import { Building, Plus, UserCheck, Users, UserX } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useParams } from 'react-router-dom'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 //components
 import { Button } from '@/components/common'
 import { PageTableHeader, PageTableSearch } from '@/components/ui'
-import { DEFAULT_TENANT_LIST_DATA, TENANT_STATUS } from '@/constants'
+import { DEFAULT_TENANT_LIST_DATA, ROUTES, TENANT_STATUS } from '@/constants'
 import { useRentoraApiTenantList } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
 import TenantTable from './TenantTable'
 
 export const Tenant = () => {
+  const navigate: NavigateFunction = useNavigate()
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState<number>(
     DEFAULT_TENANT_LIST_DATA.page,
   )
@@ -80,6 +81,10 @@ export const Tenant = () => {
     },
     [setValue, setCurrentPage],
   )
+  const navigateToCreateTenant = useCallback(() => {
+    if (!apartmentId) return
+    navigate(ROUTES.tenantCreate.getPath(apartmentId))
+  }, [apartmentId, navigate])
 
   // const handleSortDirChange = useCallback(
   //   (value: 'asc' | 'desc') => {
@@ -128,6 +133,7 @@ export const Tenant = () => {
     CreatedAt = 'createdAt',
     UpdatedAt = 'updatedAt',
   }
+
   return (
     <>
       <PageTableHeader
@@ -135,7 +141,7 @@ export const Tenant = () => {
         description="Manage and view all tenants"
         stats={tenantStats}
         actionButton={
-          <Button className="flex items-center gap-2">
+          <Button onClick={navigateToCreateTenant} className="flex items-center gap-2">
             <Plus size={18} /> New Tenant
           </Button>
         }

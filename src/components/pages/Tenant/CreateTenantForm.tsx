@@ -1,4 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { format } from 'date-fns'
+import { CalendarIcon, Plus } from 'lucide-react'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -6,10 +9,12 @@ import {
   Card,
   DateTimePicker,
   Form,
+  FormControl,
   FormField,
   FormMessage,
   Input,
   InputNumber,
+  Popover,
   Select,
   SelectContent,
   SelectItem,
@@ -17,31 +22,29 @@ import {
   SelectValue,
   Textarea,
 } from '@/components/common'
-import { TENANT_FORM_FIELDS, TENANT_FORM_SCHEMA } from '@/constants'
-import type { ITenantFormProps, TENANT_FORM_SCHEMA_TYPE } from '@/types'
+import { Calendar } from '@/components/ui'
+import { CREATE_TENANT_DEFAULT_VALUES, CREATE_TENANT_FORM_FIELDS, CREATE_TENANT_FORM_SCHEMA } from '@/constants'
+import type { CREATE_TENANT_FORM_SCHEMA_TYPE } from '@/types'
 
-const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
-  const form = useForm<TENANT_FORM_SCHEMA_TYPE>({
-    resolver: zodResolver(TENANT_FORM_SCHEMA),
-    defaultValues: {
-      full_name: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      confirm_password: '',
-      phone: '',
-      national_id: '',
-      birth_date: '',
-      floor: '',
-      unit_id: '',
-    },
+type ICreateTenantFormProps = {
+  onSubmit: (data: CREATE_TENANT_FORM_SCHEMA_TYPE) => void
+  isPending: boolean
+  errorMessage: string
+}
+const CreateTenantForm = ({ onSubmit, isPending, errorMessage }: ICreateTenantFormProps) => {
+  const form = useForm<CREATE_TENANT_FORM_SCHEMA_TYPE>({
+    resolver: zodResolver(CREATE_TENANT_FORM_SCHEMA),
+    defaultValues: CREATE_TENANT_DEFAULT_VALUES,
   })
+
+  const isButtonDisabled: boolean = useMemo(() => {
+    return form.formState.isSubmitting || !form.formState.isDirty || !form.formState.isValid || isPending
+  }, [form.formState.isSubmitting, form.formState.isDirty, form.formState.isValid, isPending])
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         {/* Task Detail */}
-        {TENANT_FORM_FIELDS.map(({ title, description, fields }) => (
+        {CREATE_TENANT_FORM_FIELDS.map(({ title, description, fields }) => (
           <Card key={'form-section' + title + description} className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
             <div>
               <h3>{title}</h3>
@@ -60,9 +63,14 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
                           <div className="space-y-1">
                             <p>{item.label}</p>
                             {item.inputType === 'number' ? (
-                              <InputNumber {...field} placeholder={item.placeholder} />
+                              <InputNumber
+                                maxLength={item.maxLength}
+                                {...field}
+                                value={field.value ?? ''}
+                                placeholder={item.placeholder}
+                              />
                             ) : item.inputType === 'textarea' ? (
-                              <Textarea {...field} placeholder={item.placeholder} />
+                              <Textarea {...field} value={field.value ?? ''} placeholder={item.placeholder} />
                             ) : item.inputType === 'datetime' ? (
                               <DateTimePicker
                                 id={field.name}
@@ -72,8 +80,37 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
                                 error={!!fieldState.error}
                                 required
                               />
+                            ) : item.inputType === 'date' ? (
+                              <FormControl>
+                                <Popover
+                                  trigger={
+                                    <Button
+                                      block
+                                      variant="outlineSecondary"
+                                      className="flex items-center justify-start"
+                                    >
+                                      {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
+                                      <CalendarIcon className="h-4 w-4" />
+                                    </Button>
+                                  }
+                                >
+                                  <Calendar
+                                    mode="single"
+                                    selected={field.value ? new Date(field.value) : undefined}
+                                    onSelect={(val) => field.onChange(val?.toISOString())}
+                                    disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                                    captionLayout="dropdown"
+                                  />
+                                </Popover>
+                              </FormControl>
                             ) : (
-                              <Input {...field} placeholder={item.placeholder} />
+                              <Input
+                                maxLength={item.maxLength}
+                                type={item.type}
+                                {...field}
+                                value={field.value ?? ''}
+                                placeholder={item.placeholder}
+                              />
                             )}
                             <FormMessage />
                           </div>
@@ -96,9 +133,19 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
                                 <p>{fieldItem.label}</p>
                                 {fieldItem.fieldType === 'input' ? (
                                   fieldItem.inputType === 'number' ? (
-                                    <InputNumber {...field} placeholder={fieldItem.placeholder} />
+                                    <InputNumber
+                                      maxLength={fieldItem.maxLength}
+                                      {...field}
+                                      value={field.value ?? ''}
+                                      placeholder={fieldItem.placeholder}
+                                    />
                                   ) : fieldItem.inputType === 'textarea' ? (
-                                    <Textarea {...field} placeholder={fieldItem.placeholder} />
+                                    <Textarea
+                                      maxLength={fieldItem.maxLength}
+                                      {...field}
+                                      value={field.value ?? ''}
+                                      placeholder={fieldItem.placeholder}
+                                    />
                                   ) : fieldItem.inputType === 'datetime' ? (
                                     <DateTimePicker
                                       id={field.name}
@@ -109,10 +156,16 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
                                       required
                                     />
                                   ) : (
-                                    <Input {...field} placeholder={fieldItem.placeholder} />
+                                    <Input
+                                      type={fieldItem.type}
+                                      maxLength={fieldItem.maxLength}
+                                      {...field}
+                                      value={field.value ?? ''}
+                                      placeholder={fieldItem.placeholder}
+                                    />
                                   )
                                 ) : fieldItem.fieldType === 'select' ? (
-                                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <Select onValueChange={field.onChange} defaultValue={field.value ?? ''}>
                                     <SelectTrigger>
                                       <SelectValue placeholder={fieldItem.placeholder} />
                                     </SelectTrigger>
@@ -138,12 +191,13 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
                 }
               })}
             </div>
+            {errorMessage && <p className="text-theme-error text-body-2">{errorMessage}</p>}
           </Card>
         ))}
 
         <div className="flex justify-end">
-          <Button className="flex items-center gap-2" type="submit">
-            {iconLabel} {buttonLabel}
+          <Button disabled={isButtonDisabled} className="flex items-center gap-2" type="submit">
+            <Plus size={18} /> Create Tenant
           </Button>
         </div>
       </form>
@@ -151,4 +205,4 @@ const TenantForm = ({ onSubmit, iconLabel, buttonLabel }: ITenantFormProps) => {
   )
 }
 
-export default TenantForm
+export default CreateTenantForm

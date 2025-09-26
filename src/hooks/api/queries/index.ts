@@ -1,3 +1,4 @@
 export * from './useRentoraApiApartmentDetail'
 export * from './useRentoraApiApartmentList'
+export * from './useRentoraApiTenantDetail'
 export * from './useRentoraApiTenantList'
