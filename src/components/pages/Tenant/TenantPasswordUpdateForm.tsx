@@ -14,6 +14,7 @@ type ITenantPasswordUpdateProps = {
 
 const TenantPasswordUpdateForm = ({ onSubmit, isPending, errorMessage }: ITenantPasswordUpdateProps) => {
   const form = useForm<TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_SCHEMA>({
+    mode: 'onChange',
     resolver: zodResolver(TENANT_PASSWORD_UPDATE_SCHEMA),
     defaultValues: {
       password: '',
