@@ -1,5 +1,5 @@
 import { OverdueInvoiceTable } from '@/components/pages/Invoice'
-import { PageTableHeader, PageTableSearch, PaginationBar } from '@/components/ui'
+import { PageTableHeader, PaginationBar } from '@/components/ui'
 import { OVERDUE_INVOICE_DATA, OVERDUE_INVOICE_STATS } from '@/constants'
 
 const OverdueInvoice = () => {
@@ -10,7 +10,7 @@ const OverdueInvoice = () => {
         description="Manage unpaid bills and outstanding invoices. Track due dates and make quick payments in one place."
         stats={OVERDUE_INVOICE_STATS}
       />
-      <PageTableSearch />
+      {/* <PageTableSearch /> */}
       <OverdueInvoiceTable data={OVERDUE_INVOICE_DATA} />
       <PaginationBar />
     </>

@@ -1,15 +1,34 @@
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, PackageOpen } from 'lucide-react'
 
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/common'
-import { Badge, PaginationBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { PaginationBar } from '@/components/feature'
+import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { TENANT_ACTION } from '@/constants'
 import { TENANTS_TABLE_HEADER } from '@/constants/tenantsmanage'
-//RECHECK : api type
+import type { IPaginate, ITenant } from '@/types'
+import { formatTimestamp } from '@/utilities'
+
+import TenantTableLoading from './TenantTableLoading'
+
 type TenantsTableProps = {
-  data: Array<any>
-}
-//RECHECK : API TYPE
-const TenantTable = ({ data }: TenantsTableProps) => {
+  data: Array<ITenant>
+  isLoading: boolean
+  currentPage: number
+  onPageChange: (page: number) => void
+} & Pick<IPaginate, 'totalPages' | 'totalElements'>
+
+const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, onPageChange }: TenantsTableProps) => {
+  if (!data || data.length === 0) {
+    return (
+      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
+        <PackageOpen size={50} />
+        <p className="text-theme-secondary text-body-1">No tenants found</p>
+      </div>
+    )
+  }
+  if (isLoading) {
+    return <TenantTableLoading />
+  }
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
       <Table>
@@ -21,17 +40,22 @@ const TenantTable = ({ data }: TenantsTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {/* RECHECK : API TYPE */}
           {data.map((item, index) => (
             <TableRow key={index}>
-              <TableCell>{item.tenantsid}</TableCell>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>{item.email}</TableCell>
-              <TableCell>{item.floor}</TableCell>
-              <TableCell>{item.unit}</TableCell>
-              <TableCell>{item.createdate}</TableCell>
+              <TableCell>TENANT-{index + 1}</TableCell>
+              <TableCell>{item.fullName ? item.fullName : 'N/A'}</TableCell>
+              <TableCell>{item.email ? item.email : 'N/A'}</TableCell>
+              <TableCell>{item.unitName ? item.unitName : 'N/A'}</TableCell>
+              <TableCell>{formatTimestamp(item.createdAt)}</TableCell>
               <TableCell>
-                <Badge variant="success">{item.status}</Badge>
+                {item.accountStatus ? <Badge variant="success">Active</Badge> : <Badge variant="error">Inactive</Badge>}
+              </TableCell>
+              <TableCell>
+                {item.occupiedStatus ? (
+                  <Badge variant="success">Occupied</Badge>
+                ) : (
+                  <Badge variant="error">Unoccupied</Badge>
+                )}
               </TableCell>
 
               <TableCell>
@@ -52,7 +76,18 @@ const TenantTable = ({ data }: TenantsTableProps) => {
           ))}
         </TableBody>
       </Table>
-      <PaginationBar />
+      <div>
+        <p className="text-theme-secondary text-body-2">
+          Showing {data.length} of {totalElements} items
+        </p>
+        <PaginationBar
+          isLoading={isLoading}
+          page={currentPage}
+          totalElements={totalElements}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
+      </div>
     </div>
   )
 }
