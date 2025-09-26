@@ -1,14 +1,14 @@
-import { ChevronDown, PackageOpen } from 'lucide-react'
+import { PackageOpen } from 'lucide-react'
+import { useCallback } from 'react'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/common'
 import { PaginationBar } from '@/components/feature'
+import { TenantAction, TenantTableLoading } from '@/components/pages/Tenant'
 import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { TENANT_ACTION } from '@/constants'
+import { ROUTES } from '@/constants'
 import { TENANTS_TABLE_HEADER } from '@/constants/tenantsmanage'
 import type { IPaginate, ITenant } from '@/types'
 import { formatTimestamp } from '@/utilities'
-
-import TenantTableLoading from './TenantTableLoading'
 
 type TenantsTableProps = {
   data: Array<ITenant>
@@ -18,6 +18,26 @@ type TenantsTableProps = {
 } & Pick<IPaginate, 'totalPages' | 'totalElements'>
 
 const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, onPageChange }: TenantsTableProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const navigate: NavigateFunction = useNavigate()
+  const handleUpdateTenant = useCallback(
+    (tenantId: string) => {
+      if (!apartmentId) return
+      navigate(ROUTES.tenantUpdate.getPath(apartmentId, tenantId))
+    },
+    [apartmentId, navigate],
+  )
+  const handlePasswordUpdateTenant = useCallback(
+    (tenantId: string) => {
+      if (!apartmentId) return
+      navigate(ROUTES.tenantUpdatePassword.getPath(apartmentId, tenantId))
+    },
+    [apartmentId, navigate],
+  )
+  if (isLoading) {
+    return <TenantTableLoading />
+  }
+
   if (!data || data.length === 0) {
     return (
       <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
@@ -26,9 +46,7 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
       </div>
     )
   }
-  if (isLoading) {
-    return <TenantTableLoading />
-  }
+
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
       <Table>
@@ -59,18 +77,11 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
               </TableCell>
 
               <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="vanilla">
-                      <ChevronDown size={18} />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" sideOffset={10}>
-                    {TENANT_ACTION.map((action) => (
-                      <DropdownMenuItem key={action}>{action}</DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <TenantAction
+                  userId={item.userId}
+                  onUpdate={handleUpdateTenant}
+                  onPasswordUpdate={handlePasswordUpdateTenant}
+                />
               </TableCell>
             </TableRow>
           ))}

@@ -1,5 +1,6 @@
 export * from './Avartar'
 export * from './Badge'
+export * from './Calendar'
 export * from './Chart'
 export * from './MultiStepForm'
 export * from './PageTable'

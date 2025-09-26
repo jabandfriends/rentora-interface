@@ -3,11 +3,14 @@ import type { AxiosResponse } from 'axios'
 import type {
   IAuthRequest,
   ICreateApartmentRequestApi,
+  ICreateTenantRequestPayload,
   IFirsttimePasswordResetRequestPayload,
   IPutPresignedUrlRequest,
   IRentoraApiClientAuthenticateResponse,
   IRentoraApiClientCreateApartmentResponse,
   ISetupApartmentRequestPayload,
+  IUpdateTenantPasswordRequestPayload,
+  IUpdateTenantRequestPayload,
   RentoraApiExecuteClientKey,
 } from '@/types'
 
@@ -20,6 +23,9 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     putPresignedUrl: 'PUT_PRESigned_URL',
     setupApartment: 'SETUP_APARTMENT',
     firstTimePasswordReset: 'FIRST_TIME_PASSWORD_RESET',
+    createTenant: 'CREATE_TENANT',
+    updateTenant: 'UPDATE_TENANT',
+    updateTenantPassword: 'UPDATE_TENANT_PASSWORD',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -50,6 +56,34 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
 
   async firstTimePasswordReset(payload: IFirsttimePasswordResetRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(`/api/auth/first-password`, payload)
+    return response.data
+  }
+
+  //create tenant
+  async createTenant(apartmentId: string, payload: ICreateTenantRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(
+      `/api/apartments/manage/tenant/${apartmentId}`,
+      payload,
+    )
+    return response.data
+  }
+
+  //update tenant
+  async updateTenant(userId: string, payload: IUpdateTenantRequestPayload): Promise<void> {
+    // /api/apartments/manage/tenant/update/:userId
+    const response = await this.axiosWithAuthInstance.put<void>(
+      `/api/apartments/manage/tenant/update/${userId}`,
+      payload,
+    )
+    return response.data
+  }
+
+  //update password
+  async updatePassword(userId: string, payload: IUpdateTenantPasswordRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.put<void>(
+      `/api/apartments/manage/tenant/update/password/${userId}`,
+      payload,
+    )
     return response.data
   }
 }

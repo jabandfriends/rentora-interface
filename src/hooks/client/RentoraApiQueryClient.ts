@@ -5,6 +5,7 @@ import type {
   IRentoraApiApartmentListParams,
   IRentoraApiClientApartmentDetailResponse,
   IRentoraApiClientApartmentListResponse,
+  IRentoraApiClientTenantDetailResponse,
   IRentoraApiClientTenantListResponse,
   IRentoraApiClientUserResponse,
   IRentoraApiTenantListParams,
@@ -20,6 +21,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     apartmentList: 'APARTMENT_LIST',
     apartmentDetail: 'APARTMENT_DETAIL',
     tenantList: 'TENANT_LIST',
+    tenantDetail: 'TENANT_DETAIL',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -60,6 +62,14 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
         {
           params,
         },
+      )
+    return response.data.data
+  }
+
+  async tenantDetail(userId: Maybe<string>): Promise<IRentoraApiClientTenantDetailResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientTenantDetailResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientTenantDetailResponse>(
+        `/api/apartments/manage/tenant/detail/${userId}`,
       )
     return response.data.data
   }

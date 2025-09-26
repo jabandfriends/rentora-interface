@@ -30,8 +30,8 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
         <div className="flex gap-2">
           {/* Status Dropdown */}
           <DropdownMenu>
-            <DropdownMenuTrigger className="w-full">
-              <Button block variant="outlineSecondary" className="flex items-center gap-2">
+            <DropdownMenuTrigger asChild>
+              <Button variant="outlineSecondary" className="flex items-center gap-2">
                 <ChevronDown size={18} /> Status
               </Button>
             </DropdownMenuTrigger>
@@ -46,8 +46,8 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
 
           {/* Sort By Dropdown */}
           <DropdownMenu>
-            <DropdownMenuTrigger className="w-full">
-              <Button block variant="outlineSecondary" className="flex items-center gap-2">
+            <DropdownMenuTrigger asChild>
+              <Button variant="outlineSecondary" className="flex items-center gap-2">
                 <ChevronDown size={18} />
                 Sort By
               </Button>
