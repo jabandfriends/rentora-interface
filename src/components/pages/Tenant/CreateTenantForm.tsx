@@ -33,6 +33,7 @@ type ICreateTenantFormProps = {
 }
 const CreateTenantForm = ({ onSubmit, isPending, errorMessage }: ICreateTenantFormProps) => {
   const form = useForm<CREATE_TENANT_FORM_SCHEMA_TYPE>({
+    mode: 'onChange',
     resolver: zodResolver(CREATE_TENANT_FORM_SCHEMA),
     defaultValues: CREATE_TENANT_DEFAULT_VALUES,
   })

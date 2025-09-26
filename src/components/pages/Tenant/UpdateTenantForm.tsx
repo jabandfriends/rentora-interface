@@ -28,6 +28,7 @@ import type { ITenantFormProps, UPDATE_TENANT_FORM_SCHEMA_TYPE } from '@/types'
 
 const UpdateTenantForm = ({ onSubmit, iconLabel, buttonLabel, defaultValues, errorMessage }: ITenantFormProps) => {
   const form = useForm<UPDATE_TENANT_FORM_SCHEMA_TYPE>({
+    mode: 'onChange',
     resolver: zodResolver(UPDATE_TENANT_FORM_SCHEMA),
   })
   useEffect(() => {
