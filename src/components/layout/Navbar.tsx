@@ -32,7 +32,11 @@ const NavBar = ({
         <div className="flex items-center gap-x-2">
           {/* Left button */}
           {isSidebar && (
-            <button onClick={onSidebarToggle} className="desktop:hidden flex cursor-pointer items-center">
+            <button
+              name="sidebarToggle"
+              onClick={onSidebarToggle}
+              className="desktop:hidden flex cursor-pointer items-center"
+            >
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           )}

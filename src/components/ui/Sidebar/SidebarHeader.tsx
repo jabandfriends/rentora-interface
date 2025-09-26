@@ -29,6 +29,7 @@ const SidebarHeader = ({ onClose, title, className, ...props }: ISidebarHeaderPr
       <button
         className="hover:bg-theme-night-800/20 hover:text-theme-night-50 text-theme-night-400 desktop:hidden cursor-pointer rounded-md p-2"
         onClick={onClose}
+        data-cy="sidebar-header-close"
       >
         <X className="size-5" />
       </button>
