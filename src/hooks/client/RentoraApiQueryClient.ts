@@ -5,7 +5,11 @@ import type {
   IRentoraApiApartmentListParams,
   IRentoraApiClientApartmentDetailResponse,
   IRentoraApiClientApartmentListResponse,
+  IRentoraApiClientInvoiceDetailResponse,
+  IRentoraApiClientInvoiceListResponse,
   IRentoraApiClientUserResponse,
+  IRentoraApiInvoiceDetailParams,
+  IRentoraApiInvoiceListParams,
   RentoraApiQueryClientKey,
 } from '@/types'
 
@@ -16,6 +20,8 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     me: 'ME',
     apartmentList: 'APARTMENT_LIST',
     apartmentDetail: 'APARTMENT_DETAIL',
+    invoiceList: 'INVOICE_LIST',
+    invoiceDetail: 'INVOICE_DETAIL',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -43,6 +49,22 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
       await this.axiosWithAuthInstance.get<IRentoraApiClientApartmentDetailResponse>(
         `/api/apartments/${payload.apartmentId}`,
       )
+    return response.data.data
+  }
+
+  async invoiceList(params: IRentoraApiInvoiceListParams): Promise<IRentoraApiClientInvoiceListResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientInvoiceListResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientInvoiceListResponse>(`/api/invoices`, {
+        params,
+      })
+    return response.data.data
+  }
+
+  async invoiceDetail(
+    payload: IRentoraApiInvoiceDetailParams,
+  ): Promise<IRentoraApiClientInvoiceDetailResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientInvoiceDetailResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientInvoiceDetailResponse>(`/api/invoices/${payload.invoiceId}`)
     return response.data.data
   }
 }
