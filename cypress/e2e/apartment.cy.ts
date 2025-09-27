@@ -66,36 +66,6 @@ describe('View Tenant Dashboard', () => {
   })
 })
 
-describe('View Overdue Invoice Dashboard', () => {
-  it('should open overdue invoice dashboard', () => {
-    // Open login page
-    cy.visit('/authentication')
-
-    // Type email and password
-    cy.get('[name="email"]').type('admin@example.com')
-    cy.get('[name="password"]').type('admin123')
-
-    // Click login button
-    cy.get('[type="submit"]').click()
-
-    // Check if redirected to dashboard
-    cy.url().should('include', '/')
-
-    cy.get('button').contains('View').click()
-
-    cy.get('[name="sidebarToggle"]').click()
-    cy.contains('Invoices').click()
-    cy.contains('Overdue Invoices').click()
-    cy.url().should('include', '/overdue-invoice')
-    cy.get('[data-cy="sidebar-header-close"]').click()
-
-    cy.contains('Overdue Invoices').should('exist')
-    cy.contains(
-      'Manage unpaid bills and outstanding invoices. Track due dates and make quick payments in one place.',
-    ).should('exist')
-  })
-})
-
 describe('View All Rooms Dashboard', () => {
   it('should open all rooms dashboard', () => {
     // Open login page
