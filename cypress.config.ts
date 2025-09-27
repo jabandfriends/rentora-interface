@@ -2,8 +2,12 @@ import { defineConfig } from 'cypress'
 
 export default defineConfig({
   e2e: {
+    // Use environment variable for baseUrl
+    baseUrl: process.env.RENTORA_FRONTEND_BASE_URL,
+
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      // You can add any Node event listeners here if needed
+      return config
     },
   },
 })

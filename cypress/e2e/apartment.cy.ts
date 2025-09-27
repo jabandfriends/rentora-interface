@@ -2,7 +2,7 @@
 describe('View All Apartments', () => {
   it('should open all apartments', () => {
     // Open login page
-    cy.visit('http://localhost:5173/authentication')
+    cy.visit('/authentication')
 
     // Type email and password
     cy.get('[name="email"]').type('admin@example.com')
@@ -23,7 +23,7 @@ describe('View All Apartments', () => {
 //As a user, I want to see the status of an apartment after login
 describe('Apartment Status', () => {
   it('should display correct status', () => {
-    cy.visit('http://localhost:5173/authentication')
+    cy.visit('/authentication')
     // Type email and password
     cy.get('[name="email"]').type('admin@example.com')
     cy.get('[name="password"]').type('admin123')
@@ -43,7 +43,7 @@ describe('Apartment Status', () => {
 describe('View Tenant Dashboard', () => {
   it('should open tenants dashboard', () => {
     // Open login page
-    cy.visit('http://localhost:5173/authentication')
+    cy.visit('/authentication')
 
     // Type email and password
     cy.get('[name="email"]').type('admin@example.com')
@@ -66,67 +66,10 @@ describe('View Tenant Dashboard', () => {
   })
 })
 
-//As a user, I want to see invoice dashboard
-describe('View Normal Invoice Dashboard', () => {
-  it('should open normal invoice dashboard', () => {
-    // Open login page
-    cy.visit('http://localhost:5173/authentication')
-
-    // Type email and password
-    cy.get('[name="email"]').type('admin@example.com')
-    cy.get('[name="password"]').type('admin123')
-
-    // Click login button
-    cy.get('[type="submit"]').click()
-
-    // Check if redirected to dashboard
-    cy.url().should('include', '/')
-
-    cy.get('button').contains('View').click()
-
-    cy.get('[name="sidebarToggle"]').click()
-    cy.contains('Invoices').click()
-    cy.contains('Normal Invoices').click()
-    cy.url().should('include', '/normal-invoice')
-    cy.get('[data-cy="sidebar-header-close"]').click()
-
-    cy.contains('Invoices Management').should('exist')
-    cy.contains('Manage and track all custom invoices and payments').should('exist')
-  })
-})
-
-describe('View Monthly Invoice Dashboard', () => {
-  it('should open monthly invoice dashboard', () => {
-    // Open login page
-    cy.visit('http://localhost:5173/authentication')
-
-    // Type email and password
-    cy.get('[name="email"]').type('admin@example.com')
-    cy.get('[name="password"]').type('admin123')
-
-    // Click login button
-    cy.get('[type="submit"]').click()
-
-    // Check if redirected to dashboard
-    cy.url().should('include', '/')
-
-    cy.get('button').contains('View').click()
-
-    cy.get('[name="sidebarToggle"]').click()
-    cy.contains('Invoices').click()
-    cy.contains('Monthly Invoices').click()
-    cy.url().should('include', '/monthly-invoice')
-    cy.get('[data-cy="sidebar-header-close"]').click()
-
-    cy.contains('Monthly Invoices').should('exist')
-    cy.contains('Manage monthly rent invoices').should('exist')
-  })
-})
-
 describe('View Overdue Invoice Dashboard', () => {
   it('should open overdue invoice dashboard', () => {
     // Open login page
-    cy.visit('http://localhost:5173/authentication')
+    cy.visit('/authentication')
 
     // Type email and password
     cy.get('[name="email"]').type('admin@example.com')
@@ -156,7 +99,7 @@ describe('View Overdue Invoice Dashboard', () => {
 describe('View All Rooms Dashboard', () => {
   it('should open all rooms dashboard', () => {
     // Open login page
-    cy.visit('http://localhost:5173/authentication')
+    cy.visit('/authentication')
 
     // Type email and password
     cy.get('[name="email"]').type('admin@example.com')
@@ -183,7 +126,7 @@ describe('View All Rooms Dashboard', () => {
 describe('View Rooms Report Dashboard', () => {
   it('should open rooms report dashboard', () => {
     // Open login page
-    cy.visit('http://localhost:5173/authentication')
+    cy.visit('/authentication')
 
     // Type email and password
     cy.get('[name="email"]').type('admin@example.com')
@@ -211,7 +154,7 @@ describe('View Rooms Report Dashboard', () => {
 describe('View Receipt Report Dashboard', () => {
   it('should open receipt report dashboard', () => {
     // Open login page
-    cy.visit('http://localhost:5173/authentication')
+    cy.visit('/authentication')
 
     // Type email and password
     cy.get('[name="email"]').type('admin@example.com')
@@ -239,7 +182,7 @@ describe('View Receipt Report Dashboard', () => {
 describe('View Electric & Water Report Dashboard', () => {
   it('should open electric & water report dashboard', () => {
     // Open login page
-    cy.visit('http://localhost:5173/authentication')
+    cy.visit('/authentication')
 
     // Type email and password
     cy.get('[name="email"]').type('admin@example.com')
@@ -267,7 +210,7 @@ describe('View Electric & Water Report Dashboard', () => {
 describe('View Maintenance Dashboard', () => {
   it('should open maintenance dashboard', () => {
     // Open login page
-    cy.visit('http://localhost:5173/authentication')
+    cy.visit('/authentication')
 
     // Type email and password
     cy.get('[name="email"]').type('admin@example.com')

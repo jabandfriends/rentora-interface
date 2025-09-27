@@ -2,7 +2,7 @@
 describe('Login and access dashboard', () => {
   it('should login successfully', () => {
     // Open login page
-    cy.visit('http://localhost:5173/authentication')
+    cy.visit('/authentication')
 
     // Type email and password
     cy.get('[name="email"]').type('admin@example.com')
