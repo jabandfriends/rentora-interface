@@ -2,32 +2,104 @@ import { CircleAlert, CircleCheckBig, DollarSign } from 'lucide-react'
 import z from 'zod'
 
 import type {
+  CREATE_TENANT_FORM_FIELDS_TYPE,
+  CREATE_TENANT_FORM_SCHEMA_TYPE,
   FORM_SECTION,
   IStatsCardProps,
-  TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_BASE,
-  TENANT_FORM_FIELDS_TYPE,
+  UPDATE_TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_BASE,
+  UPDATE_TENANT_FORM_FIELDS_TYPE,
 } from '@/types'
 
-export const TENANT_FORM_SCHEMA = z.object({
-  full_name: z.string(),
-  first_name: z.string({ error: 'First name is required.' }).min(1, 'First name is required.'),
-  last_name: z.string({ error: 'Last name is required.' }).min(1, 'Last name is required.'),
-  email: z.string({ error: 'Email is required.' }).email('Invalid email address.'),
-  password: z.string({ error: 'Password is required.' }).min(6, 'Password must be at least 6 characters long.'),
-  confirm_password: z.string({ error: 'Confirm password is required.' }).min(1, 'Confirm password is required.'),
-  phone: z.string({ error: 'Phone number is required.' }).min(1, 'Phone number is required.'),
-  national_id: z.string({ error: 'National ID is required.' }).min(1, 'National ID is required.'),
-  birth_date: z.string({ error: 'Birth date is required.' }).min(1, 'Birth date is required.'),
-  floor: z.string({ error: 'Floor is required.' }).min(1, 'Floor is required.'),
-  unit_id: z.string({ error: 'Room is required.' }).min(1, 'Room is required.'),
+export const CREATE_TENANT_FORM_SCHEMA = z
+  .object({
+    firstName: z
+      .string({ error: 'First name is required.' })
+      .min(1, 'First name is required.')
+      .max(50, 'First name must be at most 50 characters long.'),
+    lastName: z
+      .string({ error: 'Last name is required.' })
+      .min(1, 'Last name is required.')
+      .max(50, 'Last name must be at most 50 characters long.'),
+    email: z
+      .email({ error: 'Please enter a valid email address.' })
+      .min(1, 'Email is required.')
+      .max(100, 'Email must be at most 100 characters long.'),
+    password: z
+      .string({ error: 'Password is required.' })
+      .min(8, 'Password must be at least 8 characters long.')
+      .max(100, 'Password must be at most 100 characters long.'),
+    confirmPassword: z
+      .string({ error: 'Confirm password is required.' })
+      .min(8, 'Confirm password must be at least 8 characters long.')
+      .max(100, 'Confirm password must be at most 100 characters long.'),
+    phoneNumber: z
+      .string({ error: 'Phone number is required.' })
+      .min(1, 'Phone number is required.')
+      .max(10, 'Phone number must be at most 10 characters long.'),
+    nationalId: z
+      .string({ error: 'National ID is required.' })
+      .max(13, 'National ID must be at most 13 characters long.')
+      .optional()
+      .nullable(),
+    dateOfBirth: z.string().optional().nullable(),
+    emergencyContactName: z
+      .string()
+      .max(50, 'Emergency contact name must be at most 50 characters long.')
+      .optional()
+      .nullable(),
+
+    emergencyContactPhone: z
+      .string()
+      .max(10, 'Emergency contact phone must be at most 10 characters long.')
+      .optional()
+      .nullable(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Please enter the same password.',
+    path: ['confirmPassword'],
+  })
+export const CREATE_TENANT_DEFAULT_VALUES: CREATE_TENANT_FORM_SCHEMA_TYPE = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  phoneNumber: '',
+  nationalId: '',
+  dateOfBirth: '',
+  emergencyContactName: '',
+  emergencyContactPhone: '',
+}
+export const UPDATE_TENANT_FORM_SCHEMA = z.object({
+  firstName: z.string().max(50, 'First name must be at most 50 characters long.').optional().nullable(),
+  lastName: z.string().max(50, 'Last name must be at most 50 characters long.').optional().nullable(),
+  email: z.string().max(100, 'Email must be at most 100 characters long.').optional().nullable(),
+  phoneNumber: z.string().max(10, 'Phone number must be at most 10 characters long.').optional().nullable(),
+  nationalId: z.string().max(13, 'National ID must be at most 13 characters long.').optional().nullable(),
+  dateOfBirth: z.string().optional().nullable(),
+  emergencyContactName: z
+    .string()
+    .max(50, 'Emergency contact name must be at most 50 characters long.')
+    .optional()
+    .nullable(),
+  emergencyContactPhone: z
+    .string()
+    .max(10, 'Emergency contact phone must be at most 10 characters long.')
+    .optional()
+    .nullable(),
 })
 
-export const TENANT_PASSWORD_UPDATE_SCHEMA = z.object({
-  password: z.string({ error: 'Password is required.' }).min(6, 'Password must be at least 6 characters long.'),
-  confirmpassword: z.string({ error: 'Confirm password is required.' }).min(1, 'Confirm password is required.'),
-})
+export const TENANT_PASSWORD_UPDATE_SCHEMA = z
+  .object({
+    password: z.string({ error: 'Password is required.' }).min(8, 'Password must be at least 8 characters long.'),
+    confirmPassword: z.string({ error: 'Confirm password is required.' }).min(8, 'Confirm password is required.'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Please enter the same password.',
+    path: ['confirmPassword'],
+  })
 
-export const TENANT_FORM_FIELDS: Array<FORM_SECTION<TENANT_FORM_FIELDS_TYPE>> = [
+export const UPDATE_TENANT_FORM_FIELDS: Array<FORM_SECTION<UPDATE_TENANT_FORM_FIELDS_TYPE>> = [
   {
     title: 'Tenant Detail',
     description: 'Basic information about tenant',
@@ -35,87 +107,188 @@ export const TENANT_FORM_FIELDS: Array<FORM_SECTION<TENANT_FORM_FIELDS_TYPE>> = 
       {
         fieldType: 'layout',
         layout: 'row',
-        key: 'full_name',
+        key: 'firstName',
         fields: [
           {
-            key: 'first_name',
+            key: 'firstName',
             label: 'First Name',
+            placeholder: 'Enter first name',
             fieldType: 'input',
             inputType: 'text',
+            maxLength: 50,
           },
           {
-            key: 'last_name',
+            key: 'lastName',
             label: 'Last Name',
+            placeholder: 'Enter last name',
             fieldType: 'input',
             inputType: 'text',
+            maxLength: 50,
           },
         ],
       },
       {
         key: 'email',
         label: 'Email',
+        placeholder: 'Enter email',
         fieldType: 'input',
+        maxLength: 100,
       },
       {
-        key: 'phone',
+        key: 'phoneNumber',
         label: 'Phone Number',
+        placeholder: 'Enter phone number',
         fieldType: 'input',
         inputType: 'number',
+        maxLength: 10,
       },
+
       {
-        key: 'password',
-        label: 'Password',
-        fieldType: 'input',
-      },
-      {
-        key: 'confirm_password',
-        label: 'Confirm Password',
-        fieldType: 'input',
-      },
-      {
-        key: 'national_id',
+        key: 'nationalId',
         label: 'National ID',
+        placeholder: 'Enter national ID',
         fieldType: 'input',
         inputType: 'number',
+        maxLength: 13,
       },
       {
-        key: 'birth_date',
+        key: 'dateOfBirth',
         label: 'Date of Birth',
         fieldType: 'input',
-        inputType: 'datetime',
+        inputType: 'date',
+      },
+      {
+        key: 'emergencyContactName',
+        label: 'Emergency Contact Name',
+        fieldType: 'layout',
+        layout: 'row',
+        fields: [
+          {
+            key: 'emergencyContactName',
+            label: 'Emergency Contact Name',
+            placeholder: 'Enter emergency contact name',
+            fieldType: 'input',
+            inputType: 'text',
+            maxLength: 100,
+          },
+          {
+            key: 'emergencyContactPhone',
+            label: 'Emergency Contact Phone',
+            placeholder: 'Enter emergency contact phone',
+            fieldType: 'input',
+            inputType: 'number',
+            maxLength: 10,
+          },
+        ],
       },
     ],
   },
+]
+
+export const CREATE_TENANT_FORM_FIELDS: Array<FORM_SECTION<CREATE_TENANT_FORM_FIELDS_TYPE>> = [
   {
-    title: 'Assign Unit',
-    description: 'Unit assigned to the tenant.',
+    title: 'Tenant Detail',
+    description: 'Basic information about tenant',
     fields: [
       {
         fieldType: 'layout',
         layout: 'row',
-        key: 'floor',
+        key: 'firstName',
         fields: [
           {
-            key: 'floor',
-            label: 'Floor',
-            fieldType: 'select',
-            placeholder: 'Select Floor',
-            options: [
-              { value: 'floor1', label: 'Floor 1' },
-              { value: 'floor2', label: 'Floor 2' },
-              { value: 'floor3', label: 'Floor 3' },
-            ],
+            key: 'firstName',
+            label: 'First Name',
+            placeholder: 'Enter first name',
+            fieldType: 'input',
+            inputType: 'text',
+            maxLength: 50,
           },
           {
-            key: 'unit_id',
-            label: 'Room number',
-            fieldType: 'select',
-            placeholder: 'Select Room number',
-            options: [
-              { value: 'room1', label: 'Room 1' },
-              { value: 'room2', label: 'Room 2' },
-              { value: 'room3', label: 'Room 3' },
-            ],
+            key: 'lastName',
+            label: 'Last Name',
+            placeholder: 'Enter last name',
+            fieldType: 'input',
+            inputType: 'text',
+            maxLength: 50,
+          },
+        ],
+      },
+      {
+        fieldType: 'layout',
+        layout: 'row',
+        key: 'password',
+        fields: [
+          {
+            key: 'password',
+            label: 'Password',
+            placeholder: 'Enter password',
+            fieldType: 'input',
+            inputType: 'text',
+            type: 'password',
+            maxLength: 50,
+          },
+          {
+            key: 'confirmPassword',
+            label: 'Confirm Password',
+            placeholder: 'Enter confirm password',
+            fieldType: 'input',
+            inputType: 'text',
+            type: 'password',
+            maxLength: 50,
+          },
+        ],
+      },
+      {
+        key: 'email',
+        label: 'Email',
+        placeholder: 'Enter email',
+        fieldType: 'input',
+        maxLength: 100,
+      },
+      {
+        key: 'phoneNumber',
+        label: 'Phone Number',
+        placeholder: 'Enter phone number',
+        fieldType: 'input',
+        inputType: 'number',
+        maxLength: 10,
+      },
+
+      {
+        key: 'nationalId',
+        label: 'National ID',
+        placeholder: 'Enter national ID',
+        fieldType: 'input',
+        inputType: 'number',
+        maxLength: 13,
+      },
+      {
+        key: 'dateOfBirth',
+        label: 'Date of Birth',
+        fieldType: 'input',
+        inputType: 'date',
+      },
+      {
+        key: 'emergencyContactName',
+        label: 'Emergency Contact Name',
+        fieldType: 'layout',
+        layout: 'row',
+        fields: [
+          {
+            key: 'emergencyContactName',
+            label: 'Emergency Contact Name',
+            placeholder: 'Enter emergency contact name',
+            fieldType: 'input',
+            inputType: 'text',
+            maxLength: 100,
+          },
+          {
+            key: 'emergencyContactPhone',
+            label: 'Emergency Contact Phone',
+            placeholder: 'Enter emergency contact phone',
+            fieldType: 'input',
+            inputType: 'number',
+            maxLength: 10,
           },
         ],
       },
@@ -175,8 +348,7 @@ export const TENANT_TABLE_HEADER = [
   'Action',
 ]
 
-export const TENANT_ACTION: Array<string> = ['Update Tenant', 'Password Update']
-export const TENANT_PASSWORD_UPDATE_FORM: Array<FORM_SECTION<TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_BASE>> = [
+export const TENANT_PASSWORD_UPDATE_FORM: Array<FORM_SECTION<UPDATE_TENANT_FORM_FIELDS_PASSWORD_UPDATE_TYPE_BASE>> = [
   {
     title: 'Tenant Password Update',
     description: 'Update tenant password',
@@ -189,10 +361,16 @@ export const TENANT_PASSWORD_UPDATE_FORM: Array<FORM_SECTION<TENANT_FORM_FIELDS_
       },
       {
         fieldType: 'input',
-        key: 'confirmpassword',
+        key: 'confirmPassword',
         label: 'Confirm Password',
         placeholder: 'Confirm the Password',
       },
     ],
   },
 ]
+
+export enum TENANT_STATUS {
+  All = '',
+  Active = 'active',
+  Inactive = 'inactive',
+}

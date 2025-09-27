@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { MonthlyInvoiceBody } from '@/components/pages/Invoice'
-import { PageTableBar, PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableBar, PageTableHeader } from '@/components/ui'
 import { NORMAL_INVOICE_STATS, ROUTES } from '@/constants'
 
 const MonthlyInvoice = () => {
@@ -25,7 +25,7 @@ const MonthlyInvoice = () => {
         }
       />
       <PageTableBar title="Total Amount" count="฿8,000,000" />
-      <PageTableSearch />
+      {/* <PageTableSearch /> */}
       <MonthlyInvoiceBody />
     </>
   )

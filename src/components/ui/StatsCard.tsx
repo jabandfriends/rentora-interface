@@ -1,13 +1,13 @@
-import { Card } from '@/components/common'
+import { Card, Skeleton } from '@/components/common'
 import type { IStatsCardProps } from '@/types'
 import { cn } from '@/utilities'
 
-export const StatsCard = ({ title, count, icon, type, className }: IStatsCardProps) => {
+export const StatsCard = ({ title, count, icon, type, className, isLoading }: IStatsCardProps) => {
   return (
-    <Card className={cn('rounded-4xl w-68 h-40', className)}>
-      <div>
-        <h3>{count}</h3>
-        <p className="text-theme-secondary">{title}</p>
+    <Card className={cn('rounded-4xl desktop:w-68 h-40 w-full', className)}>
+      <div className="space-y-2">
+        {isLoading ? <Skeleton className="h-5 w-12" /> : <h3>{count}</h3>}
+        {isLoading ? <Skeleton className="h-5 w-32" /> : <p className="text-theme-secondary">{title}</p>}
       </div>
 
       {icon && (

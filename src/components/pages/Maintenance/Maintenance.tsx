@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { MaintenanceTable } from '@/components/pages/Maintenance'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableHeader } from '@/components/ui'
 import { MAINTENANCE_STATS, MAINTENANCE_TABLE_DATA, ROUTES } from '@/constants'
 
 const Maintenance = () => {
@@ -21,7 +21,7 @@ const Maintenance = () => {
         stats={MAINTENANCE_STATS}
         actionButton={<Button onClick={handleCreate}>New Report</Button>}
       />
-      <PageTableSearch />
+      {/* <PageTableSearch /> */}
       <MaintenanceTable data={MAINTENANCE_TABLE_DATA} />
     </>
   )

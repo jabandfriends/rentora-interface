@@ -12,7 +12,7 @@ const AllApartmentEmpty = () => {
     navigate(ROUTES.apartmentCreate.path)
   }, [navigate])
   return (
-    <div className="h-110 flex flex-col items-center justify-center gap-y-4">
+    <div className="bg-theme-light h-110 flex flex-col items-center justify-center gap-y-4 rounded-2xl shadow">
       <PackageOpen size={56} />
       <div className="desktop:w-1/4 w-2/3 text-center">
         <h3>No apartment to display</h3>

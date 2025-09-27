@@ -1,15 +1,52 @@
-import { ChevronDown } from 'lucide-react'
+import { PackageOpen } from 'lucide-react'
+import { useCallback } from 'react'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/common'
-import { Badge, PaginationBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { TENANT_ACTION } from '@/constants'
+import { PaginationBar } from '@/components/feature'
+import { TenantAction, TenantTableLoading } from '@/components/pages/Tenant'
+import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { ROUTES } from '@/constants'
 import { TENANTS_TABLE_HEADER } from '@/constants/tenantsmanage'
-//RECHECK : api type
+import type { IPaginate, ITenant } from '@/types'
+import { formatTimestamp } from '@/utilities'
+
 type TenantsTableProps = {
-  data: Array<any>
-}
-//RECHECK : API TYPE
-const TenantTable = ({ data }: TenantsTableProps) => {
+  data: Array<ITenant>
+  isLoading: boolean
+  currentPage: number
+  onPageChange: (page: number) => void
+} & Pick<IPaginate, 'totalPages' | 'totalElements'>
+
+const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, onPageChange }: TenantsTableProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const navigate: NavigateFunction = useNavigate()
+  const handleUpdateTenant = useCallback(
+    (tenantId: string) => {
+      if (!apartmentId) return
+      navigate(ROUTES.tenantUpdate.getPath(apartmentId, tenantId))
+    },
+    [apartmentId, navigate],
+  )
+  const handlePasswordUpdateTenant = useCallback(
+    (tenantId: string) => {
+      if (!apartmentId) return
+      navigate(ROUTES.tenantUpdatePassword.getPath(apartmentId, tenantId))
+    },
+    [apartmentId, navigate],
+  )
+  if (isLoading) {
+    return <TenantTableLoading />
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
+        <PackageOpen size={50} />
+        <p className="text-theme-secondary text-body-1">No tenants found</p>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
       <Table>
@@ -21,38 +58,47 @@ const TenantTable = ({ data }: TenantsTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {/* RECHECK : API TYPE */}
           {data.map((item, index) => (
             <TableRow key={index}>
-              <TableCell>{item.tenantsid}</TableCell>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>{item.email}</TableCell>
-              <TableCell>{item.floor}</TableCell>
-              <TableCell>{item.unit}</TableCell>
-              <TableCell>{item.createdate}</TableCell>
+              <TableCell>TENANT-{index + 1}</TableCell>
+              <TableCell>{item.fullName ? item.fullName : 'N/A'}</TableCell>
+              <TableCell>{item.email ? item.email : 'N/A'}</TableCell>
+              <TableCell>{item.unitName ? item.unitName : 'N/A'}</TableCell>
+              <TableCell>{formatTimestamp(item.createdAt)}</TableCell>
               <TableCell>
-                <Badge variant="success">{item.status}</Badge>
+                {item.accountStatus ? <Badge variant="success">Active</Badge> : <Badge variant="error">Inactive</Badge>}
+              </TableCell>
+              <TableCell>
+                {item.occupiedStatus ? (
+                  <Badge variant="success">Occupied</Badge>
+                ) : (
+                  <Badge variant="error">Unoccupied</Badge>
+                )}
               </TableCell>
 
               <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="vanilla">
-                      <ChevronDown size={18} />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" sideOffset={10}>
-                    {TENANT_ACTION.map((action) => (
-                      <DropdownMenuItem key={action}>{action}</DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <TenantAction
+                  userId={item.userId}
+                  onUpdate={handleUpdateTenant}
+                  onPasswordUpdate={handlePasswordUpdateTenant}
+                />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <PaginationBar />
+      <div className="flex items-center justify-between">
+        <p className="text-theme-secondary text-body-2">
+          Showing {data.length} of {totalElements} items
+        </p>
+        <PaginationBar
+          isLoading={isLoading}
+          page={currentPage}
+          totalElements={totalElements}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
+      </div>
     </div>
   )
 }
