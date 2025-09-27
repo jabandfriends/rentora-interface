@@ -39,12 +39,12 @@ export const TENANTS_DATA = [
 ]
 
 export const TENANTS_TABLE_HEADER = [
-  'TENANT ID',
-  'Full Name',
-  'Email Address',
-  'Floor',
+  'Tenant ID',
+  'Name',
+  'Email',
   'Unit',
-  'Created Date',
+  'Joined On',
   'Status',
-  'Action',
+  'Occupation',
+  'Actions',
 ]

@@ -7,11 +7,21 @@ export const getErrorMessage = (error: unknown, fallbackMessage?: string): strin
     case 'string':
       return error
     case 'object': {
-      const backendError: AxiosError<IRentoraApiClientErrorResponse> =
-        error as AxiosError<IRentoraApiClientErrorResponse>
+      const backendError = error as AxiosError<IRentoraApiClientErrorResponse>
+
       if (backendError.response?.data) {
-        return backendError.response.data.message
+        const data = backendError.response.data
+
+        if (data.message) {
+          const match = data.message.match(/\{(.+?)\}/)
+          if (match) {
+            return match[1].replace('=', ': ')
+          }
+
+          return data.message
+        }
       }
+
       if (error instanceof Error) {
         return error.message
       }

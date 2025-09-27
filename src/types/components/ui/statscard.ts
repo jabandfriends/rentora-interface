@@ -6,4 +6,5 @@ export type IStatsCardProps = {
   icon?: ReactNode
   type?: 'primary' | 'success' | 'warning' | 'error'
   className?: string
+  isLoading?: boolean
 }

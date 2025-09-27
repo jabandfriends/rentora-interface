@@ -41,9 +41,9 @@ const ApartmentSetup = () => {
     bankName: formData.bankName,
     bankAccountHolder: formData.bankAccountHolder,
     bankAccountNumber: formData.bankAccountNumber,
-    buildings: formData.buildings.map((b: { buildingName: string; totalFloors: string }) => ({
+    buildings: formData.buildings.map((b: { buildingName: string; totalFloor: string }) => ({
       buildingName: b.buildingName,
-      totalFloors: Number(b.totalFloors),
+      totalFloors: Number(b.totalFloor),
     })),
     electricityFlat: Number(formData.electricityFlat),
     electricityPrice: Number(formData.electricityPrice),

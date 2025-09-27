@@ -1,6 +1,8 @@
 export { default as AllApartmentEmpty } from './AllApartmentEmpty'
+export { default as AllApartmentHeader } from './AllApartmentHeader'
 export { default as AllApartmentLoading } from './AllApartmentLoading'
 export { default as AllApartments } from './AllApartments'
+export { default as AllApartmentSearchBar } from './AllApartmentSearchBar'
 export { default as ApartmentCard } from './ApartmentCard'
 export { default as ApartmentCardSkeleton } from './ApartmentCardSkeleton'
 export { default as ApartmentNotFound } from './ApartmentNotFound'
