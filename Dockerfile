@@ -10,6 +10,10 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install
 
+#ENV
+ARG VITE_RENTORA_API_BASE_URL
+RUN echo "VITE_RENTORA_API_BASE_URL=${VITE_RENTORA_API_BASE_URL}" > .env
+
 # Copy source code
 COPY . .
 
