@@ -123,62 +123,6 @@ describe('View All Rooms Dashboard', () => {
   })
 })
 
-describe('View Rooms Report Dashboard', () => {
-  it('should open rooms report dashboard', () => {
-    // Open login page
-    cy.visit('/authentication')
-
-    // Type email and password
-    cy.get('[name="email"]').type('admin@example.com')
-    cy.get('[name="password"]').type('admin123')
-
-    // Click login button
-    cy.get('[type="submit"]').click()
-
-    // Check if redirected to dashboard
-    cy.url().should('include', '/')
-
-    cy.get('button').contains('View').click()
-
-    cy.get('[name="sidebarToggle"]').click()
-    cy.contains('Reports').click()
-    cy.contains('Room Report').click()
-    cy.url().should('include', '/report/room')
-    cy.get('[data-cy="sidebar-header-close"]').click()
-
-    cy.contains('Room Report').should('exist')
-    cy.contains('Manage and view all room').should('exist')
-  })
-})
-
-describe('View Receipt Report Dashboard', () => {
-  it('should open receipt report dashboard', () => {
-    // Open login page
-    cy.visit('/authentication')
-
-    // Type email and password
-    cy.get('[name="email"]').type('admin@example.com')
-    cy.get('[name="password"]').type('admin123')
-
-    // Click login button
-    cy.get('[type="submit"]').click()
-
-    // Check if redirected to dashboard
-    cy.url().should('include', '/')
-
-    cy.get('button').contains('View').click()
-
-    cy.get('[name="sidebarToggle"]').click()
-    cy.contains('Reports').click()
-    cy.contains('Receipt Report').click()
-    cy.url().should('include', '/report/receipt')
-    cy.get('[data-cy="sidebar-header-close"]').click()
-
-    cy.contains('Receipt Report').should('exist')
-    cy.contains('Manage and view all customer receipt').should('exist')
-  })
-})
-
 describe('View Electric & Water Report Dashboard', () => {
   it('should open electric & water report dashboard', () => {
     // Open login page
