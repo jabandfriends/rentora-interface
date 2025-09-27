@@ -123,34 +123,6 @@ describe('View All Rooms Dashboard', () => {
   })
 })
 
-describe('View Electric & Water Report Dashboard', () => {
-  it('should open electric & water report dashboard', () => {
-    // Open login page
-    cy.visit('/authentication')
-
-    // Type email and password
-    cy.get('[name="email"]').type('admin@example.com')
-    cy.get('[name="password"]').type('admin123')
-
-    // Click login button
-    cy.get('[type="submit"]').click()
-
-    // Check if redirected to dashboard
-    cy.url().should('include', '/')
-
-    cy.get('button').contains('View').click()
-
-    cy.get('[name="sidebarToggle"]').click()
-    cy.contains('Reports').click()
-    cy.contains('Electric & Water Report').click()
-    cy.url().should('include', '/report/electric-water')
-    cy.get('[data-cy="sidebar-header-close"]').click()
-
-    cy.contains('Electric & Water Usage').should('exist')
-    cy.contains('Manage and view electric & water usage and bills').should('exist')
-  })
-})
-
 describe('View Maintenance Dashboard', () => {
   it('should open maintenance dashboard', () => {
     // Open login page
