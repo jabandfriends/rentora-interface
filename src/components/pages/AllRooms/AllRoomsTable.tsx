@@ -1,14 +1,41 @@
-import { SquarePen } from 'lucide-react'
+import { PackageOpen, SquarePen } from 'lucide-react'
 
-import { Badge, PaginationBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { PaginationBar } from '@/components/feature'
+import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { ALL_ROOMS_TABLE_HEADER } from '@/constants'
+import type { IUnit } from '@/types'
+
+import AllRoomTableLoading from './AllRoomTableLoading'
 
 //RECHECK : api type
 type AllRoomsTableProps = {
-  data: Array<any>
+  data: Array<IUnit>
+  onPageChange: (page: number) => void
+  isLoading: boolean
+  currentPage: number
+  totalPages: number
+  totalElements: number
 }
 //RECHECK : API TYPE
-const AllRoomsTable = ({ data }: AllRoomsTableProps) => {
+const AllRoomsTable = ({
+  data,
+  onPageChange,
+  isLoading,
+  currentPage,
+  totalPages,
+  totalElements,
+}: AllRoomsTableProps) => {
+  if (isLoading) return <AllRoomTableLoading />
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
+        <PackageOpen size={50} />
+        <p className="text-theme-secondary text-body-1">No rooms found</p>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
       <Table>
@@ -23,13 +50,15 @@ const AllRoomsTable = ({ data }: AllRoomsTableProps) => {
           {/* RECHECK : API TYPE */}
           {data.map((item, index) => (
             <TableRow key={index}>
-              <TableCell>{item.roomno}</TableCell>
-              <TableCell>{item.buildings}</TableCell>
-              <TableCell>{item.resident}</TableCell>
-              <TableCell>{item.category}</TableCell>
-              <TableCell>{item.moveoutdate}</TableCell>
+              <TableCell>{item.unitName}</TableCell>
+              <TableCell>{item.buildingName}</TableCell>
+              <TableCell className="capitalize">{item.currentTenant}</TableCell>
+              <TableCell className="capitalize">{item.unitType}</TableCell>
+              <TableCell>{item.contractEndDate}</TableCell>
               <TableCell>
-                <Badge variant="success">{item.status}</Badge>
+                <Badge variant="success" className="capitalize">
+                  {item.unitStatus}
+                </Badge>
               </TableCell>
 
               <TableCell>
@@ -39,7 +68,13 @@ const AllRoomsTable = ({ data }: AllRoomsTableProps) => {
           ))}
         </TableBody>
       </Table>
-      <PaginationBar />
+      <PaginationBar
+        onPageChange={onPageChange}
+        isLoading={isLoading}
+        page={currentPage}
+        totalPages={totalPages}
+        totalElements={totalElements}
+      />
     </div>
   )
 }
