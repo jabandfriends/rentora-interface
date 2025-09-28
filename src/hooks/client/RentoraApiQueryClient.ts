@@ -9,8 +9,9 @@ import type {
   IRentoraApiClientInvoiceListResponse,
   IRentoraApiClientTenantDetailResponse,
   IRentoraApiClientTenantListResponse,
-  IRentoraApiInvoiceDetailParams,
+  IRentoraApiClientUserResponse,
   IRentoraApiInvoiceListParams,
+  IRentoraApiOverdueListParams,
   IRentoraApiTenantListParams,
   Maybe,
   RentoraApiQueryClientKey,
@@ -65,11 +66,17 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     return response.data.data
   }
 
-  async invoiceDetail(
-    payload: IRentoraApiInvoiceDetailParams,
-  ): Promise<IRentoraApiClientInvoiceDetailResponse['data']> {
+  async invoiceDetail(invoiceId: Maybe<string>): Promise<IRentoraApiClientInvoiceDetailResponse['data']> {
     const response: AxiosResponse<IRentoraApiClientInvoiceDetailResponse, unknown> =
-      await this.axiosWithAuthInstance.get<IRentoraApiClientInvoiceDetailResponse>(`/api/invoices/${payload.invoiceId}`)
+      await this.axiosWithAuthInstance.get<IRentoraApiClientInvoiceDetailResponse>(`/api/invoices/${invoiceId}`)
+    return response.data.data
+  }
+
+  async overdueList(params: IRentoraApiOverdueListParams): Promise<IRentoraApiClientInvoiceListResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientInvoiceListResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientInvoiceListResponse>(`/api/invoices/overdue`, {
+        params,
+      })
     return response.data.data
   }
 

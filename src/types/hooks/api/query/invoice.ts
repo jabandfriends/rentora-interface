@@ -1,14 +1,12 @@
 import type {
   IBasePaginateQueryResult,
   IBaseUseQuery,
-  IRentoraApiClientBasePaginateResponse,
+  IRentoraApiClientBasePaginateWithMetadataResponse,
   IRentoraApiClientBaseResponse,
   Maybe,
 } from '@/types'
 
-export type IUseRentoraApiInvoiceList = IBasePaginateQueryResult<IRentoraApiClientInvoiceListResponse['data']>
-
-export type IInvoiceOverall = {
+export type IInvoiceListMetadata = {
   totalInvoice: number
   paidInvoice: number
   unpaidInvoice: number
@@ -18,15 +16,17 @@ export type IInvoiceOverall = {
 }
 
 export type IInvoiceSummary = {
-  id: string
+  invoiceId: string
   invoiceNumber: string
   tenant: string
   room: string
-  totalAmount: number
+  amount: number
   issueDate: string
   dueDate: string
   status: invoiceStatus
 }
+
+export type invoiceStatus = 'paid' | 'unpaid' | 'partially_paid' | 'overdue' | 'cancelled'
 
 export type IInvoiceDetail = IInvoiceSummary & {
   contact: string
@@ -45,9 +45,12 @@ export type IInvoiceDetail = IInvoiceSummary & {
   updatedAt: string
 }
 
-export type invoiceStatus = 'paid' | 'unpaid' | 'partially_paid' | 'overdue' | 'cancelled'
+export type IUseRentoraApiInvoiceList = IBasePaginateQueryResult<IRentoraApiClientInvoiceListResponse['data']>
 
-export type IRentoraApiClientInvoiceListResponse = IRentoraApiClientBasePaginateResponse<IInvoiceSummary>
+export type IRentoraApiClientInvoiceListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
+  IInvoiceSummary,
+  IInvoiceListMetadata
+>
 
 export type IRentoraApiInvoiceListParams = {
   page?: number
@@ -61,6 +64,6 @@ export type IUseRentoraApiInvoiceDetail = IBaseUseQuery<IRentoraApiClientInvoice
 
 export type IRentoraApiClientInvoiceDetailResponse = IRentoraApiClientBaseResponse<IInvoiceDetail>
 
-export type IRentoraApiInvoiceDetailParams = {
-  invoiceId: string
+export type IRentoraApiOverdueListParams = {
+  overdueInvoice: number
 }

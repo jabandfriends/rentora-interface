@@ -167,7 +167,6 @@ export const NORMAL_INVOICE_TABLE_HEADER = [
   'Invoice',
   'Tenant',
   'Room',
-  'Description',
   'Amount',
   'Issue Date',
   'Due Date',
@@ -176,22 +175,12 @@ export const NORMAL_INVOICE_TABLE_HEADER = [
 ]
 
 //overdue invoice table
-export const OVERDUE_INVOICE_TABLE_HEADER = [
-  'Invoice',
-  'Tenant',
-  'Room',
-  'Description',
-  'Amount',
-  'Issue Date',
-  'Due Date',
-  'Status',
-]
+export const OVERDUE_INVOICE_TABLE_HEADER = ['Invoice', 'Tenant', 'Room', 'Amount', 'Issue Date', 'Due Date', 'Status']
 
 export const SERVICE_INVOICE_TABLE_HEADER = [
   'Invoice',
   'Tenant',
   'Room',
-  'Description',
   'Amount',
   'Issue Date',
   'Due Date',
