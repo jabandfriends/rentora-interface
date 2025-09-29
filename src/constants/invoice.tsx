@@ -2,8 +2,12 @@ import { CircleAlert, CircleCheckBig, Clock, DollarSign } from 'lucide-react'
 
 import type { IStatsCardProps } from '@/types'
 
-export const INVOICE_STATUS: Array<string> = ['All', 'Paid', 'Unpaid', 'Overdue']
-export const INVOICE_SORT: Array<'createdAt' | 'updatedAt'> = ['createdAt', 'updatedAt']
+export enum INVOICE_STATUS {
+  total = '',
+  Paid = 'paid',
+  Unpaid = 'unpaid',
+  Overdue = 'overdue',
+}
 
 export const NORMAL_INVOICE_STATS: Array<IStatsCardProps> = [
   {
@@ -67,7 +71,6 @@ export const SERVICE_INVOICE_STATS: Array<IStatsCardProps> = [
   },
 ]
 
-//RECHECK : API TYPE LATER
 export const NORMAL_INVOICE_DATA = [
   {
     invoice: 'INV-001-123',
@@ -101,7 +104,6 @@ export const NORMAL_INVOICE_DATA = [
   },
 ]
 
-//RECHECK : API TYPE LATER
 export const OVERDUE_INVOICE_DATA = [
   {
     invoice: 'INV-001-123',

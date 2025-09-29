@@ -13,7 +13,7 @@ import type {
 } from '@/types'
 
 export const useRentoraApiInvoiceList = (props: {
-  apartmentId: Maybe<string>
+  invoiceId: Maybe<string>
   params: IRentoraApiInvoiceListParams
 }): IUseRentoraApiInvoiceList => {
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
@@ -21,16 +21,21 @@ export const useRentoraApiInvoiceList = (props: {
   const { data: rawData, ...rest }: UseQueryResult<IRentoraApiClientInvoiceListResponse['data']> = useQuery({
     queryKey: [
       rentoraApiQueryClient.key.invoiceList,
+      props?.invoiceId,
       props?.params?.page,
       props?.params?.size,
       props?.params?.search,
+      props?.params?.status,
+      props?.params?.name,
       props?.params?.sortBy,
       props?.params?.sortDir,
     ],
     queryFn: async () => {
-      const { page, size, search, sortBy, sortDir }: IRentoraApiInvoiceListParams = props?.params ?? {}
+      const { page, size, search, status, name, sortBy, sortDir }: IRentoraApiInvoiceListParams = props?.params ?? {}
       return await rentoraApiQueryClient.invoiceList({
         ...(props?.params ?? {}),
+        ...(status ? { status } : {}),
+        ...(name ? { name } : {}),
         ...(search ? { search } : {}),
         ...(sortBy ? { sortBy } : {}),
         ...(sortDir ? { sortDir } : {}),
@@ -39,6 +44,7 @@ export const useRentoraApiInvoiceList = (props: {
       })
     },
     retry: 1,
+    enabled: !!props?.invoiceId,
   })
 
   const result: IRentoraApiClientInvoiceListResponse['data'] = useMemo(() => {

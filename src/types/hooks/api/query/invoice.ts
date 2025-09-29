@@ -56,6 +56,8 @@ export type IRentoraApiInvoiceListParams = {
   page?: number
   size?: number
   search?: string
+  status?: string
+  name?: string
   sortBy?: 'name' | 'createdAt' | 'updatedAt'
   sortDir?: 'asc' | 'desc'
 }
@@ -64,6 +66,6 @@ export type IUseRentoraApiInvoiceDetail = IBaseUseQuery<IRentoraApiClientInvoice
 
 export type IRentoraApiClientInvoiceDetailResponse = IRentoraApiClientBaseResponse<IInvoiceDetail>
 
-export type IRentoraApiOverdueListParams = {
-  overdueInvoice: number
+export type IRentoraApiInvoiceDetailParams = {
+  invoiceId: string
 }

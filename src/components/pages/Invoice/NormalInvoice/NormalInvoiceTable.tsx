@@ -10,14 +10,13 @@ import type { IInvoiceSummary, IPaginate } from '@/types'
 import InvoiceAction from './NormalInvoiceAction'
 import NormalInvoiceLoading from './NormalInvoiceLoading'
 
-//RECHECK : api type
 type INormalInvoiceTableProps = {
   data: Array<IInvoiceSummary>
   isLoading: boolean
   currentPage: number
   onPageChange: (page: number) => void
 } & Pick<IPaginate, 'totalPages' | 'totalElements'>
-//RECHECK : API TYPE
+
 const NormalInvoiceTable = ({
   data,
   isLoading,
@@ -26,19 +25,19 @@ const NormalInvoiceTable = ({
   totalElements,
   onPageChange,
 }: INormalInvoiceTableProps) => {
-  const { invoiceId } = useParams<{ invoiceId: string }>()
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   const navigate: NavigateFunction = useNavigate()
   const handleUpdateInvoice = useCallback(
-    (tenantId: string) => {
-      if (!invoiceId) return navigate(ROUTES.tenantUpdate.getPath(invoiceId, tenantId))
+    (invoiceId: string) => {
+      if (!invoiceId) return navigate(ROUTES.tenantUpdate.getPath(apartmentId, invoiceId))
     },
-    [invoiceId, navigate],
+    [apartmentId, navigate],
   )
   const handleDeleteInvoice = useCallback(
-    (tenantId: string) => {
-      if (!invoiceId) return navigate(ROUTES.tenantUpdatePassword.getPath(invoiceId, tenantId))
+    (invoiceId: string) => {
+      if (!invoiceId) return navigate(ROUTES.tenantUpdatePassword.getPath(apartmentId, invoiceId))
     },
-    [invoiceId, navigate],
+    [apartmentId, navigate],
   )
 
   if (isLoading) {
@@ -49,7 +48,7 @@ const NormalInvoiceTable = ({
     return (
       <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
         <PackageOpen size={50} />
-        <p className="text-theme-secondary text-body-1">No tenants found</p>
+        <p className="text-theme-secondary text-body-1">No Invoices found</p>
       </div>
     )
   }
