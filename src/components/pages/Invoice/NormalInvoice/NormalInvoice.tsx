@@ -16,7 +16,9 @@ const NormalInvoice = () => {
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState<number>(
     DEFAULT_INVOICE_LIST_DATA.page,
   )
-  const { invoiceId } = useParams<{ invoiceId: string }>()
+
+  //param
+  const { apartmentId } = useParams<{ apartmentId: string }>()
 
   const { watch, setValue } = useForm<{
     search: string
@@ -38,13 +40,14 @@ const NormalInvoice = () => {
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedSortBy = useDebounce(watch('sortBy') ? watch('sortBy') : undefined, 300)
   const debouncedSortDir = useDebounce(watch('sortDir') ? watch('sortDir') : undefined, 300)
+
   const {
-    data,
+    data: invoiceData,
     isLoading,
     pagination: { totalPages, totalElements },
     metadata: { totalInvoice, paidInvoice, unpaidInvoice, overdueInvoice },
   } = useRentoraApiInvoiceList({
-    invoiceId: invoiceId,
+    apartmentId: apartmentId,
     params: {
       page: currentPage,
       size: DEFAULT_INVOICE_LIST_DATA.size,
@@ -80,9 +83,8 @@ const NormalInvoice = () => {
   )
 
   const navigateToCreateInvoice = useCallback(() => {
-    if (!invoiceId) return
-    navigate(ROUTES.invoiceCreate.getPath(invoiceId))
-  }, [invoiceId, navigate])
+    navigate(ROUTES.invoiceCreate.getPath(apartmentId))
+  }, [apartmentId, navigate])
 
   const handlePageChange = useCallback(
     (page: number) => {
@@ -147,7 +149,7 @@ const NormalInvoice = () => {
         onSortChange={handleSortChange}
       />
       <NormalInvoiceTable
-        data={data}
+        data={invoiceData}
         isLoading={isLoading}
         currentPage={currentPage}
         totalPages={totalPages}

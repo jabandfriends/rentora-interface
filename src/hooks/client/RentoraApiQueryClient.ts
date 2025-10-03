@@ -57,9 +57,12 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     return response.data.data
   }
 
-  async invoiceList(params: IRentoraApiInvoiceListParams): Promise<IRentoraApiClientInvoiceListResponse['data']> {
+  async invoiceList(
+    apartmentId: Maybe<string>,
+    params: IRentoraApiInvoiceListParams,
+  ): Promise<IRentoraApiClientInvoiceListResponse['data']> {
     const response: AxiosResponse<IRentoraApiClientInvoiceListResponse, unknown> =
-      await this.axiosWithAuthInstance.get<IRentoraApiClientInvoiceListResponse>(`/api/invoices`, {
+      await this.axiosWithAuthInstance.get<IRentoraApiClientInvoiceListResponse>(`/api/invoices/${apartmentId}`, {
         params,
       })
     return response.data.data

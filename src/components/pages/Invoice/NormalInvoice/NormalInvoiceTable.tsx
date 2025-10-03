@@ -74,7 +74,7 @@ const NormalInvoiceTable = ({
               <TableCell>{item.issueDate ? item.issueDate : 'N/A'}</TableCell>
               <TableCell>{item.dueDate ? item.dueDate : 'N/A'}</TableCell>
               <TableCell>
-                <Badge variant="success">{item.status}</Badge>
+                <Badge variant="error">{item.status}</Badge>
               </TableCell>
               <TableCell>
                 <InvoiceAction userId={item.invoiceId} onUpdate={handleUpdateInvoice} onDelete={handleDeleteInvoice} />
