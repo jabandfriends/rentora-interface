@@ -120,7 +120,7 @@ const ElectricWaterReport = () => {
         stats={utilityReportStats}
         isLoading={isLoading}
       />
-      <PageTableBar title="Total Amount" isLoading={isLoading} count={`${formatCurrency(totalAmount)}`} />
+      <PageTableBar title="Total Utility Amount" isLoading={isLoading} count={`${formatCurrency(totalAmount)}`} />
       <ElectricWaterSearchBar
         onSearchChange={handleSearchChange}
         onSortChange={handleSortChange}
