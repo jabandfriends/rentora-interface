@@ -38,6 +38,7 @@ export type IRentoraApiUnitListParams = {
   page?: number
   size?: number
   search?: string
-  sortBy?: 'createdAt' | 'updatedAt'
-  sortDir?: 'asc' | 'desc'
+  sortBy?: string
+  sortDir?: string
+  status?: string
 }

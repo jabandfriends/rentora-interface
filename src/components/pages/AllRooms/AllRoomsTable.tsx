@@ -1,39 +1,91 @@
-import { PackageOpen, SquarePen } from 'lucide-react'
+import { useCallback } from 'react'
+import type { VariantProps } from 'tailwind-variants'
 
 import { PaginationBar } from '@/components/feature'
-import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import {
+  Badge,
+  PageTableEmpty,
+  PageTableLoading,
+  PageTableSearchEmpty,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui'
 import { ALL_ROOMS_TABLE_HEADER } from '@/constants'
 import type { IUnit } from '@/types'
 
-import AllRoomTableLoading from './AllRoomTableLoading'
+import AllRoomsAction from './AllRoomsAction'
 
-//RECHECK : api type
 type AllRoomsTableProps = {
   data: Array<IUnit>
   onPageChange: (page: number) => void
   isLoading: boolean
+  isSearched: boolean
   currentPage: number
   totalPages: number
   totalElements: number
 }
-//RECHECK : API TYPE
+
 const AllRoomsTable = ({
   data,
   onPageChange,
   isLoading,
+  isSearched,
   currentPage,
   totalPages,
   totalElements,
 }: AllRoomsTableProps) => {
-  if (isLoading) return <AllRoomTableLoading />
+  const statusBadgeVariant = useCallback((unitStatus: string): VariantProps<typeof Badge>['variant'] => {
+    switch (unitStatus) {
+      case 'available':
+        return 'success'
+      case 'occupied':
+        return 'default'
+      case 'maintenance':
+        return 'warning'
+      default:
+        return 'default'
+    }
+  }, [])
 
+  const contractStatusBadgeVariant = useCallback((contractStatus: string): VariantProps<typeof Badge>['variant'] => {
+    switch (contractStatus) {
+      case 'draft':
+        return 'secondary'
+      case 'active':
+        return 'success'
+      case 'terminated':
+        return 'error'
+      case 'expired':
+        return 'warning'
+      case 'renewed':
+        return 'default'
+      default:
+        return 'default'
+    }
+  }, [])
+
+  const rentalTypeBadgeVariant = useCallback((rentalType: string): VariantProps<typeof Badge>['variant'] => {
+    switch (rentalType) {
+      case 'monthly':
+        return 'success'
+      case 'yearly':
+        return 'default'
+      case 'daily':
+        return 'secondary'
+      default:
+        return 'default'
+    }
+  }, [])
+  if (isLoading) return <PageTableLoading />
+  if (isSearched && data.length === 0) {
+    return <PageTableSearchEmpty message="No rooms found" subMessage="No rooms found for this search" />
+  }
   if (!data || data.length === 0) {
-    return (
-      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
-        <PackageOpen size={50} />
-        <p className="text-theme-secondary text-body-1">No rooms found</p>
-      </div>
-    )
+    return <PageTableEmpty message="No rooms found" />
   }
 
   return (
@@ -47,22 +99,31 @@ const AllRoomsTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {/* RECHECK : API TYPE */}
-          {data.map((item, index) => (
+          {data.map((item: IUnit, index) => (
             <TableRow key={index}>
               <TableCell>{item.unitName}</TableCell>
               <TableCell>{item.buildingName}</TableCell>
-              <TableCell className="capitalize">{item.currentTenant}</TableCell>
-              <TableCell className="capitalize">{item.unitType}</TableCell>
-              <TableCell>{item.contractEndDate}</TableCell>
+              <TableCell className="capitalize">{item.currentTenant || 'N/A'}</TableCell>
+              <TableCell className="capitalize">{item.unitType || 'N/A'}</TableCell>
+              <TableCell>{item.contractStartDate || 'N/A'}</TableCell>
+              <TableCell>{item.contractEndDate || 'N/A'}</TableCell>
+              <TableCell className="capitalize">
+                <Badge variant={rentalTypeBadgeVariant(item.rentalType)} className="capitalize">
+                  {item.rentalType || 'N/A'}
+                </Badge>
+              </TableCell>
+              <TableCell className="capitalize">
+                <Badge variant={contractStatusBadgeVariant(item.contractStatus)} className="capitalize">
+                  {item.contractStatus || 'N/A'}
+                </Badge>
+              </TableCell>
               <TableCell>
-                <Badge variant="success" className="capitalize">
+                <Badge variant={statusBadgeVariant(item.unitStatus)} className="capitalize">
                   {item.unitStatus}
                 </Badge>
               </TableCell>
-
               <TableCell>
-                <SquarePen size={20} />
+                <AllRoomsAction unitId={item.id} />
               </TableCell>
             </TableRow>
           ))}

@@ -49,12 +49,27 @@ export const ALL_ROOMS_DATA = [
   },
 ]
 
-export const ALL_ROOMS_TABLE_HEADER = [
+export const ALL_ROOMS_TABLE_HEADER: Array<string> = [
   'Room No.',
   'Buildings',
   'Resident',
   'Category',
+  'Move-in Date',
   'Move-out Date',
-  'Status',
+  'Rental Type',
+  'Contract Status',
+  'Room Status',
   'Action',
 ]
+
+export enum ROOMSTATUSENUM {
+  All = '',
+  Available = 'available',
+  Occupied = 'occupied',
+  Maintenance = 'maintenance',
+}
+
+export enum SORTDIRENUM {
+  Asc = 'asc',
+  Desc = 'desc',
+}
