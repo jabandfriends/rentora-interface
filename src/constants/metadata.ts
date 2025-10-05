@@ -1,4 +1,4 @@
-import type { IApartmentListMetadata, ITenantListMetadata } from '@/types'
+import type { IApartmentListMetadata, ITenantListMetadata, IUnitListMetadata } from '@/types'
 
 //apartment list
 export const DEFAULT_APARTMENT_LIST_METADATA: IApartmentListMetadata = {
@@ -11,4 +11,11 @@ export const DEFAULT_TENANT_LIST_METADATA: ITenantListMetadata = {
   totalOccupiedTenants: 0,
   totalUnoccupiedTenants: 0,
   totalActiveTenants: 0,
+}
+
+export const DEFAULT_UNIT_LIST_METADATA: IUnitListMetadata = {
+  totalUnits: 0,
+  totalUnitsAvailable: 0,
+  totalUnitsMaintenance: 0,
+  totalUnitsOccupied: 0,
 }

@@ -20,6 +20,8 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
   onSearchChange,
   onStatusChange,
   onSortChange,
+  selectedStatus,
+  selectedSort,
 }: IPageTableSearchProps<StatusEnum, SortEnum>) => {
   return (
     <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
@@ -31,8 +33,8 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
           {/* Status Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outlineSecondary" className="flex items-center gap-2">
-                <ChevronDown size={18} /> Status
+              <Button variant="outlineSecondary" className="flex items-center gap-2 capitalize">
+                <ChevronDown size={18} /> {selectedStatus || 'Status'}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" sideOffset={10}>
@@ -47,9 +49,9 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
           {/* Sort By Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outlineSecondary" className="flex items-center gap-2">
+              <Button variant="outlineSecondary" className="flex items-center gap-2 capitalize">
                 <ChevronDown size={18} />
-                Sort By
+                {selectedSort || 'Sort By'}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" sideOffset={10}>
