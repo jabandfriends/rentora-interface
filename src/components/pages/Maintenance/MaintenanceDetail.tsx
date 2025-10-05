@@ -14,8 +14,8 @@ import {
   X,
   XCircle,
 } from 'lucide-react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { type ComponentType, type SVGProps, useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import {
   Button,
@@ -31,110 +31,141 @@ import {
   Textarea,
 } from '@/components/common'
 import { Avatar, AvatarFallback, AvatarImage, Badge } from '@/components/ui'
+import { useRentoraMaintenanceDetail } from '@/hooks'
+
+type StatusKey = 'open' | 'in-progress' | 'completed' | 'cancelled'
+type PriorityKey = 'low' | 'medium' | 'high' | 'urgent'
+type IconType = ComponentType<SVGProps<SVGSVGElement>>
+
+const statusConfig: Record<StatusKey, { label: string; icon: IconType }> = {
+  open: { label: 'Open', icon: AlertTriangle },
+  'in-progress': { label: 'In Progress', icon: Clock },
+  completed: { label: 'Completed', icon: CheckCircle },
+  cancelled: { label: 'Cancelled', icon: XCircle },
+}
+const priorityConfig: Record<PriorityKey, { label: string }> = {
+  low: { label: 'Low' },
+  medium: { label: 'Medium' },
+  high: { label: 'High' },
+  urgent: { label: 'Urgent' },
+}
+
+const formatDate = (s?: string) => {
+  if (!s) return '-'
+  const d = new Date(s)
+  return Number.isNaN(d.getTime())
+    ? '-'
+    : d.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+}
+const getInitials = (name?: string, limit = 2) =>
+  (name ?? '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((p) => p?.[0]?.toUpperCase() ?? '')
+    .slice(0, limit)
+    .join('') || '?'
+const isValidId = (v?: string | null) => !!v && v !== '0' // << กัน id placeholder
 
 const MaintenanceDetail = () => {
-  const [status, setStatus] = useState<string>('in-progress')
-  const [priority, setPriority] = useState<string>('medium')
-  const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [editedDescription, setEditedDescription] = useState(
-    'The kitchen faucet has been leaking for the past week. Water drips constantly from the base of the faucet, causing water waste and potential damage to the cabinet below. The leak appears to be coming from the connection between the faucet and the sink.',
-  )
-
-  // Mock data
-  const maintenanceRequest = {
-    id: 'MNT-2024-001',
-    title: 'Kitchen Faucet Leak',
-    description:
-      'The kitchen faucet has been leaking for the past week. Water drips constantly from the base of the faucet, causing water waste and potential damage to the cabinet below. The leak appears to be coming from the connection between the faucet and the sink.',
-    status: 'in-progress',
-    priority: 'medium',
-    category: 'Plumbing',
-    createdAt: '2024-03-15T10:30:00Z',
-    updatedAt: '2024-03-16T14:20:00Z',
-    scheduledDate: '2024-03-18T09:00:00Z',
-    estimatedDuration: '2 hours',
-    apartment: {
-      unit: '4B',
-      address: '123 Oak Street, Building A',
-      tenant: {
-        name: 'Sarah Johnson',
-        phone: '+1 (555) 123-4567',
-        email: 'sarah.johnson@email.com',
-        avatar: undefined,
-      },
-    },
-    assignedTo: {
-      id: 'john-doe',
-      name: 'John Doe',
-      role: 'Maintenance Technician',
-      phone: '+1 (555) 987-6543',
-      avatar: undefined,
-    },
-    attachments: [
-      { id: 1, name: 'kitchen_leak_photo1.jpg', type: 'image', size: '2.4 MB' },
-      { id: 2, name: 'kitchen_leak_photo2.jpg', type: 'image', size: '1.8 MB' },
-    ],
-  }
-
-  const statusConfig = {
-    open: { color: 'bg-blue-500', label: 'Open', icon: AlertTriangle },
-    'in-progress': { color: 'bg-yellow-500', label: 'In Progress', icon: Clock },
-    completed: { color: 'bg-green-500', label: 'Completed', icon: CheckCircle },
-    cancelled: { color: 'bg-red-500', label: 'Cancelled', icon: XCircle },
-  }
-
-  const priorityConfig = {
-    low: { color: 'bg-gray-500', label: 'Low' },
-    medium: { color: 'bg-yellow-500', label: 'Medium' },
-    high: { color: 'bg-orange-500', label: 'High' },
-    urgent: { color: 'bg-red-500', label: 'Urgent' },
-  }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-  }
-
-  const handleSaveDescription = () => {
-    // In real app, this would make an API call
-
-    setIsEditing(false)
-  }
-
-  const handleStatusChange = (newStatus: string) => {
-    setStatus(newStatus)
-    // In real app, this would make an API call
-  }
-
-  const StatusIcon = statusConfig[status as keyof typeof statusConfig].icon
   const navigate = useNavigate()
+  const params = useParams<{ apartmentId?: string; maintenanceId?: string }>()
+  const location = useLocation()
+
+  // resolve id จาก params -> query string -> pathname
+  let apartmentId = params.apartmentId
+  let maintenanceId = params.maintenanceId
+  if (!isValidId(apartmentId) || !isValidId(maintenanceId)) {
+    const qs = new URLSearchParams(location.search)
+    apartmentId = apartmentId ?? qs.get('apartmentId') ?? undefined
+    maintenanceId = maintenanceId ?? qs.get('maintenanceId') ?? undefined
+  }
+  if (!isValidId(apartmentId) || !isValidId(maintenanceId)) {
+    const m = location.pathname.match(/\/dashboard\/([^/]+)\/maintenance\/detail\/([^/]+)/i)
+    if (m) {
+      apartmentId = apartmentId ?? m[1]
+      maintenanceId = maintenanceId ?? m[2]
+    }
+  }
+
+  // states
+  const [status, setStatus] = useState<StatusKey>('in-progress')
+  const [priority, setPriority] = useState<PriorityKey>('medium')
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedDescription, setEditedDescription] = useState('')
+
+  // call hook (ตัว hook จะไม่ยิงถ้า id ไม่ valid เพราะ enabled)
+  const { data, isLoading, isError, error, refetch } = useRentoraMaintenanceDetail({
+    apartmentId: apartmentId ?? '',
+    maintenanceId: maintenanceId ?? '',
+  })
+  const maintenance = useMemo(() => (data as any)?.data ?? (data as any), [data])
+
+  useEffect(() => {
+    if (!maintenance) return
+    if (maintenance.status) setStatus(maintenance.status as StatusKey)
+    if (maintenance.priority) setPriority(maintenance.priority as PriorityKey)
+    if (maintenance.description) setEditedDescription(maintenance.description as string)
+  }, [maintenance])
+
+  // ถ้ายังไม่มี id หรือเป็น '0' แสดง empty state (ไม่ยิง API)
+  if (!isValidId(apartmentId) || !isValidId(maintenanceId)) {
+    return (
+      <div className="space-y-3">
+        <div className="text-muted-foreground text-sm">Pick a maintenance item to view its details.</div>
+        <Button className="flex items-center gap-x-2" onClick={() => navigate(-1)}>
+          <ArrowLeft className="size-4" /> Back
+        </Button>
+      </div>
+    )
+  }
+
+  if (isLoading) return <div className="text-muted-foreground text-sm">Loading maintenance detail…</div>
+
+  if (isError) {
+    return (
+      <div className="space-y-2">
+        <div className="text-sm text-red-600">Failed to load maintenance detail.</div>
+        <pre className="bg-muted rounded p-2 text-xs">{String((error as any)?.message ?? error)}</pre>
+        <Button onClick={() => refetch()}>Retry</Button>
+      </div>
+    )
+  }
+
+  if (!maintenance) return <div className="text-sm">No data</div>
+
+  const StatusIcon = statusConfig[status]?.icon ?? Clock
+  const handleSaveDescription = () => {
+    /* TODO: update API */ setIsEditing(false)
+  }
+
   return (
     <div className="space-y-4">
       <Button className="flex items-center gap-x-2" onClick={() => navigate(-1)}>
-        <ArrowLeft className="size-4" />
-        Back
+        <ArrowLeft className="size-4" /> Back
       </Button>
 
       <div className="desktop:flex-row flex flex-col items-start justify-between gap-y-2">
         <div>
-          <h2>{maintenanceRequest.title}</h2>
-          <p className="text-theme-secondary text-body-2">Request ID: {maintenanceRequest.id}</p>
+          <h2>{maintenance?.title ?? '-'}</h2>
+          <p className="text-theme-secondary text-body-2">Request ID: {maintenance?.id ?? '-'}</p>
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="warning">
             <StatusIcon className="mr-1 size-4" />
-            {statusConfig[status as keyof typeof statusConfig].label}
+            {statusConfig[status]?.label}
           </Badge>
-          <Badge variant="default">{priorityConfig[priority as keyof typeof priorityConfig].label} Priority</Badge>
+          <Badge variant="default">{priorityConfig[priority]?.label} Priority</Badge>
         </div>
       </div>
+
       <div className="gap-6">
-        {/* Main Content */}
         <div className="space-y-6">
           <div className="desktop:grid-cols-3 grid gap-4">
             {/* Description */}
@@ -166,7 +197,7 @@ const MaintenanceDetail = () => {
                         variant="ghost"
                         onClick={() => {
                           setIsEditing(false)
-                          setEditedDescription(maintenanceRequest.description)
+                          setEditedDescription(maintenance?.description ?? '')
                         }}
                       >
                         <X className="size-4" />
@@ -179,13 +210,14 @@ const MaintenanceDetail = () => {
                 )}
               </CardContent>
             </Card>
+
             {/* Quick Actions */}
             <Card className="rounded-xl shadow-sm">
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Select value={status} onValueChange={handleStatusChange}>
+                <Select value={status} onValueChange={(v) => setStatus(v as StatusKey)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -197,7 +229,7 @@ const MaintenanceDetail = () => {
                   </SelectContent>
                 </Select>
 
-                <Select value={priority} onValueChange={setPriority}>
+                <Select value={priority} onValueChange={(v) => setPriority(v as PriorityKey)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -222,39 +254,35 @@ const MaintenanceDetail = () => {
                 <Calendar className="size-4" />
                 <div>
                   <p className="text-body-2">Created</p>
-                  <p className="text-body-2 text-theme-secondary">{formatDate(maintenanceRequest.createdAt)}</p>
+                  <p className="text-body-2 text-theme-secondary">{formatDate(maintenance?.createdAt)}</p>
                 </div>
               </div>
-
               <div className="flex items-center gap-3">
                 <Clock className="size-4" />
                 <div>
                   <p className="text-body-2">Scheduled</p>
-                  <p className="text-body-2 text-theme-secondary">{formatDate(maintenanceRequest.scheduledDate)}</p>
+                  <p className="text-body-2 text-theme-secondary">{formatDate(maintenance?.scheduledDate)}</p>
                 </div>
               </div>
-
               <div className="flex items-center gap-3">
                 <Wrench className="size-4" />
                 <div>
                   <p className="text-body-2">Category</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenanceRequest.category}</p>
+                  <p className="text-body-2 text-theme-secondary">{maintenance?.category ?? '-'}</p>
                 </div>
               </div>
-
               <div className="flex items-center gap-3">
                 <Clock className="size-4" />
                 <div>
                   <p className="text-body-2">Estimated Duration</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenanceRequest.estimatedDuration}</p>
+                  <p className="text-body-2 text-theme-secondary">{maintenance?.estimatedDuration ?? '-'}</p>
                 </div>
               </div>
-
               <div className="flex items-center gap-3">
                 <Check className="size-4" />
                 <div>
                   <p className="text-body-2">Completed At</p>
-                  <p className="text-body-2 text-theme-secondary">{formatDate(maintenanceRequest.scheduledDate)}</p>
+                  <p className="text-body-2 text-theme-secondary">{formatDate(maintenance?.completedAt)}</p>
                 </div>
               </div>
             </CardContent>
@@ -268,36 +296,28 @@ const MaintenanceDetail = () => {
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">
                 <Avatar>
-                  <AvatarImage src={maintenanceRequest.apartment.tenant.avatar} />
-                  <AvatarFallback>
-                    {maintenanceRequest.apartment.tenant.name
-                      .split(' ')
-                      .map((n) => n[0])
-                      .join('')}
-                  </AvatarFallback>
+                  <AvatarImage src={maintenance?.apartment?.tenant?.avatar} />
+                  <AvatarFallback>{getInitials(maintenance?.apartment?.tenant?.name)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="text-body-2">{maintenanceRequest.apartment.tenant.name}</p>
+                  <p className="text-body-2">{maintenance?.apartment?.tenant?.name ?? '-'}</p>
                   <p className="text-xs">Tenant</p>
                 </div>
               </div>
-
               <div className="flex items-center gap-3">
                 <MapPin className="size-4" />
                 <div>
-                  <p className="text-body-2">Unit {maintenanceRequest.apartment.unit}</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenanceRequest.apartment.address}</p>
+                  <p className="text-body-2">Unit {maintenance?.apartment?.unit ?? '-'}</p>
+                  <p className="text-body-2 text-theme-secondary">{maintenance?.apartment?.address ?? '-'}</p>
                 </div>
               </div>
-
               <div className="flex items-center gap-3">
                 <Phone className="size-4" />
-                <p className="text-body-2 text-theme-secondary">{maintenanceRequest.apartment.tenant.phone}</p>
+                <p className="text-body-2 text-theme-secondary">{maintenance?.apartment?.tenant?.phone ?? '-'}</p>
               </div>
-
               <div className="flex items-center gap-3">
                 <Mail className="size-4" />
-                <p className="text-body-2 text-theme-secondary">{maintenanceRequest.apartment.tenant.email}</p>
+                <p className="text-body-2 text-theme-secondary">{maintenance?.apartment?.tenant?.email ?? '-'}</p>
               </div>
             </CardContent>
           </Card>
