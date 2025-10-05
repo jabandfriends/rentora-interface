@@ -10,16 +10,6 @@ import type {
   IUseRentoraApiMaintenanceList,
 } from '@/types'
 
-export type IRentoraApiMaintenanceListParams = {
-  apartmentId: string
-  page?: number
-  size?: number
-  search?: string
-  sortBy?: 'title' | 'createdAt' | 'updatedAt'
-  sortDir?: 'asc' | 'desc'
-  status?: 'pending' | 'assigned' | 'in_progress' | 'completed' | 'cancelled'
-}
-
 export const useRentoraApiMaintenanceList = (props: {
   params: IRentoraApiMaintenanceListParams
 }): IUseRentoraApiMaintenanceList => {

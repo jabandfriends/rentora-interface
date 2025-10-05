@@ -2,7 +2,7 @@ import { Plus } from 'lucide-react'
 
 import { Button } from '@/components/common'
 import TenantsManagementTable from '@/components/pages/TenantsManagement/TenantsManagementTable'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableHeader } from '@/components/ui'
 import { TENANTS_DATA, TENANTS_STAT } from '@/constants/tenantsmanage'
 
 const TenantsManagement = () => {
@@ -18,7 +18,7 @@ const TenantsManagement = () => {
           </Button>
         }
       />
-      <PageTableSearch />
+      {/* <PageTableSearch /> */}
       <TenantsManagementTable data={TENANTS_DATA} />
     </>
   )

@@ -1,5 +1,5 @@
 import { ReceiptReportTable } from '@/components/pages/Report/ReceiptReport'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableHeader } from '@/components/ui'
 import { RECEIPT_REPORT_DATA, RECEIPT_REPORT_STATS } from '@/constants'
 
 export const ReceiptReport = () => {
@@ -10,7 +10,7 @@ export const ReceiptReport = () => {
         description="Manage and view all customer receipt"
         stats={RECEIPT_REPORT_STATS}
       />
-      <PageTableSearch />
+      {/* <PageTableSearch /> */}
       <ReceiptReportTable data={RECEIPT_REPORT_DATA} />
     </>
   )

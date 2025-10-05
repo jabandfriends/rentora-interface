@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { NormalInvoiceTable } from '@/components/pages/Invoice'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableHeader } from '@/components/ui'
 import { NORMAL_INVOICE_DATA, NORMAL_INVOICE_STATS, ROUTES } from '@/constants'
 
 const NormalInvoice = () => {
@@ -23,7 +23,7 @@ const NormalInvoice = () => {
           </Button>
         }
       />
-      <PageTableSearch />
+      {/* <PageTableSearch /> */}
       <NormalInvoiceTable data={NORMAL_INVOICE_DATA} />
     </>
   )

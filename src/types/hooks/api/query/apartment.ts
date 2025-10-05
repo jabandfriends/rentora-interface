@@ -1,7 +1,7 @@
 import type {
   IBasePaginateQueryResult,
   IBaseUseQuery,
-  IRentoraApiClientBasePaginateResponse,
+  IRentoraApiClientBasePaginateWithMetadataResponse,
   IRentoraApiClientBaseResponse,
   Maybe,
 } from '@/types'
@@ -40,26 +40,23 @@ export type IApartmentDetail = IApartment & {
   totalTenants: number
 }
 
-export type IUser = {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-  phoneNumber: Maybe<string>
-  profileImageUrl: Maybe<string>
-  mustChangePassword: boolean
-  lastLogin: string
+//metadata
+export type IApartmentListMetadata = {
+  totalApartments: number
+  totalActiveApartments: number
 }
 
-export type IRentoraApiClientUserResponse = IRentoraApiClientBaseResponse<IUser>
-
 //response
-export type IRentoraApiClientApartmentListResponse = IRentoraApiClientBasePaginateResponse<IApartment>
+export type IRentoraApiClientApartmentListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
+  IApartment,
+  IApartmentListMetadata
+>
 
 //params
 export type IRentoraApiApartmentListParams = {
   page?: number
   size?: number
+  status?: string
   search?: string
   sortBy?: 'name' | 'createdAt' | 'updatedAt'
   sortDir?: 'asc' | 'desc'

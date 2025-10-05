@@ -2,7 +2,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { RENTORA_API_BASE_URL } from '@/config'
-import { DEFAULT_APARTMENT_LIST_DATA } from '@/constants'
+import { DEFAULT_APARTMENT_LIST_DATA, DEFAULT_APARTMENT_LIST_METADATA } from '@/constants'
 import { RentoraApiQueryClient } from '@/hooks'
 import type {
   IRentoraApiApartmentListParams,
@@ -20,14 +20,16 @@ export const useRentoraApiApartmentList = (props: {
       rentoraApiQueryClient.key.apartmentList,
       props?.params?.page,
       props?.params?.size,
+      props?.params?.status,
       props?.params?.search,
       props?.params?.sortBy,
       props?.params?.sortDir,
     ],
     queryFn: async () => {
-      const { page, size, search, sortBy, sortDir }: IRentoraApiApartmentListParams = props?.params ?? {}
+      const { page, size, status, search, sortBy, sortDir }: IRentoraApiApartmentListParams = props?.params ?? {}
       return await rentoraApiQueryClient.apartmentList({
         ...(props?.params ?? {}),
+        ...(status ? { status } : {}),
         ...(search ? { search } : {}),
         ...(sortBy ? { sortBy } : {}),
         ...(sortDir ? { sortDir } : {}),
@@ -42,6 +44,7 @@ export const useRentoraApiApartmentList = (props: {
     return {
       data: rawData?.data ?? ([] as IRentoraApiClientApartmentListResponse['data']['data']),
       pagination: rawData?.pagination ?? DEFAULT_APARTMENT_LIST_DATA,
+      metadata: rawData?.metadata ?? DEFAULT_APARTMENT_LIST_METADATA,
     }
   }, [rawData])
 

@@ -10,7 +10,6 @@ import {
 const PaginationBar = () => {
   return (
     <div className="flex items-center justify-between">
-      <p className="text-theme-secondary text-body-2">Showing 5 of 5 items</p>
       <Pagination>
         <PaginationContent>
           <PaginationItem>

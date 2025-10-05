@@ -8,7 +8,7 @@ const ApartmentCardSkeleton = () => {
       </h4>
       <div className="desktop:grid-cols-2 grid gap-4">
         <div>
-          <Skeleton className="desktop:w-144 h-56" />
+          <Skeleton className="h-56 w-full" />
         </div>
         <div className="flex flex-col justify-between gap-y-2">
           <div className="flex flex-col gap-y-2">

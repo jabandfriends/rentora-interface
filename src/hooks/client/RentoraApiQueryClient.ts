@@ -5,7 +5,13 @@ import type {
   IRentoraApiApartmentListParams,
   IRentoraApiClientApartmentDetailResponse,
   IRentoraApiClientApartmentListResponse,
+  IRentoraApiClientMaintenanceDetailResponse,
+  IRentoraApiClientTenantDetailResponse,
+  IRentoraApiClientTenantListResponse,
   IRentoraApiClientUserResponse,
+  IRentoraApiMaintenanceDetailParams,
+  IRentoraApiTenantListParams,
+  Maybe,
   RentoraApiQueryClientKey,
 } from '@/types'
 
@@ -16,6 +22,9 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     me: 'ME',
     apartmentList: 'APARTMENT_LIST',
     apartmentDetail: 'APARTMENT_DETAIL',
+    maintenanceDetail: 'MAINTENANCE_DETAIL',
+    tenantList: 'TENANT_LIST',
+    tenantDetail: 'TENANT_DETAIL',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -42,6 +51,38 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     const response: AxiosResponse<IRentoraApiClientApartmentDetailResponse, unknown> =
       await this.axiosWithAuthInstance.get<IRentoraApiClientApartmentDetailResponse>(
         `/api/apartments/${payload.apartmentId}`,
+      )
+    return response.data.data
+  }
+
+  async maintenanceDetail(
+    payload: IRentoraApiMaintenanceDetailParams,
+  ): Promise<IRentoraApiClientMaintenanceDetailResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientMaintenanceDetailResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceDetailResponse>(
+        `/api/apartments/${payload.apartmentId}/maintenance/${payload.maintenanceId}`,
+      )
+    return response.data.data
+  }
+
+  async tenantList(
+    apartmentId: Maybe<string>,
+    params: IRentoraApiTenantListParams,
+  ): Promise<IRentoraApiClientTenantListResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientTenantListResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientTenantListResponse>(
+        `/api/apartments/manage/tenant/${apartmentId}`,
+        {
+          params,
+        },
+      )
+    return response.data.data
+  }
+
+  async tenantDetail(userId: Maybe<string>): Promise<IRentoraApiClientTenantDetailResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientTenantDetailResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientTenantDetailResponse>(
+        `/api/apartments/manage/tenant/detail/${userId}`,
       )
     return response.data.data
   }

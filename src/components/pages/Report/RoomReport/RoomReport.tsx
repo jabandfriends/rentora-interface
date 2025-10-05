@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react'
 //components
 import { Button } from '@/components/common'
 import { RoomReportTable } from '@/components/pages/Report/RoomReport'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableHeader } from '@/components/ui'
 import { ROOM_REPORT_DATA, ROOM_REPORT_STATS } from '@/constants'
 
 export const RoomReport = () => {
@@ -20,7 +20,7 @@ export const RoomReport = () => {
           </Button>
         }
       />
-      <PageTableSearch />
+      {/* <PageTableSearch /> */}
       <RoomReportTable data={ROOM_REPORT_DATA} />
     </>
   )
