@@ -24,7 +24,13 @@ export const MAINTENANCE_STATS: Array<IStatsCardProps> = [
   },
 ]
 
-export const MAINTENANCE_STATUS: Array<string> = ['Done', 'Pending', 'Inactive']
+export const MAINTENANCE_STATUS = {
+  // COMPLETED = 'completed',
+  PENDING: 'pending',
+  ASSIGNED: 'assigned',
+  IN_PROGRESS: 'in_progress',
+  CANCELLED: 'cancelled',
+}
 
 export const MAINTENANCE_TABLE_DATA = [
   {

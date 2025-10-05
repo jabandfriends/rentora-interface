@@ -1,44 +1,16 @@
-<<<<<<< HEAD
-import type { IBasePaginateQueryResult, IBaseUseQuery, IRentoraApiClientBaseResponse, Maybe } from '@/types'
-
-export type IUseRentoraApiMaintenanceList = IBasePaginateQueryResult<
-  IRentoraApiClientBaseResponse<IMaintenance['data']>
->
-
-export type IMaintenance = {
-  id: string
-  ticketNumber: string
-  title: string
-  status: 'pending' | 'assigned' | 'in_progress' | 'completed' | 'cancelled'
-  requestedDate: string
-  unitName: string
-  tenantUserName: string
-  isEmergency: boolean
-}
-
-export type IMaintenanceDetail = IMaintenance & {
-  description: Maybe<string>
-  category: string
-  priority: string
-  appointmentDate: Maybe<string>
-  startedAt: Maybe<string>
-  completedAt: Maybe<string>
-  dueDate: Maybe<string>
-  estimatedHours: Maybe<number>
-  actualHours: Maybe<number>
-  estimatedCost: Maybe<number>
-  actualCost: Maybe<number>
-  workSummary: Maybe<string>
-  tenantFeedback: Maybe<string>
-  tenantRating: Maybe<number>
-  isRecurring: boolean
-=======
 import type { Category, Priority, RecurringSchedule, Status } from '@/enum'
-import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '@/types'
+import type {
+  IBasePaginateQueryResult,
+  IBaseUseQuery,
+  IRentoraApiClientBasePaginateWithMetadataResponse,
+  IRentoraApiClientBaseResponse,
+} from '@/types'
 
 //Maintenance type
 export type IMaintenance = {
   id: string
+  buildingsName: string
+  unitName: string
   ticketNumber: string
   unitId: string
   tenantUserId: string
@@ -63,18 +35,38 @@ export type IMaintenance = {
   isEmergency: boolean
   isRecurring: boolean
   recurringSchedule: RecurringSchedule
->>>>>>> feat/REN-112-Hook-Maintenance
   createdAt: string
   updatedAt: string
 }
 
-<<<<<<< HEAD
-export type IUseRentoraApiMaintenanceDetail = IBaseUseQuery<IRentoraApiClientMaintenanceDetailResponse['data']>
+//hooks type useRentoraApiMaintenanceList
+export type IUseRentoraApiMaintenanceList = IBasePaginateQueryResult<IRentoraApiClientMaintenanceListResponse['data']>
 
-export type IRentoraApiClientMaintenanceDetailResponse = IRentoraApiClientBaseResponse<IMaintenanceDetail>
+//metadata
+export type IMaintenanceListMetadata = {
+  totalMaintenance: number
+  pendingCount: number
+  assignedCount: number
+  inProgressCount: number
+}
 
-export type IRentoraApiMaintenanceDetailParams = {
-=======
+// response
+export type IRentoraApiClientMaintenanceListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
+  IMaintenance,
+  IMaintenanceListMetadata
+>
+
+export type IRentoraApiMaintenanceListParams = {
+  page?: number
+  size?: number
+  search?: string
+  sortBy?: 'title' | 'createdAt' | 'updatedAt'
+  sortDir?: 'asc' | 'desc'
+  status?: Status
+}
+
+export type IRentoraApiMaintenanceApartmentIdParams = string
+
 //Maintenance detail type
 export type IMaintenanceDetail = IMaintenance
 
@@ -87,6 +79,5 @@ export type IUseRentoraApiMaintenanceDetail = IBaseUseQuery<IRentoraApiClientMai
 //Maintenance detail params
 export type IRentoraApiMaintenanceDetailParams = {
   apartmentId: string
->>>>>>> feat/REN-112-Hook-Maintenance
   maintenanceId: string
 }

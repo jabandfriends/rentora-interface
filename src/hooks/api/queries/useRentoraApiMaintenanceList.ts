@@ -2,23 +2,25 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { RENTORA_API_BASE_URL } from '@/config'
-import { DEFAULT_APARTMENT_LIST_DATA } from '@/constants' // ใช้เป็นค่า Default Pagination
+import { DEFAULT_MAINTENANCE_LIST_DATA, DEFAULT_MAINTENANCE_LIST_METADATA } from '@/constants'
 import { RentoraApiQueryClient } from '@/hooks'
 import type {
-  IRentoraApiClientMaintenanceDetailResponse,
-  IRentoraApiMaintenanceDetailParams,
+  IRentoraApiClientMaintenanceListResponse,
+  IRentoraApiMaintenanceListParams,
   IUseRentoraApiMaintenanceList,
+  Maybe,
 } from '@/types'
 
 export const useRentoraApiMaintenanceList = (props: {
+  apartmentId: Maybe<string>
   params: IRentoraApiMaintenanceListParams
 }): IUseRentoraApiMaintenanceList => {
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
 
-  const { data: rawData, ...rest }: UseQueryResult<IRentoraApiClientMaintenanceDetailResponse['data']> = useQuery({
+  const { data: rawData, ...rest }: UseQueryResult<IRentoraApiClientMaintenanceListResponse['data']> = useQuery({
     queryKey: [
       rentoraApiQueryClient.key.maintenanceList,
-      props?.params?.apartmentId,
+      props?.apartmentId,
       props?.params?.page,
       props?.params?.size,
       props?.params?.search,
@@ -28,35 +30,30 @@ export const useRentoraApiMaintenanceList = (props: {
     ],
 
     queryFn: async () => {
-      const { apartmentId, page, size, search, sortBy, sortDir, status }: IRentoraApiMaintenanceDetailParams =
-        props?.params ?? {}
+      const { page, size, search, sortBy, sortDir, status }: IRentoraApiMaintenanceListParams = props?.params ?? {}
 
-      return await rentoraApiQueryClient.maintenanceList({
-        ...(props?.params ?? {}),
-        ...(search ? { search } : {}),
-        ...(sortBy ? { sortBy } : {}),
-        ...(sortDir ? { sortDir } : {}),
-        ...(status ? { status } : {}),
-        apartmentId,
-        page,
-        size,
-      })
+      return await rentoraApiQueryClient.maintenanceList(
+        {
+          ...(props?.params ?? {}),
+          ...(search ? { search } : {}),
+          ...(sortBy ? { sortBy } : {}),
+          ...(sortDir ? { sortDir } : {}),
+          ...(status ? { status } : {}),
+          page,
+          size,
+        },
+        props.apartmentId!,
+      )
     },
-    enabled: !!props?.params?.apartmentId,
+    enabled: !!props?.apartmentId,
     retry: 1,
   })
 
-  const result: IRentoraApiClientMaintenanceDetailResponse = useMemo(() => {
-    const data = rawData?.data
-
+  const result: IRentoraApiClientMaintenanceListResponse['data'] = useMemo(() => {
     return {
-      maintenances: data?.maintenances ?? [],
-      totalMaintenance: data?.totalMaintenance ?? 0,
-      pendingCount: data?.pendingCount ?? 0,
-      assignedCount: data?.assignedCount ?? 0,
-      inProgressCount: data?.inProgressCount ?? 0,
-      currentPage: data?.currentPage ?? DEFAULT_APARTMENT_LIST_DATA.page,
-      totalPages: data?.totalPages ?? DEFAULT_APARTMENT_LIST_DATA.totalPages,
+      data: rawData?.data ?? ([] as IRentoraApiClientMaintenanceListResponse['data']['data']),
+      pagination: rawData?.pagination ?? DEFAULT_MAINTENANCE_LIST_DATA,
+      metadata: rawData?.metadata ?? DEFAULT_MAINTENANCE_LIST_METADATA,
     }
   }, [rawData])
 
