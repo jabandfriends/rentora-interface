@@ -9,9 +9,8 @@ import { Button } from '@/components/common'
 import { MaintenanceTable } from '@/components/pages/Maintenance'
 import { PageTableHeader, PageTableSearch } from '@/components/ui'
 import { DEFAULT_MAINTENANCE_LIST_DATA, MAINTENANCE_STATUS, ROUTES } from '@/constants'
-import type { Status } from '@/enum'
 import { useRentoraApiMaintenanceList } from '@/hooks'
-import type { ISearchBarProps, IStatsCardProps, Maybe } from '@/types'
+import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
 const Maintenance = () => {
   const navigate = useNavigate()
@@ -20,24 +19,19 @@ const Maintenance = () => {
   )
   const { apartmentId } = useParams<{ apartmentId: string }>()
 
-  const { watch, setValue } = useForm<{
-    search: string
-    status: Maybe<Status>
-    sortBy: Maybe<sortType>
-    sortDir: Maybe<sortDirType>
-  }>({
+  const { watch, setValue } = useForm({
     defaultValues: {
       search: '',
-      status: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
+      status: '',
+      sortBy: '',
+      sortDir: '',
     },
   })
 
-  type sortType = 'createdAt' | 'updatedAt'
-  type sortDirType = 'asc' | 'desc'
+  // type sortType = 'createdAt' | 'updatedAt'
+  // type sortDirType = 'asc' | 'desc'
 
-  const [search, status, sortBy, sortDir]: [string, Maybe<Status>, Maybe<sortType>, Maybe<sortDirType>] = watch([
+  const [search, status, sortBy, sortDir]: [string, string, string, string] = watch([
     'search',
     'status',
     'sortBy',
@@ -95,11 +89,16 @@ const Maintenance = () => {
   )
 
   const handleSortChange = useCallback(
-    (value: Maybe<'createdAt' | 'updatedAt'>) => {
+    (value: string) => {
       setValue('sortBy', value)
       setCurrentPage(DEFAULT_MAINTENANCE_LIST_DATA.page)
     },
     [setValue, setCurrentPage],
+  )
+
+  const isSearched: boolean = useMemo(
+    () => !!debouncedSearch || !!debouncedStatus || !!debouncedSortBy || !!debouncedSortDir,
+    [debouncedSearch, debouncedStatus, debouncedSortBy, debouncedSortDir],
   )
 
   const maintenanceStats: Array<IStatsCardProps> = useMemo(
@@ -131,6 +130,7 @@ const Maintenance = () => {
     ],
     [totalMaintenance, assignedCount, pendingCount, inProgressCount],
   )
+
   enum MAINTENANCE_SORT {
     CreatedAt = 'createdAt',
     UpdatedAt = 'updatedAt',
@@ -156,6 +156,7 @@ const Maintenance = () => {
       <MaintenanceTable
         data={data}
         isLoading={isLoading}
+        isSearched={isSearched}
         currentPage={currentPage}
         totalPages={totalPages}
         totalElements={totalElements}

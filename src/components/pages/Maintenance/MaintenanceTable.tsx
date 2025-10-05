@@ -1,26 +1,42 @@
 import { PackageOpen } from 'lucide-react'
 import { useCallback } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
+import type { VariantProps } from 'tailwind-variants'
 
-import { MaintenanceAction, MaintenanceTableLoading } from '@/components/pages/Maintenance'
-import { Badge, PaginationBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { PaginationBar } from '@/components/feature'
+import { MaintenanceAction } from '@/components/pages/Maintenance'
+import {
+  Badge,
+  PageTableLoading,
+  PageTableSearchEmpty,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui'
 import { MAINTENANCE_TABLE_HEADER, ROUTES } from '@/constants'
-import type { IMaintenance, IPaginate } from '@/types'
+import type { IMaintenance } from '@/types'
 
 type IMaintenanceTableProps = {
   data: Array<IMaintenance>
-  isLoading: boolean
-  currentPage: number
   onPageChange: (page: number) => void
-} & Pick<IPaginate, 'totalPages' | 'totalElements'>
+  isLoading: boolean
+  isSearched: boolean
+  currentPage: number
+  totalPages: number
+  totalElements: number
+}
 
 const MaintenanceTable = ({
   data,
+  onPageChange,
   isLoading,
+  isSearched,
   currentPage,
   totalPages,
   totalElements,
-  onPageChange,
 }: IMaintenanceTableProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const navigate: NavigateFunction = useNavigate()
@@ -45,9 +61,24 @@ const MaintenanceTable = ({
     },
     [navigate, apartmentId],
   )
+  const statusBadgeVariant = useCallback((maintenanceStatus: string): VariantProps<typeof Badge>['variant'] => {
+    switch (maintenanceStatus) {
+      case 'pending':
+        return 'success'
+      case 'assigned':
+        return 'default'
+      case 'in_progress':
+        return 'warning'
+      default:
+        return 'default'
+    }
+  }, [])
 
   if (isLoading) {
-    return <MaintenanceTableLoading />
+    return <PageTableLoading />
+  }
+  if (isSearched && data.length === 0) {
+    return <PageTableSearchEmpty message="No maintenance found" subMessage="No maintenance for this search" />
   }
 
   if (!data || data.length === 0) {
@@ -70,15 +101,15 @@ const MaintenanceTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item, index) => (
-            <TableRow className="cursor-pointer" onClick={() => handleRowClick(index.toString())} key={index}>
+          {data.map((item) => (
+            <TableRow className="cursor-pointer" onClick={() => handleRowClick(item.id)} key={item.id}>
               <TableCell>{item.unitName}</TableCell>
               <TableCell>{item.buildingsName}</TableCell>
               <TableCell>{item.requestedDate} </TableCell>
               <TableCell>{item.appointmentDate}</TableCell>
               <TableCell>{item.title}</TableCell>
               <TableCell>
-                <Badge>{item.status}</Badge>
+                <Badge variant={statusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
               <TableCell>
                 <MaintenanceAction
@@ -92,11 +123,11 @@ const MaintenanceTable = ({
         </TableBody>
       </Table>
       <PaginationBar
+        onPageChange={onPageChange}
         isLoading={isLoading}
         page={currentPage}
         totalElements={totalElements}
         totalPages={totalPages}
-        onPageChange={onPageChange}
       />
     </div>
   )

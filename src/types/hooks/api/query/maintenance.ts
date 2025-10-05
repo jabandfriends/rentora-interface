@@ -60,9 +60,9 @@ export type IRentoraApiMaintenanceListParams = {
   page?: number
   size?: number
   search?: string
-  sortBy?: 'title' | 'createdAt' | 'updatedAt'
-  sortDir?: 'asc' | 'desc'
-  status?: Status
+  sortBy?: string
+  sortDir?: string
+  status?: string
 }
 
 export type IRentoraApiMaintenanceApartmentIdParams = string
