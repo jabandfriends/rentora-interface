@@ -5,7 +5,8 @@ import type { IBaseUseMutation, IRentoraApiClientBaseResponse } from '@/types'
 export type IMaintenanceExecuteBasePayload = {
   title: string
   description?: string
-  appointmentDate?: string
+  appointmentDate?: number
+  dueDate?: number
   startAt?: string
   completedAt?: string
   estimatedHours?: number
@@ -21,10 +22,15 @@ export type IMaintenanceExecuteBasePayload = {
   recurringSchedule: RecurringSchedule
 }
 //create payload type
-export type ICreateMaintenanceRequestPayload = IMaintenanceExecuteBasePayload & {
+export type ICreateMaintenanceRequestPayload = {
   unitId: string
-  tenantUserId: string
-  ticketNumber: string
+  title: string
+  description: string
+  status: string
+  priority: string
+  appointmentDate: string
+  dueDate: string
+  estimatedHours: number
 }
 //update payload type
 export type IUpdateMaintenanceRequestPayload = Partial<IMaintenanceExecuteBasePayload>

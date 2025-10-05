@@ -82,7 +82,7 @@ export const MAINTENANCE_TABLE_HEADER = [
 
 export const MAINTENANCE_FORM_SCHEMA = z.object({
   unit_id: z.string({ error: 'Room number is required.' }).min(1, 'Room number is required.'),
-  title: z.string({ error: 'Task title is required.' }).optional(),
+  title: z.string({ error: 'Task title is required.' }).min(1, 'Task title is required.'),
   description: z.string({ error: 'Task description is required.' }).min(1, 'Task description is required.'),
   status: z.string({ error: 'Task status is required.' }).min(1, 'Task status is required.'),
   priority: z.string({ error: 'Task priority is required.' }).min(1, 'Task priority is required.'),

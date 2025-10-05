@@ -73,7 +73,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   ): Promise<IRentoraApiClientCreateMaintenanceResponse['data']> {
     const response: AxiosResponse<IRentoraApiClientCreateMaintenanceResponse, unknown> =
       await this.axiosWithAuthInstance.post<IRentoraApiClientCreateMaintenanceResponse>(
-        `/api/apartment/${apartmentId}/maintenance`,
+        `/api/apartment/${apartmentId}/maintenance/users/create`,
         payload,
       )
     return response.data.data
