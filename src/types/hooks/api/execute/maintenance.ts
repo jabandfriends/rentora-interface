@@ -6,6 +6,7 @@ export type IMaintenanceExecuteBasePayload = {
   title: string
   description?: string
   appointmentDate?: string
+  dueDate?: string
   startAt?: string
   completedAt?: string
   estimatedHours?: number
@@ -15,7 +16,7 @@ export type IMaintenanceExecuteBasePayload = {
   workSummary?: string
   isEmergency?: boolean
   isRecurring?: boolean
-  category: Category
+  category?: Category
   status: Status
   priority: Priority
   recurringSchedule: RecurringSchedule
@@ -27,7 +28,22 @@ export type ICreateMaintenanceRequestPayload = IMaintenanceExecuteBasePayload & 
   ticketNumber: string
 }
 //update payload type
-export type IUpdateMaintenanceRequestPayload = Partial<IMaintenanceExecuteBasePayload>
+export type IUpdateMaintenanceRequestPayload = Partial<
+  Omit<
+    IMaintenanceExecuteBasePayload,
+    | 'startAt'
+    | 'completedAt'
+    | 'estimatedCost'
+    | 'actualCost'
+    | 'actualHours'
+    | 'workSummary'
+    | 'isEmergency'
+    | 'isRecurring'
+    | 'recurringSchedule'
+    | 'category'
+    | 'recurringSchedule'
+  >
+>
 
 //hooks type UseRentoraApiCreateMaintenance
 export type IUseRentoraApiCreateMaintenance = IBaseUseMutation<

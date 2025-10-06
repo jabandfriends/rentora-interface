@@ -1,16 +1,17 @@
-import { ArrowLeft, Plus } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { PageHeader, PageSection } from '@/components/layout'
-import { MaintenanceForm } from '@/components/pages/Maintenance'
+import { UpdateMaintenanceForm } from '@/components/pages/Maintenance'
+// import { MaintenanceForm } from '@/components/pages/Maintenance'
 import { ROUTES } from '@/constants'
-import type { MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
+import type { UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 
 const MaintenanceCreate = () => {
   const navigate = useNavigate()
   const { apartmentId } = useParams<{ apartmentId: string }>()
-  const onSubmit = useCallback((data: MAINTENANCE_FORM_SCHEMA_TYPE) => {
+  const onSubmit = useCallback((data: UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE) => {
     alert(data)
   }, [])
 
@@ -26,7 +27,14 @@ const MaintenanceCreate = () => {
         actionIcon={<ArrowLeft />}
         actionOnClick={navigateBefore}
       />
-      <MaintenanceForm onSubmit={onSubmit} buttonIcon={<Plus />} buttonLabel="Create a Task" />
+      <UpdateMaintenanceForm
+        onSubmit={onSubmit}
+        buttonLabel="Create a Task"
+        iconLabel={<ArrowLeft />}
+        isPending={false}
+        errorMessage={undefined}
+      />
+      {/* <MaintenanceForm onSubmit={onSubmit} buttonIcon={<Plus />} buttonLabel="Create a Task" /> */}
     </PageSection>
   )
 }

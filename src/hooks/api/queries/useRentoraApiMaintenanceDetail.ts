@@ -4,7 +4,7 @@ import { RENTORA_API_BASE_URL } from '@/config'
 import { RentoraApiQueryClient } from '@/hooks'
 import type { IRentoraApiMaintenanceDetailParams, IUseRentoraApiMaintenanceDetail } from '@/types'
 
-export const useRentoraMaintenanceDetail = (
+export const useRentoraApiMaintenanceDetail = (
   props: IRentoraApiMaintenanceDetailParams,
 ): IUseRentoraApiMaintenanceDetail => {
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
