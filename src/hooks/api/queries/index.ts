@@ -1,5 +1,7 @@
 export * from './useRentoraApiApartmentDetail'
 export * from './useRentoraApiApartmentList'
+export * from './useRentoraApiReportReadingDateUtility'
+export * from './useRentoraApiReportUtility'
 export * from './useRentoraApiTenantDetail'
 export * from './useRentoraApiTenantList'
 export * from './useRentoraApiUnitList'
