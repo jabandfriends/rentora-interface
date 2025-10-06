@@ -1,19 +1,31 @@
-import { PackageOpen } from 'lucide-react'
 import { useCallback } from 'react'
+import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
+import type { VariantProps } from 'tailwind-variants'
 
 import { PaginationBar } from '@/components/feature'
-import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import {
+  Badge,
+  PageTableEmpty,
+  PageTableLoading,
+  PageTableSearchEmpty,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui'
 import { NORMAL_INVOICE_TABLE_HEADER, ROUTES } from '@/constants'
 import type { IInvoiceSummary, IPaginate } from '@/types'
 
 import InvoiceAction from './NormalInvoiceAction'
-import NormalInvoiceLoading from './NormalInvoiceLoading'
 
 type INormalInvoiceTableProps = {
   data: Array<IInvoiceSummary>
   isLoading: boolean
   currentPage: number
+  isSearched: boolean
   onPageChange: (page: number) => void
 } & Pick<IPaginate, 'totalPages' | 'totalElements'>
 
@@ -21,25 +33,20 @@ const NormalInvoiceTable = ({
   data,
   isLoading,
   currentPage,
+  isSearched,
   totalPages,
   totalElements,
   onPageChange,
 }: INormalInvoiceTableProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const navigate: NavigateFunction = useNavigate()
-  const handleUpdateInvoice = useCallback(
-    (adhocInvoiceId: string) => {
-      if (!adhocInvoiceId) return navigate(ROUTES.tenantUpdate.getPath(apartmentId, adhocInvoiceId))
-    },
-    [apartmentId, navigate],
-  )
+  const handleUpdateInvoice = useCallback(() => {
+    toast.success('Need invoice Update Page here')
+  }, [])
 
-  const handleDeleteInvoice = useCallback(
-    (adhocInvoiceId: string) => {
-      if (!adhocInvoiceId) return navigate(ROUTES.tenantUpdatePassword.getPath(apartmentId, adhocInvoiceId))
-    },
-    [apartmentId, navigate],
-  )
+  const handleDeleteInvoice = useCallback(() => {
+    toast.success('Need invoice Invoice Delete here')
+  }, [])
 
   const handleDetailInvoice = useCallback(
     (adhocInvoiceId?: string) => {
@@ -49,17 +56,29 @@ const NormalInvoiceTable = ({
     [apartmentId, navigate],
   )
 
+  const maintenanceStatusBadgeVariant = useCallback((status: string): VariantProps<typeof Badge>['variant'] => {
+    switch (status) {
+      case 'paid':
+        return 'success'
+      case 'unpaid':
+        return 'warning'
+      case 'overdue':
+        return 'error'
+      default:
+        return 'secondary'
+    }
+  }, [])
+
   if (isLoading) {
-    return <NormalInvoiceLoading />
+    return <PageTableLoading />
+  }
+
+  if (isSearched && data.length === 0) {
+    return <PageTableSearchEmpty subMessage="No Invoices found" message="No Invoices found" />
   }
 
   if (!data || data.length === 0) {
-    return (
-      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
-        <PackageOpen size={50} />
-        <p className="text-theme-secondary text-body-1">No Invoices found</p>
-      </div>
-    )
+    return <PageTableEmpty message="No Invoices found" />
   }
 
   return (
@@ -73,34 +92,19 @@ const NormalInvoiceTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {/* RECHECK : API TYPE */}
-          {data.map((item, index) => (
-            <TableRow className="cursor-pointer" key={index} onClick={() => handleDetailInvoice(item.adhocInvoiceId)}>
+          {data.map((item: IInvoiceSummary, index) => (
+            <TableRow className="cursor-pointer" key={index} onClick={() => handleDetailInvoice(item.id)}>
               <TableCell>{item.invoiceNumber ? item.invoiceNumber : 'N/A'}</TableCell>
               <TableCell>{item.tenant ? item.tenant : 'N/A'}</TableCell>
               <TableCell>{item.room ? item.room : 'N/A'}</TableCell>
               <TableCell>{item.amount ? item.amount : 'N/A'}</TableCell>
               <TableCell>{item.issueDate ? item.issueDate : 'N/A'}</TableCell>
               <TableCell>{item.dueDate ? item.dueDate : 'N/A'}</TableCell>
-              <TableCell>
-                <TableCell>
-                  {item.status === 'paid' ? (
-                    <Badge variant="success">paid</Badge>
-                  ) : item.status === 'unpaid' || item.status === 'partially_paid' ? (
-                    <Badge variant="warning">unpaid</Badge>
-                  ) : item.status === 'overdue' ? (
-                    <Badge variant="error">overdue</Badge>
-                  ) : (
-                    <Badge variant="secondary">{item.status}</Badge>
-                  )}
-                </TableCell>
+              <TableCell className="capitalize">
+                <Badge variant={maintenanceStatusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
               <TableCell>
-                <InvoiceAction
-                  userId={item.adhocInvoiceId}
-                  onUpdate={handleUpdateInvoice}
-                  onDelete={handleDeleteInvoice}
-                />
+                <InvoiceAction id={item.id} onUpdate={handleUpdateInvoice} onDelete={handleDeleteInvoice} />
               </TableCell>
             </TableRow>
           ))}

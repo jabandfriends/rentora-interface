@@ -10,16 +10,17 @@ import {
   FileText,
   User,
 } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Card } from '@/components/common'
 import { Badge, Separator } from '@/components/ui'
 import { useRentoraApiInvoiceDetails } from '@/hooks'
+import { formatCurrency } from '@/utilities'
 
 const InvoiceDetail = () => {
-  const { apartmentId, adhocInvoiceId } = useParams<{ apartmentId: string; adhocInvoiceId: string }>()
+  const { apartmentId, id: adhocInvoiceId } = useParams<{ apartmentId: string; id: string }>()
   const { data } = useRentoraApiInvoiceDetails({ apartmentId, adhocInvoiceId })
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
       case 'paid':
@@ -62,13 +63,6 @@ const InvoiceDetail = () => {
       {priority}
     </Badge>
   )
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount)
-  }
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -246,7 +240,7 @@ const InvoiceDetail = () => {
         </Card>
       </div>
 
-      {/* Documents & Attachments */}
+      {/* Documents & Attachments
       <Card className="rounded-2xl shadow">
         <div>
           <h4>Documents & Attachments</h4>
@@ -263,7 +257,7 @@ const InvoiceDetail = () => {
             </div>
           </div>
         </div>
-      </Card>
+      </Card> */}
 
       {/* Notes */}
       {data.notes && (
@@ -273,7 +267,7 @@ const InvoiceDetail = () => {
           </div>
           <Separator />
           <div>
-            <p className="text-sm leading-relaxed">{data.notes}</p>
+            <p className="text-body-2 leading-relaxed">{data.notes}</p>
           </div>
         </Card>
       )}

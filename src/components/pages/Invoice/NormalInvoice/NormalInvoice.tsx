@@ -34,12 +34,17 @@ const NormalInvoice = () => {
     },
   })
 
-  const [search, status]: [string, string] = watch(['search', 'status'])
+  const [search, status, sortBy, sortDir]: [string, string, 'createdAt' | 'updatedAt', 'asc' | 'desc'] = watch([
+    'search',
+    'status',
+    'sortBy',
+    'sortDir',
+  ])
 
   const debouncedSearch = useDebounce(search ? search : undefined, 500)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
-  const debouncedSortBy = useDebounce(watch('sortBy') ? watch('sortBy') : undefined, 300)
-  const debouncedSortDir = useDebounce(watch('sortDir') ? watch('sortDir') : undefined, 300)
+  const debouncedSortBy = useDebounce(sortBy ? sortBy : undefined, 300)
+  const debouncedSortDir = useDebounce(sortDir ? sortDir : undefined, 300)
 
   const {
     data: invoiceData,
@@ -93,6 +98,11 @@ const NormalInvoice = () => {
     },
     [setCurrentPage],
   )
+
+  const isSearched: boolean = useMemo(
+    () => !!debouncedSearch || !!debouncedSortBy || !!debouncedSortDir || !!debouncedStatus,
+    [debouncedSearch, debouncedSortBy, debouncedSortDir, debouncedStatus],
+  )
   const invoiceStats: Array<IStatsCardProps> = useMemo(
     () => [
       {
@@ -133,6 +143,7 @@ const NormalInvoice = () => {
         title="Invoices Management"
         description="Manage and track all custom invoices and payments"
         stats={invoiceStats}
+        isLoading={isLoading}
         actionButton={
           <Button className="flex items-center gap-2" onClick={navigateToCreateInvoice}>
             <Plus size={18} /> New Invoice
@@ -140,8 +151,8 @@ const NormalInvoice = () => {
         }
       />
       <PageTableSearch
-        selectedStatus={watch('status')}
-        selectedSort={watch('sortBy')}
+        selectedStatus={status}
+        selectedSort={sortBy}
         statusEnum={INVOICE_STATUS}
         sortEnum={INVOICE_SORT}
         onSearchChange={handleSearchChange}
@@ -149,6 +160,7 @@ const NormalInvoice = () => {
         onSortChange={handleSortChange}
       />
       <NormalInvoiceTable
+        isSearched={isSearched}
         data={invoiceData}
         isLoading={isLoading}
         currentPage={currentPage}

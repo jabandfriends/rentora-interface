@@ -3,7 +3,7 @@ import { CircleAlert, CircleCheckBig, Clock, DollarSign } from 'lucide-react'
 import type { IStatsCardProps } from '@/types'
 
 export enum INVOICE_STATUS {
-  total = '',
+  Total = '',
   Paid = 'paid',
   Unpaid = 'unpaid',
   Overdue = 'overdue',

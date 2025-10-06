@@ -19,7 +19,7 @@ export type IOverdueInvoiceListMetadata = {
 }
 
 export type IInvoiceSummary = {
-  adhocInvoiceId: string
+  id: string
   invoiceNumber: string
   tenant: string
   room: string
@@ -30,7 +30,7 @@ export type IInvoiceSummary = {
 }
 
 export type IOverdueInvoice = {
-  adhocInvoiceId: string
+  id: string
   invoiceNumber: string
   tenant: string
   room: string
