@@ -3,16 +3,25 @@ import { useCallback } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { PaginationBar } from '@/components/feature'
-import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import {
+  Badge,
+  PageTableLoading,
+  PageTableSearchEmpty,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui'
 import { OVERDUE_INVOICE_TABLE_HEADER, ROUTES } from '@/constants'
 import { type IOverdueInvoice, type IPaginate } from '@/types'
-
-import OverdueInvoiceLoading from './OverdueInvoiceLoading'
 
 type IOverdueInvoiceTableProps = {
   data: Array<IOverdueInvoice>
   isLoading: boolean
   currentPage: number
+  isSearched: boolean
   onPageChange: (page: number) => void
 } & Pick<IPaginate, 'totalPages' | 'totalElements'>
 
@@ -20,6 +29,7 @@ const OverdueInvoiceTable = ({
   data,
   isLoading,
   currentPage,
+  isSearched,
   totalPages,
   totalElements,
   onPageChange,
@@ -28,15 +38,19 @@ const OverdueInvoiceTable = ({
   const navigate: NavigateFunction = useNavigate()
 
   const handleDetailInvoice = useCallback(
-    (invoiceId?: string) => {
-      if (!invoiceId) return
-      if (!apartmentId) return navigate(ROUTES.invoiceDetail.getPath(apartmentId, invoiceId))
+    (adhocInvoiceId?: string) => {
+      if (!apartmentId || !adhocInvoiceId) return
+      navigate(ROUTES.invoiceDetail.getPath(apartmentId, adhocInvoiceId))
     },
     [apartmentId, navigate],
   )
 
   if (isLoading) {
-    return <OverdueInvoiceLoading />
+    return <PageTableLoading />
+  }
+
+  if (isSearched && data.length === 0) {
+    return <PageTableSearchEmpty subMessage="No Invoices found" message="No Invoices found" />
   }
 
   if (!data || data.length === 0) {
@@ -59,7 +73,7 @@ const OverdueInvoiceTable = ({
         </TableHeader>
         <TableBody>
           {/* RECHECK : API TYPE */}
-          {data?.map((item, index) => (
+          {data?.map((item: IOverdueInvoice, index) => (
             <TableRow className="cursor-pointer" key={index} onClick={() => handleDetailInvoice(item.id)}>
               <TableCell>{item.invoiceNumber ? item.invoiceNumber : 'N/A'}</TableCell>
               <TableCell>{item.tenant ? item.tenant : 'N/A'}</TableCell>
@@ -67,7 +81,7 @@ const OverdueInvoiceTable = ({
               <TableCell>{item.amount ? item.amount : 'N/A'}</TableCell>
               <TableCell>{item.issueDate ? item.issueDate : 'N/A'}</TableCell>
               <TableCell>{item.dueDate ? item.dueDate : 'N/A'}</TableCell>
-              <TableCell>
+              <TableCell className="capitalize">
                 <Badge variant="error">{item.status}</Badge>
               </TableCell>
             </TableRow>

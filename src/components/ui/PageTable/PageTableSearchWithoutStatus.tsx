@@ -15,6 +15,7 @@ const PageTableSearchWithoutStatus = <SortEnum extends string>({
   sortEnum,
   onSearchChange,
   onSortChange,
+  selectedSort,
 }: IPageTableSearchWithoutStatusProps<SortEnum>) => {
   return (
     <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
@@ -28,12 +29,12 @@ const PageTableSearchWithoutStatus = <SortEnum extends string>({
             <DropdownMenuTrigger asChild>
               <Button variant="outlineSecondary" className="flex items-center gap-2">
                 <ChevronDown size={18} />
-                Sort By
+                {selectedSort || 'Sort By'}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" sideOffset={10}>
               {Object.entries(sortEnum).map(([key, value]) => (
-                <DropdownMenuItem onSelect={() => onSortChange(value)} key={value}>
+                <DropdownMenuItem onSelect={() => onSortChange?.(value)} key={value}>
                   {key}
                 </DropdownMenuItem>
               ))}

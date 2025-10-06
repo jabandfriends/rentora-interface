@@ -30,11 +30,15 @@ const OverdueInvoice = () => {
     },
   })
 
-  const [search]: [string] = watch(['search'])
+  const [search, sortBy, sortDir]: [string, 'createdAt' | 'updatedAt', 'asc' | 'desc'] = watch([
+    'search',
+    'sortBy',
+    'sortDir',
+  ])
 
   const debouncedSearch = useDebounce(search ? search : undefined, 500)
-  const debouncedSortBy = useDebounce(watch('sortBy') ? watch('sortBy') : undefined, 300)
-  const debouncedSortDir = useDebounce(watch('sortDir') ? watch('sortDir') : undefined, 300)
+  const debouncedSortBy = useDebounce(sortBy ? sortBy : undefined, 300)
+  const debouncedSortDir = useDebounce(sortDir ? sortDir : undefined, 300)
 
   const {
     data: invoiceData,
@@ -46,7 +50,7 @@ const OverdueInvoice = () => {
     params: {
       page: currentPage,
       size: DEFAULT_INVOICE_LIST_DATA.size,
-      name: debouncedSearch,
+      search: debouncedSearch,
       sortBy: debouncedSortBy,
       sortDir: debouncedSortDir,
     },
@@ -75,6 +79,12 @@ const OverdueInvoice = () => {
     },
     [setCurrentPage],
   )
+
+  const isSearched: boolean = useMemo(
+    () => !!debouncedSearch || !!debouncedSortBy || !!debouncedSortDir,
+    [debouncedSearch, debouncedSortBy, debouncedSortDir],
+  )
+
   const overdueInvoiceStats: Array<IStatsCardProps> = useMemo(
     () => [
       {
@@ -104,6 +114,7 @@ const OverdueInvoice = () => {
         onSortChange={handleSortChange}
       />
       <OverdueInvoiceTable
+        isSearched={isSearched}
         data={invoiceData}
         isLoading={isLoading}
         currentPage={currentPage}
