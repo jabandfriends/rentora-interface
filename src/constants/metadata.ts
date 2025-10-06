@@ -2,6 +2,7 @@ import type {
   IApartmentListMetadata,
   IInvoiceListMetadata,
   IOverdueInvoiceListMetadata,
+  IReportUtilityListMetadata,
   ITenantListMetadata,
   IUnitListMetadata,
 } from '@/types'
@@ -36,4 +37,13 @@ export const DEFAULT_UNIT_LIST_METADATA: IUnitListMetadata = {
   totalUnitsAvailable: 0,
   totalUnitsMaintenance: 0,
   totalUnitsOccupied: 0,
+}
+
+export const DEFAULT_REPORT_UTILITY_LIST_METADATA: IReportUtilityListMetadata = {
+  electricUsageUnits: 0,
+  waterUsageUnits: 0,
+  totalUsageUnits: 0,
+  electricUsagePrices: 0,
+  waterUsagePrices: 0,
+  totalAmount: 0,
 }
