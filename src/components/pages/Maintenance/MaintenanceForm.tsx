@@ -28,12 +28,18 @@ import { useRentoraApiCreateMaintenance } from '@/hooks/api/execute/useRentoraAp
 import type { ICreateMaintenanceRequestPayload, IUnit, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
-const MaintenanceForm = ({ buttonLabel, buttonIcon }: { buttonLabel: string; buttonIcon?: React.ReactNode }) => {
+const MaintenanceForm = ({
+  buttonLabel,
+  buttonIcon,
+}: {
+  buttonLabel: string
+  buttonIcon?: React.ReactNode
+  onSubmit?: (data: MAINTENANCE_FORM_SCHEMA_TYPE) => void | Promise<void>
+}) => {
   // ใช้ type จาก Zod schema โดยตรง
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(MAINTENANCE_FORM_SCHEMA),
     defaultValues: {
-
       unit_id: '',
       title: '',
       description: '',

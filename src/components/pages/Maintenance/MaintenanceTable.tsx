@@ -112,11 +112,7 @@ const MaintenanceTable = ({
                 <Badge variant={statusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
               <TableCell>
-                <MaintenanceAction
-                  maintenanceId={item.id}
-                  onUpdate={handleUpdateMaintenance}
-                // onDelete={handleDeleteMaintenance}
-                />
+                <MaintenanceAction maintenanceId={item.id} onUpdate={handleUpdateMaintenance} />
               </TableCell>
             </TableRow>
           ))}
