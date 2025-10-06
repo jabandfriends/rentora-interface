@@ -26,9 +26,9 @@ type Props = {
   buttonLabel: string
   buttonIcon?: React.ReactNode
   onSubmit: (data: MAINTENANCE_FORM_SCHEMA_TYPE) => void | Promise<void>
-  isSubmitting: boolean
-  units: Array<IUnit>
-  unitsLoading: boolean
+  isSubmitting?: boolean
+  units?: Array<IUnit>
+  unitsLoading?: boolean
 }
 
 const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, units, unitsLoading }: Props) => {
