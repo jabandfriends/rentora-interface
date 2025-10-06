@@ -28,14 +28,23 @@ const NormalInvoiceTable = ({
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const navigate: NavigateFunction = useNavigate()
   const handleUpdateInvoice = useCallback(
-    (invoiceId: string) => {
-      if (!invoiceId) return navigate(ROUTES.tenantUpdate.getPath(apartmentId, invoiceId))
+    (adhocInvoiceId: string) => {
+      if (!adhocInvoiceId) return navigate(ROUTES.tenantUpdate.getPath(apartmentId, adhocInvoiceId))
     },
     [apartmentId, navigate],
   )
+
   const handleDeleteInvoice = useCallback(
-    (invoiceId: string) => {
-      if (!invoiceId) return navigate(ROUTES.tenantUpdatePassword.getPath(apartmentId, invoiceId))
+    (adhocInvoiceId: string) => {
+      if (!adhocInvoiceId) return navigate(ROUTES.tenantUpdatePassword.getPath(apartmentId, adhocInvoiceId))
+    },
+    [apartmentId, navigate],
+  )
+
+  const handleDetailInvoice = useCallback(
+    (adhocInvoiceId?: string) => {
+      if (!apartmentId || !adhocInvoiceId) return
+      navigate(ROUTES.invoiceDetail.getPath(apartmentId, adhocInvoiceId))
     },
     [apartmentId, navigate],
   )
@@ -66,18 +75,32 @@ const NormalInvoiceTable = ({
         <TableBody>
           {/* RECHECK : API TYPE */}
           {data.map((item, index) => (
-            <TableRow className="cursor-pointer" key={index}>
-              <TableCell>INVOICE-{item.invoiceNumber}</TableCell>
+            <TableRow className="cursor-pointer" key={index} onClick={() => handleDetailInvoice(item.adhocInvoiceId)}>
+              <TableCell>{item.invoiceNumber ? item.invoiceNumber : 'N/A'}</TableCell>
               <TableCell>{item.tenant ? item.tenant : 'N/A'}</TableCell>
               <TableCell>{item.room ? item.room : 'N/A'}</TableCell>
               <TableCell>{item.amount ? item.amount : 'N/A'}</TableCell>
               <TableCell>{item.issueDate ? item.issueDate : 'N/A'}</TableCell>
               <TableCell>{item.dueDate ? item.dueDate : 'N/A'}</TableCell>
               <TableCell>
-                <Badge variant="error">{item.status}</Badge>
+                <TableCell>
+                  {item.status === 'paid' ? (
+                    <Badge variant="success">paid</Badge>
+                  ) : item.status === 'unpaid' || item.status === 'partially_paid' ? (
+                    <Badge variant="warning">unpaid</Badge>
+                  ) : item.status === 'overdue' ? (
+                    <Badge variant="error">overdue</Badge>
+                  ) : (
+                    <Badge variant="secondary">{item.status}</Badge>
+                  )}
+                </TableCell>
               </TableCell>
               <TableCell>
-                <InvoiceAction userId={item.invoiceId} onUpdate={handleUpdateInvoice} onDelete={handleDeleteInvoice} />
+                <InvoiceAction
+                  userId={item.adhocInvoiceId}
+                  onUpdate={handleUpdateInvoice}
+                  onDelete={handleDeleteInvoice}
+                />
               </TableCell>
             </TableRow>
           ))}

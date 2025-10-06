@@ -3,7 +3,6 @@ import type {
   IBaseUseQuery,
   IRentoraApiClientBasePaginateWithMetadataResponse,
   IRentoraApiClientBaseResponse,
-  Maybe,
 } from '@/types'
 
 export type IInvoiceListMetadata = {
@@ -15,8 +14,12 @@ export type IInvoiceListMetadata = {
   cancelledInvoice: number
 }
 
+export type IOverdueInvoiceListMetadata = {
+  overdueInvoice: number
+}
+
 export type IInvoiceSummary = {
-  invoiceId: string
+  adhocInvoiceId: string
   invoiceNumber: string
   tenant: string
   room: string
@@ -26,26 +29,49 @@ export type IInvoiceSummary = {
   status: invoiceStatus
 }
 
+export type IOverdueInvoice = {
+  adhocInvoiceId: string
+  invoiceNumber: string
+  tenant: string
+  room: string
+  amount: number
+  issueDate: string
+  dueDate: string
+  status: 'overdue'
+}
+
 export type invoiceStatus = 'paid' | 'unpaid' | 'partially_paid' | 'overdue' | 'cancelled'
 
-export type IInvoiceDetail = IInvoiceSummary & {
-  contact: string
-  rentalAmount: number
-  utilAmount: number
-  serviceAmount: number
-  feesAmount: number
-  discountAmount: number
-  taxAmount: number
-  apartmentName: string
+export type IInvoiceDetail = {
+  adhocInvoiceId: string
+  adhocNumber: string
+  title: string
+  description: string
+  paymentStatus: string
+  status: string
+  priority: string
+  category: string
+  finalAmount: number
+  paidAmount: number
+  invoiceDate: string
+  dueDate: string
+  apartment: string
   unit: string
+  tenantUser: string
   email: string
-  pdf: Maybe<string>
-  notes: Maybe<string>
+  receiptUrls: string
+  images: string
+  notes: string
+  createdByUserId: string
   createdAt: string
   updatedAt: string
 }
 
 export type IUseRentoraApiInvoiceList = IBasePaginateQueryResult<IRentoraApiClientInvoiceListResponse['data']>
+
+export type IUseRentoraApiOverdueInvoiceList = IBasePaginateQueryResult<
+  IRentoraApiClientOverdueInvoiceListResponse['data']
+>
 
 export type IRentoraApiClientInvoiceListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
   IInvoiceSummary,
@@ -62,9 +88,23 @@ export type IRentoraApiInvoiceListParams = {
   sortDir?: 'asc' | 'desc'
 }
 
+export type IRentoraApiOverdueInvoiceListParams = {
+  page?: number
+  size?: number
+  search?: string
+  name?: string
+  sortBy?: 'name' | 'createdAt' | 'updatedAt'
+  sortDir?: 'asc' | 'desc'
+}
+
 export type IUseRentoraApiInvoiceDetail = IBaseUseQuery<IRentoraApiClientInvoiceDetailResponse['data']>
 
 export type IRentoraApiClientInvoiceDetailResponse = IRentoraApiClientBaseResponse<IInvoiceDetail>
+
+export type IRentoraApiClientOverdueInvoiceListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
+  IOverdueInvoice,
+  IOverdueInvoiceListMetadata
+>
 
 export type IRentoraApiInvoiceDetailParams = {
   invoiceId: string

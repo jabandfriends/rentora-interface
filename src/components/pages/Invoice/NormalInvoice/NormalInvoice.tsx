@@ -51,7 +51,7 @@ const NormalInvoice = () => {
     params: {
       page: currentPage,
       size: DEFAULT_INVOICE_LIST_DATA.size,
-      name: debouncedSearch,
+      search: debouncedSearch,
       status: debouncedStatus,
       sortBy: debouncedSortBy,
       sortDir: debouncedSortDir,
@@ -110,7 +110,7 @@ const NormalInvoice = () => {
       {
         title: 'Unpaid Invoices',
         count: unpaidInvoice,
-        type: 'success',
+        type: 'warning',
         icon: <Clock size={22} />,
       },
       {

@@ -1,18 +1,116 @@
+import { useDebounce } from '@uidotdev/usehooks'
+import { CircleAlert } from 'lucide-react'
+import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
+
 import { OverdueInvoiceTable } from '@/components/pages/Invoice'
-import { PageTableHeader, PaginationBar } from '@/components/ui'
-import { OVERDUE_INVOICE_DATA, OVERDUE_INVOICE_STATS } from '@/constants'
+import { PageTableHeader } from '@/components/ui'
+import PageTableSearchWithoutStatus from '@/components/ui/PageTable/PageTableSearchWithoutStatus'
+import { DEFAULT_INVOICE_LIST_DATA } from '@/constants'
+import { useRentoraApiOverdueInvoiceList } from '@/hooks'
+import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
 const OverdueInvoice = () => {
+  const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState<number>(
+    DEFAULT_INVOICE_LIST_DATA.page,
+  )
+  //param
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+
+  const { watch, setValue } = useForm<{
+    search: string
+    sortBy: 'createdAt' | 'updatedAt'
+    sortDir: 'asc' | 'desc'
+  }>({
+    defaultValues: {
+      search: '',
+      sortBy: 'createdAt',
+      sortDir: 'desc',
+    },
+  })
+
+  const [search]: [string] = watch(['search'])
+
+  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSortBy = useDebounce(watch('sortBy') ? watch('sortBy') : undefined, 300)
+  const debouncedSortDir = useDebounce(watch('sortDir') ? watch('sortDir') : undefined, 300)
+
+  const {
+    data: invoiceData,
+    isLoading,
+    pagination: { totalPages, totalElements },
+    metadata: { overdueInvoice },
+  } = useRentoraApiOverdueInvoiceList({
+    apartmentId: apartmentId,
+    params: {
+      page: currentPage,
+      size: DEFAULT_INVOICE_LIST_DATA.size,
+      name: debouncedSearch,
+      sortBy: debouncedSortBy,
+      sortDir: debouncedSortDir,
+    },
+  })
+
+  const handleSearchChange: ISearchBarProps['onChange'] = useCallback(
+    ({ target: { value } }: Parameters<ISearchBarProps['onChange']>[0]) => {
+      setValue('search', value)
+      setCurrentPage(DEFAULT_INVOICE_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
+
+  const handleSortChange = useCallback(
+    (value: 'createdAt' | 'updatedAt') => {
+      setValue('sortBy', value)
+      setCurrentPage(DEFAULT_INVOICE_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      if (page < 1) return
+      setCurrentPage(page)
+    },
+    [setCurrentPage],
+  )
+  const overdueInvoiceStats: Array<IStatsCardProps> = useMemo(
+    () => [
+      {
+        title: 'Overdue Invoices',
+        count: overdueInvoice,
+        type: 'error',
+        icon: <CircleAlert size={22} />,
+      },
+    ],
+    [overdueInvoice],
+  )
+  enum INVOICE_SORT {
+    CreatedAt = 'createdAt',
+    UpdatedAt = 'updatedAt',
+  }
   return (
     <>
       <PageTableHeader
         title="Overdue Invoices"
         description="Manage unpaid bills and outstanding invoices. Track due dates and make quick payments in one place."
-        stats={OVERDUE_INVOICE_STATS}
+        stats={overdueInvoiceStats}
       />
-      {/* <PageTableSearch /> */}
-      <OverdueInvoiceTable data={OVERDUE_INVOICE_DATA} />
-      <PaginationBar />
+      <PageTableSearchWithoutStatus
+        selectedSort={watch('sortBy')}
+        sortEnum={INVOICE_SORT}
+        onSearchChange={handleSearchChange}
+        onSortChange={handleSortChange}
+      />
+      <OverdueInvoiceTable
+        data={invoiceData}
+        isLoading={isLoading}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalElements={totalElements}
+        onPageChange={handlePageChange}
+      />
     </>
   )
 }

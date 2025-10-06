@@ -10,39 +10,15 @@ import {
   FileText,
   User,
 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Card } from '@/components/common'
 import { Badge, Separator } from '@/components/ui'
+import { useRentoraApiInvoiceDetails } from '@/hooks'
 
-type IInvoice = {
-  id: string
-  adhoc_number: string
-  title: string
-  description: string
-  category: string
-  final_amount: number
-  invoice_date: string
-  due_date: string
-  payment_status: string
-  paid_amount: number
-  status: string
-  priority: string
-  apartment: string
-  unit: string
-  tenant_name: string
-  tenant_email: string
-  created_by: string
-  notes: string
-  receipt_urls: Array<string>
-  created_at: string
-  updated_at: string
-}
-
-type IInvoiceDetailProps = {
-  data: IInvoice
-}
-const InvoiceDetail = ({ data }: IInvoiceDetailProps) => {
+const InvoiceDetail = () => {
+  const { apartmentId, adhocInvoiceId } = useParams<{ apartmentId: string; adhocInvoiceId: string }>()
+  const { data } = useRentoraApiInvoiceDetails({ apartmentId, adhocInvoiceId })
   const navigate = useNavigate()
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
@@ -104,13 +80,18 @@ const InvoiceDetail = ({ data }: IInvoiceDetailProps) => {
   const handleBackClick = () => {
     navigate(-1)
   }
+
+  if (!data) {
+    return <div>No data</div>
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="desktop:flex-row desktop:items-center desktop:justify-between flex flex-col gap-4">
         <div>
-          <h3>Invoice {data.adhoc_number}</h3>
-          <p className="text-theme-secondary text-body-2">Created {formatDate(data.created_at)}</p>
+          <h3>Invoice {data.adhocNumber}</h3>
+          <p className="text-theme-secondary text-body-2">Created {formatDate(data.createdAt)}</p>
         </div>
         <div className="flex gap-3">
           <Button className="flex items-center gap-x-2" variant="outline">
@@ -154,7 +135,7 @@ const InvoiceDetail = ({ data }: IInvoiceDetailProps) => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <label className="font-medium">Payment Status</label>
-                <StatusBadge status={data.payment_status} />
+                <StatusBadge status={data.paymentStatus} />
               </div>
               <div className="flex items-center justify-between">
                 <label className="font-medium">Priority</label>
@@ -184,16 +165,16 @@ const InvoiceDetail = ({ data }: IInvoiceDetailProps) => {
           <div className="space-y-4">
             <div className="flex items-center justify-between text-2xl font-bold">
               <span>Total Amount</span>
-              <span className="text-theme-primary">{formatCurrency(data.final_amount)}</span>
+              <span className="text-theme-primary">{formatCurrency(data.finalAmount)}</span>
             </div>
 
             <div className="flex items-center justify-between">
               <label className="font-medium">Paid Amount</label>
-              <span>{formatCurrency(data.paid_amount)}</span>
+              <span>{formatCurrency(data.paidAmount)}</span>
             </div>
             <div className="flex items-center justify-between font-semibold">
               <label className="font-medium">Outstanding Balance</label>
-              <span className="text-theme-error">{formatCurrency(data.final_amount - data.paid_amount)}</span>
+              <span className="text-theme-error">{formatCurrency(data.finalAmount - data.paidAmount)}</span>
             </div>
           </div>
         </div>
@@ -212,11 +193,11 @@ const InvoiceDetail = ({ data }: IInvoiceDetailProps) => {
           <div className="desktop:grid-cols-2 grid gap-6">
             <div className="space-y-2">
               <label className="font-medium">Invoice Date</label>
-              <p className="text-body-2">{formatDate(data.invoice_date)}</p>
+              <p className="text-body-2">{formatDate(data.invoiceDate)}</p>
             </div>
             <div className="space-y-2">
               <label className="font-medium">Due Date</label>
-              <p className="text-body-2">{formatDate(data.due_date)}</p>
+              <p className="text-body-2">{formatDate(data.dueDate)}</p>
             </div>
           </div>
         </div>
@@ -255,41 +236,34 @@ const InvoiceDetail = ({ data }: IInvoiceDetailProps) => {
           <div className="space-y-4">
             <div>
               <label className="font-medium">Name</label>
-              <p className="text-body-2">{data.tenant_name}</p>
+              <p className="text-body-2">{data.tenantUser}</p>
             </div>
             <div>
               <label className="font-medium">Email</label>
-              <p className="text-body-2">{data.tenant_email}</p>
+              <p className="text-body-2">{data.email}</p>
             </div>
           </div>
         </Card>
       </div>
 
       {/* Documents & Attachments */}
-      {data.receipt_urls.length > 0 && (
-        <Card className="rounded-2xl shadow">
-          <div>
-            <h4>Documents & Attachments</h4>
-          </div>
-          <Separator />
-          <div>
-            <div className="desktop:grid-cols-2 grid gap-3">
-              {data.receipt_urls.map((url, index) => (
-                <div
-                  key={index}
-                  className="hover:bg-theme-primary/50 border-theme-primary hover:text-theme-white flex cursor-pointer items-center gap-3 rounded-lg border p-3 duration-100"
-                >
-                  <FileText className="text-theme-primary size-5" />
-                  <span className="flex-1 truncate">{url}</span>
-                  <Button variant="ghost" size="sm">
-                    <Download className="size-4" />
-                  </Button>
-                </div>
-              ))}
+      <Card className="rounded-2xl shadow">
+        <div>
+          <h4>Documents & Attachments</h4>
+        </div>
+        <Separator />
+        <div>
+          <div className="desktop:grid-cols-2 grid gap-3">
+            <div className="hover:bg-theme-primary/50 border-theme-primary hover:text-theme-white flex cursor-pointer items-center gap-3 rounded-lg border p-3 duration-100">
+              <FileText className="text-theme-primary size-5" />
+              <span className="flex-1 truncate">{data.receiptUrls}</span>
+              <Button variant="ghost" size="sm">
+                <Download className="size-4" />
+              </Button>
             </div>
           </div>
-        </Card>
-      )}
+        </div>
+      </Card>
 
       {/* Notes */}
       {data.notes && (
@@ -315,17 +289,17 @@ const InvoiceDetail = ({ data }: IInvoiceDetailProps) => {
             <div className="space-y-4">
               <div>
                 <label className="font-medium">Created By</label>
-                <p className="text-body-2">{data.created_by}</p>
+                <p className="text-body-2">{data.createdByUserId}</p>
               </div>
               <div>
                 <label className="font-medium">Created At</label>
-                <p className="text-body-2">{formatDate(data.created_at)}</p>
+                <p className="text-body-2">{formatDate(data.createdAt)}</p>
               </div>
             </div>
             <div className="space-y-4">
               <div>
                 <label className="font-medium">Last Updated</label>
-                <p className="text-body-2">{formatDate(data.updated_at)}</p>
+                <p className="text-body-2">{formatDate(data.updatedAt)}</p>
               </div>
             </div>
           </div>

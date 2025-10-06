@@ -7,10 +7,12 @@ import type {
   IRentoraApiClientApartmentListResponse,
   IRentoraApiClientInvoiceDetailResponse,
   IRentoraApiClientInvoiceListResponse,
+  IRentoraApiClientOverdueInvoiceListResponse,
   IRentoraApiClientTenantDetailResponse,
   IRentoraApiClientTenantListResponse,
   IRentoraApiClientUserResponse,
   IRentoraApiInvoiceListParams,
+  IRentoraApiOverdueInvoiceListParams,
   IRentoraApiTenantListParams,
   Maybe,
   RentoraApiQueryClientKey,
@@ -24,6 +26,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     apartmentList: 'APARTMENT_LIST',
     apartmentDetail: 'APARTMENT_DETAIL',
     invoiceList: 'INVOICE_LIST',
+    overdueInvoiceList: 'OVERDUE_INVOICE_LIST',
     invoiceDetail: 'INVOICE_DETAIL',
     tenantList: 'TENANT_LIST',
     tenantDetail: 'TENANT_DETAIL',
@@ -68,19 +71,30 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     return response.data.data
   }
 
-  async invoiceDetail(invoiceId: Maybe<string>): Promise<IRentoraApiClientInvoiceDetailResponse['data']> {
-    const response: AxiosResponse<IRentoraApiClientInvoiceDetailResponse, unknown> =
-      await this.axiosWithAuthInstance.get<IRentoraApiClientInvoiceDetailResponse>(`/api/invoices/detail/${invoiceId}`)
+  async overdueInvoiceList(
+    apartmentId: Maybe<string>,
+    params: IRentoraApiOverdueInvoiceListParams,
+  ): Promise<IRentoraApiClientOverdueInvoiceListResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientOverdueInvoiceListResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientOverdueInvoiceListResponse>(
+        `/api/invoices/${apartmentId}/overdue`,
+        {
+          params,
+        },
+      )
     return response.data.data
   }
 
-  // async overdueList(params: IRentoraApiOverdueListParams): Promise<IRentoraApiClientInvoiceListResponse['data']> {
-  //   const response: AxiosResponse<IRentoraApiClientInvoiceListResponse, unknown> =
-  //     await this.axiosWithAuthInstance.get<IRentoraApiClientInvoiceListResponse>(`/api/invoices/overdue`, {
-  //       params,
-  //     })
-  //   return response.data.data
-  // }
+  async invoiceDetail(
+    apartmentId: Maybe<string>,
+    adhocInvoiceId: Maybe<string>,
+  ): Promise<IRentoraApiClientInvoiceDetailResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientInvoiceDetailResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientInvoiceDetailResponse>(
+        `/api/invoices/${apartmentId}/detail/${adhocInvoiceId}`,
+      )
+    return response.data.data
+  }
 
   async tenantList(
     apartmentId: Maybe<string>,

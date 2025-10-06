@@ -4,15 +4,18 @@ import { RENTORA_API_BASE_URL } from '@/config'
 import { RentoraApiQueryClient } from '@/hooks'
 import type { IRentoraApiClientInvoiceDetailResponse, IUseRentoraApiInvoiceDetail, Maybe } from '@/types'
 
-export const useRentoraApiInvoiceDetails = (props: { invoiceId: Maybe<string> }): IUseRentoraApiInvoiceDetail => {
+export const useRentoraApiInvoiceDetails = (props: {
+  apartmentId: Maybe<string>
+  adhocInvoiceId: Maybe<string>
+}): IUseRentoraApiInvoiceDetail => {
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
 
   return useQuery<IRentoraApiClientInvoiceDetailResponse['data']>({
-    queryKey: [rentoraApiQueryClient.key.invoiceDetail, props?.invoiceId],
+    queryKey: [rentoraApiQueryClient.key.invoiceDetail, props?.apartmentId, props?.adhocInvoiceId],
     queryFn: async () => {
-      return await rentoraApiQueryClient.invoiceDetail(props?.invoiceId)
+      return await rentoraApiQueryClient.invoiceDetail(props?.apartmentId, props?.adhocInvoiceId)
     },
     retry: 1,
-    enabled: !!props?.invoiceId,
+    enabled: Boolean(props?.apartmentId && props?.adhocInvoiceId),
   })
 }

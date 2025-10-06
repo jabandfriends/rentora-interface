@@ -3,6 +3,7 @@ export type RentoraApiQueryClientKey =
   | 'apartmentList'
   | 'apartmentDetail'
   | 'invoiceList'
+  | 'overdueInvoiceList'
   | 'invoiceDetail'
   | 'tenantList'
   | 'tenantDetail'
