@@ -31,7 +31,10 @@ const MaintenanceUpdate = () => {
         appointmentDate: data.appointmentDate ? new Date(data.appointmentDate).toISOString() : undefined,
         dueDate: data.dueDate ? new Date(data.dueDate).toISOString() : undefined,
         priority: data.priority ? data.priority : undefined,
+        status: data.status ? data.status : undefined,
+        category: data.category ? data.category : undefined,
         estimatedHours: data.estimatedHours ? data.estimatedHours : undefined,
+        recurringSchedule: data.recurringSchedule ? data.recurringSchedule : undefined,
       }
       try {
         await updateMaintenance({

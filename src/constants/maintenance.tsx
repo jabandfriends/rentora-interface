@@ -1,7 +1,7 @@
 import { CircleCheckBig, Clock, ScrollText } from 'lucide-react'
 import { z } from 'zod'
 
-import { Priority } from '@/enum'
+import { Category, Priority, RecurringSchedule, Status } from '@/enum'
 import type { FORM_SECTION, IStatsCardProps, UPDATE_MAINTENANCE_FORM_FIELDS_TYPE } from '@/types'
 
 export const MAINTENANCE_STATS: Array<IStatsCardProps> = [
@@ -81,6 +81,15 @@ export const UPDATE_MAINTENANCE_FORM_SCHEMA = z.object({
   appointmentDate: z.string().optional().nullable(),
   dueDate: z.string().optional().nullable(),
   priority: z.enum([Priority.LOW, Priority.NORMAL, Priority.HIGH, Priority.URGENT]).optional().nullable(),
+  status: z
+    .enum([Status.PENDING, Status.ASSIGNED, Status.IN_PROGRESS, Status.COMPLETED, Status.CANCELLED])
+    .optional()
+    .nullable(),
+  category: z.enum([Category.GENERAL, Category.ELECTRICAL, Category.PLUMBING, Category.HVAC]).optional().nullable(),
+  recurringSchedule: z
+    .enum([RecurringSchedule.WEEKLY, RecurringSchedule.MONTHLY, RecurringSchedule.QUARTERLY])
+    .optional()
+    .nullable(),
   estimatedHours: z.coerce.number().min(0, 'Estimated hours cannot be negative').optional().nullable(),
 })
 
@@ -116,6 +125,33 @@ export const UPDATE_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<UPDATE_MAINTENAN
           { value: Priority.URGENT, label: 'Urgent' },
         ],
         placeholder: 'Select Priority',
+      },
+      {
+        key: 'status',
+        label: 'Status',
+        description: 'Basic information about the maintenance task',
+        fieldType: 'select',
+        options: [
+          { value: Status.PENDING, label: 'Pending' },
+          { value: Status.ASSIGNED, label: 'Assigned' },
+          { value: Status.IN_PROGRESS, label: 'In Progress' },
+          { value: Status.COMPLETED, label: 'Completed' },
+          { value: Status.CANCELLED, label: 'Cancelled' },
+        ],
+        placeholder: 'Select Status',
+      },
+      {
+        key: 'category',
+        label: 'Category',
+        description: 'Basic information about the maintenance task',
+        fieldType: 'select',
+        options: [
+          { value: Category.GENERAL, label: 'General' },
+          { value: Category.ELECTRICAL, label: 'Electrical' },
+          { value: Category.PLUMBING, label: 'Plumbing' },
+          { value: Category.HVAC, label: 'HVAC' },
+        ],
+        placeholder: 'Select Category',
       },
     ],
   },
@@ -153,6 +189,18 @@ export const UPDATE_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<UPDATE_MAINTENAN
         fieldType: 'input',
         inputType: 'number',
         placeholder: 'Enter Estimated Hours',
+      },
+      {
+        key: 'recurringSchedule',
+        label: 'Recurring schedule',
+        description: 'Basic information about the maintenance task',
+        fieldType: 'select',
+        options: [
+          { value: RecurringSchedule.WEEKLY, label: 'Weekly' },
+          { value: RecurringSchedule.MONTHLY, label: 'Monthly' },
+          { value: RecurringSchedule.QUARTERLY, label: 'Quarterly' },
+        ],
+        placeholder: 'Select Recurring Schedule',
       },
     ],
   },

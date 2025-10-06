@@ -39,9 +39,6 @@ export type IUpdateMaintenanceRequestPayload = Partial<
     | 'workSummary'
     | 'isEmergency'
     | 'isRecurring'
-    | 'recurringSchedule'
-    | 'category'
-    | 'recurringSchedule'
   >
 >
 
