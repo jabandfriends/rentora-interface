@@ -60,7 +60,7 @@ const OverdueInvoiceTable = ({
         <TableBody>
           {/* RECHECK : API TYPE */}
           {data?.map((item, index) => (
-            <TableRow className="cursor-pointer" key={index} onClick={() => handleDetailInvoice(item.adhocInvoiceId)}>
+            <TableRow className="cursor-pointer" key={index} onClick={() => handleDetailInvoice(item.id)}>
               <TableCell>{item.invoiceNumber ? item.invoiceNumber : 'N/A'}</TableCell>
               <TableCell>{item.tenant ? item.tenant : 'N/A'}</TableCell>
               <TableCell>{item.room ? item.room : 'N/A'}</TableCell>
