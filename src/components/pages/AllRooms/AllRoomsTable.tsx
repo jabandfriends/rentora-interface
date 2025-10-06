@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
 
 import { PaginationBar } from '@/components/feature'
@@ -14,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui'
-import { ALL_ROOMS_TABLE_HEADER } from '@/constants'
+import { ALL_ROOMS_TABLE_HEADER, ROUTES } from '@/constants'
 import type { IUnit } from '@/types'
 
 import AllRoomsAction from './AllRoomsAction'
@@ -38,6 +39,8 @@ const AllRoomsTable = ({
   totalPages,
   totalElements,
 }: AllRoomsTableProps) => {
+  const navigate: NavigateFunction = useNavigate()
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   const statusBadgeVariant = useCallback((unitStatus: string): VariantProps<typeof Badge>['variant'] => {
     switch (unitStatus) {
       case 'available':
@@ -80,6 +83,13 @@ const AllRoomsTable = ({
         return 'default'
     }
   }, [])
+
+  const handleRoomDetail = useCallback(
+    (unitId: string) => {
+      navigate(ROUTES.roomDetail.getPath(apartmentId, unitId))
+    },
+    [navigate, apartmentId],
+  )
   if (isLoading) return <PageTableLoading />
   if (isSearched && data.length === 0) {
     return <PageTableSearchEmpty message="No rooms found" subMessage="No rooms found for this search" />
@@ -100,7 +110,7 @@ const AllRoomsTable = ({
         </TableHeader>
         <TableBody>
           {data.map((item: IUnit, index) => (
-            <TableRow key={index}>
+            <TableRow key={index} onClick={() => handleRoomDetail(item.id)}>
               <TableCell>{item.unitName}</TableCell>
               <TableCell>{item.buildingName}</TableCell>
               <TableCell className="capitalize">{item.currentTenant || 'N/A'}</TableCell>

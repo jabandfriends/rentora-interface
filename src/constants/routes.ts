@@ -40,4 +40,8 @@ export const ROUTES: IRoutes = {
   tenantUpdatePassword: apartmentRoute('/tenant/update-password/:id'),
   invoiceDetail: apartmentRoute('/invoice/detail/:id'),
   tenantUpdate: apartmentRoute('/tenant/update/:id'),
+  roomDetail: apartmentRoute('/all-room/detail/:id'),
+  monthlyContractCreate: apartmentRoute('/:id/contract/monthly/create'),
+  dailyContractCreate: apartmentRoute('/:id/contract/daily/create'),
+  yearlyContractCreate: apartmentRoute('/:id/contract/yearly/create'),
 }
