@@ -1,5 +1,8 @@
 export { default as PageTableBar } from './PageTableBar'
 export { default as PageTableBody } from './PageTableBody'
+export { default as PageTableEmpty } from './PageTableEmpty'
 export { default as PageTableHeader } from './PageTableHeader'
+export { default as PageTableLoading } from './PageTableLoading'
 export { default as PageTableSearch } from './PageTableSearch'
+export { default as PageTableSearchEmpty } from './PageTableSearchEmpty'
 export { default as PageTableSearchWihtoutStatus } from './PageTableSearchWithoutStatus'

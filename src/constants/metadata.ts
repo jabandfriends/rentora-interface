@@ -3,6 +3,7 @@ import type {
   IInvoiceListMetadata,
   IOverdueInvoiceListMetadata,
   ITenantListMetadata,
+  IUnitListMetadata,
 } from '@/types'
 
 //apartment list
@@ -29,4 +30,10 @@ export const DEFAULT_INVOICE_LIST_METADATA: IInvoiceListMetadata = {
 
 export const DEFAULT_OVERDUE_INVOICE_LIST_METADATA: IOverdueInvoiceListMetadata = {
   overdueInvoice: 0,
+}
+export const DEFAULT_UNIT_LIST_METADATA: IUnitListMetadata = {
+  totalUnits: 0,
+  totalUnitsAvailable: 0,
+  totalUnitsMaintenance: 0,
+  totalUnitsOccupied: 0,
 }

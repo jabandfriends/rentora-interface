@@ -7,6 +7,9 @@ export type RentoraApiQueryClientKey =
   | 'invoiceDetail'
   | 'tenantList'
   | 'tenantDetail'
+  | 'tenantList'
+  | 'tenantDetail'
+  | 'unitList'
 export type RentoraApiExecuteClientKey =
   | 'authenticate'
   | 'createApartment'
