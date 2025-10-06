@@ -1,8 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import {
   Button,
@@ -21,22 +19,19 @@ import {
   Spinner,
   Textarea,
 } from '@/components/common'
-import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA, ROUTES } from '@/constants'
-import type { Priority, Status } from '@/enum'
-import { useRentoraApiUnitList } from '@/hooks'
-import { useRentoraApiCreateMaintenance } from '@/hooks/api/execute/useRentoraApiCreateMaintenance'
-import type { ICreateMaintenanceRequestPayload, IUnit, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
-import { getErrorMessage } from '@/utilities'
+import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
+import type { IUnit, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 
-const MaintenanceForm = ({
-  buttonLabel,
-  buttonIcon,
-}: {
+type Props = {
   buttonLabel: string
   buttonIcon?: React.ReactNode
-  onSubmit?: (data: MAINTENANCE_FORM_SCHEMA_TYPE) => void | Promise<void>
-}) => {
-  // ใช้ type จาก Zod schema โดยตรง
+  onSubmit: (data: MAINTENANCE_FORM_SCHEMA_TYPE) => void | Promise<void>
+  isSubmitting: boolean
+  units: Array<IUnit>
+  unitsLoading: boolean
+}
+
+const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, units, unitsLoading }: Props) => {
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(MAINTENANCE_FORM_SCHEMA),
     defaultValues: {
@@ -52,50 +47,14 @@ const MaintenanceForm = ({
     mode: 'onChange',
   })
 
-  const navigate: NavigateFunction = useNavigate()
-  const { apartmentId } = useParams<{ apartmentId: string }>()
-  const { data: unitList = [], isLoading: unitsLoading } = useRentoraApiUnitList({
-    apartmentId: apartmentId ?? '',
-    params: { page: 0, size: 50, search: '', sortBy: undefined, sortDir: undefined, status: undefined },
-  })
-  const { mutateAsync: createMaintenance, isPending } = useRentoraApiCreateMaintenance()
-
   const isButtonDisabled = useMemo(
-    () => isPending || !form.formState.isDirty || !form.formState.isValid,
-    [isPending, form.formState.isDirty, form.formState.isValid],
-  )
-
-  const handleFormSubmit = useCallback(
-    async (data: MAINTENANCE_FORM_SCHEMA_TYPE) => {
-      const dataPayload: ICreateMaintenanceRequestPayload = {
-        unitId: data.unit_id,
-        title: data.title,
-        description: data.description,
-        status: data.status as Status,
-        priority: data.priority as Priority,
-        appointmentDate: data.appointment_date,
-        dueDate: data.due_date!,
-        estimatedHours: Number(data.estimated_hours),
-      }
-
-      try {
-        await createMaintenance({
-          apartmentId: apartmentId ?? '',
-          payload: dataPayload,
-        })
-
-        toast.success('Create maintenance successfully')
-        navigate(ROUTES.maintenance.getPath(apartmentId ?? ''))
-      } catch (error) {
-        toast.error(getErrorMessage(error))
-      }
-    },
-    [apartmentId, createMaintenance, navigate],
+    () => isSubmitting || !form.formState.isDirty || !form.formState.isValid,
+    [isSubmitting, form.formState.isDirty, form.formState.isValid],
   )
 
   return (
     <Form {...form}>
-      <form className="space-y-4" onSubmit={form.handleSubmit(handleFormSubmit)}>
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         {MAINTENANCE_FORM_FIELDS.map(({ title, description, fields }) => (
           <Card key={'form-section' + title + description} className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
             <div>
@@ -119,7 +78,7 @@ const MaintenanceForm = ({
                               <SelectValue placeholder="Select Room Number" />
                             </SelectTrigger>
                             <SelectContent>
-                              {unitList?.map((unit: IUnit) => (
+                              {units?.map((unit: IUnit) => (
                                 <SelectItem key={unit.id} value={unit.id}>
                                   {unit.unitName}
                                 </SelectItem>
@@ -144,7 +103,6 @@ const MaintenanceForm = ({
                             <p>{item.label}</p>
 
                             {item.inputType === 'number' ? (
-                              // ถ้า InputNumber คืน string ให้ปล่อยผ่าน แล้วค่อย Number() ตอน submit
                               <InputNumber {...field} placeholder={item.placeholder} />
                             ) : item.inputType === 'textarea' ? (
                               <Textarea {...field} placeholder={item.placeholder} />
@@ -231,7 +189,7 @@ const MaintenanceForm = ({
 
         <div className="flex justify-end">
           <Button className="flex items-center gap-2" disabled={isButtonDisabled} type="submit">
-            {isPending ? <Spinner /> : buttonLabel}
+            {isSubmitting ? <Spinner /> : buttonLabel}
             {buttonIcon}
           </Button>
         </div>

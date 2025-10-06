@@ -124,7 +124,7 @@ const Maintenance = () => {
       {
         title: 'Inprocess',
         count: inProgressCount,
-        type: 'warning',
+        type: 'primary',
         icon: <Clock />,
       },
     ],

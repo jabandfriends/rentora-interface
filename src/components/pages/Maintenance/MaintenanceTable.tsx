@@ -1,4 +1,3 @@
-import { PackageOpen } from 'lucide-react'
 import { useCallback } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
@@ -47,13 +46,6 @@ const MaintenanceTable = ({
     },
     [apartmentId, navigate],
   )
-  // const handleDeleteMaintenance = useCallback(
-  //   (maintenanceId: string) => {
-  //     if (!apartmentId) return
-  //     navigate(ROUTES.maintenanceDelete.getPath(apartmentId, maintenanceId))
-  //   },
-  //   [apartmentId, navigate],
-  // )
 
   const handleRowClick = useCallback(
     (id: string) => {
@@ -64,11 +56,11 @@ const MaintenanceTable = ({
   const statusBadgeVariant = useCallback((maintenanceStatus: string): VariantProps<typeof Badge>['variant'] => {
     switch (maintenanceStatus) {
       case 'pending':
-        return 'success'
-      case 'assigned':
-        return 'default'
-      case 'in_progress':
         return 'warning'
+      case 'assigned':
+        return 'success'
+      case 'in_progress':
+        return 'default'
       default:
         return 'default'
     }
@@ -82,12 +74,7 @@ const MaintenanceTable = ({
   }
 
   if (!data || data.length === 0) {
-    return (
-      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
-        <PackageOpen size={50} />
-        <p className="text-theme-secondary text-body-1">No maintenance found</p>
-      </div>
-    )
+    return <PageTableSearchEmpty message="No maintenance found" subMessage="No maintenance for this search" />
   }
 
   return (
@@ -105,8 +92,8 @@ const MaintenanceTable = ({
             <TableRow className="cursor-pointer" onClick={() => handleRowClick(item.id)} key={item.id}>
               <TableCell>{item.unitName}</TableCell>
               <TableCell>{item.buildingsName}</TableCell>
-              <TableCell>{item.requestedDate} </TableCell>
               <TableCell>{item.appointmentDate}</TableCell>
+              <TableCell>{item.dueDate}</TableCell>
               <TableCell>{item.title}</TableCell>
               <TableCell>
                 <Badge variant={statusBadgeVariant(item.status)}>{item.status}</Badge>
