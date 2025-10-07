@@ -1,104 +1,26 @@
-import {
-  AlertTriangle,
-  ArrowLeft,
-  Building,
-  Calendar,
-  CheckCircle,
-  Clock,
-  DollarSign,
-  Download,
-  FileText,
-  User,
-} from 'lucide-react'
-import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
+import { ArrowLeft, Building, Calendar, DollarSign, Download, FileText, User } from 'lucide-react'
 
-import { Button, Card } from '@/components/common'
+import { Button, Card, Skeleton } from '@/components/common'
 import { Badge, Separator } from '@/components/ui'
-import { useRentoraApiInvoiceDetails } from '@/hooks'
-import { formatCurrency } from '@/utilities'
 
-import { InvoiceDetailEmpty, InvoiceDetailLoading } from '.'
-
-const InvoiceDetail = () => {
-  const { apartmentId, id: adhocInvoiceId } = useParams<{ apartmentId: string; id: string }>()
-  const { data, isLoading } = useRentoraApiInvoiceDetails({ apartmentId, adhocInvoiceId })
-  const navigate: NavigateFunction = useNavigate()
-  const getStatusBadgeVariant = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return 'default'
-      case 'unpaid':
-        return 'error'
-      case 'cancelled':
-        return 'secondary'
-      default:
-        return 'secondary'
-    }
-  }
-
-  const getPriorityBadgeVariant = (priority: string) => {
-    switch (priority) {
-      case 'urgent':
-        return 'error'
-      case 'high':
-        return 'error'
-      case 'normal':
-        return 'default'
-      case 'low':
-        return 'secondary'
-      default:
-        return 'secondary'
-    }
-  }
-
-  const StatusBadge = ({ status }: { status: string }) => (
-    <Badge variant={getStatusBadgeVariant(status)} className="capitalize">
-      {status === 'paid' && <CheckCircle className="mr-1 h-3 w-3" />}
-      {status === 'unpaid' && <Clock className="mr-1 h-3 w-3" />}
-      {status === 'cancelled' && <AlertTriangle className="mr-1 h-3 w-3" />}
-      {status}
-    </Badge>
-  )
-
-  const PriorityBadge = ({ priority }: { priority: string }) => (
-    <Badge variant={getPriorityBadgeVariant(priority)} className="capitalize">
-      {priority}
-    </Badge>
-  )
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  }
-  const handleBackClick = () => {
-    navigate(-1)
-  }
-
-  if (!data) {
-    return <InvoiceDetailEmpty />
-  }
-
-  if (isLoading) {
-    return <InvoiceDetailLoading />
-  }
-
+const invocieDetailLoading = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="desktop:flex-row desktop:items-center desktop:justify-between flex flex-col gap-4">
         <div>
-          <h3>Invoice {data.adhocNumber}</h3>
-          <p className="text-theme-secondary text-body-2">Created {formatDate(data.createdAt)}</p>
+          <h3>Invoice </h3>
+          <div className="flex items-center gap-2">
+            <p className="text-theme-secondary text-body-2">Created</p>
+            <Skeleton className="w-25 h-5" />
+          </div>
         </div>
         <div className="flex gap-3">
           <Button className="flex items-center gap-x-2" variant="outline">
             <Download className="size-4" />
             Download PDF
           </Button>
-          <Button className="flex items-center gap-x-2" onClick={handleBackClick}>
+          <Button className="flex items-center gap-x-2">
             <ArrowLeft className="size-4" />
             Back
           </Button>
@@ -119,33 +41,35 @@ const InvoiceDetail = () => {
             <div className="space-y-4">
               <div>
                 <label className="font-medium">Title</label>
-                <p className="text-body-2">{data.title}</p>
+                <p className="text-body-2">
+                  <Skeleton />
+                </p>
               </div>
               <div>
                 <label className="font-medium">Description</label>
-                <p className="text-body-2">{data.description}</p>
+                <p className="text-body-2">
+                  <Skeleton />
+                </p>
               </div>
-              <div>
+              <div className="flex items-center">
                 <label className="font-medium">Category : </label>
                 <Badge variant="warning" className="ml-2 capitalize">
-                  {data.category}
+                  <Skeleton className="h-7 w-20" />
                 </Badge>
               </div>
             </div>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <label className="font-medium">Payment Status</label>
-                <StatusBadge status={data.paymentStatus} />
+                <Skeleton className="h-7 w-20" />
               </div>
               <div className="flex items-center justify-between">
                 <label className="font-medium">Priority</label>
-                <PriorityBadge priority={data.priority} />
+                <Skeleton className="h-7 w-20" />
               </div>
               <div className="flex items-center justify-between">
                 <label className="font-medium">Status</label>
-                <Badge variant="default" className="capitalize">
-                  {data.status}
-                </Badge>
+                <Skeleton className="h-7 w-20" />
               </div>
             </div>
           </div>
@@ -165,16 +89,16 @@ const InvoiceDetail = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between text-2xl font-bold">
               <span>Total Amount</span>
-              <span className="text-theme-primary">{formatCurrency(data.finalAmount)}</span>
+              <Skeleton className="h-8 w-20" />
             </div>
 
             <div className="flex items-center justify-between">
               <label className="font-medium">Paid Amount</label>
-              <span>{formatCurrency(data.paidAmount)}</span>
+              <Skeleton className="h-8 w-20" />
             </div>
             <div className="flex items-center justify-between font-semibold">
               <label className="font-medium">Outstanding Balance</label>
-              <span className="text-theme-error">{formatCurrency(data.finalAmount - data.paidAmount)}</span>
+              <Skeleton className="h-8 w-20" />
             </div>
           </div>
         </div>
@@ -193,11 +117,15 @@ const InvoiceDetail = () => {
           <div className="desktop:grid-cols-2 grid gap-6">
             <div className="space-y-2">
               <label className="font-medium">Invoice Date</label>
-              <p className="text-body-2">{formatDate(data.invoiceDate)}</p>
+              <p className="text-body-2">
+                <Skeleton />
+              </p>
             </div>
             <div className="space-y-2">
               <label className="font-medium">Due Date</label>
-              <p className="text-body-2">{formatDate(data.dueDate)}</p>
+              <p className="text-body-2">
+                <Skeleton />
+              </p>
             </div>
           </div>
         </div>
@@ -216,11 +144,15 @@ const InvoiceDetail = () => {
           <div className="space-y-4">
             <div>
               <label className="font-medium">Apartment</label>
-              <p className="text-body-2">{data.apartment}</p>
+              <p className="text-body-2">
+                <Skeleton />
+              </p>
             </div>
             <div>
               <label className="font-medium">Unit</label>
-              <p className="text-body-2">{data.unit}</p>
+              <p className="text-body-2">
+                <Skeleton />
+              </p>
             </div>
           </div>
         </Card>
@@ -236,11 +168,15 @@ const InvoiceDetail = () => {
           <div className="space-y-4">
             <div>
               <label className="font-medium">Name</label>
-              <p className="text-body-2">{data.tenantUser}</p>
+              <p className="text-body-2">
+                <Skeleton />
+              </p>
             </div>
             <div>
               <label className="font-medium">Email</label>
-              <p className="text-body-2">{data.email}</p>
+              <p className="text-body-2">
+                <Skeleton />
+              </p>
             </div>
           </div>
         </Card>
@@ -266,17 +202,17 @@ const InvoiceDetail = () => {
       </Card> */}
 
       {/* Notes */}
-      {data.notes && (
-        <Card className="rounded-2xl shadow">
-          <div>
-            <h4>Notes</h4>
-          </div>
-          <Separator />
-          <div>
-            <p className="text-body-2 leading-relaxed">{data.notes}</p>
-          </div>
-        </Card>
-      )}
+      <Card className="rounded-2xl shadow">
+        <div>
+          <h4>Notes</h4>
+        </div>
+        <Separator />
+        <div>
+          <p className="text-body-2 leading-relaxed">
+            <Skeleton />
+          </p>
+        </div>
+      </Card>
 
       {/* Administrative Details */}
       <Card className="rounded-2xl shadow">
@@ -289,17 +225,23 @@ const InvoiceDetail = () => {
             <div className="space-y-4">
               <div>
                 <label className="font-medium">Created By</label>
-                <p className="text-body-2">{data.createdByUserId}</p>
+                <p className="text-body-2">
+                  <Skeleton />
+                </p>
               </div>
               <div>
                 <label className="font-medium">Created At</label>
-                <p className="text-body-2">{formatDate(data.createdAt)}</p>
+                <p className="text-body-2">
+                  <Skeleton />
+                </p>
               </div>
             </div>
             <div className="space-y-4">
               <div>
                 <label className="font-medium">Last Updated</label>
-                <p className="text-body-2">{formatDate(data.updatedAt)}</p>
+                <p className="text-body-2">
+                  <Skeleton />
+                </p>
               </div>
             </div>
           </div>
@@ -309,4 +251,4 @@ const InvoiceDetail = () => {
   )
 }
 
-export default InvoiceDetail
+export default invocieDetailLoading

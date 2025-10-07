@@ -4,12 +4,17 @@ import type {
   IAuthRequest,
   ICreateApartmentRequestApi,
   ICreateContractRequestPayload,
+  ICreateMaintenanceRequestPayload,
   ICreateTenantRequestPayload,
   IFirsttimePasswordResetRequestPayload,
   IPutPresignedUrlRequest,
   IRentoraApiClientAuthenticateResponse,
   IRentoraApiClientCreateApartmentResponse,
+  IRentoraApiClientCreateMaintenanceResponse,
+  IRentoraApiClientDeleteMaintenanceResponse,
+  IRentoraApiClientUpdateMaintenanceResponse,
   ISetupApartmentRequestPayload,
+  IUpdateMaintenanceRequestPayload,
   IUpdateTenantPasswordRequestPayload,
   IUpdateTenantRequestPayload,
   RentoraApiExecuteClientKey,
@@ -21,9 +26,12 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   readonly key: Record<RentoraApiExecuteClientKey, string> = {
     authenticate: 'AUTHENTICATE',
     createApartment: 'CREATE_APARTMENT',
-    putPresignedUrl: 'PUT_PRESigned_URL',
+    putPresignedUrl: 'PUT_PRESIGNED_URL',
     setupApartment: 'SETUP_APARTMENT',
     firstTimePasswordReset: 'FIRST_TIME_PASSWORD_RESET',
+    createMaintenance: 'CREATE_MAINTENANCE',
+    updateMaintenance: 'UPDATE_MAINTENANCE',
+    deleteMaintenance: 'DELETE_MAINTENANCE',
     createTenant: 'CREATE_TENANT',
     updateTenant: 'UPDATE_TENANT',
     updateTenantPassword: 'UPDATE_TENANT_PASSWORD',
@@ -61,6 +69,41 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     return response.data
   }
 
+  async createMaintenance(
+    apartmentId: string,
+    payload: ICreateMaintenanceRequestPayload,
+  ): Promise<IRentoraApiClientCreateMaintenanceResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientCreateMaintenanceResponse, unknown> =
+      await this.axiosWithAuthInstance.post<IRentoraApiClientCreateMaintenanceResponse>(
+        `/api/apartment/${apartmentId}/maintenance/users/create`,
+        payload,
+      )
+    return response.data.data
+  }
+
+  async updateMaintenance(
+    apartmentId: string,
+    maintenanceId: string,
+    payload: IUpdateMaintenanceRequestPayload,
+  ): Promise<IRentoraApiClientUpdateMaintenanceResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientUpdateMaintenanceResponse, unknown> =
+      await this.axiosWithAuthInstance.put<IRentoraApiClientUpdateMaintenanceResponse>(
+        `/api/apartment/${apartmentId}/maintenance/${maintenanceId}`,
+        payload,
+      )
+    return response.data.data
+  }
+
+  async deleteMaintenance(
+    apartmentId: string,
+    maintenanceId: string,
+  ): Promise<IRentoraApiClientDeleteMaintenanceResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientDeleteMaintenanceResponse, unknown> =
+      await this.axiosWithAuthInstance.delete<IRentoraApiClientDeleteMaintenanceResponse>(
+        `/api/apartment/${apartmentId}/maintenance/${maintenanceId}`,
+      )
+    return response.data.data
+  }
   //create tenant
   async createTenant(apartmentId: string, payload: ICreateTenantRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(
