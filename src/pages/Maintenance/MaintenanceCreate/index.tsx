@@ -9,6 +9,7 @@ import { ROUTES } from '@/constants'
 import { Priority, Status } from '@/enum'
 import { useRentoraApiCreateMaintenance, useRentoraApiUnitList } from '@/hooks'
 import type { ICreateMaintenanceRequestPayload, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
 const MaintenanceCreate = () => {
   const navigate = useNavigate()
@@ -31,12 +32,16 @@ const MaintenanceCreate = () => {
         dueDate: data.due_date!,
         estimatedHours: Number(data.estimated_hours),
       }
-      await createMaintenance({ apartmentId: apartmentId ?? '', payload })
-      toast.success('Create maintenance successfully')
+      try {
+        await createMaintenance({ apartmentId: apartmentId ?? '', payload })
+        toast.success('Create maintenance successfully')
 
-      setTimeout(() => {
-        navigate(ROUTES.maintenance.getPath(apartmentId ?? ''))
-      }, 1500)
+        setTimeout(() => {
+          navigate(ROUTES.maintenance.getPath(apartmentId ?? ''))
+        }, 500)
+      } catch (e) {
+        toast.error(getErrorMessage(e))
+      }
     },
     [apartmentId, createMaintenance, navigate],
   )
