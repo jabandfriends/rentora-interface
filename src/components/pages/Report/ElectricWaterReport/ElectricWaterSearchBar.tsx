@@ -1,0 +1,71 @@
+import { Download } from 'lucide-react'
+import type { ChangeEvent } from 'react'
+
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
+import { SearchBar } from '@/components/feature'
+import type { IReadingUnitUtility, Maybe } from '@/types'
+
+type IElectricWaterSearchBarProps = {
+  onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
+  onSortChange?: (value: string) => void
+  sortEnum?: Record<string, string>
+  isLoadingDate?: boolean
+  readingDateUtility: Maybe<Array<IReadingUnitUtility>>
+  onReadingDateChange?: (value: string) => void
+}
+const ElectricWaterSearchBar = ({
+  onSearchChange,
+  onSortChange,
+
+  sortEnum,
+  isLoadingDate,
+  readingDateUtility,
+  onReadingDateChange,
+}: IElectricWaterSearchBarProps) => {
+  if (!readingDateUtility || isLoadingDate) return null
+  return (
+    <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
+      {/* Search */}
+      <SearchBar onChange={onSearchChange} />
+
+      <div className="desktop:flex-row flex flex-col gap-2">
+        <div className="flex gap-2">
+          {/* Sort By Dropdown */}
+          <Select onValueChange={onReadingDateChange}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Date" />
+            </SelectTrigger>
+            <SelectContent>
+              {readingDateUtility.map((item: IReadingUnitUtility) => (
+                <SelectItem key={item.readingDate} value={item.readingDate}>
+                  {item.readingDate}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {sortEnum && (
+            <Select onValueChange={onSortChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Sort" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(sortEnum).map(([key, value]) => (
+                  <SelectItem key={value} value={value}>
+                    {key}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
+
+        {/* Export PDF */}
+        <Button className="flex items-center gap-2">
+          <Download size={18} /> Export PDF
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export default ElectricWaterSearchBar

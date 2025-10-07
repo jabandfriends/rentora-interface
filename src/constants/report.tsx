@@ -1,4 +1,4 @@
-import { Building, CircleAlert, CircleCheckBig, Clock, DollarSign, Droplet, Zap } from 'lucide-react'
+import { Building, CircleAlert, CircleCheckBig, Clock, DollarSign } from 'lucide-react'
 
 import type { IStatsCardProps } from '@/types'
 
@@ -68,22 +68,6 @@ export const ROOM_REPORT_DATA = [
     dueDate: '2022-01-15',
     checkoutDate: '2022-01-20',
     status: 'Unavailable',
-  },
-]
-
-//electric & water report stats
-export const ELECTRIC_WATER_REPORT_STATS: Array<IStatsCardProps> = [
-  {
-    title: 'Electric usage',
-    count: '฿6,000,000',
-    icon: <Zap size={22} />,
-    type: 'warning',
-  },
-  {
-    title: 'Water usage',
-    count: '฿7,000,000',
-    icon: <Droplet size={22} />,
-    type: 'primary',
   },
 ]
 
