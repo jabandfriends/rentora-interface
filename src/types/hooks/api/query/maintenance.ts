@@ -1,9 +1,16 @@
 import type { Category, Priority, RecurringSchedule, Status } from '@/enum'
-import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '@/types'
+import type {
+  IBasePaginateQueryResult,
+  IBaseUseQuery,
+  IRentoraApiClientBasePaginateWithMetadataResponse,
+  IRentoraApiClientBaseResponse,
+} from '@/types'
 
 //Maintenance type
 export type IMaintenance = {
   id: string
+  buildingsName: string
+  unitName: string
   ticketNumber: string
   unitId: string
   tenantUserId: string
@@ -31,6 +38,34 @@ export type IMaintenance = {
   createdAt: string
   updatedAt: string
 }
+
+//hooks type useRentoraApiMaintenanceList
+export type IUseRentoraApiMaintenanceList = IBasePaginateQueryResult<IRentoraApiClientMaintenanceListResponse['data']>
+
+//metadata
+export type IMaintenanceListMetadata = {
+  totalMaintenance: number
+  pendingCount: number
+  assignedCount: number
+  inProgressCount: number
+}
+
+// response
+export type IRentoraApiClientMaintenanceListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
+  IMaintenance,
+  IMaintenanceListMetadata
+>
+
+export type IRentoraApiMaintenanceListParams = {
+  page?: number
+  size?: number
+  search?: string
+  sortBy?: string
+  sortDir?: string
+  status?: string
+}
+
+export type IRentoraApiMaintenanceApartmentIdParams = string
 
 //Maintenance detail type
 export type IMaintenanceDetail = IMaintenance
