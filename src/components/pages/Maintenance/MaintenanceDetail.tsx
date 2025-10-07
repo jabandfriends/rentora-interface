@@ -73,7 +73,7 @@ const MaintenanceDetail = () => {
         <div className="space-y-6">
           <div className="desktop:grid-cols-3 grid gap-4">
             {/* Description */}
-            <Card className="desktop:col-span-2 rounded-xl shadow-sm">
+            <Card className="desktop:col-span-2 justify-start rounded-xl shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Description</CardTitle>
               </CardHeader>
@@ -116,7 +116,7 @@ const MaintenanceDetail = () => {
           </div>
 
           {/* Request Details */}
-          <Card className="rounded-xl shadow-sm">
+          <Card className="justify-start rounded-xl shadow-sm">
             <CardHeader>
               <CardTitle>Request Details</CardTitle>
             </CardHeader>
@@ -166,7 +166,7 @@ const MaintenanceDetail = () => {
           </Card>
 
           {/* Tenant Information */}
-          <Card className="rounded-xl shadow-sm">
+          <Card className="justify-start rounded-xl shadow-sm">
             <CardHeader>
               <CardTitle>Tenant Information</CardTitle>
             </CardHeader>

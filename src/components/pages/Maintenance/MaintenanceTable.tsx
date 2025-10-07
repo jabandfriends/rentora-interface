@@ -66,6 +66,21 @@ const MaintenanceTable = ({
     }
   }, [])
 
+  const priorityBadgeVariant = useCallback((maintenancePriority: string): VariantProps<typeof Badge>['variant'] => {
+    switch (maintenancePriority) {
+      case 'urgent':
+        return 'error'
+      case 'high':
+        return 'error'
+      case 'normal':
+        return 'warning'
+      case 'low':
+        return 'default'
+      default:
+        return 'default'
+    }
+  }, [])
+
   if (isLoading) {
     return <PageTableLoading />
   }
@@ -88,7 +103,7 @@ const MaintenanceTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item) => (
+          {data.map((item: IMaintenance) => (
             <TableRow className="cursor-pointer" onClick={() => handleRowClick(item.id)} key={item.id}>
               <TableCell>{item.ticketNumber}</TableCell>
               <TableCell>{item.title}</TableCell>
@@ -97,8 +112,12 @@ const MaintenanceTable = ({
               <TableCell>{item.appointmentDate}</TableCell>
               <TableCell>{item.dueDate || '-'}</TableCell>
               <TableCell className="capitalize">
+                <Badge variant={priorityBadgeVariant(item.priority)}>{item.priority}</Badge>
+              </TableCell>
+              <TableCell className="capitalize">
                 <Badge variant={statusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
+
               <TableCell>
                 <MaintenanceAction maintenanceId={item.id} onUpdate={handleUpdateMaintenance} />
               </TableCell>
