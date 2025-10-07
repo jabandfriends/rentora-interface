@@ -51,7 +51,7 @@ const Maintenance = () => {
     data,
     isLoading,
     pagination: { totalPages, totalElements },
-    metadata: { totalMaintenance, pendingCount, assignedCount, inProgressCount },
+    metadata: { totalMaintenance, pendingCount, inProgressCount, completedCount },
   } = useRentoraApiMaintenanceList({
     apartmentId: apartmentId,
     params: {
@@ -104,14 +104,14 @@ const Maintenance = () => {
   const maintenanceStats: Array<IStatsCardProps> = useMemo(
     () => [
       {
-        title: 'Total Reports',
+        title: 'Total Maintenances',
         count: totalMaintenance,
         type: 'primary',
         icon: <ScrollText />,
       },
       {
-        title: 'Assigned',
-        count: assignedCount,
+        title: 'Completed',
+        count: completedCount,
         type: 'success',
         icon: <CircleCheckBig />,
       },
@@ -122,13 +122,13 @@ const Maintenance = () => {
         icon: <Clock />,
       },
       {
-        title: 'Inprocess',
+        title: 'In Progress',
         count: inProgressCount,
         type: 'primary',
         icon: <Wrench />,
       },
     ],
-    [totalMaintenance, assignedCount, pendingCount, inProgressCount],
+    [totalMaintenance, completedCount, pendingCount, inProgressCount],
   )
 
   enum MAINTENANCE_SORT {

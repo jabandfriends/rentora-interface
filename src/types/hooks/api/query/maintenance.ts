@@ -48,8 +48,8 @@ export type IUseRentoraApiMaintenanceList = IBasePaginateQueryResult<IRentoraApi
 export type IMaintenanceListMetadata = {
   totalMaintenance: number
   pendingCount: number
-  assignedCount: number
   inProgressCount: number
+  completedCount: number
 }
 
 // response
