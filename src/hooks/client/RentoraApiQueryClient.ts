@@ -82,6 +82,9 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     const response: AxiosResponse<IRentoraApiClientMaintenanceListResponse, unknown> =
       await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceListResponse>(
         `/api/apartment/${apartmentId}/maintenance`,
+        {
+          params,
+        },
       )
     return response.data.data
   }
