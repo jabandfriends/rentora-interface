@@ -78,6 +78,7 @@ export const MAINTENANCE_TABLE_HEADER = [
   'Buildings',
   'Appointment Date',
   'Due Date',
+  'Priority',
   'Status',
   'Action',
 ]
