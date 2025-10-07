@@ -45,6 +45,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     unitList: 'UNIT_LIST',
     reportUtilityList: 'REPORT_UTILITY_LIST',
     reportReadingDateUtility: 'REPORT_READING_DATE_UTILITY',
+    getUserData: 'GET_USER_DATA',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -54,6 +55,12 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
           'Rentora-Auth-Token': accessToken,
         },
       })
+    return response.data.data
+  }
+
+  async getUserData(): Promise<IRentoraApiClientUserResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientUserResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientUserResponse>(`/api/auth/me`)
     return response.data.data
   }
 

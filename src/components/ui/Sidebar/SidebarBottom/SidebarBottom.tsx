@@ -4,14 +4,15 @@ import { useParams } from 'react-router-dom'
 import SidebarUserProfile from '@/components/ui/Sidebar/SidebarBottom/SidebarUserProfile'
 import { SidebarItem, SidebarItemCollapse } from '@/components/ui/Sidebar/SidebarNavigation'
 import { getSidebarItems } from '@/constants'
-import type { SidebarNavMenu } from '@/types'
+import type { IUser, SidebarNavMenu } from '@/types'
 import { cn } from '@/utilities'
 
 type ISidebarBottomProps = {
   onClose: () => void
+  userData: IUser
 } & HTMLAttributes<HTMLDivElement>
 
-const SidebarBottom = ({ onClose, className, ...props }: ISidebarBottomProps) => {
+const SidebarBottom = ({ onClose, className, userData, ...props }: ISidebarBottomProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const SIDEBAR_BOTTOM_ITEMS_MENU = getSidebarItems(apartmentId)
   return (
@@ -35,7 +36,7 @@ const SidebarBottom = ({ onClose, className, ...props }: ISidebarBottomProps) =>
             )
           }
         })}
-        <SidebarUserProfile />
+        <SidebarUserProfile userData={userData} />
       </nav>
     </div>
   )
