@@ -1,5 +1,7 @@
 import type {
   IApartmentListMetadata,
+  IInvoiceListMetadata,
+  IOverdueInvoiceListMetadata,
   IReportUtilityListMetadata,
   ITenantListMetadata,
   IUnitListMetadata,
@@ -18,6 +20,18 @@ export const DEFAULT_TENANT_LIST_METADATA: ITenantListMetadata = {
   totalActiveTenants: 0,
 }
 
+export const DEFAULT_INVOICE_LIST_METADATA: IInvoiceListMetadata = {
+  totalInvoice: 0,
+  paidInvoice: 0,
+  unpaidInvoice: 0,
+  partiallyPaidInvoice: 0,
+  overdueInvoice: 0,
+  cancelledInvoice: 0,
+}
+
+export const DEFAULT_OVERDUE_INVOICE_LIST_METADATA: IOverdueInvoiceListMetadata = {
+  overdueInvoice: 0,
+}
 export const DEFAULT_UNIT_LIST_METADATA: IUnitListMetadata = {
   totalUnits: 0,
   totalUnitsAvailable: 0,

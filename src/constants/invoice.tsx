@@ -2,8 +2,12 @@ import { CircleAlert, CircleCheckBig, Clock, DollarSign } from 'lucide-react'
 
 import type { IStatsCardProps } from '@/types'
 
-export const INVOICE_STATUS: Array<string> = ['All', 'Paid', 'Unpaid', 'Overdue']
-export const INVOICE_SORT: Array<'createdAt' | 'updatedAt'> = ['createdAt', 'updatedAt']
+export enum INVOICE_STATUS {
+  Total = '',
+  Paid = 'paid',
+  Unpaid = 'unpaid',
+  Overdue = 'overdue',
+}
 
 export const NORMAL_INVOICE_STATS: Array<IStatsCardProps> = [
   {
@@ -67,7 +71,6 @@ export const SERVICE_INVOICE_STATS: Array<IStatsCardProps> = [
   },
 ]
 
-//RECHECK : API TYPE LATER
 export const NORMAL_INVOICE_DATA = [
   {
     invoice: 'INV-001-123',
@@ -101,7 +104,6 @@ export const NORMAL_INVOICE_DATA = [
   },
 ]
 
-//RECHECK : API TYPE LATER
 export const OVERDUE_INVOICE_DATA = [
   {
     invoice: 'INV-001-123',
@@ -164,10 +166,11 @@ export const SERVICE_INVOICE_DATA = [
 
 //NORMAL INVOICE TABLE
 export const NORMAL_INVOICE_TABLE_HEADER = [
-  'Invoice',
+  'Invoice Number',
+  'Title',
+  'Description',
   'Tenant',
   'Room',
-  'Description',
   'Amount',
   'Issue Date',
   'Due Date',
@@ -176,22 +179,12 @@ export const NORMAL_INVOICE_TABLE_HEADER = [
 ]
 
 //overdue invoice table
-export const OVERDUE_INVOICE_TABLE_HEADER = [
-  'Invoice',
-  'Tenant',
-  'Room',
-  'Description',
-  'Amount',
-  'Issue Date',
-  'Due Date',
-  'Status',
-]
+export const OVERDUE_INVOICE_TABLE_HEADER = ['Invoice', 'Tenant', 'Room', 'Amount', 'Issue Date', 'Due Date', 'Status']
 
 export const SERVICE_INVOICE_TABLE_HEADER = [
   'Invoice',
   'Tenant',
   'Room',
-  'Description',
   'Amount',
   'Issue Date',
   'Due Date',
