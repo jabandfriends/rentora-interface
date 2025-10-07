@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/common'
 import { ROUTES } from '@/constants'
-import type { IUser } from '@/types'
+import type { IUser, Maybe } from '@/types'
 import { cn } from '@/utilities'
 
 const NavBar = ({
@@ -23,7 +23,7 @@ const NavBar = ({
   onSidebarToggle: () => void
   isSidebar: boolean
   sidebarOpen: boolean
-  userData: IUser
+  userData: Maybe<IUser>
 }) => {
   // hooks
   const navigate: NavigateFunction = useNavigate()
@@ -60,9 +60,9 @@ const NavBar = ({
           <DropdownMenuTrigger onClick={handleSetDropdown}>
             <div className="hover:bg-theme-night-800/15 text-theme-secondary flex cursor-pointer items-center space-x-2 rounded-lg px-2 py-1 duration-200 focus:outline-none">
               <div className="bg-theme-night-600 flex size-8 items-center justify-center rounded-full">
-                <span className="text-body-2">{userData.firstName.charAt(0)}</span>
+                <span className="text-body-2">{userData?.firstName.charAt(0)}</span>
               </div>
-              <p className="text-body-2">{userData.firstName + ' ' + userData.lastName}</p>
+              <p className="text-body-2">{userData?.firstName + ' ' + userData?.lastName}</p>
 
               <div className={cn('text-theme-secondary-400 duration-200', [isDropdownOpen && 'rotate-180'])}>
                 <ChevronDown size={16} />
@@ -75,8 +75,8 @@ const NavBar = ({
                 <User className="text-theme-primary size-4" />
               </div>
               <div className="text-theme-night-300">
-                <h5>{userData.firstName}</h5>
-                <p className="text-body-3 text-theme-secondary">{userData.email}</p>
+                <h5>{userData?.firstName}</h5>
+                <p className="text-body-3 text-theme-secondary">{userData?.email}</p>
               </div>
             </div>
             <DropdownMenuSeparator />

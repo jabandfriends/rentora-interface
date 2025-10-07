@@ -34,9 +34,7 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
       </div>
     )
   }
-  if (!userData) {
-    return null
-  }
+
   return (
     <div className="relative min-h-screen">
       <>

@@ -4,12 +4,12 @@ import { useParams } from 'react-router-dom'
 import SidebarUserProfile from '@/components/ui/Sidebar/SidebarBottom/SidebarUserProfile'
 import { SidebarItem, SidebarItemCollapse } from '@/components/ui/Sidebar/SidebarNavigation'
 import { getSidebarItems } from '@/constants'
-import type { IUser, SidebarNavMenu } from '@/types'
+import type { IUser, Maybe, SidebarNavMenu } from '@/types'
 import { cn } from '@/utilities'
 
 type ISidebarBottomProps = {
   onClose: () => void
-  userData: IUser
+  userData: Maybe<IUser>
 } & HTMLAttributes<HTMLDivElement>
 
 const SidebarBottom = ({ onClose, className, userData, ...props }: ISidebarBottomProps) => {
