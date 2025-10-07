@@ -1,10 +1,10 @@
-import { PackageOpen } from 'lucide-react'
 import { useCallback } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { PaginationBar } from '@/components/feature'
 import {
   Badge,
+  PageTableEmpty,
   PageTableLoading,
   PageTableSearchEmpty,
   Table,
@@ -50,16 +50,11 @@ const OverdueInvoiceTable = ({
   }
 
   if (isSearched && data.length === 0) {
-    return <PageTableSearchEmpty subMessage="No Invoices found" message="No Invoices found" />
+    return <PageTableSearchEmpty subMessage="No Invoices found" message="No Invoices found for this search" />
   }
 
   if (!data || data.length === 0) {
-    return (
-      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
-        <PackageOpen size={50} />
-        <p className="text-theme-secondary text-body-1">No Invoices found</p>
-      </div>
-    )
+    return <PageTableEmpty message="No Invoices found for this apartment" />
   }
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">

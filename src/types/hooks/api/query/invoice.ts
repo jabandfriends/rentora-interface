@@ -21,6 +21,8 @@ export type IOverdueInvoiceListMetadata = {
 export type IInvoiceSummary = {
   id: string
   invoiceNumber: string
+  title: string
+  description: string
   tenant: string
   room: string
   amount: number

@@ -20,17 +20,17 @@ const OverdueInvoice = () => {
 
   const { watch, setValue } = useForm<{
     search: string
-    sortBy: 'createdAt' | 'updatedAt'
-    sortDir: 'asc' | 'desc'
+    sortBy: 'createdAt' | 'updatedAt' | undefined
+    sortDir: 'asc' | 'desc' | undefined
   }>({
     defaultValues: {
       search: '',
-      sortBy: 'createdAt',
-      sortDir: 'desc',
+      sortBy: undefined,
+      sortDir: undefined,
     },
   })
 
-  const [search, sortBy, sortDir]: [string, 'createdAt' | 'updatedAt', 'asc' | 'desc'] = watch([
+  const [search, sortBy, sortDir]: [string, 'createdAt' | 'updatedAt' | undefined, 'asc' | 'desc' | undefined] = watch([
     'search',
     'sortBy',
     'sortDir',

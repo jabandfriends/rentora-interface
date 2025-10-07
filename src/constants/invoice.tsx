@@ -166,7 +166,9 @@ export const SERVICE_INVOICE_DATA = [
 
 //NORMAL INVOICE TABLE
 export const NORMAL_INVOICE_TABLE_HEADER = [
-  'Invoice',
+  'Invoice Number',
+  'Title',
+  'Description',
   'Tenant',
   'Room',
   'Amount',

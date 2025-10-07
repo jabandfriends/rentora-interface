@@ -74,11 +74,11 @@ const NormalInvoiceTable = ({
   }
 
   if (isSearched && data.length === 0) {
-    return <PageTableSearchEmpty subMessage="No Invoices found" message="No Invoices found" />
+    return <PageTableSearchEmpty subMessage="No Invoices found" message="No Invoices found for this search" />
   }
 
   if (!data || data.length === 0) {
-    return <PageTableEmpty message="No Invoices found" />
+    return <PageTableEmpty message="No Invoices found for this apartment" />
   }
 
   return (
@@ -95,6 +95,8 @@ const NormalInvoiceTable = ({
           {data.map((item: IInvoiceSummary, index) => (
             <TableRow className="cursor-pointer" key={index} onClick={() => handleDetailInvoice(item.id)}>
               <TableCell>{item.invoiceNumber ? item.invoiceNumber : 'N/A'}</TableCell>
+              <TableCell>{item.title ? item.title : 'N/A'}</TableCell>
+              <TableCell>{item.description ? item.description : 'N/A'}</TableCell>
               <TableCell>{item.tenant ? item.tenant : 'N/A'}</TableCell>
               <TableCell>{item.room ? item.room : 'N/A'}</TableCell>
               <TableCell>{item.amount ? item.amount : 'N/A'}</TableCell>

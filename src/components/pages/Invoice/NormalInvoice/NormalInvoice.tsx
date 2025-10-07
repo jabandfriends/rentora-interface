@@ -103,6 +103,7 @@ const NormalInvoice = () => {
     () => !!debouncedSearch || !!debouncedSortBy || !!debouncedSortDir || !!debouncedStatus,
     [debouncedSearch, debouncedSortBy, debouncedSortDir, debouncedStatus],
   )
+
   const invoiceStats: Array<IStatsCardProps> = useMemo(
     () => [
       {
