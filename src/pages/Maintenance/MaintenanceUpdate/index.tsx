@@ -1,6 +1,6 @@
 import { ArrowLeft, PenLine } from 'lucide-react'
 import { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { PageHeader, PageSection } from '@/components/layout'
 import { MaintenanceForm } from '@/components/pages/Maintenance'
@@ -13,9 +13,10 @@ const MaintenanceUpdate = () => {
     alert(data)
     // wait for api
   }, [])
+  const { apartmentId } = useParams<{ apartmentId: string }>()
 
   //navigate before page
-  const navigateBefore = useCallback(() => navigate(ROUTES.maintenance.path), [navigate])
+  const navigateBefore = useCallback(() => navigate(ROUTES.maintenance.getPath(apartmentId)), [navigate, apartmentId])
   return (
     <PageSection className="space-y-4">
       <PageHeader

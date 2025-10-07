@@ -3,6 +3,7 @@ import type { AxiosResponse } from 'axios'
 import type {
   IAuthRequest,
   ICreateApartmentRequestApi,
+  ICreateContractRequestPayload,
   ICreateMaintenanceRequestPayload,
   ICreateTenantRequestPayload,
   IFirsttimePasswordResetRequestPayload,
@@ -34,6 +35,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createTenant: 'CREATE_TENANT',
     updateTenant: 'UPDATE_TENANT',
     updateTenantPassword: 'UPDATE_TENANT_PASSWORD',
+    createContract: 'CREATE_CONTRACT',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -127,6 +129,12 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
       `/api/apartments/manage/tenant/update/password/${userId}`,
       payload,
     )
+    return response.data
+  }
+
+  //create Contract
+  async createContract(apartmentId: string, payload: ICreateContractRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/${apartmentId}/contracts`, payload)
     return response.data
   }
 }

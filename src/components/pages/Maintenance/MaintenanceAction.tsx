@@ -10,7 +10,14 @@ const MaintenanceAction = ({ maintenanceId, onUpdate }: { maintenanceId: string;
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="start" sideOffset={10}>
-      <DropdownMenuItem onSelect={() => onUpdate(maintenanceId)}>Update Maintenance</DropdownMenuItem>
+      <DropdownMenuItem
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
+        onSelect={() => onUpdate(maintenanceId)}
+      >
+        Update Maintenance
+      </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 )

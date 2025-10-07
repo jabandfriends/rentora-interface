@@ -39,4 +39,6 @@ export type IRoutes = {
   tenantUpdatePassword: IRoute
   invoiceDetail: IRoute
   tenantUpdate: IRoute
+  roomDetail: IRoute
+  contractCreate: IRoute
 }
