@@ -10,9 +10,7 @@ import ApartmentCreatePage from '@/pages/ApartmentCreate'
 import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication/Authentication'
 import FirstTimePasswordResetPage from '@/pages/Authentication/FirstTimePasswordReset'
-import DailyContract from '@/pages/ContractCreate/DailyContract'
-import MonthlyContract from '@/pages/ContractCreate/MonthlyContract'
-import YearlyContract from '@/pages/ContractCreate/YearlyContract'
+import ContractCreate from '@/pages/ContractCreate'
 import InvoiceCreatePage from '@/pages/Invoice/InvoiceCreate'
 import InvoiceDetailPage from '@/pages/Invoice/InvoiceDetail'
 import MonthlyInvoicePage from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoice'
@@ -278,16 +276,8 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <InvoiceDetailPage />,
       },
       {
-        path: ROUTES.monthlyContractCreate.path,
-        element: <MonthlyContract />,
-      },
-      {
-        path: ROUTES.dailyContractCreate.path,
-        element: <DailyContract />,
-      },
-      {
-        path: ROUTES.yearlyContractCreate.path,
-        element: <YearlyContract />,
+        path: ROUTES.contractCreate.path,
+        element: <ContractCreate />,
       },
     ],
   },

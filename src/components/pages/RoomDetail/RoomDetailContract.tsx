@@ -12,18 +12,8 @@ const RoomDetailContract = () => {
   const [billingType, setBillingType] = useState<ContractType>(ContractType.MONTHLY)
 
   const handleNavigateCreateContract = useCallback(() => {
-    switch (billingType) {
-      case ContractType.MONTHLY:
-        navigate(ROUTES.monthlyContractCreate.getPath(apartmentId, id))
-        break
-      case ContractType.DAILY:
-        navigate(ROUTES.dailyContractCreate.getPath(apartmentId, id))
-        break
-      case ContractType.YEARLY:
-        navigate(ROUTES.yearlyContractCreate.getPath(apartmentId, id))
-        break
-    }
-  }, [navigate, apartmentId, id, billingType])
+    navigate(ROUTES.contractCreate.getPath(apartmentId, id))
+  }, [navigate, apartmentId, id])
   return (
     <Card className="border-border justify-start rounded-2xl shadow-lg hover:shadow-xl">
       <div className="border-theme-secondary-400 border-b pb-4">

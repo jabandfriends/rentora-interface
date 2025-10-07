@@ -79,6 +79,7 @@ export const MAINTENANCE_TABLE_HEADER = [
   'Appointment Date',
   'Due Date',
   'Status',
+  'Action',
 ]
 
 export const MAINTENANCE_FORM_SCHEMA = z.object({

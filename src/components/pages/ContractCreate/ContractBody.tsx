@@ -6,7 +6,7 @@ import { CalendarIcon } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
+import { Link, type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import z from 'zod'
 
 import {
@@ -21,6 +21,11 @@ import {
   FormMessage,
   Input,
   InputNumber,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Textarea,
 } from '@/components/common'
 import { Switch } from '@/components/feature'
@@ -30,7 +35,7 @@ import { useRentoraApiCreateContract, useRentoraApiTenantList } from '@/hooks'
 import type { ICreateContractRequestPayload } from '@/types'
 import { cn, getErrorMessage } from '@/utilities'
 
-import MonthlyUserCombobox from './MonthlyUserCombobox'
+import UserCombobox from './UserCombobox'
 
 type MonthlyContractFormData = z.infer<typeof MONTHLY_CONTRACT_SCHEMA>
 
@@ -129,13 +134,48 @@ const MonthlyContractBody = () => {
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div>
-            <FormLabel>
-              Tenant
-              <span className="text-theme-error">*</span>
-            </FormLabel>
-            <MonthlyUserCombobox onSelectTenant={handleSelectTenant} users={data} onSearchTenant={handleSearchTenant} />
+          <div className="desktop:grid-cols-2 grid">
+            <div>
+              <FormLabel>
+                Tenant
+                <span className="text-theme-error">*</span>
+              </FormLabel>
+              <FormControl>
+                <UserCombobox onSelectTenant={handleSelectTenant} users={data} onSearchTenant={handleSearchTenant} />
+              </FormControl>
+              <FormDescription>
+                Select a tenant from the list to create a new contract. If you don’t see the tenant, you can add one{' '}
+                <Link className="text-theme-primary underline" to={ROUTES.tenantCreate.getPath(apartmentId)}>
+                  here
+                </Link>
+                .
+              </FormDescription>
+            </div>
+
+            <FormField
+              control={form.control}
+              name="rentalType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Rental Type</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a rental type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="monthly">Monthly</SelectItem>
+                      <SelectItem value="yearly">Yearly</SelectItem>
+                      <SelectItem value="daily">Daily</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
+
           <div className="desktop:grid-cols-2 grid gap-4">
             <FormField
               control={form.control}
@@ -146,7 +186,7 @@ const MonthlyContractBody = () => {
                     Guarantor Name <span className="text-theme-error">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter guarantor name" {...field} />
+                    <Input maxLength={50} placeholder="Enter guarantor name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,7 +202,7 @@ const MonthlyContractBody = () => {
                     Guarantor Phone <span className="text-theme-error">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="0626063049" {...field} />
+                    <InputNumber maxLength={10} placeholder="0626063049" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -178,7 +218,7 @@ const MonthlyContractBody = () => {
                     Guarantor ID Number <span className="text-theme-error">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="1103700123456" {...field} />
+                    <InputNumber maxLength={13} placeholder="1103700123456" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -268,7 +308,7 @@ const MonthlyContractBody = () => {
                     Rental Price <span className="text-theme-error">*</span>
                   </FormLabel>
                   <FormControl>
-                    <InputNumber placeholder="12000.00" {...field} />
+                    <InputNumber maxLength={9} decimal placeholder="12000.00" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -284,7 +324,7 @@ const MonthlyContractBody = () => {
                     Deposit Amount <span className="text-theme-error">*</span>
                   </FormLabel>
                   <FormControl>
-                    <InputNumber placeholder="24000.00" {...field} />
+                    <InputNumber maxLength={9} decimal placeholder="24000.00" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -300,7 +340,7 @@ const MonthlyContractBody = () => {
                     Advance Payment (Months) <span className="text-theme-error">*</span>
                   </FormLabel>
                   <FormControl>
-                    <InputNumber placeholder="1" {...field} />
+                    <InputNumber maxLength={2} placeholder="1" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -316,7 +356,7 @@ const MonthlyContractBody = () => {
                     Late Fee Amount <span className="text-theme-error">*</span>
                   </FormLabel>
                   <FormControl>
-                    <InputNumber placeholder="500.00" {...field} />
+                    <InputNumber maxLength={9} decimal placeholder="500.00" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -332,7 +372,7 @@ const MonthlyContractBody = () => {
                     Renewal Notice (Days) <span className="text-theme-error">*</span>
                   </FormLabel>
                   <FormControl>
-                    <InputNumber placeholder="30" {...field} />
+                    <InputNumber maxLength={2} placeholder="30" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -346,7 +386,7 @@ const MonthlyContractBody = () => {
                 <FormItem>
                   <FormLabel>Document URL</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://example.com/contract.pdf" {...field} />
+                    <Input maxLength={100} placeholder="https://example.com/contract.pdf" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -361,7 +401,12 @@ const MonthlyContractBody = () => {
               <FormItem>
                 <FormLabel>Terms and Conditions</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Enter terms and conditions..." className="min-h-[100px]" {...field} />
+                  <Textarea
+                    maxLength={120}
+                    placeholder="Enter terms and conditions..."
+                    className="min-h-[100px]"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -375,7 +420,12 @@ const MonthlyContractBody = () => {
               <FormItem>
                 <FormLabel>Special Conditions</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Enter special conditions..." className="min-h-[100px]" {...field} />
+                  <Textarea
+                    maxLength={120}
+                    placeholder="Enter special conditions..."
+                    className="min-h-[100px]"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

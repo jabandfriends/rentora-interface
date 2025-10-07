@@ -109,8 +109,12 @@ const AllRoomsTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item: IUnit, index) => (
-            <TableRow key={index} onClick={() => handleRoomDetail(item.id)}>
+          {data.map((item: IUnit) => (
+            <TableRow
+              key={item.apartmentName + item.createdAt}
+              className="cursor-pointer"
+              onClick={() => handleRoomDetail(item.id)}
+            >
               <TableCell>{item.unitName}</TableCell>
               <TableCell>{item.buildingName}</TableCell>
               <TableCell className="capitalize">{item.currentTenant || 'N/A'}</TableCell>
