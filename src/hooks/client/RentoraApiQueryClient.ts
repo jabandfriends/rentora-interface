@@ -119,7 +119,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
   ): Promise<IRentoraApiClientMaintenanceDetailResponse['data']> {
     const response: AxiosResponse<IRentoraApiClientMaintenanceDetailResponse, unknown> =
       await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceDetailResponse>(
-        `/api/apartments/${payload.apartmentId}/maintenance/${payload.maintenanceId}`,
+        `/api/apartment/${payload.apartmentId}/maintenance/${payload.maintenanceId}`,
       )
     return response.data.data
   }

@@ -13,6 +13,7 @@ export type IMaintenance = {
   unitName: string
   ticketNumber: string
   unitId: string
+  tenantName: string
   tenantUserId: string
   assignedToUserId: string
   title: string

@@ -6,15 +6,13 @@ import {
   CheckCircle,
   Clock,
   Edit3,
-  Mail,
   MapPin,
-  Phone,
   Save,
   Wrench,
   X,
   XCircle,
 } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import {
@@ -30,7 +28,7 @@ import {
   SelectValue,
   Textarea,
 } from '@/components/common'
-import { Avatar, AvatarFallback, AvatarImage, Badge } from '@/components/ui'
+import { Badge } from '@/components/ui'
 import { useRentoraMaintenanceDetail } from '@/hooks'
 
 const MaintenanceDetail = () => {
@@ -49,30 +47,6 @@ const MaintenanceDetail = () => {
     setStatus(data.status ?? 'in-progress')
     setPriority(data.priority ?? 'medium')
     setEditedDescription(data.description ?? '')
-  }, [data])
-
-  const maintenanceRequest = useMemo(() => {
-    if (!data) return undefined
-    return {
-      id: data.ticketNumber ?? String(data.id ?? ''),
-      title: data.title,
-      description: data.description,
-      status: data.status ?? 'in-progress',
-      priority: data.priority ?? 'medium',
-      category: data.category,
-      createdAt: (data.createdAt as unknown as string) ?? undefined,
-      updatedAt: (data.updatedAt as unknown as string) ?? undefined,
-      scheduledDate: (data.appointmentDate as unknown as string) ?? undefined,
-      estimatedDuration: data.estimatedHours != null ? `${data.estimatedHours} hours` : undefined,
-      completedAt: (data.completedAt as unknown as string) ?? undefined,
-      apartment: {
-        unit: '-',
-        address: '-',
-        tenant: { name: '-', phone: '-', email: '-', avatar: undefined as string | undefined },
-      },
-      assignedTo: undefined,
-      attachments: [] as Array<{ id: number | string; name: string; type: string; size?: string }>,
-    }
   }, [data])
 
   const statusConfig = {
@@ -110,7 +84,7 @@ const MaintenanceDetail = () => {
 
   if (isLoading) return <div className="p-4">Loading maintenance...</div>
   if (isError) return <div className="p-4">Failed to load maintenance.</div>
-  if (!maintenanceRequest) return <div className="p-4">No data</div>
+  if (!data) return <div className="p-4">No data</div>
 
   const StatusIcon = (statusConfig as any)[status]?.icon ?? Clock
 
@@ -123,8 +97,8 @@ const MaintenanceDetail = () => {
 
       <div className="desktop:flex-row flex flex-col items-start justify-between gap-y-2">
         <div>
-          <h2>{maintenanceRequest.title}</h2>
-          <p className="text-theme-secondary text-body-2">Request ID: {maintenanceRequest.id}</p>
+          <h2>{data.title}</h2>
+          <p className="text-theme-secondary text-body-2">Request ID: {data.id}</p>
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="warning">
@@ -167,7 +141,7 @@ const MaintenanceDetail = () => {
                         variant="ghost"
                         onClick={() => {
                           setIsEditing(false)
-                          setEditedDescription(maintenanceRequest.description ?? '')
+                          setEditedDescription(data.description ?? '')
                         }}
                       >
                         <X className="size-4" />
@@ -221,7 +195,7 @@ const MaintenanceDetail = () => {
                 <Calendar className="size-4" />
                 <div>
                   <p className="text-body-2">Created</p>
-                  <p className="text-body-2 text-theme-secondary">{formatDate(maintenanceRequest.createdAt)}</p>
+                  <p className="text-body-2 text-theme-secondary">{formatDate(data.createdAt)}</p>
                 </div>
               </div>
 
@@ -229,7 +203,7 @@ const MaintenanceDetail = () => {
                 <Clock className="size-4" />
                 <div>
                   <p className="text-body-2">Scheduled</p>
-                  <p className="text-body-2 text-theme-secondary">{formatDate(maintenanceRequest.scheduledDate)}</p>
+                  <p className="text-body-2 text-theme-secondary">{formatDate(data.appointmentDate)}</p>
                 </div>
               </div>
 
@@ -237,7 +211,7 @@ const MaintenanceDetail = () => {
                 <Wrench className="size-4" />
                 <div>
                   <p className="text-body-2">Category</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenanceRequest.category}</p>
+                  <p className="text-body-2 text-theme-secondary">{data.category}</p>
                 </div>
               </div>
 
@@ -245,7 +219,7 @@ const MaintenanceDetail = () => {
                 <Clock className="size-4" />
                 <div>
                   <p className="text-body-2">Estimated Duration</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenanceRequest.estimatedDuration}</p>
+                  <p className="text-body-2 text-theme-secondary">{data.estimatedHours}</p>
                 </div>
               </div>
 
@@ -253,9 +227,7 @@ const MaintenanceDetail = () => {
                 <Check className="size-4" />
                 <div>
                   <p className="text-body-2">Completed At</p>
-                  <p className="text-body-2 text-theme-secondary">
-                    {formatDate(maintenanceRequest.completedAt as any)}
-                  </p>
+                  <p className="text-body-2 text-theme-secondary">{formatDate(data.completedAt)}</p>
                 </div>
               </div>
             </CardContent>
@@ -267,17 +239,8 @@ const MaintenanceDetail = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">
-                <Avatar>
-                  <AvatarImage src={maintenanceRequest.apartment.tenant.avatar} />
-                  <AvatarFallback>
-                    {maintenanceRequest.apartment.tenant.name
-                      .split(' ')
-                      .map((n) => n[0])
-                      .join('')}
-                  </AvatarFallback>
-                </Avatar>
                 <div>
-                  <p className="text-body-2">{maintenanceRequest.apartment.tenant.name}</p>
+                  <p className="text-body-2">{data.tenantName}</p>
                   <p className="text-xs">Tenant</p>
                 </div>
               </div>
@@ -285,19 +248,9 @@ const MaintenanceDetail = () => {
               <div className="flex items-center gap-3">
                 <MapPin className="size-4" />
                 <div>
-                  <p className="text-body-2">Unit {maintenanceRequest.apartment.unit}</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenanceRequest.apartment.address}</p>
+                  <p className="text-body-2">Unit {data.unitName}</p>
+                  <p className="text-body-2 text-theme-secondary">{data.buildingsName}</p>
                 </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <Phone className="size-4" />
-                <p className="text-body-2 text-theme-secondary">{maintenanceRequest.apartment.tenant.phone}</p>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <Mail className="size-4" />
-                <p className="text-body-2 text-theme-secondary">{maintenanceRequest.apartment.tenant.email}</p>
               </div>
             </CardContent>
           </Card>
