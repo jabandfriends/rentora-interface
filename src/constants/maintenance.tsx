@@ -24,7 +24,13 @@ export const MAINTENANCE_STATS: Array<IStatsCardProps> = [
   },
 ]
 
-export const MAINTENANCE_STATUS: Array<string> = ['Done', 'Pending', 'Inactive']
+export const MAINTENANCE_STATUS = {
+  // COMPLETED = 'completed',
+  PENDING: 'pending',
+  ASSIGNED: 'assigned',
+  IN_PROGRESS: 'in_progress',
+  CANCELLED: 'cancelled',
+}
 
 export const MAINTENANCE_TABLE_DATA = [
   {
@@ -66,17 +72,18 @@ export const MAINTENANCE_TABLE_DATA = [
 ]
 
 export const MAINTENANCE_TABLE_HEADER = [
+  'Ticket Number',
+  'Service Request Reason',
   'Room',
   'Buildings',
-  'Issue Date',
   'Appointment Date',
-  'Service Request Reason',
+  'Due Date',
   'Status',
 ]
 
 export const MAINTENANCE_FORM_SCHEMA = z.object({
   unit_id: z.string({ error: 'Room number is required.' }).min(1, 'Room number is required.'),
-  title: z.string({ error: 'Task title is required.' }).optional(),
+  title: z.string({ error: 'Task title is required.' }).min(1, 'Task title is required.'),
   description: z.string({ error: 'Task description is required.' }).min(1, 'Task description is required.'),
   status: z.string({ error: 'Task status is required.' }).min(1, 'Task status is required.'),
   priority: z.string({ error: 'Task priority is required.' }).min(1, 'Task priority is required.'),

@@ -1,4 +1,9 @@
+import type { z } from 'zod'
+
+import type { MAINTENANCE_FORM_SCHEMA } from '@/constants'
 import type { IInputNumberProps } from '@/types'
+
+export type MAINTENANCE_FORM_VALUES = z.infer<typeof MAINTENANCE_FORM_SCHEMA>
 
 type MAINTENANCE_FORM_FIELDS_TYPE_BASE = {
   key: 'unit_id' | 'title' | 'description' | 'status' | 'priority' | 'appointment_date' | 'due_date' | 'estimated_hours'

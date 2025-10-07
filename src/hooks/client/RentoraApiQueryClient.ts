@@ -7,6 +7,8 @@ import type {
   IRentoraApiClientApartmentListResponse,
   IRentoraApiClientInvoiceDetailResponse,
   IRentoraApiClientInvoiceListResponse,
+  IRentoraApiClientMaintenanceDetailResponse,
+  IRentoraApiClientMaintenanceListResponse,
   IRentoraApiClientOverdueInvoiceListResponse,
   IRentoraApiClientReadingUnitUtilityResponse,
   IRentoraApiClientReportUtilityListResponse,
@@ -15,6 +17,9 @@ import type {
   IRentoraApiClientUnitListResponse,
   IRentoraApiClientUserResponse,
   IRentoraApiInvoiceListParams,
+  IRentoraApiMaintenanceApartmentIdParams,
+  IRentoraApiMaintenanceDetailParams,
+  IRentoraApiMaintenanceListParams,
   IRentoraApiOverdueInvoiceListParams,
   IRentoraApiReportUtilityListParams,
   IRentoraApiTenantListParams,
@@ -30,6 +35,8 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     me: 'ME',
     apartmentList: 'APARTMENT_LIST',
     apartmentDetail: 'APARTMENT_DETAIL',
+    maintenanceList: 'MAINTENANCE_LIST',
+    maintenanceDetail: 'MAINTENANCE_DETAIL',
     invoiceList: 'INVOICE_LIST',
     overdueInvoiceList: 'OVERDUE_INVOICE_LIST',
     invoiceDetail: 'INVOICE_DETAIL',
@@ -68,6 +75,20 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     return response.data.data
   }
 
+  async maintenanceList(
+    params: IRentoraApiMaintenanceListParams,
+    apartmentId: IRentoraApiMaintenanceApartmentIdParams,
+  ): Promise<IRentoraApiClientMaintenanceListResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientMaintenanceListResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceListResponse>(
+        `/api/apartment/${apartmentId}/maintenance`,
+        {
+          params,
+        },
+      )
+    return response.data.data
+  }
+
   async invoiceList(
     apartmentId: Maybe<string>,
     params: IRentoraApiInvoiceListParams,
@@ -89,6 +110,16 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
         {
           params,
         },
+      )
+    return response.data.data
+  }
+
+  async maintenanceDetail(
+    payload: IRentoraApiMaintenanceDetailParams,
+  ): Promise<IRentoraApiClientMaintenanceDetailResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientMaintenanceDetailResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceDetailResponse>(
+        `/api/apartments/${payload.apartmentId}/maintenance/${payload.maintenanceId}`,
       )
     return response.data.data
   }
