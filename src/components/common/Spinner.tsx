@@ -5,7 +5,7 @@ export const Spinner = ({ className }: { className?: string }) => {
     <div className="flex items-center justify-center">
       <div
         className={cn(
-          'border-theme-night-600 size-5 animate-spin rounded-full border-4 border-t-transparent',
+          'border-theme-night-600 size-8 animate-spin rounded-full border-4 border-t-transparent',
           className,
         )}
       />

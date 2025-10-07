@@ -4,6 +4,7 @@ import type {
   IBaseUseQuery,
   IRentoraApiClientBasePaginateWithMetadataResponse,
   IRentoraApiClientBaseResponse,
+  Maybe,
 } from '@/types'
 
 //Maintenance type
@@ -12,10 +13,10 @@ export type IMaintenance = {
   buildingsName: string
   unitName: string
   ticketNumber: string
-  unitId: string
-  tenantUserId: string
-  assignedToUserId: string
+  tenantName: string
+  assignedToUserName: string
   title: string
+  tenantPhoneNumber: string
   description: string
   category: Category
   status: Status
@@ -32,6 +33,7 @@ export type IMaintenance = {
   workSummary: string
   tenantFeedback: string
   tenantRating: number
+  tenantEmail: string
   isEmergency: boolean
   isRecurring: boolean
   recurringSchedule: RecurringSchedule
@@ -78,6 +80,6 @@ export type IUseRentoraApiMaintenanceDetail = IBaseUseQuery<IRentoraApiClientMai
 
 //Maintenance detail params
 export type IRentoraApiMaintenanceDetailParams = {
-  apartmentId: string
-  maintenanceId: string
+  apartmentId: Maybe<string>
+  maintenanceId: Maybe<string>
 }
