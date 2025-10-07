@@ -15,6 +15,7 @@ export type IRoutes = {
   apartmentCreate: Omit<IRoute, 'getPath'>
   apartmentSetup: Omit<IRouteWithUrl, 'getPath'>
   allApartment: Omit<IRoute, 'getPath'>
+  // maintenanceCreate: Omit<IRouteWithUrl, 'getPath'>
 
   // dashboard "/dashboard/:apartmentId/${subpath}"
   normalInvoice: IRoute
@@ -38,4 +39,6 @@ export type IRoutes = {
   tenantUpdatePassword: IRoute
   invoiceDetail: IRoute
   tenantUpdate: IRoute
+  roomDetail: IRoute
+  contractCreate: IRoute
 }

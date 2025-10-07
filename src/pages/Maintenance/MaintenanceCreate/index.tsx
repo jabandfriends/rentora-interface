@@ -1,19 +1,50 @@
 import { ArrowLeft } from 'lucide-react'
 import { useCallback } from 'react'
+import { toast } from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { PageHeader, PageSection } from '@/components/layout'
 import { UpdateMaintenanceForm } from '@/components/pages/Maintenance'
-// import { MaintenanceForm } from '@/components/pages/Maintenance'
 import { ROUTES } from '@/constants'
-import type { UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
+import { Priority, Status } from '@/enum'
+import { useRentoraApiCreateMaintenance, useRentoraApiUnitList } from '@/hooks'
+import type { ICreateMaintenanceRequestPayload, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
 const MaintenanceCreate = () => {
   const navigate = useNavigate()
   const { apartmentId } = useParams<{ apartmentId: string }>()
-  const onSubmit = useCallback((data: UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE) => {
-    alert(data)
-  }, [])
+  const { data: unitList = [], isLoading: unitsLoading } = useRentoraApiUnitList({
+    apartmentId: apartmentId ?? '',
+    params: { page: 0, size: 50, search: '' },
+  })
+  const { mutateAsync: createMaintenance, isPending } = useRentoraApiCreateMaintenance()
+
+  const onSubmit = useCallback(
+    async (data: MAINTENANCE_FORM_SCHEMA_TYPE) => {
+      const payload: ICreateMaintenanceRequestPayload = {
+        unitId: data.unit_id,
+        title: data.title,
+        description: data.description,
+        status: data.status as Status,
+        priority: data.priority as Priority,
+        appointmentDate: data.appointment_date,
+        dueDate: data.due_date!,
+        estimatedHours: Number(data.estimated_hours),
+      }
+      try {
+        await createMaintenance({ apartmentId: apartmentId ?? '', payload })
+        toast.success('Create maintenance successfully')
+
+        setTimeout(() => {
+          navigate(ROUTES.maintenance.getPath(apartmentId ?? ''))
+        }, 500)
+      } catch (e) {
+        toast.error(getErrorMessage(e))
+      }
+    },
+    [apartmentId, createMaintenance, navigate],
+  )
 
   //navigate before page
   const navigateBefore = useCallback(() => navigate(ROUTES.maintenance.getPath(apartmentId)), [navigate, apartmentId])
@@ -27,14 +58,14 @@ const MaintenanceCreate = () => {
         actionIcon={<ArrowLeft />}
         actionOnClick={navigateBefore}
       />
-      <UpdateMaintenanceForm
+      <MaintenanceForm
         onSubmit={onSubmit}
+        buttonIcon={<Plus />}
         buttonLabel="Create a Task"
-        iconLabel={<ArrowLeft />}
-        isPending={false}
-        errorMessage={undefined}
+        isSubmitting={isPending}
+        units={unitList}
+        unitsLoading={unitsLoading}
       />
-      {/* <MaintenanceForm onSubmit={onSubmit} buttonIcon={<Plus />} buttonLabel="Create a Task" /> */}
     </PageSection>
   )
 }

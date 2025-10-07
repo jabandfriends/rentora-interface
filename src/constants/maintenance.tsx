@@ -25,7 +25,13 @@ export const MAINTENANCE_STATS: Array<IStatsCardProps> = [
   },
 ]
 
-export const MAINTENANCE_STATUS: Array<string> = ['Done', 'Pending', 'Inactive']
+export const MAINTENANCE_STATUS = {
+  // COMPLETED = 'completed',
+  PENDING: 'pending',
+  ASSIGNED: 'assigned',
+  IN_PROGRESS: 'in_progress',
+  CANCELLED: 'cancelled',
+}
 
 export const MAINTENANCE_TABLE_DATA = [
   {
@@ -67,14 +73,17 @@ export const MAINTENANCE_TABLE_DATA = [
 ]
 
 export const MAINTENANCE_TABLE_HEADER = [
+  'Ticket Number',
+  'Service Request Reason',
   'Room',
   'Buildings',
-  'Issue Date',
   'Appointment Date',
-  'Service Request Reason',
+  'Due Date',
   'Status',
+  'Action',
 ]
 
+<<<<<<< HEAD
 export const UPDATE_MAINTENANCE_FORM_SCHEMA = z.object({
   title: z.string().max(100, 'Title must be at most 100 characters').optional().nullable(),
   description: z.string().optional().nullable(),
@@ -91,6 +100,17 @@ export const UPDATE_MAINTENANCE_FORM_SCHEMA = z.object({
     .optional()
     .nullable(),
   estimatedHours: z.coerce.number().min(0, 'Estimated hours cannot be negative').optional().nullable(),
+=======
+export const MAINTENANCE_FORM_SCHEMA = z.object({
+  unit_id: z.string({ error: 'Room number is required.' }).min(1, 'Room number is required.'),
+  title: z.string({ error: 'Task title is required.' }).min(1, 'Task title is required.'),
+  description: z.string({ error: 'Task description is required.' }).min(1, 'Task description is required.'),
+  status: z.string({ error: 'Task status is required.' }).min(1, 'Task status is required.'),
+  priority: z.string({ error: 'Task priority is required.' }).min(1, 'Task priority is required.'),
+  appointment_date: z.string({ error: 'Appointment date is required.' }).min(1, 'Appointment date is required.'),
+  due_date: z.string({ error: 'Due date is required.' }).optional(),
+  estimated_hours: z.string().optional(),
+>>>>>>> develop
 })
 
 export const UPDATE_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<UPDATE_MAINTENANCE_FORM_FIELDS_TYPE>> = [
@@ -104,6 +124,7 @@ export const UPDATE_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<UPDATE_MAINTENAN
         description: 'Basic information about the maintenance task',
         fieldType: 'input',
         placeholder: 'Enter task title',
+        maxLength: 100,
       },
       {
         key: 'description',
@@ -112,6 +133,7 @@ export const UPDATE_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<UPDATE_MAINTENAN
         fieldType: 'input',
         inputType: 'textarea',
         placeholder: 'Enter task description',
+        maxLength: 200,
       },
       {
         key: 'priority',
@@ -119,10 +141,17 @@ export const UPDATE_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<UPDATE_MAINTENAN
         description: 'Basic information about the maintenance task',
         fieldType: 'select',
         options: [
+<<<<<<< HEAD
           { value: Priority.LOW, label: 'Low' },
           { value: Priority.NORMAL, label: 'Normal' },
           { value: Priority.HIGH, label: 'High' },
           { value: Priority.URGENT, label: 'Urgent' },
+=======
+          { value: 'low', label: 'Low' },
+          { value: 'normal', label: 'Normal' },
+          { value: 'high', label: 'High' },
+          { value: 'urgent', label: 'Urgent' },
+>>>>>>> develop
         ],
         placeholder: 'Select Priority',
       },
@@ -189,6 +218,7 @@ export const UPDATE_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<UPDATE_MAINTENAN
         fieldType: 'input',
         inputType: 'number',
         placeholder: 'Enter Estimated Hours',
+        maxLength: 9,
       },
       {
         key: 'recurringSchedule',
