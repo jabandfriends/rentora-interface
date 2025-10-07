@@ -72,11 +72,12 @@ export const MAINTENANCE_TABLE_DATA = [
 ]
 
 export const MAINTENANCE_TABLE_HEADER = [
+  'Ticket Number',
+  'Service Request Reason',
   'Room',
   'Buildings',
   'Appointment Date',
   'Due Date',
-  'Service Request Reason',
   'Status',
 ]
 

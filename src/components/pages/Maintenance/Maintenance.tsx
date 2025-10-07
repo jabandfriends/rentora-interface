@@ -1,5 +1,5 @@
 import { useDebounce } from '@uidotdev/usehooks'
-import { CircleCheckBig, Clock, ScrollText } from 'lucide-react'
+import { CircleCheckBig, Clock, ScrollText, Wrench } from 'lucide-react'
 import type { Dispatch, SetStateAction } from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -110,7 +110,7 @@ const Maintenance = () => {
         icon: <ScrollText />,
       },
       {
-        title: 'assigned',
+        title: 'Assigned',
         count: assignedCount,
         type: 'success',
         icon: <CircleCheckBig />,
@@ -125,7 +125,7 @@ const Maintenance = () => {
         title: 'Inprocess',
         count: inProgressCount,
         type: 'primary',
-        icon: <Clock />,
+        icon: <Wrench />,
       },
     ],
     [totalMaintenance, assignedCount, pendingCount, inProgressCount],

@@ -90,12 +90,13 @@ const MaintenanceTable = ({
         <TableBody>
           {data.map((item) => (
             <TableRow className="cursor-pointer" onClick={() => handleRowClick(item.id)} key={item.id}>
+              <TableCell>{item.ticketNumber}</TableCell>
+              <TableCell>{item.title}</TableCell>
               <TableCell>{item.unitName}</TableCell>
               <TableCell>{item.buildingsName}</TableCell>
               <TableCell>{item.appointmentDate}</TableCell>
-              <TableCell>{item.dueDate}</TableCell>
-              <TableCell>{item.title}</TableCell>
-              <TableCell>
+              <TableCell>{item.dueDate || '-'}</TableCell>
+              <TableCell className="capitalize">
                 <Badge variant={statusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
               <TableCell>
