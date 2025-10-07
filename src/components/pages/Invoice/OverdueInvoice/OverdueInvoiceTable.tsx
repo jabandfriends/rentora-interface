@@ -1,8 +1,61 @@
-import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { OVERDUE_INVOICE_TABLE_HEADER } from '@/constants'
+import { useCallback } from 'react'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-//RECHECK : API TYPE
-const OverdueInvoiceTable = ({ data }: { data: Array<any> }) => {
+import { PaginationBar } from '@/components/feature'
+import {
+  Badge,
+  PageTableEmpty,
+  PageTableLoading,
+  PageTableSearchEmpty,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui'
+import { OVERDUE_INVOICE_TABLE_HEADER, ROUTES } from '@/constants'
+import { type IOverdueInvoice, type IPaginate } from '@/types'
+
+type IOverdueInvoiceTableProps = {
+  data: Array<IOverdueInvoice>
+  isLoading: boolean
+  currentPage: number
+  isSearched: boolean
+  onPageChange: (page: number) => void
+} & Pick<IPaginate, 'totalPages' | 'totalElements'>
+
+const OverdueInvoiceTable = ({
+  data,
+  isLoading,
+  currentPage,
+  isSearched,
+  totalPages,
+  totalElements,
+  onPageChange,
+}: IOverdueInvoiceTableProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const navigate: NavigateFunction = useNavigate()
+
+  const handleDetailInvoice = useCallback(
+    (adhocInvoiceId?: string) => {
+      if (!apartmentId || !adhocInvoiceId) return
+      navigate(ROUTES.invoiceDetail.getPath(apartmentId, adhocInvoiceId))
+    },
+    [apartmentId, navigate],
+  )
+
+  if (isLoading) {
+    return <PageTableLoading />
+  }
+
+  if (isSearched && data.length === 0) {
+    return <PageTableSearchEmpty subMessage="No Invoices found" message="No Invoices found for this search" />
+  }
+
+  if (!data || data.length === 0) {
+    return <PageTableEmpty message="No Invoices found for this apartment" />
+  }
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
       <Table>
@@ -15,22 +68,33 @@ const OverdueInvoiceTable = ({ data }: { data: Array<any> }) => {
         </TableHeader>
         <TableBody>
           {/* RECHECK : API TYPE */}
-          {data?.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>{item.invoice}</TableCell>
-              <TableCell>{item.tenant}</TableCell>
-              <TableCell>{item.room}</TableCell>
-              <TableCell>{item.description}</TableCell>
-              <TableCell>{item.amount}</TableCell>
-              <TableCell>{item.issueDate}</TableCell>
-              <TableCell>{item.dueDate}</TableCell>
-              <TableCell>
-                <Badge variant="success">{item.status}</Badge>
+          {data?.map((item: IOverdueInvoice, index) => (
+            <TableRow className="cursor-pointer" key={index} onClick={() => handleDetailInvoice(item.id)}>
+              <TableCell>{item.invoiceNumber ? item.invoiceNumber : 'N/A'}</TableCell>
+              <TableCell>{item.tenant ? item.tenant : 'N/A'}</TableCell>
+              <TableCell>{item.room ? item.room : 'N/A'}</TableCell>
+              <TableCell>{item.amount ? item.amount : 'N/A'}</TableCell>
+              <TableCell>{item.issueDate ? item.issueDate : 'N/A'}</TableCell>
+              <TableCell>{item.dueDate ? item.dueDate : 'N/A'}</TableCell>
+              <TableCell className="capitalize">
+                <Badge variant="error">{item.status}</Badge>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <div className="flex items-center justify-between">
+        <p className="text-theme-secondary text-body-2">
+          Showing {data.length} of {totalElements} items
+        </p>
+        <PaginationBar
+          isLoading={isLoading}
+          page={currentPage}
+          totalElements={totalElements}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
+      </div>
     </div>
   )
 }
