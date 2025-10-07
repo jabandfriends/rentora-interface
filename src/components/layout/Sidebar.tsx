@@ -1,13 +1,13 @@
 import type { HTMLAttributes } from 'react'
 
 import { SidebarBody, SidebarBottom, SidebarHeader, SidebarNavigation } from '@/components/ui'
-import type { IUser } from '@/types'
+import type { IUser, Maybe } from '@/types'
 import { cn } from '@/utilities'
 
 type ISidebarProps = {
   isOpen: boolean
   onClose: () => void
-  userData: IUser
+  userData: Maybe<IUser>
 } & HTMLAttributes<HTMLDivElement>
 
 const Sidebar = ({ isOpen, onClose, userData, className, ...props }: ISidebarProps) => {
