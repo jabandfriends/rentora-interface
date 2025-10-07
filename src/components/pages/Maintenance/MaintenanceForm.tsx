@@ -39,7 +39,7 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, unit
       title: '',
       description: '',
       status: 'pending',
-      priority: 'medium',
+      priority: 'normal',
       appointment_date: '',
       due_date: '',
       estimated_hours: '',
@@ -103,9 +103,9 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, unit
                             <p>{item.label}</p>
 
                             {item.inputType === 'number' ? (
-                              <InputNumber {...field} placeholder={item.placeholder} />
+                              <InputNumber maxLength={item.maxLength} {...field} placeholder={item.placeholder} />
                             ) : item.inputType === 'textarea' ? (
-                              <Textarea {...field} placeholder={item.placeholder} />
+                              <Textarea maxLength={item.maxLength} {...field} placeholder={item.placeholder} />
                             ) : item.inputType === 'datetime' ? (
                               <DateTimePicker
                                 id={field.name}
@@ -116,7 +116,7 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, unit
                                 required
                               />
                             ) : (
-                              <Input {...field} placeholder={item.placeholder} />
+                              <Input maxLength={item.maxLength} {...field} placeholder={item.placeholder} />
                             )}
 
                             <FormMessage />

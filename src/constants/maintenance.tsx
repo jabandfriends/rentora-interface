@@ -104,6 +104,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         description: 'Basic information about the maintenance task',
         fieldType: 'input',
         placeholder: 'Enter task title',
+        maxLength: 100,
       },
       {
         key: 'description',
@@ -112,6 +113,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         fieldType: 'input',
         inputType: 'textarea',
         placeholder: 'Enter task description',
+        maxLength: 200,
       },
       {
         key: 'priority',
@@ -120,8 +122,9 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         fieldType: 'select',
         options: [
           { value: 'low', label: 'Low' },
-          { value: 'medium', label: 'Medium' },
+          { value: 'normal', label: 'Normal' },
           { value: 'high', label: 'High' },
+          { value: 'urgent', label: 'Urgent' },
         ],
         placeholder: 'Select priority',
       },
@@ -161,6 +164,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         fieldType: 'input',
         inputType: 'number',
         placeholder: 'Enter Estimated Hours',
+        maxLength: 9,
       },
     ],
   },
