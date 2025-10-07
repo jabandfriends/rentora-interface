@@ -46,7 +46,7 @@ const MaintenanceDetail = () => {
     return <LoadingPage />
   }
 
-  if (!maintenance && !isLoading) {
+  if (!maintenance) {
     return <EmptyPage title="Maintenance Not Found" description="The maintenance you're looking for doesn't exist." />
   }
 
@@ -56,15 +56,15 @@ const MaintenanceDetail = () => {
 
       <div className="desktop:flex-row flex flex-col items-start justify-between gap-y-2">
         <div>
-          <h2>{maintenance?.title}</h2>
-          <p className="text-theme-secondary text-body-2">Request ID: {maintenance?.ticketNumber}</p>
+          <h2>{maintenance.title}</h2>
+          <p className="text-theme-secondary text-body-2">Request ID: {maintenance.ticketNumber}</p>
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="warning" className="capitalize">
-            {maintenance?.status}
+            {maintenance.status}
           </Badge>
           <Badge variant="default" className="capitalize">
-            {maintenance?.priority} Priority
+            {maintenance.priority} Priority
           </Badge>
         </div>
       </div>
@@ -78,7 +78,7 @@ const MaintenanceDetail = () => {
                 <CardTitle>Description</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-theme-secondary">{maintenance?.description}</p>
+                <p className="text-theme-secondary">{maintenance.description}</p>
               </CardContent>
             </Card>
             {/* Quick Actions */}
@@ -100,7 +100,7 @@ const MaintenanceDetail = () => {
                   </SelectContent>
                 </Select>
 
-                <Select value={maintenance?.priority}>
+                <Select value={maintenance.priority}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -125,7 +125,7 @@ const MaintenanceDetail = () => {
                 <Calendar className="size-4" />
                 <div>
                   <p className="text-body-2">Created</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenance?.createdAt}</p>
+                  <p className="text-body-2 text-theme-secondary">{maintenance.createdAt}</p>
                 </div>
               </div>
 
@@ -133,7 +133,7 @@ const MaintenanceDetail = () => {
                 <Clock className="size-4" />
                 <div>
                   <p className="text-body-2">Scheduled</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenance?.appointmentDate}</p>
+                  <p className="text-body-2 text-theme-secondary">{maintenance.appointmentDate}</p>
                 </div>
               </div>
 
@@ -141,7 +141,7 @@ const MaintenanceDetail = () => {
                 <Wrench className="size-4" />
                 <div>
                   <p className="text-body-2">Category</p>
-                  <p className="text-body-2 text-theme-secondary capitalize">{maintenance?.category}</p>
+                  <p className="text-body-2 text-theme-secondary capitalize">{maintenance.category}</p>
                 </div>
               </div>
 
@@ -149,7 +149,7 @@ const MaintenanceDetail = () => {
                 <Clock className="size-4" />
                 <div>
                   <p className="text-body-2">Estimated Duration</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenance?.estimatedHours || 'N/A'} hours</p>
+                  <p className="text-body-2 text-theme-secondary">{maintenance.estimatedHours || 'N/A'} hours</p>
                 </div>
               </div>
 
@@ -158,7 +158,7 @@ const MaintenanceDetail = () => {
                 <div>
                   <p className="text-body-2">Completed At</p>
                   <p className="text-body-2 text-theme-secondary">
-                    {maintenance?.completedAt ? formatDate(maintenance?.completedAt) : 'N/A'}
+                    {maintenance.completedAt ? formatDate(maintenance.completedAt) : 'N/A'}
                   </p>
                 </div>
               </div>
@@ -173,7 +173,7 @@ const MaintenanceDetail = () => {
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">
                 <div>
-                  <p className="text-body-2">{maintenance?.tenantName || 'N/A'}</p>
+                  <p className="text-body-2">{maintenance.tenantName || 'N/A'}</p>
                   <p className="text-body-2 text-theme-secondary">Tenant</p>
                 </div>
               </div>
@@ -181,19 +181,19 @@ const MaintenanceDetail = () => {
               <div className="flex items-center gap-3">
                 <MapPin className="size-4" />
                 <div>
-                  <p className="text-body-2">{maintenance?.unitName || 'N/A'}</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenance?.buildingsName || 'N/A'}</p>
+                  <p className="text-body-2">{maintenance.unitName || 'N/A'}</p>
+                  <p className="text-body-2 text-theme-secondary">{maintenance.buildingsName || 'N/A'}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
                 <Phone className="size-4" />
-                <p className="text-body-2 text-theme-secondary">{maintenance?.tenantPhoneNumber || 'N/A'}</p>
+                <p className="text-body-2 text-theme-secondary">{maintenance.tenantPhoneNumber || 'N/A'}</p>
               </div>
 
               <div className="flex items-center gap-3">
                 <Mail className="size-4" />
-                <p className="text-body-2 text-theme-secondary">{maintenance?.tenantEmail || 'N/A'}</p>
+                <p className="text-body-2 text-theme-secondary">{maintenance.tenantEmail || 'N/A'}</p>
               </div>
             </CardContent>
           </Card>
