@@ -8,7 +8,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/common'
 import { MaintenanceTable } from '@/components/pages/Maintenance'
 import { PageTableHeader, PageTableSearch } from '@/components/ui'
-import { DEFAULT_MAINTENANCE_LIST_DATA, MAINTENANCE_STATUS, ROUTES } from '@/constants'
+import { DEFAULT_MAINTENANCE_LIST_DATA, ROUTES } from '@/constants'
+import { MAINTENANCE_SORT, MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiMaintenanceList } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
@@ -131,10 +132,6 @@ const Maintenance = () => {
     [totalMaintenance, assignedCount, pendingCount, inProgressCount],
   )
 
-  enum MAINTENANCE_SORT {
-    CreatedAt = 'createdAt',
-    UpdatedAt = 'updatedAt',
-  }
   return (
     <>
       <PageTableHeader

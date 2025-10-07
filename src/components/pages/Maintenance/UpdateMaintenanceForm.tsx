@@ -19,7 +19,7 @@ import {
   Textarea,
 } from '@/components/common'
 import { UPDATE_MAINTENANCE_FORM_FIELDS, UPDATE_MAINTENANCE_FORM_SCHEMA } from '@/constants'
-import type { IMaintenanceFormProps } from '@/types'
+import type { IUpdateMaintenanceFormProps } from '@/types'
 
 const UpdateMaintenanceForm = ({
   onSubmit,
@@ -27,7 +27,7 @@ const UpdateMaintenanceForm = ({
   buttonLabel,
   defaultValues,
   errorMessage,
-}: IMaintenanceFormProps) => {
+}: IUpdateMaintenanceFormProps) => {
   const form = useForm({
     mode: 'onChange',
     resolver: zodResolver(UPDATE_MAINTENANCE_FORM_SCHEMA),

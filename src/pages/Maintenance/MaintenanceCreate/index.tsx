@@ -1,12 +1,12 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Plus } from 'lucide-react'
 import { useCallback } from 'react'
 import { toast } from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { PageHeader, PageSection } from '@/components/layout'
-import { UpdateMaintenanceForm } from '@/components/pages/Maintenance'
+import { MaintenanceForm } from '@/components/pages/Maintenance'
 import { ROUTES } from '@/constants'
-import { Priority, Status } from '@/enum'
+import { MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiCreateMaintenance, useRentoraApiUnitList } from '@/hooks'
 import type { ICreateMaintenanceRequestPayload, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 import { getErrorMessage } from '@/utilities'
@@ -26,8 +26,8 @@ const MaintenanceCreate = () => {
         unitId: data.unit_id,
         title: data.title,
         description: data.description,
-        status: data.status as Status,
-        priority: data.priority as Priority,
+        status: data.status as MAINTENANCE_PRIORITY,
+        priority: data.priority as MAINTENANCE_STATUS,
         appointmentDate: data.appointment_date,
         dueDate: data.due_date!,
         estimatedHours: Number(data.estimated_hours),

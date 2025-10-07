@@ -18,8 +18,6 @@ import {
 import { MAINTENANCE_TABLE_HEADER, ROUTES } from '@/constants'
 import type { IMaintenance } from '@/types'
 
-import MaintenanceAction from './MaintenanceAction'
-
 type IMaintenanceTableProps = {
   data: Array<IMaintenance>
   onPageChange: (page: number) => void
@@ -41,6 +39,7 @@ const MaintenanceTable = ({
 }: IMaintenanceTableProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const navigate: NavigateFunction = useNavigate()
+
   const handleUpdateMaintenance = useCallback(
     (maintenanceId: string) => {
       if (!apartmentId) return
@@ -49,17 +48,9 @@ const MaintenanceTable = ({
     [apartmentId, navigate],
   )
 
-  // const handleUpdateTenant = useCallback(
-  //   (tenantId: string) => {
-  //     if (!apartmentId) return
-  //     navigate(ROUTES.tenantUpdate.getPath(apartmentId, tenantId))
-  //   },
-  //   [apartmentId, navigate],
-  // )
-
   const handleRowClick = useCallback(
-    (id: string) => {
-      navigate(ROUTES.maintenanceDetail.getPath(apartmentId, id))
+    (maintenanceId: string) => {
+      navigate(ROUTES.maintenanceDetail.getPath(apartmentId, maintenanceId))
     },
     [navigate, apartmentId],
   )
@@ -99,7 +90,11 @@ const MaintenanceTable = ({
         </TableHeader>
         <TableBody>
           {data.map((item) => (
-            <TableRow className="cursor-pointer" onClick={() => handleRowClick(item.id)} key={item.id}>
+            <TableRow
+              className="cursor-pointer"
+              onClick={() => handleRowClick(item.maintenanceId)}
+              key={item.maintenanceId}
+            >
               <TableCell>{item.ticketNumber}</TableCell>
               <TableCell>{item.title}</TableCell>
               <TableCell>{item.unitName}</TableCell>
@@ -117,8 +112,8 @@ const MaintenanceTable = ({
                 >
                   <MaintenanceAction
                     maintenanceId={item.maintenanceId}
-                    onUpdate={handleUpdateTenant}
-                    onDelete={handleUpdateTenant}
+                    onUpdate={handleUpdateMaintenance}
+                    onDelete={handleUpdateMaintenance}
                   />
                 </div>
               </TableCell>

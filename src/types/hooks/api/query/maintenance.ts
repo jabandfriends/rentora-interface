@@ -1,4 +1,4 @@
-import type { Category, Priority, RecurringSchedule, Status } from '@/enum'
+import type { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_RECURRING, MAINTENANCE_STATUS } from '@/enum'
 import type {
   IBasePaginateQueryResult,
   IBaseUseQuery,
@@ -8,7 +8,7 @@ import type {
 
 //Maintenance type
 export type IMaintenance = {
-  id: string
+  maintenanceId: string
   buildingsName: string
   unitName: string
   ticketNumber: string
@@ -17,9 +17,9 @@ export type IMaintenance = {
   assignedToUserId: string
   title: string
   description: string
-  category: Category
-  status: Status
-  priority: Priority
+  category: MAINTENANCE_CATEGORY
+  status: MAINTENANCE_STATUS
+  priority: MAINTENANCE_PRIORITY
   requestedDate: string
   appointmentDate: string
   startedAt: string
@@ -34,7 +34,7 @@ export type IMaintenance = {
   tenantRating: number
   isEmergency: boolean
   isRecurring: boolean
-  recurringSchedule: RecurringSchedule
+  recurringSchedule: MAINTENANCE_RECURRING
   createdAt: string
   updatedAt: string
 }
