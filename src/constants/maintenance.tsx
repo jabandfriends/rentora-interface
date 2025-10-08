@@ -187,6 +187,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
 ]
 
 export const UPDATE_MAINTENANCE_FORM_SCHEMA = z.object({
+  unitId: z.string().optional().nullable(),
   title: z.string().max(100, 'Title must be at most 100 characters').optional().nullable(),
   description: z.string().optional().nullable(),
   appointmentDate: z.string().optional().nullable(),
@@ -334,6 +335,20 @@ export const UPDATE_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<UPDATE_MAINTENAN
           { value: MAINTENANCE_RECURRING.QUARTERLY, label: 'Quarterly' },
         ],
         placeholder: 'Select Recurring Schedule',
+      },
+    ],
+  },
+  {
+    title: 'Location',
+    description: 'Select the room where this task should be completed',
+    fields: [
+      {
+        key: 'unitId',
+        label: 'Room number',
+        placeholder: 'Select Room Number',
+        description: 'Basic information about the maintenance task',
+        fieldType: 'select',
+        options: [],
       },
     ],
   },

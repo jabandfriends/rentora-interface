@@ -7,7 +7,7 @@ import { Spinner } from '@/components/common'
 import { PageHeader, PageSection } from '@/components/layout'
 import { UpdateMaintenanceForm } from '@/components/pages/Maintenance'
 import { ROUTES } from '@/constants'
-import { useRentoraApiMaintenanceDetail, useRentoraApiUpdateMaintenance } from '@/hooks'
+import { useRentoraApiMaintenanceDetail, useRentoraApiUnitList, useRentoraApiUpdateMaintenance } from '@/hooks'
 import type { IUpdateMaintenanceRequestPayload, UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
@@ -15,6 +15,10 @@ const MaintenanceUpdate = () => {
   const { apartmentId, maintenanceId } = useParams<{ apartmentId: string; maintenanceId: string }>()
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage]: [string, Dispatch<SetStateAction<string>>] = useState('')
+  const { data: unitList = [], isLoading: unitsLoading } = useRentoraApiUnitList({
+    apartmentId: apartmentId ?? '',
+    params: { page: 0, size: 50, search: '' },
+  })
   const { data, isLoading, isPending } = useRentoraApiMaintenanceDetail({
     maintenanceId: maintenanceId ?? '',
     apartmentId: apartmentId ?? '',
@@ -35,6 +39,7 @@ const MaintenanceUpdate = () => {
         category: data.category ? data.category : undefined,
         estimatedHours: data.estimatedHours ? data.estimatedHours : undefined,
         recurringSchedule: data.recurringSchedule ? data.recurringSchedule : undefined,
+        unitId: data.unitId ? data.unitId : undefined,
       }
       try {
         await updateMaintenance({
@@ -78,6 +83,8 @@ const MaintenanceUpdate = () => {
         iconLabel={<PenLine />}
         isPending={isPending}
         errorMessage={errorMessage}
+        units={unitList}
+        unitsLoading={unitsLoading}
       />
     </PageSection>
   )

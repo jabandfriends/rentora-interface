@@ -3,6 +3,7 @@ import type { IBaseUseMutation, IRentoraApiClientBaseResponse } from '@/types'
 
 //base payload type
 export type IMaintenanceExecuteBasePayload = {
+  unitId: string
   title: string
   description?: string
   appointmentDate?: string

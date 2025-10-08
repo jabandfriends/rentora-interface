@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -19,7 +19,8 @@ import {
   Textarea,
 } from '@/components/common'
 import { UPDATE_MAINTENANCE_FORM_FIELDS, UPDATE_MAINTENANCE_FORM_SCHEMA } from '@/constants'
-import type { IUpdateMaintenanceFormProps } from '@/types'
+import { MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
+import type { IUnit, IUpdateMaintenanceFormProps, UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 
 const UpdateMaintenanceForm = ({
   onSubmit,
@@ -27,12 +28,29 @@ const UpdateMaintenanceForm = ({
   buttonLabel,
   defaultValues,
   errorMessage,
+  units,
+  unitsLoading,
 }: IUpdateMaintenanceFormProps) => {
   const form = useForm({
     mode: 'onChange',
     resolver: zodResolver(UPDATE_MAINTENANCE_FORM_SCHEMA),
-    defaultValues: defaultValues ?? {},
+    defaultValues: {
+      unitId: undefined,
+      title: '',
+      description: '',
+      status: MAINTENANCE_STATUS.PENDING,
+      priority: MAINTENANCE_PRIORITY.NORMAL,
+      appointmentDate: '',
+      dueDate: '',
+      estimatedHours: undefined,
+    },
   })
+
+  const initialUnitName = useMemo(() => {
+    const dv: any = defaultValues as any
+    return dv?.unit?.unitName ?? dv?.unitName ?? undefined
+  }, [defaultValues])
+
   useEffect(() => {
     if (defaultValues) {
       form.reset(defaultValues)
@@ -52,6 +70,37 @@ const UpdateMaintenanceForm = ({
 
             <div className="space-y-2">
               {fields.map((item, index) => {
+                if (item.key === 'unitId') {
+                  return (
+                    <FormField
+                      key={'form-maintenance-field' + item.key + index}
+                      control={form.control}
+                      name={'unitId' as keyof UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE}
+                      render={({ field }) => (
+                        <div className="space-y-1">
+                          <p>{item.label}</p>
+                          <Select
+                            value={field.value == null ? undefined : String(field.value)}
+                            onValueChange={(val) => field.onChange(val)}
+                            disabled={unitsLoading}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder={initialUnitName ?? 'Select Room Number'} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {units?.map((unit: IUnit) => (
+                                <SelectItem key={unit.id} value={String(unit.id)}>
+                                  {unit.unitName}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </div>
+                      )}
+                    />
+                  )
+                }
                 switch (item.fieldType) {
                   case 'input':
                     return (

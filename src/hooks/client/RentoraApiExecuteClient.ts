@@ -88,7 +88,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   ): Promise<IRentoraApiClientUpdateMaintenanceResponse['data']> {
     const response: AxiosResponse<IRentoraApiClientUpdateMaintenanceResponse, unknown> =
       await this.axiosWithAuthInstance.put<IRentoraApiClientUpdateMaintenanceResponse>(
-        `/api/apartments/${apartmentId}/maintenance/${maintenanceId}`,
+        `/api/apartment/${apartmentId}/maintenance/${maintenanceId}`,
         payload,
       )
     return response.data.data
@@ -100,10 +100,11 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   ): Promise<IRentoraApiClientDeleteMaintenanceResponse['data']> {
     const response: AxiosResponse<IRentoraApiClientDeleteMaintenanceResponse, unknown> =
       await this.axiosWithAuthInstance.delete<IRentoraApiClientDeleteMaintenanceResponse>(
-        `/api/apartments/${apartmentId}/maintenance/${maintenanceId}`,
+        `/api/apartment/${apartmentId}/maintenance/${maintenanceId}`,
       )
     return response.data.data
   }
+
   //create tenant
   async createTenant(apartmentId: string, payload: ICreateTenantRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(
