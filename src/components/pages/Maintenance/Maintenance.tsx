@@ -145,8 +145,6 @@ const Maintenance = () => {
       />
       {/* <PageTableSearch /> */}
       <PageTableSearch
-        selectedStatus={status?.toString()}
-        selectedSort={sortBy?.toString()}
         statusEnum={MAINTENANCE_STATUS}
         sortEnum={MAINTENANCE_SORT}
         onSearchChange={handleSearchChange}
