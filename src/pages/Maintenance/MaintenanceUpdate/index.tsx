@@ -12,7 +12,7 @@ import type { IUpdateMaintenanceRequestPayload, UPDATE_MAINTENANCE_FORM_SCHEMA_T
 import { getErrorMessage } from '@/utilities'
 
 const MaintenanceUpdate = () => {
-  const { apartmentId, maintenanceId } = useParams<{ apartmentId: string; maintenanceId: string }>()
+  const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage]: [string, Dispatch<SetStateAction<string>>] = useState('')
   const { data: unitList = [], isLoading: unitsLoading } = useRentoraApiUnitList({
@@ -20,13 +20,13 @@ const MaintenanceUpdate = () => {
     params: { page: 0, size: 50, search: '' },
   })
   const { data, isLoading, isPending } = useRentoraApiMaintenanceDetail({
-    maintenanceId: maintenanceId ?? '',
+    maintenanceId: id ?? '',
     apartmentId: apartmentId ?? '',
   })
   const { mutateAsync: updateMaintenance } = useRentoraApiUpdateMaintenance()
   const onSubmit = useCallback(
     async (data: UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE) => {
-      if (!apartmentId || !maintenanceId) {
+      if (!apartmentId || !id) {
         throw new Error('Missing route params: apartmentId or maintenanceId')
       }
       const payload: IUpdateMaintenanceRequestPayload = {
@@ -44,7 +44,7 @@ const MaintenanceUpdate = () => {
       try {
         await updateMaintenance({
           apartmentId: apartmentId ?? '',
-          maintenanceId: maintenanceId ?? '',
+          maintenanceId: id ?? '',
           payload,
         })
         toast.success('Maintenance updated successfully')
@@ -54,7 +54,7 @@ const MaintenanceUpdate = () => {
         setErrorMessage(getErrorMessage(error))
       }
     },
-    [updateMaintenance, apartmentId, maintenanceId, navigate],
+    [updateMaintenance, apartmentId, id, navigate],
   )
 
   //navigate before page

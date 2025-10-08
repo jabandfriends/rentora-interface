@@ -8,7 +8,7 @@ import type {
 
 //Maintenance type
 export type IMaintenance = {
-  maintenanceId: string
+  id: string
   buildingsName: string
   unitName: string
   ticketNumber: string

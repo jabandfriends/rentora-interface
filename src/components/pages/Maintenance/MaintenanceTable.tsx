@@ -1,22 +1,16 @@
+import { PackageOpen } from 'lucide-react'
 import { useCallback } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
 
 import { PaginationBar } from '@/components/feature'
-import { MaintenanceAction } from '@/components/pages/Maintenance'
-import {
-  Badge,
-  PageTableLoading,
-  PageTableSearchEmpty,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui'
+import { TenantTableLoading } from '@/components/pages/Tenant'
+import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { MAINTENANCE_TABLE_HEADER, ROUTES } from '@/constants'
+import { MAINTENANCE_STATUS } from '@/enum'
 import type { IMaintenance } from '@/types'
+
+import { MaintenanceAction } from '.'
 
 type IMaintenanceTableProps = {
   data: Array<IMaintenance>
@@ -30,37 +24,30 @@ type IMaintenanceTableProps = {
 
 const MaintenanceTable = ({
   data,
-  onPageChange,
   isLoading,
-  isSearched,
   currentPage,
   totalPages,
   totalElements,
+  onPageChange,
 }: IMaintenanceTableProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const navigate: NavigateFunction = useNavigate()
 
   const handleUpdateMaintenance = useCallback(
-    (maintenanceId: string) => {
+    (id: string) => {
       if (!apartmentId) return
-      navigate(ROUTES.maintenanceUpdate.getPath(apartmentId, maintenanceId))
+      navigate(ROUTES.maintenanceUpdate.getPath(apartmentId, id))
     },
     [apartmentId, navigate],
   )
 
-  const handleRowClick = useCallback(
-    (maintenanceId: string) => {
-      navigate(ROUTES.maintenanceDetail.getPath(apartmentId, maintenanceId))
-    },
-    [navigate, apartmentId],
-  )
   const statusBadgeVariant = useCallback((maintenanceStatus: string): VariantProps<typeof Badge>['variant'] => {
     switch (maintenanceStatus) {
-      case 'pending':
+      case MAINTENANCE_STATUS.PENDING:
         return 'warning'
-      case 'assigned':
+      case MAINTENANCE_STATUS.ASSIGNED:
         return 'success'
-      case 'in_progress':
+      case MAINTENANCE_STATUS.IN_PROGRESS:
         return 'default'
       default:
         return 'default'
@@ -68,14 +55,16 @@ const MaintenanceTable = ({
   }, [])
 
   if (isLoading) {
-    return <PageTableLoading />
-  }
-  if (isSearched && data.length === 0) {
-    return <PageTableSearchEmpty message="No maintenance found" subMessage="No maintenance for this search" />
+    return <TenantTableLoading />
   }
 
   if (!data || data.length === 0) {
-    return <PageTableSearchEmpty message="No maintenance found" subMessage="No maintenance for this search" />
+    return (
+      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
+        <PackageOpen size={50} />
+        <p className="text-theme-secondary text-body-1">No maintenance found</p>
+      </div>
+    )
   }
 
   return (
@@ -89,45 +78,40 @@ const MaintenanceTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item) => (
-            <TableRow
-              className="cursor-pointer"
-              onClick={() => handleRowClick(item.maintenanceId)}
-              key={item.maintenanceId}
-            >
-              <TableCell>{item.ticketNumber}</TableCell>
-              <TableCell>{item.title}</TableCell>
-              <TableCell>{item.unitName}</TableCell>
-              <TableCell>{item.buildingsName}</TableCell>
-              <TableCell>{item.appointmentDate}</TableCell>
+          {data.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell>MAINTENANCE-{index + 1}</TableCell>
+              <TableCell>{item.title ? item.title : 'N/A'}</TableCell>
+              <TableCell>{item.unitName ? item.unitName : 'N/A'}</TableCell>
+              <TableCell>{item.buildingsName ? item.buildingsName : 'N/A'}</TableCell>
+              <TableCell>{item.appointmentDate ? item.appointmentDate : 'N/A'}</TableCell>
               <TableCell>{item.dueDate || '-'}</TableCell>
               <TableCell className="capitalize">
                 <Badge variant={statusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
               <TableCell>
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation()
-                  }}
-                >
-                  <MaintenanceAction
-                    maintenanceId={item.maintenanceId}
-                    onUpdate={handleUpdateMaintenance}
-                    onDelete={handleUpdateMaintenance}
-                  />
-                </div>
+                <MaintenanceAction
+                  maintenanceId={item.id}
+                  onUpdate={handleUpdateMaintenance}
+                  onDelete={handleUpdateMaintenance}
+                />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <PaginationBar
-        onPageChange={onPageChange}
-        isLoading={isLoading}
-        page={currentPage}
-        totalElements={totalElements}
-        totalPages={totalPages}
-      />
+      <div className="flex items-center justify-between">
+        <p className="text-theme-secondary text-body-2">
+          Showing {data.length} of {totalElements} items
+        </p>
+        <PaginationBar
+          isLoading={isLoading}
+          page={currentPage}
+          totalElements={totalElements}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
+      </div>
     </div>
   )
 }

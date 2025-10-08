@@ -19,7 +19,7 @@ const MaintenanceAction = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" sideOffset={10}>
             <DropdownMenuItem onSelect={() => onUpdate(maintenanceId)}>Update Maintenance</DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => onDelete(maintenanceId)}>Update Maintenance</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => onDelete(maintenanceId)}>Delete Maintenance</DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>
 )
