@@ -1,51 +1,33 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
 import { useDebounce } from '@uidotdev/usehooks'
 import { format } from 'date-fns'
-import { CalendarIcon } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, type UseFormReturn } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { Link, type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
-import z from 'zod'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import {
-  Button,
-  Card,
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-  InputNumber,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Textarea,
-} from '@/components/common'
-import { Switch } from '@/components/feature'
-import { Calendar } from '@/components/ui'
+import { Card, Form } from '@/components/common'
 import { DEFAULT_TENANT_LIST_DATA, MONTHLY_CONTRACT_SCHEMA, ROUTES } from '@/constants'
 import { useRentoraApiCreateContract, useRentoraApiTenantList } from '@/hooks'
-import type { ICreateContractRequestPayload } from '@/types'
-import { cn, getErrorMessage } from '@/utilities'
+import type { ICreateContractRequestPayload, MonthlyContractFormData } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
-import UserCombobox from './UserCombobox'
-
-type MonthlyContractFormData = z.infer<typeof MONTHLY_CONTRACT_SCHEMA>
+import ContractMainInformation from './ContractMainInformation'
+import ContractNavigation from './ContractNavigation'
+import { ContractReview } from './ContractReview'
+import ContractStartMeter from './ContractStartMeter'
 
 const MonthlyContractBody = () => {
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
     DEFAULT_TENANT_LIST_DATA.page,
   )
+  const [currentStep, setCurrentStep]: [number, Dispatch<SetStateAction<number>>] = useState(1)
   const navigate: NavigateFunction = useNavigate()
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
+
+  //api to create contract
   const { mutateAsync: createContract } = useRentoraApiCreateContract({ apartmentId })
+
   const { watch, setValue } = useForm({
     defaultValues: {
       search: '',
@@ -55,7 +37,7 @@ const MonthlyContractBody = () => {
   const [search]: [string] = watch(['search'])
 
   const debouncedSearch = useDebounce(search ? search : undefined, 500)
-  const { data } = useRentoraApiTenantList({
+  const { data: tenantsData } = useRentoraApiTenantList({
     apartmentId: apartmentId,
     params: {
       page: currentPage,
@@ -71,7 +53,8 @@ const MonthlyContractBody = () => {
     },
     [setValue],
   )
-  const form = useForm<MonthlyContractFormData>({
+
+  const form: UseFormReturn<MonthlyContractFormData> = useForm<MonthlyContractFormData>({
     resolver: zodResolver(MONTHLY_CONTRACT_SCHEMA),
     mode: 'onChange',
     defaultValues: {
@@ -91,40 +74,84 @@ const MonthlyContractBody = () => {
       autoRenewal: false,
       renewalNoticeDays: '',
       documentUrl: '',
+      waterMeterStart: '',
+      electricMeterStart: '',
     },
   })
 
+  //change step
+  const handleStepChange = useCallback(
+    async (nextStep: number) => {
+      // only validate if moving forward
+      if (nextStep > currentStep) {
+        const isValid: boolean = await form.trigger([
+          'unitId',
+          'tenantId',
+          'guarantorName',
+          'guarantorPhone',
+          'guarantorIdNumber',
+          'rentalType',
+          'rentalPrice',
+          'depositAmount',
+          'advancePaymentMonths',
+          'lateFeeAmount',
+          'utilitiesIncluded',
+          'termsAndConditions',
+          'specialConditions',
+          'autoRenewal',
+          'renewalNoticeDays',
+          'documentUrl',
+        ])
+        if (!isValid) {
+          toast.error('Please fill or fix the following fields')
+          return
+        }
+      }
+
+      // if valid or going backward, allow step change
+      setCurrentStep(nextStep)
+    },
+    [form, currentStep],
+  )
+
   const handleSelectTenant = useCallback(
-    (userId: string) => {
-      form.setValue('tenantId', userId)
+    (userId: string, name: string) => {
+      form.setValue('tenantId', userId, { shouldValidate: true })
+      form.setValue('tenantName', name, { shouldValidate: true })
     },
     [form],
   )
 
-  const onSubmit = async (data: MonthlyContractFormData) => {
-    try {
-      const payload: ICreateContractRequestPayload = {
-        ...data,
-        rentalPrice: Number(data.rentalPrice),
-        depositAmount: Number(data.depositAmount),
-        advancePaymentMonths: Number(data.advancePaymentMonths),
-        lateFeeAmount: Number(data.lateFeeAmount),
-        renewalNoticeDays: Number(data.renewalNoticeDays),
-        startDate: format(data.startDate, 'yyyy-MM-dd'),
-        endDate: format(data.endDate, 'yyyy-MM-dd'),
+  const onSubmit = useCallback(
+    async (data: MonthlyContractFormData) => {
+      try {
+        const { tenantName, ...rest } = data
+        const payload: ICreateContractRequestPayload = {
+          ...rest,
+          rentalPrice: Number(data.rentalPrice),
+          depositAmount: Number(data.depositAmount),
+          advancePaymentMonths: Number(data.advancePaymentMonths),
+          lateFeeAmount: Number(data.lateFeeAmount),
+          renewalNoticeDays: Number(data.renewalNoticeDays),
+          startDate: format(data.startDate, 'yyyy-MM-dd'),
+          endDate: format(data.endDate, 'yyyy-MM-dd'),
+          waterMeterStart: Number(data.waterMeterStart),
+          electricMeterStart: Number(data.electricMeterStart),
+        }
+
+        await createContract(payload)
+        toast.success(`Tenant ${tenantName} Contract created successfully`)
+        form.reset()
+
+        setTimeout(() => {
+          navigate(ROUTES.allRoom.getPath(apartmentId))
+        }, 1000)
+      } catch (error) {
+        toast.error(getErrorMessage(error))
       }
-
-      await createContract(payload)
-      toast.success('Contract created successfully')
-      form.reset()
-
-      setTimeout(() => {
-        navigate(ROUTES.allRoom.getPath(apartmentId))
-      }, 1000)
-    } catch (error) {
-      toast.error(getErrorMessage(error))
-    }
-  }
+    },
+    [form, navigate, apartmentId, createContract],
+  )
 
   return (
     <Card className="space-y-4 rounded-2xl">
@@ -134,341 +161,22 @@ const MonthlyContractBody = () => {
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="desktop:grid-cols-2 grid">
-            <div>
-              <FormLabel>
-                Tenant
-                <span className="text-theme-error">*</span>
-              </FormLabel>
-              <FormControl>
-                <UserCombobox onSelectTenant={handleSelectTenant} users={data} onSearchTenant={handleSearchTenant} />
-              </FormControl>
-              <FormDescription>
-                Select a tenant from the list to create a new contract. If you don’t see the tenant, you can add one{' '}
-                <Link className="text-theme-primary underline" to={ROUTES.tenantCreate.getPath(apartmentId)}>
-                  here
-                </Link>
-                .
-              </FormDescription>
-            </div>
-
-            <FormField
-              control={form.control}
-              name="rentalType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Rental Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a rental type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                      <SelectItem value="yearly">Yearly</SelectItem>
-                      <SelectItem value="daily">Daily</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+          {currentStep === 1 && (
+            <ContractMainInformation
+              form={form}
+              tenantsData={tenantsData}
+              handleSelectTenant={handleSelectTenant}
+              handleSearchTenant={handleSearchTenant}
             />
-          </div>
+          )}
 
-          <div className="desktop:grid-cols-2 grid gap-4">
-            <FormField
-              control={form.control}
-              name="guarantorName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Guarantor Name <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input maxLength={50} placeholder="Enter guarantor name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="guarantorPhone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Guarantor Phone <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <InputNumber maxLength={10} placeholder="0626063049" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="guarantorIdNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Guarantor ID Number <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <InputNumber maxLength={13} placeholder="1103700123456" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="startDate"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>
-                    Start Date <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            'flex w-full justify-between pl-3 text-left font-normal',
-                            !field.value && 'text-theme-secondary',
-                          )}
-                        >
-                          {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="bg-theme-light w-auto rounded-xl p-0 shadow" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        className="pointer-events-auto"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="endDate"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>
-                    End Date <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            'flex w-full justify-between pl-3 text-left font-normal',
-                            !field.value && 'text-theme-secondary',
-                          )}
-                        >
-                          {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
-                          <CalendarIcon className="h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="bg-theme-light w-auto rounded-xl p-0 shadow" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        className="pointer-events-auto"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="rentalPrice"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Rental Price <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <InputNumber maxLength={9} decimal placeholder="12000.00" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="depositAmount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Deposit Amount <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <InputNumber maxLength={9} decimal placeholder="24000.00" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="advancePaymentMonths"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Advance Payment (Months) <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <InputNumber maxLength={2} placeholder="1" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="lateFeeAmount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Late Fee Amount <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <InputNumber maxLength={9} decimal placeholder="500.00" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="renewalNoticeDays"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Renewal Notice (Days) <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <InputNumber maxLength={2} placeholder="30" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="documentUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Document URL</FormLabel>
-                  <FormControl>
-                    <Input maxLength={100} placeholder="https://example.com/contract.pdf" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="termsAndConditions"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Terms and Conditions</FormLabel>
-                <FormControl>
-                  <Textarea
-                    maxLength={120}
-                    placeholder="Enter terms and conditions..."
-                    className="min-h-[100px]"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+          {currentStep === 2 && <ContractStartMeter form={form} />}
+          {currentStep === 3 && <ContractReview form={form} />}
+          <ContractNavigation
+            currentStep={currentStep}
+            setCurrentStep={handleStepChange}
+            onSubmit={form.handleSubmit(onSubmit)}
           />
-
-          <FormField
-            control={form.control}
-            name="specialConditions"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Special Conditions</FormLabel>
-                <FormControl>
-                  <Textarea
-                    maxLength={120}
-                    placeholder="Enter special conditions..."
-                    className="min-h-[100px]"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="desktop:grid-cols-2 grid gap-4">
-            <FormField
-              control={form.control}
-              name="utilitiesIncluded"
-              render={({ field }) => (
-                <FormItem className="border-theme-secondary-300 flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Utilities Included</FormLabel>
-                    <FormDescription>Include utilities in rental price</FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="autoRenewal"
-              render={({ field }) => (
-                <FormItem className="border-theme-secondary-300 flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Auto Renewal</FormLabel>
-                    <FormDescription>Automatically renew contract</FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="flex justify-end gap-3">
-            <Button type="submit">Create Contract</Button>
-          </div>
         </form>
       </Form>
     </Card>

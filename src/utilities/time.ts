@@ -20,6 +20,15 @@ export function formatTimestamp(isoString: string, format = 'YYYY-MM-DD HH:mm:ss
   }
   return dayjs(isoString).format(format)
 }
+//format date
+export function formatDate(date: Date, format = 'YYYY-MM-DD HH:mm:ss') {
+  return dayjs(date).format(format)
+}
+
+//calculate month
+export function calculateMonth(startDate: Date, endDate: Date) {
+  return dayjs(endDate).diff(dayjs(startDate), 'month')
+}
 
 /**
  * Get relative time from now
