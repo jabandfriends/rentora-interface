@@ -63,7 +63,6 @@ export const ALL_ROOMS_TABLE_HEADER: Array<string> = [
 ]
 
 export enum ROOMSTATUSENUM {
-  All = '',
   Available = 'available',
   Occupied = 'occupied',
   Maintenance = 'maintenance',

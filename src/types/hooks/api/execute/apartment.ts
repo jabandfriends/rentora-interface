@@ -53,6 +53,7 @@ export type ISetupApartmentRequestPayload = {
   buildings: Array<{
     buildingName: string
     totalFloors: number
+    totalUnitPerFloor: number
   }>
   electricityFlat: number
   electricityPrice: number

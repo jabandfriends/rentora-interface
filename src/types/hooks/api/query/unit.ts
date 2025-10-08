@@ -41,4 +41,5 @@ export type IRentoraApiUnitListParams = {
   sortBy?: string
   sortDir?: string
   status?: string
+  buildingName?: string
 }

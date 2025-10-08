@@ -1,12 +1,10 @@
-import { ChevronDown, Download } from 'lucide-react'
+import { Download } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/common'
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
 import { SearchBar } from '@/components/feature'
 
 type IPageTableSearchProps<StatusEnum extends string, SortEnum extends string> = {
-  selectedStatus?: StatusEnum
-  selectedSort?: SortEnum
   statusEnum?: Record<string, StatusEnum>
   sortEnum?: Record<string, SortEnum>
   onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
@@ -20,8 +18,6 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
   onSearchChange,
   onStatusChange,
   onSortChange,
-  selectedStatus,
-  selectedSort,
 }: IPageTableSearchProps<StatusEnum, SortEnum>) => {
   return (
     <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
@@ -32,39 +28,34 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
         <div className="flex gap-2">
           {/* Status Dropdown */}
           {statusEnum && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outlineSecondary" className="flex items-center gap-2 capitalize">
-                  <ChevronDown size={18} /> {selectedStatus || 'Status'}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" sideOffset={10}>
+            <Select onValueChange={onStatusChange}>
+              <SelectTrigger className="capitalize">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent align="start" sideOffset={10}>
                 {Object.entries(statusEnum).map(([key, value]) => (
-                  <DropdownMenuItem onSelect={() => onStatusChange?.(value)} key={key}>
+                  <SelectItem className="capitalize" key={key} value={value}>
                     {key}
-                  </DropdownMenuItem>
+                  </SelectItem>
                 ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </SelectContent>
+            </Select>
           )}
 
           {/* Sort By Dropdown */}
           {sortEnum && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outlineSecondary" className="flex items-center gap-2 capitalize">
-                  <ChevronDown size={18} />
-                  {selectedSort || 'Sort By'}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" sideOffset={10}>
+            <Select onValueChange={onSortChange}>
+              <SelectTrigger className="capitalize">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent align="start" sideOffset={10}>
                 {Object.entries(sortEnum).map(([key, value]) => (
-                  <DropdownMenuItem onSelect={() => onSortChange?.(value)} key={value}>
+                  <SelectItem className="capitalize" value={value} key={value}>
                     {key}
-                  </DropdownMenuItem>
+                  </SelectItem>
                 ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </SelectContent>
+            </Select>
           )}
         </div>
 

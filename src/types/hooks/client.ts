@@ -15,6 +15,7 @@ export type RentoraApiQueryClientKey =
   | 'reportUtilityList'
   | 'reportReadingDateUtility'
   | 'getUserData'
+  | 'buildingListNoPaginate'
 export type RentoraApiExecuteClientKey =
   | 'authenticate'
   | 'createApartment'

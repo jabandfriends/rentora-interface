@@ -1,7 +1,8 @@
-import { ChevronDown, Download } from 'lucide-react'
+import { SelectValue } from '@radix-ui/react-select'
+import { Download } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/common'
+import { Button, Select, SelectContent, SelectItem, SelectTrigger } from '@/components/common'
 import { SearchBar } from '@/components/feature'
 
 type IPageTableSearchWithoutStatusProps<SortEnum extends string> = {
@@ -15,7 +16,6 @@ const PageTableSearchWithoutStatus = <SortEnum extends string>({
   sortEnum,
   onSearchChange,
   onSortChange,
-  selectedSort,
 }: IPageTableSearchWithoutStatusProps<SortEnum>) => {
   return (
     <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
@@ -25,21 +25,18 @@ const PageTableSearchWithoutStatus = <SortEnum extends string>({
       <div className="desktop:flex-row flex flex-col gap-2">
         <div className="flex gap-2">
           {/* Sort By Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outlineSecondary" className="flex items-center gap-2">
-                <ChevronDown size={18} />
-                {selectedSort || 'Sort By'}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" sideOffset={10}>
+          <Select onValueChange={onSortChange}>
+            <SelectTrigger>
+              <SelectValue placeholder="Sort By" />
+            </SelectTrigger>
+            <SelectContent>
               {Object.entries(sortEnum).map(([key, value]) => (
-                <DropdownMenuItem onSelect={() => onSortChange?.(value)} key={value}>
+                <SelectItem key={value} value={value}>
                   {key}
-                </DropdownMenuItem>
+                </SelectItem>
               ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Export PDF */}

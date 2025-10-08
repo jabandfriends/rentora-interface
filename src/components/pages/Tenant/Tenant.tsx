@@ -147,8 +147,6 @@ export const Tenant = () => {
         }
       />
       <PageTableSearch
-        selectedStatus={watch('status')}
-        selectedSort={watch('sortBy')}
         statusEnum={TENANT_STATUS}
         sortEnum={TENANT_SORT}
         onSearchChange={handleSearchChange}
