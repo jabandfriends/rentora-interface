@@ -51,6 +51,11 @@ const UpdateMaintenanceForm = ({
     return dv?.unit?.unitName ?? dv?.unitName ?? undefined
   }, [defaultValues])
 
+  const initialUnitId = useMemo(() => {
+    const dv: any = defaultValues as any
+    return dv?.unitId ?? dv?.unit?.id ?? undefined
+  }, [defaultValues])
+
   useEffect(() => {
     if (defaultValues) {
       form.reset(defaultValues)
@@ -80,7 +85,13 @@ const UpdateMaintenanceForm = ({
                         <div className="space-y-1">
                           <p>{item.label}</p>
                           <Select
-                            value={field.value == null ? undefined : String(field.value)}
+                            value={
+                              field.value == null || field.value === ''
+                                ? initialUnitId != null
+                                  ? String(initialUnitId)
+                                  : undefined
+                                : String(field.value)
+                            }
                             onValueChange={(val) => field.onChange(val)}
                             disabled={unitsLoading}
                           >
