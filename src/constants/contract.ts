@@ -97,12 +97,5 @@ export const MONTHLY_CONTRACT_SCHEMA = z
           code: 'custom',
         })
       }
-      if (diffInDays > 366) {
-        ctx.addIssue({
-          path: ['endDate'],
-          message: 'Yearly rental cannot exceed 1 year',
-          code: 'custom',
-        })
-      }
     }
   })

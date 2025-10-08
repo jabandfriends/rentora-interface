@@ -15,6 +15,7 @@ import {
   Popover,
 } from '@/components/common'
 import { Calendar } from '@/components/ui'
+import { endMonth, startMonth } from '@/constants'
 import type { MonthlyContractFormData } from '@/types'
 import { cn } from '@/utilities'
 
@@ -116,6 +117,8 @@ const ContractDetail = ({ form }: IContractDetail) => {
                   selected={field.value}
                   onSelect={field.onChange}
                   captionLayout="dropdown"
+                  startMonth={startMonth}
+                  endMonth={endMonth}
                   disabled={(date) => {
                     const today = new Date()
                     today.setHours(0, 0, 0, 0) // set to midnight
@@ -162,6 +165,8 @@ const ContractDetail = ({ form }: IContractDetail) => {
                   selected={field.value}
                   onSelect={field.onChange}
                   captionLayout="dropdown"
+                  startMonth={startMonth}
+                  endMonth={endMonth}
                   disabled={(date) => {
                     const today = new Date()
                     today.setHours(0, 0, 0, 0) // set to midnight

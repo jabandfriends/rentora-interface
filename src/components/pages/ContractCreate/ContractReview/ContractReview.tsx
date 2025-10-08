@@ -4,7 +4,7 @@ import type { UseFormReturn } from 'react-hook-form'
 import { Card, CardContent } from '@/components/common'
 import { Badge } from '@/components/ui'
 import type { MonthlyContractFormData } from '@/types'
-import { calculateMonth, formatCurrency, formatDate } from '@/utilities'
+import { formatCurrency, formatDate, getDateDiff } from '@/utilities'
 
 import ReviewItem from './ReviewItem'
 import SectionCard from './SectionCard'
@@ -13,7 +13,7 @@ type IContractReview = {
   form: UseFormReturn<MonthlyContractFormData>
 }
 const ContractReview = ({ form }: IContractReview) => {
-  const values = form.getValues()
+  const values = form.watch()
 
   return (
     <div className="space-y-6">
@@ -54,27 +54,74 @@ const ContractReview = ({ form }: IContractReview) => {
 
         {/* Financial Terms */}
         <SectionCard title="Financial Terms" description="Pricing and deposit information">
+          {/* Price per unit */}
           <ReviewItem
             icon={DollarSign}
-            label="Monthly Rental Price"
+            label={
+              values.rentalType === 'daily'
+                ? 'Price per Night'
+                : values.rentalType === 'monthly'
+                  ? 'Price per Month'
+                  : 'Price per Year'
+            }
             value={formatCurrency(Number(values.rentalPrice) || 0)}
             highlight
           />
+
+          {/* Security Deposit */}
           <ReviewItem
             icon={Shield}
             label="Security Deposit"
             value={formatCurrency(Number(values.depositAmount) || 0)}
           />
+
+          {/* Total Price */}
+          {values.startDate && values.endDate && (
+            <ReviewItem
+              icon={DollarSign}
+              label="Total Rental Price"
+              value={formatCurrency(
+                (() => {
+                  const start = new Date(values.startDate)
+                  const end = new Date(values.endDate)
+                  const diffInDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1
+                  const price = Number(values.rentalPrice) || 0
+
+                  if (values.rentalType === 'daily') return price * diffInDays
+                  if (values.rentalType === 'monthly') return price * Math.ceil(diffInDays / 30)
+                  if (values.rentalType === 'yearly') return price * Math.ceil(diffInDays / 365)
+                  return 0
+                })(),
+              )}
+              highlight
+            />
+          )}
         </SectionCard>
 
         {/* Contract Period */}
         <SectionCard title="Contract Period" description="Lease duration and dates">
           <ReviewItem icon={Calendar} label="Start Date" value={formatDate(values.startDate, 'DD-MM-YYYY')} highlight />
           <ReviewItem icon={Calendar} label="End Date" value={formatDate(values.endDate, 'DD-MM-YYYY')} />
+
           {values.startDate && values.endDate && (
             <div className="bg-theme-success-100 mt-3 rounded-lg p-3">
               <p className="text-body-2 text-theme-secondary-600">Contract Duration</p>
-              <p className="text-body-2 font-semibold">{calculateMonth(values.startDate, values.endDate)} months</p>
+              <p className="text-body-2 font-semibold">
+                {(() => {
+                  const { days, months, years } = getDateDiff(values.startDate, values.endDate)
+
+                  switch (values.rentalType) {
+                    case 'daily':
+                      return `${days} day${days > 1 ? 's' : ''}`
+                    case 'monthly':
+                      return `${months} month${months > 1 ? 's' : ''}`
+                    case 'yearly':
+                      return `${years} year${years > 1 ? 's' : ''}`
+                    default:
+                      return `${days} day${days > 1 ? 's' : ''}`
+                  }
+                })()}
+              </p>
             </div>
           )}
         </SectionCard>

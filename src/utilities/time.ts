@@ -3,6 +3,8 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 
+import type { DateDiff } from '@/types'
+
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
@@ -28,6 +30,22 @@ export function formatDate(date: Date, format = 'YYYY-MM-DD HH:mm:ss') {
 //calculate month
 export function calculateMonth(startDate: Date, endDate: Date) {
   return dayjs(endDate).diff(dayjs(startDate), 'month')
+}
+
+//get date diff
+export function getDateDiff(startDate: string | Date, endDate: string | Date): DateDiff {
+  const start = dayjs(startDate)
+  const end = dayjs(endDate)
+
+  if (!start.isValid() || !end.isValid()) {
+    return { days: 0, months: 0, years: 0 }
+  }
+
+  const days = end.diff(start, 'day')
+  const months = end.diff(start, 'month')
+  const years = end.diff(start, 'year')
+
+  return { days, months, years }
 }
 
 /**
