@@ -24,6 +24,7 @@ import MaintenanceDetailPage from '@/pages/Maintenance/MaintenanceDetailPage'
 import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
 import MaintenanceUpdate from '@/pages/Maintenance/MaintenanceUpdate'
 import OverviewPage from '@/pages/Overview'
+import PageNotFound from '@/pages/PageNotFound'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import ReceiptReport from '@/pages/Report/ReceiptReport'
 import RoomReport from '@/pages/Report/RoomReport'
@@ -92,6 +93,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         index: true,
         element: <Authentication />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
   {
@@ -108,6 +113,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         path: ROUTES.firstTimePasswordReset.path,
         element: <FirstTimePasswordResetPage />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
   {
@@ -123,6 +132,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         index: true,
         element: <AllApartmentPage />,
+      },
+      {
+        path: '*',
+        element: <PageNotFound />,
       },
     ],
   },
@@ -149,6 +162,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         index: true,
         element: <ApartmentSetup />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
   {
@@ -164,6 +181,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.apartmentCreate.path,
         element: <ApartmentCreatePage />,
+      },
+      {
+        path: '*',
+        element: <PageNotFound />,
       },
     ],
   },
@@ -278,6 +299,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.contractCreate.path,
         element: <ContractCreate />,
+      },
+      {
+        path: '*',
+        element: <PageNotFound />,
       },
     ],
   },

@@ -118,6 +118,7 @@ const AllRoomsTable = ({
             >
               <TableCell className="text-theme-primary">{item.unitName}</TableCell>
               <TableCell>{item.buildingName}</TableCell>
+              <TableCell>{item.floorName}</TableCell>
               <TableCell className="capitalize">{item.currentTenant || <FieldEmpty />}</TableCell>
               <TableCell className="capitalize">{item.unitType || <FieldEmpty />}</TableCell>
               <TableCell>{item.contractStartDate || <FieldEmpty />}</TableCell>
