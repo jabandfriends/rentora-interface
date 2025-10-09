@@ -8,7 +8,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/common'
 import { MaintenanceTable } from '@/components/pages/Maintenance'
 import { PageTableHeader, PageTableSearch } from '@/components/ui'
-import { DEFAULT_MAINTENANCE_LIST_DATA, MAINTENANCE_STATUS, ROUTES } from '@/constants'
+import { DEFAULT_MAINTENANCE_LIST_DATA, ROUTES } from '@/constants'
+import { MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiMaintenanceList } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
@@ -28,9 +29,6 @@ const Maintenance = () => {
     },
   })
 
-  // type sortType = 'createdAt' | 'updatedAt'
-  // type sortDirType = 'asc' | 'desc'
-
   const [search, status, sortBy, sortDir]: [string, string, string, string] = watch([
     'search',
     'status',
@@ -47,6 +45,7 @@ const Maintenance = () => {
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedSortBy = useDebounce(sortBy ? sortBy : undefined, 300)
   const debouncedSortDir = useDebounce(sortDir ? sortDir : undefined, 300)
+
   const {
     data,
     isLoading,

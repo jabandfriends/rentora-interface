@@ -1,5 +1,5 @@
 import { useDebounce } from '@uidotdev/usehooks'
-import { Building2, ChevronRight, MapPin, Search } from 'lucide-react'
+import { Building2, ChevronRight, MapPin, PackageOpen } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
@@ -66,6 +66,8 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
     enabled: !!debouncedBuildingName,
   })
 
+  const isLoading: boolean = useMemo(() => buildingsLoading || unitsLoading, [buildingsLoading, unitsLoading])
+
   const handlePageChange = useCallback(
     (page: number) => {
       setCurrentUnitPage(page)
@@ -88,23 +90,6 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
     },
     [setValue, setCurrentUnitPage],
   )
-
-  //loading state
-  const isLoading: boolean = useMemo(() => buildingsLoading || unitsLoading, [buildingsLoading, unitsLoading])
-
-  if (isLoading)
-    return (
-      <Dialog open={showRoomModal} onOpenChange={setShowRoomModal}>
-        <DialogContent className="flex max-h-[90vh] max-w-4xl flex-col overflow-hidden p-0">
-          <DialogHeader className="p-6 pb-4">
-            <DialogTitle>Loading...</DialogTitle>
-            <DialogDescription>
-              <Spinner />
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    )
 
   if (!buildings)
     return (
@@ -145,7 +130,9 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
       <DialogContent className="flex max-h-[90vh] max-w-4xl flex-col overflow-hidden p-0">
         <DialogHeader className="p-6 pb-4">
           <DialogTitle>Select Room</DialogTitle>
-          <DialogDescription>Choose a building and then select a room for this maintenance task</DialogDescription>
+          <DialogDescription>
+            Start by choosing a building, then pick the contracted room where this maintenance task applies.
+          </DialogDescription>
         </DialogHeader>
 
         {/* Search */}
@@ -165,31 +152,38 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
               </h4>
 
               <div className="grid grid-cols-2 gap-2">
-                {buildings.map((building: IBuilding) => (
-                  <div
-                    key={'building-' + building.id + building.name}
-                    onClick={() => {
-                      handleBuildingChange(building.name)
-                    }}
-                    className={cn('border-1 w-full cursor-pointer rounded-lg px-4 py-3 duration-100 hover:shadow', [
-                      debouncedBuildingName === building.name
-                        ? 'border-theme-primary bg-theme-primary-100/80 text-theme-primary-600'
-                        : 'border-theme-secondary-300 hover:border-theme-primary-300 hover:bg-theme-secondary-50',
-                    ])}
-                  >
-                    <div className="w-full space-y-1 text-left">
-                      <div className="font-medium">{building.name}</div>
-                      <div
-                        className={cn(
-                          'text-body-2',
-                          debouncedBuildingName === building.name ? 'text-theme-primary' : 'text-theme-secondary',
-                        )}
-                      >
-                        {building.unitCount} rooms
+                {buildingsLoading ? (
+                  <div className="text-theme-secondary col-span-2 flex flex-col items-center justify-center py-12">
+                    <Spinner />
+                    <p>Loading buildings...</p>
+                  </div>
+                ) : (
+                  buildings.map((building: IBuilding) => (
+                    <div
+                      key={'building-' + building.id + building.name}
+                      onClick={() => {
+                        handleBuildingChange(building.name)
+                      }}
+                      className={cn('border-1 w-full cursor-pointer rounded-lg px-4 py-3 duration-100 hover:shadow', [
+                        debouncedBuildingName === building.name
+                          ? 'border-theme-primary bg-theme-primary-100/80 text-theme-primary-600'
+                          : 'border-theme-secondary-300 hover:border-theme-primary-300 hover:bg-theme-secondary-50',
+                      ])}
+                    >
+                      <div className="w-full space-y-1 text-left">
+                        <div className="font-medium">{building.name}</div>
+                        <div
+                          className={cn(
+                            'text-body-2',
+                            debouncedBuildingName === building.name ? 'text-theme-primary' : 'text-theme-secondary',
+                          )}
+                        >
+                          {building.occupiedUnitCount} rooms
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
 
@@ -199,6 +193,12 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
                 <MapPin className="size-4" />
                 Select Room
               </h4>
+              {unitsLoading && (
+                <div className="text-theme-secondary flex flex-col items-center justify-center py-12">
+                  <Spinner />
+                  <p>Loading rooms...</p>
+                </div>
+              )}
               {!debouncedBuildingName ? (
                 <div className="text-theme-secondary flex flex-col items-center justify-center py-12">
                   <Building2 className="text-theme-secondary size-12" />
@@ -206,7 +206,7 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
                 </div>
               ) : units.length === 0 ? (
                 <div className="text-theme-secondary flex flex-col items-center justify-center space-y-3 py-12">
-                  <Search className="text-theme-secondary-300 size-12" />
+                  <PackageOpen className="text-theme-secondary-300 size-12" />
                   <p>No rooms found</p>
                 </div>
               ) : (

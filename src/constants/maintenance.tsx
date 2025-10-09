@@ -1,6 +1,7 @@
 import { CircleCheckBig, Clock, ScrollText } from 'lucide-react'
 import z from 'zod'
 
+import { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
 import type { FORM_SECTION, IStatsCardProps, MAINTENANCE_FORM_FIELDS_TYPE } from '@/types'
 
 export const MAINTENANCE_STATS: Array<IStatsCardProps> = [
@@ -24,53 +25,6 @@ export const MAINTENANCE_STATS: Array<IStatsCardProps> = [
   },
 ]
 
-export const MAINTENANCE_STATUS = {
-  // COMPLETED = 'completed',
-  PENDING: 'pending',
-  ASSIGNED: 'assigned',
-  IN_PROGRESS: 'in_progress',
-  CANCELLED: 'cancelled',
-}
-
-export const MAINTENANCE_TABLE_DATA = [
-  {
-    room: 101,
-    buildings: 'A',
-    issuesDate: '15/08/2025',
-    appointmentDate: '20/08/2025',
-    servicerequest: 'น้ำแอร์รั่ว',
-    status: 'Pending',
-    type: 'warning',
-  },
-  {
-    room: 102,
-    buildings: 'A',
-    issuesDate: '15/08/2025',
-    appointmentDate: '20/08/2025',
-    servicerequest: 'น้ำแอร์รั่ว',
-    status: 'Pending',
-    type: 'warning',
-  },
-  {
-    room: 103,
-    buildings: 'A',
-    issuesDate: '15/08/2025',
-    appointmentDate: '20/08/2025',
-    servicerequest: 'น้ำแอร์รั่ว',
-    status: 'Done',
-    type: 'success',
-  },
-  {
-    room: 101,
-    buildings: 'A',
-    issuesDate: '15/08/2025',
-    appointmentDate: '20/08/2025',
-    servicerequest: 'น้ำแอร์รั่ว',
-    status: 'Inactive',
-    type: 'error',
-  },
-]
-
 export const MAINTENANCE_TABLE_HEADER = [
   'Ticket Number',
   'Service Request Reason',
@@ -84,14 +38,31 @@ export const MAINTENANCE_TABLE_HEADER = [
 ]
 
 export const MAINTENANCE_FORM_SCHEMA = z.object({
-  unit_id: z.string({ error: 'Room number is required.' }).min(1, 'Room number is required.'),
+  unitId: z.string({ error: 'Room number is required.' }).min(1, 'Room number is required.'),
   title: z.string({ error: 'Task title is required.' }).min(1, 'Task title is required.'),
-  description: z.string({ error: 'Task description is required.' }).min(1, 'Task description is required.'),
-  status: z.string({ error: 'Task status is required.' }).min(1, 'Task status is required.'),
-  priority: z.string({ error: 'Task priority is required.' }).min(1, 'Task priority is required.'),
-  appointment_date: z.string({ error: 'Appointment date is required.' }).min(1, 'Appointment date is required.'),
-  due_date: z.string({ error: 'Due date is required.' }).optional(),
-  estimated_hours: z.string().optional(),
+  description: z.string().optional(),
+  status: z.enum(
+    [
+      MAINTENANCE_STATUS.COMPLETED,
+      MAINTENANCE_STATUS.PENDING,
+      MAINTENANCE_STATUS.ASSIGNED,
+      MAINTENANCE_STATUS.IN_PROGRESS,
+      MAINTENANCE_STATUS.CANCELLED,
+    ],
+    { error: 'Status is required' },
+  ),
+  priority: z.enum(
+    [MAINTENANCE_PRIORITY.LOW, MAINTENANCE_PRIORITY.NORMAL, MAINTENANCE_PRIORITY.HIGH, MAINTENANCE_PRIORITY.URGENT],
+    { error: 'Priority is required' },
+  ),
+  appointmentDate: z.string({ error: 'Appointment date is required.' }).min(1, 'Appointment date is required.'),
+  dueDate: z.string({ error: 'Due date is required.' }).optional(),
+  category: z.enum([MAINTENANCE_CATEGORY.GENERAL, MAINTENANCE_CATEGORY.PLUMBING, MAINTENANCE_CATEGORY.ELECTRICITY], {
+    error: 'Category is required',
+  }),
+  isEmergency: z.boolean(),
+  estimatedHours: z.string().optional(),
+  estimatedCost: z.string().optional(),
 })
 
 export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS_TYPE>> = [
@@ -106,6 +77,7 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         fieldType: 'input',
         placeholder: 'Enter task title',
         maxLength: 100,
+        isRequired: true,
       },
       {
         key: 'description',
@@ -121,13 +93,44 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         label: 'Priority',
         description: 'Basic information about the maintenance task',
         fieldType: 'select',
+        isRequired: true,
         options: [
-          { value: 'low', label: 'Low' },
-          { value: 'normal', label: 'Normal' },
-          { value: 'high', label: 'High' },
-          { value: 'urgent', label: 'Urgent' },
+          { value: MAINTENANCE_PRIORITY.LOW, label: MAINTENANCE_PRIORITY.LOW },
+          { value: MAINTENANCE_PRIORITY.NORMAL, label: MAINTENANCE_PRIORITY.NORMAL },
+          { value: MAINTENANCE_PRIORITY.HIGH, label: MAINTENANCE_PRIORITY.HIGH },
+          { value: MAINTENANCE_PRIORITY.URGENT, label: MAINTENANCE_PRIORITY.URGENT },
         ],
         placeholder: 'Select priority',
+      },
+
+      {
+        key: 'status',
+        label: 'Status',
+        description: 'Basic information about the maintenance task',
+        fieldType: 'select',
+        isRequired: true,
+        options: [
+          { value: MAINTENANCE_STATUS.PENDING, label: MAINTENANCE_STATUS.PENDING },
+          { value: MAINTENANCE_STATUS.ASSIGNED, label: MAINTENANCE_STATUS.ASSIGNED },
+          { value: MAINTENANCE_STATUS.IN_PROGRESS, label: MAINTENANCE_STATUS.IN_PROGRESS },
+          { value: MAINTENANCE_STATUS.COMPLETED, label: MAINTENANCE_STATUS.COMPLETED },
+          { value: MAINTENANCE_STATUS.CANCELLED, label: MAINTENANCE_STATUS.CANCELLED },
+        ],
+        placeholder: 'Select status',
+      },
+      //category
+      {
+        key: 'category',
+        label: 'Category',
+        description: 'Basic information about the maintenance task',
+        fieldType: 'select',
+        isRequired: true,
+        options: [
+          { value: MAINTENANCE_CATEGORY.GENERAL, label: MAINTENANCE_CATEGORY.GENERAL },
+          { value: MAINTENANCE_CATEGORY.PLUMBING, label: MAINTENANCE_CATEGORY.PLUMBING },
+          { value: MAINTENANCE_CATEGORY.ELECTRICITY, label: MAINTENANCE_CATEGORY.ELECTRICITY },
+        ],
+        placeholder: 'Select category',
       },
     ],
   },
@@ -140,32 +143,49 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         layout: 'row',
         label: 'Scheduling',
         description: 'When and how often this task should be completed',
-        key: 'appointment_date',
+        key: 'appointmentDate',
         fields: [
           {
-            key: 'appointment_date',
+            key: 'appointmentDate',
             label: 'Appointment date',
             description: 'Basic information about the maintenance task',
             fieldType: 'input',
             inputType: 'datetime',
+            isRequired: true,
           },
           {
-            key: 'due_date',
+            key: 'dueDate',
             label: 'Due date',
             description: 'Basic information about the maintenance task',
             fieldType: 'input',
             inputType: 'datetime',
+            isRequired: true,
           },
         ],
       },
+
       {
-        key: 'estimated_hours',
+        key: 'estimatedHours',
         label: 'Estimated hours',
         description: 'Basic information about the maintenance task',
         fieldType: 'input',
         inputType: 'number',
         placeholder: 'Enter Estimated Hours',
         maxLength: 9,
+      },
+      {
+        key: 'estimatedCost',
+        label: 'Estimated Cost',
+        fieldType: 'input',
+        inputType: 'number',
+        placeholder: 'Enter Estimated Cost',
+        maxLength: 9,
+      },
+
+      {
+        key: 'isEmergency',
+        label: 'Emergency',
+        fieldType: 'switch',
       },
     ],
   },

@@ -7,7 +7,11 @@ import {
   Card,
   DateTimePicker,
   Form,
+  FormControl,
+  FormDescription,
   FormField,
+  FormItem,
+  FormLabel,
   FormMessage,
   Input,
   InputNumber,
@@ -19,8 +23,10 @@ import {
   Spinner,
   Textarea,
 } from '@/components/common'
+import { Switch } from '@/components/feature'
 import { SelectRoomModal } from '@/components/ui'
 import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
+import { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
 import type { MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 
 type Props = {
@@ -34,19 +40,22 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(MAINTENANCE_FORM_SCHEMA),
     defaultValues: {
-      unit_id: '',
+      unitId: '',
       title: '',
       description: '',
-      status: 'pending',
-      priority: 'normal',
-      appointment_date: '',
-      due_date: '',
-      estimated_hours: '',
+      status: MAINTENANCE_STATUS.PENDING,
+      priority: MAINTENANCE_PRIORITY.NORMAL,
+      appointmentDate: '',
+      dueDate: '',
+      estimatedHours: '',
+      estimatedCost: '',
+      category: MAINTENANCE_CATEGORY.GENERAL,
+      isEmergency: false,
     },
     mode: 'onChange',
   })
 
-  const isButtonDisabled = useMemo(
+  const isButtonDisabled: boolean = useMemo(
     () => isSubmitting || !form.formState.isDirty || !form.formState.isValid,
     [isSubmitting, form.formState.isDirty, form.formState.isValid],
   )
@@ -64,20 +73,57 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
             <div className="space-y-2">
               {fields.map((item, index) => {
                 switch (item.fieldType) {
+                  case 'switch':
+                    return (
+                      <FormField
+                        key={'form-maintenance-switch' + item.key + index + item.fieldType}
+                        name={item.key}
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem className="border-theme-secondary-300 flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">{item.label}</FormLabel>
+                              <FormDescription>{item.description}</FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                id={field.name}
+                                onBlur={field.onBlur}
+                                checked={Boolean(field.value)}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )
                   case 'input':
                     return (
                       <FormField
                         key={'form-maintenance-field' + item.key + index}
                         control={form.control}
-                        name={item.key as keyof MAINTENANCE_FORM_SCHEMA_TYPE}
+                        name={item.key}
                         render={({ field, fieldState }) => (
                           <div className="space-y-1">
-                            <p>{item.label}</p>
+                            <p>
+                              {item.label} {item.isRequired && <span className="text-theme-error">*</span>}
+                            </p>
 
                             {item.inputType === 'number' ? (
-                              <InputNumber maxLength={item.maxLength} {...field} placeholder={item.placeholder} />
+                              <InputNumber
+                                maxLength={item.maxLength}
+                                {...field}
+                                value={field.value?.toString()}
+                                placeholder={item.placeholder}
+                              />
                             ) : item.inputType === 'textarea' ? (
-                              <Textarea maxLength={item.maxLength} {...field} placeholder={item.placeholder} />
+                              <Textarea
+                                maxLength={item.maxLength}
+                                {...field}
+                                value={field.value?.toString()}
+                                placeholder={item.placeholder}
+                              />
                             ) : item.inputType === 'datetime' ? (
                               <DateTimePicker
                                 id={field.name}
@@ -88,7 +134,12 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
                                 required
                               />
                             ) : (
-                              <Input maxLength={item.maxLength} {...field} placeholder={item.placeholder} />
+                              <Input
+                                maxLength={item.maxLength}
+                                {...field}
+                                value={field.value?.toString()}
+                                placeholder={item.placeholder}
+                              />
                             )}
 
                             <FormMessage />
@@ -105,14 +156,20 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
                         name={item.key as keyof MAINTENANCE_FORM_SCHEMA_TYPE}
                         render={({ field }) => (
                           <div className="space-y-1">
-                            <p>{item.label}</p>
+                            <p>
+                              {item.label} {item.isRequired && <span className="text-theme-error">*</span>}
+                            </p>
                             <Select onValueChange={field.onChange} value={(field.value as string) ?? ''}>
-                              <SelectTrigger>
+                              <SelectTrigger className="capitalize">
                                 <SelectValue placeholder={item.placeholder} />
                               </SelectTrigger>
                               <SelectContent>
                                 {item.options.map((opt, i) => (
-                                  <SelectItem key={'select-value' + opt.value + i} value={opt.value}>
+                                  <SelectItem
+                                    className="capitalize"
+                                    key={'select-value' + opt.value + i}
+                                    value={opt.value}
+                                  >
                                     {opt.label}
                                   </SelectItem>
                                 ))}
@@ -130,27 +187,32 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
                         key={'form-maintenance-field' + item.key + index}
                         className="desktop:grid-cols-2 grid gap-x-4 gap-y-1"
                       >
-                        {item.fields.map((fieldItem, i2) => (
-                          <FormField
-                            key={'form-maintenance-field' + fieldItem.key + i2}
-                            control={form.control}
-                            name={fieldItem.key as keyof MAINTENANCE_FORM_SCHEMA_TYPE}
-                            render={({ field, fieldState }) => (
-                              <div className="space-y-1">
-                                <p>{fieldItem.label}</p>
-                                <DateTimePicker
-                                  id={field.name}
-                                  onChange={(val) => field.onChange(val?.toISOString() ?? '')}
-                                  onBlur={field.onBlur}
-                                  name={field.name}
-                                  error={!!fieldState.error}
-                                  required
-                                />
-                                <FormMessage />
-                              </div>
-                            )}
-                          />
-                        ))}
+                        {item.fields.map((fieldItem, i2) => {
+                          return (
+                            <FormField
+                              key={'form-maintenance-field' + fieldItem.key + i2}
+                              control={form.control}
+                              name={fieldItem.key}
+                              render={({ field, fieldState }) => (
+                                <div className="space-y-1">
+                                  <p>
+                                    {fieldItem.label}{' '}
+                                    {fieldItem.isRequired && <span className="text-theme-error">*</span>}
+                                  </p>
+                                  <DateTimePicker
+                                    id={field.name}
+                                    onChange={(val) => field.onChange(val?.toISOString() ?? '')}
+                                    onBlur={field.onBlur}
+                                    name={field.name}
+                                    error={!!fieldState.error}
+                                    required
+                                  />
+                                  <FormMessage />
+                                </div>
+                              )}
+                            />
+                          )
+                        })}
                       </div>
                     )
                 }
@@ -160,14 +222,16 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
         ))}
 
         {/* Location */}
-        <Card>
+        <Card className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
           <div>
-            <h3>Location</h3>
-            <p>Select the room where this task should be completed</p>
+            <h3>
+              Location <span className="text-theme-error">*</span>
+            </h3>
+            <p className="text-theme-secondary">Select the room where this task should be completed</p>
           </div>
           <FormField
             control={form.control}
-            name="unit_id"
+            name="unitId"
             render={({ field }) => (
               <div className="space-y-1">
                 <SelectRoomModal onRoomSelect={field.onChange} selectedRoomId={field.value} />
