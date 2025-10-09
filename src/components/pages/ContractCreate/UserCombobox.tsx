@@ -10,7 +10,7 @@ import { cn } from '@/utilities'
 type IMonthlyUserComboboxProps = {
   users: Array<ITenant>
   onSearchTenant: (query: string) => void
-  onSelectTenant: (userId: string) => void
+  onSelectTenant: (userId: string, name: string) => void
 }
 
 const MonthlyUserCombobox = ({ users, onSearchTenant, onSelectTenant }: IMonthlyUserComboboxProps) => {
@@ -41,7 +41,7 @@ const MonthlyUserCombobox = ({ users, onSearchTenant, onSelectTenant }: IMonthly
                   onSelect={(currentValue) => {
                     setValue(currentValue)
                     setOpen(false)
-                    onSelectTenant(currentValue)
+                    onSelectTenant(currentValue, user.fullName)
                   }}
                 >
                   {user.fullName}

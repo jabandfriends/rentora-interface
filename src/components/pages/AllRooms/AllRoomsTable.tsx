@@ -42,14 +42,15 @@ const AllRoomsTable = ({
 }: AllRoomsTableProps) => {
   const navigate: NavigateFunction = useNavigate()
   const { apartmentId } = useParams<{ apartmentId: string }>()
+
   const statusBadgeVariant = useCallback((unitStatus: string): VariantProps<typeof Badge>['variant'] => {
     switch (unitStatus) {
       case 'available':
         return 'success'
       case 'occupied':
-        return 'default'
-      case 'maintenance':
         return 'warning'
+      case 'maintenance':
+        return 'error'
       default:
         return 'default'
     }
