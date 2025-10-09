@@ -17,7 +17,9 @@ export const MONTHLY_CONTRACT_SCHEMA = z
       .min(10, 'Valid phone number is required')
       .regex(/^0[0-9]{9}$/, 'Phone number must be 10 digits and start with 0'),
     guarantorIdNumber: z.string().min(13, 'Valid ID number is required'),
-    rentalType: z.enum(['monthly', 'daily', 'yearly']),
+    rentalType: z.enum([ContractType.MONTHLY, ContractType.DAILY, ContractType.YEARLY], {
+      error: 'Rental type is required',
+    }),
     startDate: z.date({ error: 'Start date is required' }),
     endDate: z.date({ error: 'End date is required' }),
     rentalPrice: z.string().min(1, 'Rental price is required'),

@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/common'
+import { ContractType } from '@/constants'
 import type { ITenant, MonthlyContractFormData } from '@/types'
 
 import UserCombobox from './UserCombobox'
@@ -47,14 +48,16 @@ const ContractTenantAndType = ({ form, usersData, handleSelectTenant, handleSear
             <FormLabel>Rental Type</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="capitalize">
                   <SelectValue placeholder="Select a rental type" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="monthly">Monthly</SelectItem>
-                <SelectItem value="yearly">Yearly</SelectItem>
-                <SelectItem value="daily">Daily</SelectItem>
+                {Object.entries(ContractType).map(([key, value]) => (
+                  <SelectItem className="capitalize" key={key} value={value}>
+                    {value}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <FormMessage />

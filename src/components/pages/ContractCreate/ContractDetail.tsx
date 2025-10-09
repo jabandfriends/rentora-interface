@@ -25,12 +25,12 @@ type IContractDetail = {
 
 const ContractDetail = ({ form }: IContractDetail) => {
   const { trigger, watch } = form
-  const [startDate, endDate]: [Date, Date] = watch(['startDate', 'endDate'])
+  const [startDate, endDate, rentalType]: [Date, Date, string] = watch(['startDate', 'endDate', 'rentalType'])
   useEffect(() => {
-    if (startDate || endDate) {
-      trigger(['startDate', 'endDate'])
+    if (startDate || endDate || rentalType) {
+      trigger(['startDate', 'endDate', 'rentalType'])
     }
-  }, [startDate, endDate, trigger])
+  }, [startDate, endDate, trigger, rentalType])
   return (
     <div className="desktop:grid-cols-2 grid gap-4">
       <div>
@@ -107,7 +107,7 @@ const ContractDetail = ({ form }: IContractDetail) => {
                       )}
                     >
                       {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      <CalendarIcon className="ml-auto size-4 opacity-50" />
                     </Button>
                   </FormControl>
                 }
@@ -155,7 +155,7 @@ const ContractDetail = ({ form }: IContractDetail) => {
                       )}
                     >
                       {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
-                      <CalendarIcon className="h-4 w-4 opacity-50" />
+                      <CalendarIcon className="size-4 opacity-50" />
                     </Button>
                   </FormControl>
                 }
