@@ -13,8 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/common'
-import { Badge, EmptyPage, LoadingPage } from '@/components/ui'
+import { Badge, EmptyPage, FieldEmpty, LoadingPage } from '@/components/ui'
+import { MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraMaintenanceDetail } from '@/hooks'
+import { formatDate } from '@/utilities'
 
 import MaintenanceBreadcrumb from './MaintenanceBreadcrumb'
 
@@ -23,19 +25,9 @@ const MaintenanceDetail = () => {
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
 
   //fetch maintenance detail
-  const { data: maintenance, isLoading } = useRentoraMaintenanceDetail({ apartmentId, maintenanceId: id })
+  const { data: maintenance, isLoading, error } = useRentoraMaintenanceDetail({ apartmentId, maintenanceId: id })
 
   const [status, setStatus] = useState<string>(maintenance?.status || 'in-progress')
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-  }
 
   const handleStatusChange = (newStatus: string) => {
     setStatus(newStatus)
@@ -44,6 +36,10 @@ const MaintenanceDetail = () => {
 
   if (isLoading) {
     return <LoadingPage />
+  }
+
+  if (error) {
+    return <EmptyPage title="Maintenance Not Found" description="The maintenance you're looking for doesn't exist. " />
   }
 
   if (!maintenance) {
@@ -78,7 +74,9 @@ const MaintenanceDetail = () => {
                 <CardTitle>Description</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-theme-secondary">{maintenance.description}</p>
+                <p className="text-theme-secondary">
+                  {maintenance.description ? maintenance.description : <FieldEmpty />}
+                </p>
               </CardContent>
             </Card>
             {/* Quick Actions */}
@@ -88,27 +86,28 @@ const MaintenanceDetail = () => {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Select value={status} onValueChange={handleStatusChange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="capitalize">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="assigned">Assigned</SelectItem>
-                    <SelectItem value="in-progress">In Progress</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                    {Object.values(MAINTENANCE_STATUS).map((value) => (
+                      <SelectItem className="capitalize" value={value}>
+                        {value}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
 
                 <Select value={maintenance.priority}>
-                  <SelectTrigger>
+                  <SelectTrigger className="capitalize">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="low">Low Priority</SelectItem>
-                    <SelectItem value="normal">Normal Priority</SelectItem>
-                    <SelectItem value="high">High Priority</SelectItem>
-                    <SelectItem value="urgent">Urgent Priority</SelectItem>
+                    {Object.values(MAINTENANCE_PRIORITY).map((value) => (
+                      <SelectItem className="capitalize" value={value}>
+                        {value} Priority
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </CardContent>
@@ -125,7 +124,9 @@ const MaintenanceDetail = () => {
                 <Calendar className="size-4" />
                 <div>
                   <p className="text-body-2">Created</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenance.createdAt}</p>
+                  <p className="text-body-2 text-theme-secondary">
+                    {maintenance.createdAt ? formatDate(new Date(maintenance.createdAt)) : <FieldEmpty />}
+                  </p>
                 </div>
               </div>
 
@@ -133,7 +134,9 @@ const MaintenanceDetail = () => {
                 <Clock className="size-4" />
                 <div>
                   <p className="text-body-2">Scheduled</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenance.appointmentDate}</p>
+                  <p className="text-body-2 text-theme-secondary">
+                    {maintenance.appointmentDate ? formatDate(new Date(maintenance.appointmentDate)) : <FieldEmpty />}
+                  </p>
                 </div>
               </div>
 
@@ -149,7 +152,9 @@ const MaintenanceDetail = () => {
                 <Clock className="size-4" />
                 <div>
                   <p className="text-body-2">Estimated Duration</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenance.estimatedHours || 'N/A'} hours</p>
+                  <p className="text-body-2 text-theme-secondary">
+                    {maintenance.estimatedHours || <FieldEmpty />} hours
+                  </p>
                 </div>
               </div>
 
@@ -158,7 +163,11 @@ const MaintenanceDetail = () => {
                 <div>
                   <p className="text-body-2">Completed At</p>
                   <p className="text-body-2 text-theme-secondary">
-                    {maintenance.completedAt ? formatDate(maintenance.completedAt) : 'N/A'}
+                    {maintenance.completedAt ? (
+                      formatDate(new Date(maintenance.completedAt), 'YYYY-MM-DD')
+                    ) : (
+                      <FieldEmpty />
+                    )}
                   </p>
                 </div>
               </div>
@@ -173,7 +182,7 @@ const MaintenanceDetail = () => {
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">
                 <div>
-                  <p className="text-body-2">{maintenance.tenantName || 'N/A'}</p>
+                  <p className="text-body-2">{maintenance.tenantName || <FieldEmpty />}</p>
                   <p className="text-body-2 text-theme-secondary">Tenant</p>
                 </div>
               </div>
@@ -181,19 +190,19 @@ const MaintenanceDetail = () => {
               <div className="flex items-center gap-3">
                 <MapPin className="size-4" />
                 <div>
-                  <p className="text-body-2">{maintenance.unitName || 'N/A'}</p>
-                  <p className="text-body-2 text-theme-secondary">{maintenance.buildingsName || 'N/A'}</p>
+                  <p className="text-body-2">{maintenance.unitName || <FieldEmpty />}</p>
+                  <p className="text-body-2 text-theme-secondary">{maintenance.buildingsName || <FieldEmpty />}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
                 <Phone className="size-4" />
-                <p className="text-body-2 text-theme-secondary">{maintenance.tenantPhoneNumber || 'N/A'}</p>
+                <p className="text-body-2 text-theme-secondary">{maintenance.tenantPhoneNumber || <FieldEmpty />}</p>
               </div>
 
               <div className="flex items-center gap-3">
                 <Mail className="size-4" />
-                <p className="text-body-2 text-theme-secondary">{maintenance.tenantEmail || 'N/A'}</p>
+                <p className="text-body-2 text-theme-secondary">{maintenance.tenantEmail || <FieldEmpty />}</p>
               </div>
             </CardContent>
           </Card>

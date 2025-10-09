@@ -11,6 +11,7 @@ export type IBuilding = {
   createdAt: string
   floorCount: number
   unitCount: number
+  occupiedUnitCount: number
 }
 
 export type IRentoraApiClientBuildingListResponse = IRentoraApiClientBaseResponse<Array<IBuilding>>

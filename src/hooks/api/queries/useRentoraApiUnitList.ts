@@ -9,6 +9,7 @@ import type { IRentoraApiClientUnitListResponse, IRentoraApiUnitListParams, IUse
 export const useRentoraApiUnitList = (props: {
   apartmentId: string
   params: IRentoraApiUnitListParams
+  enabled?: boolean
 }): IUseRentoraApiUnitList => {
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
 
@@ -38,6 +39,7 @@ export const useRentoraApiUnitList = (props: {
       })
     },
     retry: 1,
+    enabled: props.enabled ?? true,
   })
 
   const result: IRentoraApiClientUnitListResponse['data'] = useMemo(() => {

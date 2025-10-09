@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Spinner } from '@/components/common'
 import { SearchBar } from '@/components/feature'
-import { ROOMSTATUSENUM } from '@/constants'
+import { UnitStatus } from '@/enum'
 import { useRentoraApiBuildingListNoPaginate } from '@/hooks'
 
 type IAllRoomSearchProps = {
   onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
-  onStatusChange?: (value: string) => void
+  onStatusChange?: (value: UnitStatus) => void
   onBuildingChange?: (value: string) => void
 }
 const AllRoomSearch = ({ onSearchChange, onStatusChange, onBuildingChange }: IAllRoomSearchProps) => {
@@ -29,17 +29,19 @@ const AllRoomSearch = ({ onSearchChange, onStatusChange, onBuildingChange }: IAl
       <div className="desktop:flex-row flex flex-col gap-2">
         <div className="flex gap-2">
           {/* Status Dropdown */}
-          {ROOMSTATUSENUM && (
+          {UnitStatus && (
             <Select onValueChange={onStatusChange}>
               <SelectTrigger className="capitalize">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                {Object.values(ROOMSTATUSENUM).map((status) => (
-                  <SelectItem className="capitalize" key={status} value={status}>
-                    {status}
-                  </SelectItem>
-                ))}
+                {Object.values(UnitStatus)
+                  .filter((status) => status !== UnitStatus.all)
+                  .map((status) => (
+                    <SelectItem className="capitalize" key={status} value={status}>
+                      {status}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           )}
