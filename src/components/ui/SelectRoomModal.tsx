@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  PaginationBar,
   SearchBar,
 } from '@/components/feature'
 import { DEFAULT_UNIT_LIST_DATA } from '@/constants'
@@ -49,17 +50,28 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
   const { data: buildings, isLoading: buildingsLoading } = useRentoraApiBuildingListNoPaginate({ apartmentId })
 
   //fetch all room
-  const { data: units, isLoading: unitsLoading } = useRentoraApiUnitList({
+  const {
+    data: units,
+    isLoading: unitsLoading,
+    pagination: { totalElements, totalPages },
+  } = useRentoraApiUnitList({
     apartmentId: apartmentId!,
     params: {
       page: currentUnitPage,
-      size: DEFAULT_UNIT_LIST_DATA.size,
+      size: 4,
       search: debouncedSearch,
       buildingName: debouncedBuildingName,
       status: UnitStatus.occupied,
     },
     enabled: !!debouncedBuildingName,
   })
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setCurrentUnitPage(page)
+    },
+    [setCurrentUnitPage],
+  )
 
   const handleSearchChange: ISearchBarProps['onChange'] = useCallback(
     ({ target: { value } }: Parameters<ISearchBarProps['onChange']>[0]) => {
@@ -145,14 +157,14 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
 
         {/* Modal Body */}
         <div className="flex-1 overflow-y-auto px-6 pb-6">
-          <div className="desktop:grid-cols-2 grid gap-6">
+          <div className="grid gap-6">
             <div className="space-y-2">
               <h4 className="flex items-center gap-x-2">
                 <Building2 className="size-4" />
                 Select Building
               </h4>
 
-              <div className="flex flex-col gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 {buildings.map((building: IBuilding) => (
                   <div
                     key={'building-' + building.id + building.name}
@@ -198,26 +210,37 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
                   <p>No rooms found</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-2">
-                  {units.map((unit) => (
-                    <div
-                      key={unit.id}
-                      onClick={() => {
-                        onRoomSelect(unit.id)
-                        setSelectedUnitName(unit.unitName)
-                      }}
-                      className={cn(
-                        'border-1 border-theme-secondary-300 hover:border-theme-primary-300 hover:bg-theme-secondary-50 cursor-pointer rounded-lg px-4 py-3 text-center font-medium duration-100',
-                        [
-                          selectedRoomId === unit.id
-                            ? 'border-theme-primary bg-theme-primary-100/80 text-theme-primary-600'
-                            : '',
-                        ],
-                      )}
-                    >
-                      {unit.unitName}
-                    </div>
-                  ))}
+                <div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {units.map((unit) => (
+                      <div
+                        key={unit.id}
+                        onClick={() => {
+                          onRoomSelect(unit.id)
+                          setSelectedUnitName(unit.unitName)
+                        }}
+                        className={cn(
+                          'border-1 border-theme-secondary-300 hover:border-theme-primary-300 hover:bg-theme-secondary-50 cursor-pointer rounded-lg px-4 py-3 text-center font-medium duration-100',
+                          [
+                            selectedRoomId === unit.id
+                              ? 'border-theme-primary bg-theme-primary-100/80 text-theme-primary-600'
+                              : '',
+                          ],
+                        )}
+                      >
+                        {unit.unitName}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-end gap-y-2">
+                    <PaginationBar
+                      onPageChange={handlePageChange}
+                      isLoading={isLoading}
+                      page={currentUnitPage}
+                      totalPages={totalPages}
+                      totalElements={totalElements}
+                    />
+                  </div>
                 </div>
               )}
             </div>

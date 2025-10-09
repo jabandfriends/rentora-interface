@@ -7,17 +7,13 @@ import { PageHeader, PageSection } from '@/components/layout'
 import { MaintenanceForm } from '@/components/pages/Maintenance'
 import { ROUTES } from '@/constants'
 import { Priority, Status } from '@/enum'
-import { useRentoraApiCreateMaintenance, useRentoraApiUnitList } from '@/hooks'
+import { useRentoraApiCreateMaintenance } from '@/hooks'
 import type { ICreateMaintenanceRequestPayload, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
 const MaintenanceCreate = () => {
   const navigate = useNavigate()
   const { apartmentId } = useParams<{ apartmentId: string }>()
-  const { data: unitList = [], isLoading: unitsLoading } = useRentoraApiUnitList({
-    apartmentId: apartmentId ?? '',
-    params: { page: 0, size: 50, search: '' },
-  })
   const { mutateAsync: createMaintenance, isPending } = useRentoraApiCreateMaintenance()
 
   const onSubmit = useCallback(
@@ -58,14 +54,7 @@ const MaintenanceCreate = () => {
         actionIcon={<ArrowLeft />}
         actionOnClick={navigateBefore}
       />
-      <MaintenanceForm
-        onSubmit={onSubmit}
-        buttonIcon={<Plus />}
-        buttonLabel="Create a Task"
-        isSubmitting={isPending}
-        units={unitList}
-        unitsLoading={unitsLoading}
-      />
+      <MaintenanceForm onSubmit={onSubmit} buttonIcon={<Plus />} buttonLabel="Create a Task" isSubmitting={isPending} />
     </PageSection>
   )
 }

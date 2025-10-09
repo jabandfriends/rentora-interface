@@ -21,18 +21,16 @@ import {
 } from '@/components/common'
 import { SelectRoomModal } from '@/components/ui'
 import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
-import type { IUnit, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
+import type { MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 
 type Props = {
   buttonLabel: string
   buttonIcon?: React.ReactNode
   onSubmit: (data: MAINTENANCE_FORM_SCHEMA_TYPE) => void | Promise<void>
   isSubmitting?: boolean
-  units?: Array<IUnit>
-  unitsLoading?: boolean
 }
 
-const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, units, unitsLoading }: Props) => {
+const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Props) => {
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(MAINTENANCE_FORM_SCHEMA),
     defaultValues: {
@@ -65,33 +63,6 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, unit
 
             <div className="space-y-2">
               {fields.map((item, index) => {
-                if (item.key === 'unit_id') {
-                  return (
-                    <FormField
-                      key={'form-maintenance-field' + item.key + index}
-                      control={form.control}
-                      name={item.key as keyof MAINTENANCE_FORM_SCHEMA_TYPE}
-                      render={({ field }) => (
-                        <div className="space-y-1">
-                          <p>{item.label}</p>
-                          <Select value={field.value ?? ''} onValueChange={field.onChange} disabled={unitsLoading}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select Room Number" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {units?.map((unit: IUnit) => (
-                                <SelectItem key={unit.id} value={unit.id}>
-                                  {unit.unitName}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </div>
-                      )}
-                    />
-                  )
-                }
                 switch (item.fieldType) {
                   case 'input':
                     return (
