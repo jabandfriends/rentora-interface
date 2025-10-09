@@ -15,8 +15,8 @@ import {
   PaginationBar,
   SearchBar,
 } from '@/components/feature'
+import { Badge } from '@/components/ui'
 import { DEFAULT_UNIT_LIST_DATA } from '@/constants'
-import { UnitStatus } from '@/enum'
 import { useRentoraApiBuildingListNoPaginate, useRentoraApiUnitList } from '@/hooks'
 import type { IBuilding, ISearchBarProps } from '@/types'
 import { cn } from '@/utilities'
@@ -61,7 +61,6 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
       size: 4,
       search: debouncedSearch,
       buildingName: debouncedBuildingName,
-      status: UnitStatus.occupied,
     },
     enabled: !!debouncedBuildingName,
   })
@@ -178,7 +177,7 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
                             debouncedBuildingName === building.name ? 'text-theme-primary' : 'text-theme-secondary',
                           )}
                         >
-                          {building.occupiedUnitCount} rooms
+                          {building.occupiedUnitCount} / {building.unitCount} rooms occupied
                         </div>
                       </div>
                     </div>
@@ -210,17 +209,17 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
                   <p>No rooms found</p>
                 </div>
               ) : (
-                <div>
+                <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-2">
-                    {units.map((unit) => (
+                    {units.map((unit, index) => (
                       <div
-                        key={unit.id}
+                        key={unit.id + index + unit.createdAt}
                         onClick={() => {
                           onRoomSelect(unit.id)
                           setSelectedUnitName(unit.unitName)
                         }}
                         className={cn(
-                          'border-1 border-theme-secondary-300 hover:border-theme-primary-300 hover:bg-theme-secondary-50 cursor-pointer rounded-lg px-4 py-3 text-center font-medium duration-100',
+                          'border-1 border-theme-secondary-300 hover:border-theme-primary-300 hover:bg-theme-secondary-50 flex cursor-pointer flex-col items-center rounded-lg px-4 py-3 font-medium duration-100',
                           [
                             selectedRoomId === unit.id
                               ? 'border-theme-primary bg-theme-primary-100/80 text-theme-primary-600'
@@ -229,6 +228,7 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
                         )}
                       >
                         {unit.unitName}
+                        <Badge className="capitalize">{unit.contractStatus ?? 'No Tenant'}</Badge>
                       </div>
                     ))}
                   </div>
