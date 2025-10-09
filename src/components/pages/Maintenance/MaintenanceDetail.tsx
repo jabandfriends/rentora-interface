@@ -1,5 +1,5 @@
 import { Calendar, Check, Clock, Mail, MapPin, Phone, Wrench } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import {
@@ -27,7 +27,13 @@ const MaintenanceDetail = () => {
   //fetch maintenance detail
   const { data: maintenance, isLoading, error } = useRentoraMaintenanceDetail({ apartmentId, maintenanceId: id })
 
-  const [status, setStatus] = useState<string>(maintenance?.status || 'in-progress')
+  const [status, setStatus] = useState<string>(MAINTENANCE_STATUS.IN_PROGRESS)
+
+  useEffect(() => {
+    if (maintenance?.status) {
+      setStatus(maintenance.status)
+    }
+  }, [maintenance])
 
   const handleStatusChange = (newStatus: string) => {
     setStatus(newStatus)

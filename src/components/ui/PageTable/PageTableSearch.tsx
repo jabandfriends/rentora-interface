@@ -35,7 +35,7 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
               <SelectContent align="start" sideOffset={10}>
                 {Object.entries(statusEnum).map(([key, value]) => (
                   <SelectItem className="capitalize" key={key} value={value}>
-                    {key}
+                    {value}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -50,8 +50,8 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
               </SelectTrigger>
               <SelectContent align="start" sideOffset={10}>
                 {Object.entries(sortEnum).map(([key, value]) => (
-                  <SelectItem className="capitalize" value={value} key={value}>
-                    {key}
+                  <SelectItem className="capitalize" value={value} key={key}>
+                    {value}
                   </SelectItem>
                 ))}
               </SelectContent>
