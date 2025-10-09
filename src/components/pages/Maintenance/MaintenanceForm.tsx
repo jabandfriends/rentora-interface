@@ -19,6 +19,7 @@ import {
   Spinner,
   Textarea,
 } from '@/components/common'
+import { SelectRoomModal } from '@/components/ui'
 import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
 import type { IUnit, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 
@@ -186,6 +187,24 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, unit
             </div>
           </Card>
         ))}
+
+        {/* Location */}
+        <Card>
+          <div>
+            <h3>Location</h3>
+            <p>Select the room where this task should be completed</p>
+          </div>
+          <FormField
+            control={form.control}
+            name="unit_id"
+            render={({ field }) => (
+              <div className="space-y-1">
+                <SelectRoomModal onRoomSelect={field.onChange} selectedRoomId={field.value} />
+                <FormMessage />
+              </div>
+            )}
+          />
+        </Card>
 
         <div className="flex justify-end">
           <Button className="flex items-center gap-2" disabled={isButtonDisabled} type="submit">

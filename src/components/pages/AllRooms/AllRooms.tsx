@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom'
 import AllRoomsTable from '@/components/pages/AllRooms/AllRoomsTable'
 import { PageTableHeader } from '@/components/ui'
 import { DEFAULT_UNIT_LIST_DATA } from '@/constants'
+import { UnitStatus } from '@/enum'
 import { useRentoraApiUnitList } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
@@ -23,12 +24,12 @@ const AllRooms = () => {
   const { watch, setValue } = useForm({
     defaultValues: {
       search: '',
-      status: '',
+      status: UnitStatus.all,
       buildingName: '',
     },
   })
 
-  const [search, status, buildingName]: [string, string, string] = watch(['search', 'status', 'buildingName'])
+  const [search, status, buildingName]: [string, UnitStatus, string] = watch(['search', 'status', 'buildingName'])
 
   const debouncedSearch = useDebounce(search ? search : undefined, 500)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
@@ -59,7 +60,7 @@ const AllRooms = () => {
     [setValue, setCurrentPage],
   )
   const handleStatusChange = useCallback(
-    (value: string) => {
+    (value: UnitStatus) => {
       setValue('status', value)
       setCurrentPage(DEFAULT_UNIT_LIST_DATA.page)
     },

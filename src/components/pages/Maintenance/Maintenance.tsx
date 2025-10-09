@@ -141,7 +141,7 @@ const Maintenance = () => {
         title="Maintenance"
         description="Manage maintenance reports"
         stats={maintenanceStats}
-        actionButton={<Button onClick={handleCreate}>New Report</Button>}
+        actionButton={<Button onClick={handleCreate}>New Maintenance</Button>}
       />
       {/* <PageTableSearch /> */}
       <PageTableSearch

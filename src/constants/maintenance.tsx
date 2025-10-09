@@ -169,22 +169,4 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
       },
     ],
   },
-  {
-    title: 'Location',
-    description: 'Select the room where this task should be completed',
-    fields: [
-      {
-        key: 'unit_id',
-        label: 'Room number',
-        placeholder: 'Select Room Number',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'select',
-        options: [
-          { value: 'room1', label: 'Room 1' },
-          { value: 'room2', label: 'Room 2' },
-          { value: 'room3', label: 'Room 3' },
-        ],
-      },
-    ],
-  },
 ]
