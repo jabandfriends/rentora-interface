@@ -140,6 +140,7 @@ const Maintenance = () => {
         title="Maintenance"
         description="Manage maintenance reports"
         stats={maintenanceStats}
+        isLoading={isLoading}
         actionButton={<Button onClick={handleCreate}>New Maintenance</Button>}
       />
       {/* <PageTableSearch /> */}

@@ -97,7 +97,7 @@ const MaintenanceDetail = () => {
                   </SelectTrigger>
                   <SelectContent>
                     {Object.values(MAINTENANCE_STATUS).map((value) => (
-                      <SelectItem className="capitalize" value={value}>
+                      <SelectItem className="capitalize" key={value} value={value}>
                         {value}
                       </SelectItem>
                     ))}
@@ -110,7 +110,7 @@ const MaintenanceDetail = () => {
                   </SelectTrigger>
                   <SelectContent>
                     {Object.values(MAINTENANCE_PRIORITY).map((value) => (
-                      <SelectItem className="capitalize" value={value}>
+                      <SelectItem className="capitalize" key={value} value={value}>
                         {value} Priority
                       </SelectItem>
                     ))}

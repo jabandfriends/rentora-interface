@@ -141,7 +141,6 @@ const MonthlyContractBody = () => {
 
         await createContract(payload)
         toast.success(`Tenant ${tenantName} Contract created successfully`)
-        form.reset()
 
         setTimeout(() => {
           navigate(ROUTES.allRoom.getPath(apartmentId))
@@ -150,7 +149,7 @@ const MonthlyContractBody = () => {
         toast.error(getErrorMessage(error))
       }
     },
-    [form, navigate, apartmentId, createContract],
+    [navigate, apartmentId, createContract],
   )
 
   return (
