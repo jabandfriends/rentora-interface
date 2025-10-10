@@ -17,6 +17,9 @@ dayjs.extend(relativeTime)
  * @returns formatted string
  */
 export function formatTimestamp(isoString: string, format = 'YYYY-MM-DD HH:mm:ss', tz?: string) {
+  if (!isoString) {
+    return ''
+  }
   if (tz) {
     return dayjs.utc(isoString).tz(tz).format(format)
   }
@@ -24,16 +27,25 @@ export function formatTimestamp(isoString: string, format = 'YYYY-MM-DD HH:mm:ss
 }
 //format date
 export function formatDate(date: Date, format = 'YYYY-MM-DD HH:mm:ss') {
+  if (!date) {
+    return ''
+  }
   return dayjs(date).format(format)
 }
 
 //calculate month
 export function calculateMonth(startDate: Date, endDate: Date) {
+  if (!startDate || !endDate) {
+    return 0
+  }
   return dayjs(endDate).diff(dayjs(startDate), 'month')
 }
 
 //get date diff
 export function getDateDiff(startDate: string | Date, endDate: string | Date): DateDiff {
+  if (!startDate || !endDate) {
+    return { days: 0, months: 0, years: 0 }
+  }
   const start = dayjs(startDate)
   const end = dayjs(endDate)
 
@@ -54,5 +66,8 @@ export function getDateDiff(startDate: string | Date, endDate: string | Date): D
  * @returns e.g. "3 hours ago"
  */
 export function timeFromNow(isoString: string) {
+  if (!isoString) {
+    return ''
+  }
   return dayjs(isoString).fromNow()
 }

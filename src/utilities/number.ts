@@ -11,5 +11,6 @@ export function formatNumber(value: number, decimalPlaces: number = 0, useThousa
 }
 
 export function formatCurrency(value: number, decimalPlaces: number = 2, currencySymbol: string = '฿'): string {
+  if (isNaN(value)) return '0'
   return `${currencySymbol}${formatNumber(value, decimalPlaces)}`
 }

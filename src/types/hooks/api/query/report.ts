@@ -11,6 +11,7 @@ export type IReportUtilityListParams = {
 
 export type IReportUtility = {
   roomName: string
+  buildingName: string
   tenantName: string
   electricUsage: number
   electricCost: number
