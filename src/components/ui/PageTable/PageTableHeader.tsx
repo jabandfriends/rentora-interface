@@ -6,7 +6,7 @@ import type { IStatsCardProps } from '@/types'
 type IPageTableHeaderProps = {
   title: string
   description: string
-  stats: Array<IStatsCardProps>
+  stats?: Array<IStatsCardProps>
   actionButton?: ReactNode
   isLoading?: boolean
 }
@@ -26,11 +26,13 @@ const PageTableHeader = ({ title, description, stats, actionButton, isLoading }:
       </div>
 
       {/* Stats Card */}
-      <div className="desktop:flex-row desktop:justify-start desktop:flex grid grid-cols-2 flex-col items-center justify-center gap-3">
-        {stats.map((item: IStatsCardProps) => (
-          <StatsCard key={item.title} isLoading={isLoading} {...item} />
-        ))}
-      </div>
+      {stats && (
+        <div className="desktop:flex-row desktop:justify-start desktop:flex grid grid-cols-2 flex-col items-center justify-center gap-3">
+          {stats.map((item: IStatsCardProps) => (
+            <StatsCard key={item.title} isLoading={isLoading} {...item} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
