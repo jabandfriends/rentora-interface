@@ -1,5 +1,6 @@
 import type {
   IApartmentListMetadata,
+  IReportRoomListMetadata,
   IReportUtilityListMetadata,
   ITenantListMetadata,
   IUnitListMetadata,
@@ -32,4 +33,9 @@ export const DEFAULT_REPORT_UTILITY_LIST_METADATA: IReportUtilityListMetadata = 
   electricUsagePrices: 0,
   waterUsagePrices: 0,
   totalAmount: 0,
+}
+export const DEFAULT_REPORT_ROOM_LIST_METADATA: IReportRoomListMetadata = {
+  totalRooms: 0,
+  availableRooms: 0,
+  unavailableRooms: 0,
 }

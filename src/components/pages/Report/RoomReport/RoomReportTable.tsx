@@ -1,13 +1,47 @@
-import { SquarePen } from 'lucide-react'
-
-import { Badge, PaginationBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { PaginationBar } from '@/components/feature'
+import {
+  Badge,
+  PageTableEmpty,
+  PageTableLoading,
+  PageTableSearchEmpty,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui'
 import { ROOM_REPORT_TABLE_HEADER } from '@/constants'
+import type { IReportRoom } from '@/types'
 
 type IRoomReportTableProps = {
   data: Array<any>
+  isLoading: boolean
+  isSearched: boolean
+  currentPage: number
+  totalPages: number
+  totalElements: number
+  onPageChange: (page: number) => void
 }
 
-const RoomReportTable = ({ data }: IRoomReportTableProps) => {
+const RoomReportTable = ({
+  data,
+  isLoading,
+  isSearched,
+  currentPage,
+  totalPages,
+  totalElements,
+  onPageChange,
+}: IRoomReportTableProps) => {
+  if (isLoading) {
+    return <PageTableLoading />
+  }
+  if (isSearched && !isLoading && data?.length === 0) {
+    return <PageTableSearchEmpty message="No room report found" subMessage="No room report found for this search" />
+  }
+  if (!isLoading && (!data || data.length === 0)) {
+    return <PageTableEmpty message="No room report found" />
+  }
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
       <Table>
@@ -19,27 +53,28 @@ const RoomReportTable = ({ data }: IRoomReportTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {/* RECHECK : API TYPE */}
-          {data.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>{item.room}</TableCell>
-              <TableCell>{item.tenant}</TableCell>
-              <TableCell>{item.reservationHolder}</TableCell>
-              <TableCell>{item.amount}</TableCell>
-              <TableCell>{item.dueDate}</TableCell>
+          {data.map((item: IReportRoom) => (
+            <TableRow key={item.roomName + item.roomName}>
+              <TableCell>{item.roomName}</TableCell>
+              <TableCell>{item.tenantName}</TableCell>
+              <TableCell>{item.reservedName}</TableCell>
+              <TableCell>{item.totalAmount}</TableCell>
               <TableCell>{item.issueDate}</TableCell>
+              <TableCell>{item.dueDate}</TableCell>
               <TableCell>{item.checkoutDate}</TableCell>
               <TableCell>
                 <Badge variant="success">{item.status}</Badge>
-              </TableCell>
-              <TableCell>
-                <SquarePen size={20} />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <PaginationBar />
+      <PaginationBar
+        page={currentPage}
+        totalPages={totalPages}
+        totalElements={totalElements}
+        onPageChange={onPageChange}
+      />
     </div>
   )
 }

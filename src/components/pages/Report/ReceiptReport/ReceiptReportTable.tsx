@@ -1,5 +1,3 @@
-import { SquarePen, Trash } from 'lucide-react'
-
 import { Badge, PaginationBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { RECEIPT_REPORT_TABLE_HEADER } from '@/constants'
 
@@ -30,10 +28,6 @@ const ReceiptReportTable = ({ data }: IReceiptReportTableProps) => {
               <TableCell>{item.duedate}</TableCell>
               <TableCell>
                 <Badge variant="success">{item.status}</Badge>
-              </TableCell>
-              <TableCell className="flex gap-2">
-                <SquarePen size={20} />
-                <Trash size={20} />
               </TableCell>
             </TableRow>
           ))}
