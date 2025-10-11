@@ -31,15 +31,12 @@ const PaginationButton = ({ className, isActive, isEllipsis = false, disabled, .
       data-slot="pagination-link"
       data-active={isActive}
       disabled={disabled}
-      className={cn(
-        '!text-heading-5 bg-theme-night-600 text-primary size-7.5 aspect-square shrink-0 rounded border-none',
-        [
-          isActive && !isEllipsis && !disabled && 'bg-theme-primary text-theme-white',
-          !isActive && !isEllipsis && !disabled && 'hover:bg-theme-night-600/40 cursor-pointer',
-          disabled && 'text-button-disabled',
-          className,
-        ],
-      )}
+      className={cn('text-body-2 border-theme-secondary-300 size-7.5 aspect-square shrink-0 rounded border', [
+        isActive && !isEllipsis && !disabled && 'bg-theme-primary text-theme-white',
+        !isActive && !isEllipsis && !disabled && 'hover:bg-theme-night-600/40 cursor-pointer',
+        disabled && 'text-button-disabled',
+        className,
+      ])}
       {...props}
     />
   )
@@ -49,9 +46,9 @@ const PaginationNavigate = ({ className, direction, ...props }: IPaginationNavig
   return (
     <PaginationButton aria-label={`Go to ${direction} page`} className={cn('p-[3px]', className)} {...props}>
       {direction === 'previous' ? (
-        <ChevronLeftIcon className="size-6 shrink-0" />
+        <ChevronLeftIcon className="size-6 shrink-0 opacity-90" />
       ) : (
-        <ChevronRightIcon className="size-6 shrink-0" />
+        <ChevronRightIcon className="size-6 shrink-0 opacity-90" />
       )}
     </PaginationButton>
   )

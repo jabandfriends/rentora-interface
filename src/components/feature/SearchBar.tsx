@@ -10,7 +10,7 @@ const SearchBar = (props: ISearchBarProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-theme-light flex w-full flex-row items-center justify-center gap-x-4 rounded-lg px-2 py-1 shadow ring-0"
+      className="bg-theme-light border-theme-secondary-300 flex w-full flex-row items-center justify-center gap-x-4 rounded-lg border px-2 py-1 shadow ring-0"
     >
       <SearchIcon className="size-5" />
       <input

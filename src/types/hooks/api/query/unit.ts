@@ -1,3 +1,4 @@
+import type { UnitStatus } from '@/enum'
 import type { IBasePaginateQueryResult, IRentoraApiClientBasePaginateWithMetadataResponse } from '@/types'
 
 //hook
@@ -40,5 +41,6 @@ export type IRentoraApiUnitListParams = {
   search?: string
   sortBy?: string
   sortDir?: string
-  status?: string
+  status?: UnitStatus
+  buildingName?: string
 }

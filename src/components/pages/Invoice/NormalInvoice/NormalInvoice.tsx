@@ -152,8 +152,6 @@ const NormalInvoice = () => {
         }
       />
       <PageTableSearch
-        selectedStatus={status}
-        selectedSort={sortBy}
         statusEnum={INVOICE_STATUS}
         sortEnum={INVOICE_SORT}
         onSearchChange={handleSearchChange}

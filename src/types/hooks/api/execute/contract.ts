@@ -19,6 +19,8 @@ export interface ICreateContractRequestPayload {
   autoRenewal: boolean
   renewalNoticeDays: number
   documentUrl?: string
+  waterMeterStart: number
+  electricMeterStart: number
 }
 
 //hook use

@@ -5,6 +5,7 @@ import type { VariantProps } from 'tailwind-variants'
 import { PaginationBar } from '@/components/feature'
 import {
   Badge,
+  FieldEmpty,
   PageTableEmpty,
   PageTableLoading,
   PageTableSearchEmpty,
@@ -41,14 +42,15 @@ const AllRoomsTable = ({
 }: AllRoomsTableProps) => {
   const navigate: NavigateFunction = useNavigate()
   const { apartmentId } = useParams<{ apartmentId: string }>()
+
   const statusBadgeVariant = useCallback((unitStatus: string): VariantProps<typeof Badge>['variant'] => {
     switch (unitStatus) {
       case 'available':
         return 'success'
       case 'occupied':
-        return 'default'
-      case 'maintenance':
         return 'warning'
+      case 'maintenance':
+        return 'error'
       default:
         return 'default'
     }
@@ -109,31 +111,32 @@ const AllRoomsTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item: IUnit) => (
+          {data.map((item: IUnit, index) => (
             <TableRow
-              key={item.apartmentName + item.createdAt}
+              key={item.apartmentName + item.createdAt + item.unitName + item.buildingName + index}
               className="cursor-pointer"
               onClick={() => handleRoomDetail(item.id)}
             >
-              <TableCell>{item.unitName}</TableCell>
+              <TableCell className="text-theme-primary">{item.unitName}</TableCell>
               <TableCell>{item.buildingName}</TableCell>
-              <TableCell className="capitalize">{item.currentTenant || 'N/A'}</TableCell>
-              <TableCell className="capitalize">{item.unitType || 'N/A'}</TableCell>
-              <TableCell>{item.contractStartDate || 'N/A'}</TableCell>
-              <TableCell>{item.contractEndDate || 'N/A'}</TableCell>
+              <TableCell>{item.floorName}</TableCell>
+              <TableCell className="capitalize">{item.currentTenant || <FieldEmpty />}</TableCell>
+              <TableCell className="capitalize">{item.unitType || <FieldEmpty />}</TableCell>
+              <TableCell>{item.contractStartDate || <FieldEmpty />}</TableCell>
+              <TableCell>{item.contractEndDate || <FieldEmpty />}</TableCell>
               <TableCell className="capitalize">
                 <Badge variant={rentalTypeBadgeVariant(item.rentalType)} className="capitalize">
-                  {item.rentalType || 'N/A'}
+                  {item.rentalType || <FieldEmpty />}
                 </Badge>
               </TableCell>
               <TableCell className="capitalize">
                 <Badge variant={contractStatusBadgeVariant(item.contractStatus)} className="capitalize">
-                  {item.contractStatus || 'N/A'}
+                  {item.contractStatus || <FieldEmpty />}
                 </Badge>
               </TableCell>
               <TableCell>
                 <Badge variant={statusBadgeVariant(item.unitStatus)} className="capitalize">
-                  {item.unitStatus}
+                  {item.unitStatus || <FieldEmpty />}
                 </Badge>
               </TableCell>
               <TableCell>
@@ -143,13 +146,16 @@ const AllRoomsTable = ({
           ))}
         </TableBody>
       </Table>
-      <PaginationBar
-        onPageChange={onPageChange}
-        isLoading={isLoading}
-        page={currentPage}
-        totalPages={totalPages}
-        totalElements={totalElements}
-      />
+
+      <div className="flex justify-end gap-y-2">
+        <PaginationBar
+          onPageChange={onPageChange}
+          isLoading={isLoading}
+          page={currentPage}
+          totalPages={totalPages}
+          totalElements={totalElements}
+        />
+      </div>
     </div>
   )
 }

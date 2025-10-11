@@ -24,8 +24,8 @@ export const DEFAULT_TENANT_LIST_METADATA: ITenantListMetadata = {
 export const DEFAULT_MAINTENANCE_LIST_METADATA: IMaintenanceListMetadata = {
   totalMaintenance: 0,
   pendingCount: 0,
-  assignedCount: 0,
   inProgressCount: 0,
+  completedCount: 0,
 }
 
 export const DEFAULT_INVOICE_LIST_METADATA: IInvoiceListMetadata = {

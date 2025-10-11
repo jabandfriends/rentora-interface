@@ -79,7 +79,9 @@ const RoomDetailContract = () => {
             )}
           </div>
 
-          <Button onClick={handleNavigateCreateContract}>Create {billingType} contract</Button>
+          <div className="flex items-center justify-end">
+            <Button onClick={handleNavigateCreateContract}>Create {billingType} contract</Button>
+          </div>
         </div>
       </div>
     </Card>

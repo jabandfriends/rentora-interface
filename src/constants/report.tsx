@@ -73,51 +73,13 @@ export const ROOM_REPORT_DATA = [
 
 export const ELECTRIC_WATER_REPORT_TABLE_HEADER: Array<string> = [
   'Room',
+  'Building',
   'Tenant',
   'Electric Usage',
   'Electric Bills',
   'Water Usage',
   'Water Bills',
   'Total Bills',
-]
-
-export const ELECTRIC_WATER_REPORT_DATA = [
-  {
-    room: 1,
-    tenant: 'John Doe',
-    electricUsage: '100Units',
-    electricBills: '฿500',
-    waterUsage: '100Units',
-    waterBills: '฿200',
-    totalBills: '฿700',
-  },
-  {
-    room: 1,
-    tenant: 'John Doe',
-    electricUsage: '100Units',
-    electricBills: '฿500',
-    waterUsage: '100Units',
-    waterBills: '฿200',
-    totalBills: '฿700',
-  },
-  {
-    room: 1,
-    tenant: 'John Doe',
-    electricUsage: '100Units',
-    electricBills: '฿500',
-    waterUsage: '100Units',
-    waterBills: '฿200',
-    totalBills: '฿700',
-  },
-  {
-    room: 1,
-    tenant: 'John Doe',
-    electricUsage: '100Units',
-    electricBills: '฿500',
-    waterUsage: '100Units',
-    waterBills: '฿200',
-    totalBills: '฿700',
-  },
 ]
 
 export const RECEIPT_REPORT_STATS: Array<IStatsCardProps> = [

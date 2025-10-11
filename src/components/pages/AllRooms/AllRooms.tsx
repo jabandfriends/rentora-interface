@@ -6,10 +6,13 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import AllRoomsTable from '@/components/pages/AllRooms/AllRoomsTable'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
-import { DEFAULT_UNIT_LIST_DATA, ROOMSTATUSENUM, SORTDIRENUM } from '@/constants'
+import { PageTableHeader } from '@/components/ui'
+import { DEFAULT_UNIT_LIST_DATA } from '@/constants'
+import { UnitStatus } from '@/enum'
 import { useRentoraApiUnitList } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps } from '@/types'
+
+import AllRoomSearch from './AllRoomSearch'
 
 const AllRooms = () => {
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
@@ -21,16 +24,16 @@ const AllRooms = () => {
   const { watch, setValue } = useForm({
     defaultValues: {
       search: '',
-      status: '',
-      sort: '',
+      status: UnitStatus.all,
+      buildingName: '',
     },
   })
 
-  const [search, status, sort]: [string, string, string] = watch(['search', 'status', 'sort'])
+  const [search, status, buildingName]: [string, UnitStatus, string] = watch(['search', 'status', 'buildingName'])
 
   const debouncedSearch = useDebounce(search ? search : undefined, 500)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
-  const debouncedSort = useDebounce(sort ? sort : undefined, 300)
+  const debouncedBuildingName = useDebounce(buildingName ? buildingName : undefined, 300)
 
   const {
     data,
@@ -44,7 +47,8 @@ const AllRooms = () => {
       size: DEFAULT_UNIT_LIST_DATA.size,
       search: debouncedSearch,
       status: debouncedStatus,
-      sortDir: debouncedSort,
+
+      buildingName: debouncedBuildingName,
     },
   })
 
@@ -56,16 +60,16 @@ const AllRooms = () => {
     [setValue, setCurrentPage],
   )
   const handleStatusChange = useCallback(
-    (value: string) => {
+    (value: UnitStatus) => {
       setValue('status', value)
       setCurrentPage(DEFAULT_UNIT_LIST_DATA.page)
     },
     [setValue, setCurrentPage],
   )
 
-  const handleSortChange = useCallback(
+  const handleBuildingChange = useCallback(
     (value: string) => {
-      setValue('sort', value)
+      setValue('buildingName', value)
       setCurrentPage(DEFAULT_UNIT_LIST_DATA.page)
     },
     [setValue, setCurrentPage],
@@ -80,8 +84,8 @@ const AllRooms = () => {
   )
 
   const isSearched: boolean = useMemo(
-    () => !!debouncedSearch || !!debouncedStatus || !!debouncedSort,
-    [debouncedSearch, debouncedStatus, debouncedSort],
+    () => !!debouncedSearch || !!debouncedStatus || !!debouncedBuildingName,
+    [debouncedSearch, debouncedStatus, debouncedBuildingName],
   )
 
   const All_ROOMS_STAT: Array<IStatsCardProps> = useMemo(
@@ -117,14 +121,10 @@ const AllRooms = () => {
   return (
     <>
       <PageTableHeader title="All Rooms" description="All rooms with category dashboard" stats={All_ROOMS_STAT} />
-      <PageTableSearch
-        selectedStatus={status}
-        selectedSort={sort}
+      <AllRoomSearch
         onSearchChange={handleSearchChange}
         onStatusChange={handleStatusChange}
-        onSortChange={handleSortChange}
-        statusEnum={ROOMSTATUSENUM}
-        sortEnum={SORTDIRENUM}
+        onBuildingChange={handleBuildingChange}
       />
       <AllRoomsTable
         data={data}

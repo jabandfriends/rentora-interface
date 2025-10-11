@@ -1,9 +1,15 @@
 export enum MAINTENANCE_STATUS {
+  COMPLETED = 'completed',
   PENDING = 'pending',
   ASSIGNED = 'assigned',
   IN_PROGRESS = 'in_progress',
-  COMPLETED = 'completed',
   CANCELLED = 'cancelled',
+}
+
+export enum MAINTENANCE_CATEGORY {
+  GENERAL = 'general',
+  PLUMBING = 'plumbing',
+  ELECTRICITY = 'electrical',
 }
 
 export enum MAINTENANCE_PRIORITY {
@@ -13,14 +19,7 @@ export enum MAINTENANCE_PRIORITY {
   URGENT = 'urgent',
 }
 
-export enum MAINTENANCE_CATEGORY {
-  GENERAL = 'general',
-  ELECTRICAL = 'electrical',
-  PLUMBING = 'plumbing',
-  HVAC = 'hvac',
-}
-
-export enum MAINTENANCE_RECURRING {
+export enum RecurringSchedule {
   WEEKLY = 'weekly',
   MONTHLY = 'monthly',
   QUARTERLY = 'quarterly',

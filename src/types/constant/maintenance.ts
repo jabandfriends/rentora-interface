@@ -1,11 +1,16 @@
 import type { HTMLInputTypeAttribute } from 'react'
+import type { z } from 'zod'
 
+import type { MAINTENANCE_FORM_SCHEMA } from '@/constants'
 import type { IInputNumberProps, UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 
+export type MAINTENANCE_FORM_VALUES = z.infer<typeof MAINTENANCE_FORM_SCHEMA>
+
 type MAINTENANCE_FORM_FIELDS_TYPE_BASE = {
-  key: 'unit_id' | 'title' | 'description' | 'status' | 'priority' | 'appointment_date' | 'due_date' | 'estimated_hours'
+  key: keyof MAINTENANCE_FORM_VALUES
   label?: string
   description?: string
+  isRequired?: boolean
 }
 
 type MAINTENANCE_FORM_FIELDS_TYPE_INPUT = MAINTENANCE_FORM_FIELDS_TYPE_BASE & {
@@ -25,10 +30,16 @@ type MAINTENANCE_FORM_FIELDS_TYPE_LAYOUT = MAINTENANCE_FORM_FIELDS_TYPE_BASE & {
   fields: Array<MAINTENANCE_FORM_FIELDS_TYPE>
 }
 
+//switch layout
+type MAINTENANCE_FORM_FIELDS_TYPE_SWITCH = MAINTENANCE_FORM_FIELDS_TYPE_BASE & {
+  fieldType: 'switch'
+}
+
 export type MAINTENANCE_FORM_FIELDS_TYPE =
   | MAINTENANCE_FORM_FIELDS_TYPE_INPUT
   | MAINTENANCE_FORM_FIELDS_TYPE_SELECT
   | MAINTENANCE_FORM_FIELDS_TYPE_LAYOUT
+  | MAINTENANCE_FORM_FIELDS_TYPE_SWITCH
 
 type UPDATE_MAINTENANCE_FORM_FIELDS_TYPE_BASE = {
   key: keyof UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE

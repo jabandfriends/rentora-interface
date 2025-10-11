@@ -50,6 +50,13 @@ const MaintenanceTable = ({
 
   const [rows, setRows] = useState<Array<IMaintenance>>(data)
 
+  const handleRowClick = useCallback(
+    (id: string) => {
+      navigate(ROUTES.maintenanceDetail.getPath(apartmentId, id))
+    },
+    [navigate, apartmentId],
+  )
+
   // keep local rows in sync when props.data changes (e.g., page change or refetch)
   useEffect(() => {
     setRows(data)
@@ -110,6 +117,21 @@ const MaintenanceTable = ({
     }
   }, [])
 
+  const priorityBadgeVariant = useCallback((maintenancePriority: string): VariantProps<typeof Badge>['variant'] => {
+    switch (maintenancePriority) {
+      case 'urgent':
+        return 'error'
+      case 'high':
+        return 'error'
+      case 'normal':
+        return 'warning'
+      case 'low':
+        return 'default'
+      default:
+        return 'default'
+    }
+  }, [])
+
   if (isLoading) {
     return <TenantTableLoading />
   }
@@ -134,17 +156,21 @@ const MaintenanceTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rows.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>MAINTENANCE-{index + 1}</TableCell>
-              <TableCell>{item.title ? item.title : 'N/A'}</TableCell>
-              <TableCell>{item.unitName ? item.unitName : 'N/A'}</TableCell>
-              <TableCell>{item.buildingsName ? item.buildingsName : 'N/A'}</TableCell>
-              <TableCell>{item.appointmentDate ? item.appointmentDate : 'N/A'}</TableCell>
+          {data.map((item: IMaintenance) => (
+            <TableRow className="cursor-pointer" onClick={() => handleRowClick(item.id)} key={item.id}>
+              <TableCell>{item.ticketNumber}</TableCell>
+              <TableCell>{item.title}</TableCell>
+              <TableCell>{item.unitName}</TableCell>
+              <TableCell>{item.buildingsName}</TableCell>
+              <TableCell>{item.appointmentDate}</TableCell>
               <TableCell>{item.dueDate || '-'}</TableCell>
+              <TableCell className="capitalize">
+                <Badge variant={priorityBadgeVariant(item.priority)}>{item.priority}</Badge>
+              </TableCell>
               <TableCell className="capitalize">
                 <Badge variant={statusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
+
               <TableCell>
                 <MaintenanceAction
                   maintenanceId={item.id}

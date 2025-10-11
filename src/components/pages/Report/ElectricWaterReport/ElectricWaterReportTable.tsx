@@ -58,6 +58,7 @@ const ElectricWaterReportTable = ({
   if (!isLoading && (!data || data.length === 0)) {
     return <PageTableEmpty message="No utilities report found" />
   }
+
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
       <Table>
@@ -72,12 +73,21 @@ const ElectricWaterReportTable = ({
           {data.map((item: IReportUtility) => (
             <TableRow key={item.roomName + item.roomName}>
               <TableCell>{item.roomName}</TableCell>
+              <TableCell>{item.buildingName}</TableCell>
               <TableCell>{item.tenantName}</TableCell>
               <TableCell>{item.electricUsage} Units</TableCell>
-              <TableCell>{formatCurrency(item.electricCost)}</TableCell>
+              <TableCell>
+                {item.electricCost != null && item.electricCost >= 0 ? formatCurrency(item.electricCost) : '฿0'}
+              </TableCell>
               <TableCell>{item.waterUsage} Units</TableCell>
-              <TableCell>{formatCurrency(item.waterCost)}</TableCell>
-              <TableCell>{formatCurrency(item.electricCost + item.waterCost)}</TableCell>
+              <TableCell>
+                {item.waterCost != null && item.waterCost >= 0 ? formatCurrency(item.waterCost) : '฿0'}
+              </TableCell>
+              {item.electricCost != null && item.waterCost != null && item.electricCost + item.waterCost >= 0 ? (
+                <TableCell>{formatCurrency(item.electricCost + item.waterCost)}</TableCell>
+              ) : (
+                <TableCell>฿0</TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

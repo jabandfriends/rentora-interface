@@ -3,6 +3,8 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 
+import type { DateDiff } from '@/types'
+
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
@@ -15,10 +17,47 @@ dayjs.extend(relativeTime)
  * @returns formatted string
  */
 export function formatTimestamp(isoString: string, format = 'YYYY-MM-DD HH:mm:ss', tz?: string) {
+  if (!isoString) {
+    return ''
+  }
   if (tz) {
     return dayjs.utc(isoString).tz(tz).format(format)
   }
   return dayjs(isoString).format(format)
+}
+//format date
+export function formatDate(date: Date, format = 'YYYY-MM-DD HH:mm:ss') {
+  if (!date) {
+    return ''
+  }
+  return dayjs(date).format(format)
+}
+
+//calculate month
+export function calculateMonth(startDate: Date, endDate: Date) {
+  if (!startDate || !endDate) {
+    return 0
+  }
+  return dayjs(endDate).diff(dayjs(startDate), 'month')
+}
+
+//get date diff
+export function getDateDiff(startDate: string | Date, endDate: string | Date): DateDiff {
+  if (!startDate || !endDate) {
+    return { days: 0, months: 0, years: 0 }
+  }
+  const start = dayjs(startDate)
+  const end = dayjs(endDate)
+
+  if (!start.isValid() || !end.isValid()) {
+    return { days: 0, months: 0, years: 0 }
+  }
+
+  const days = end.diff(start, 'day')
+  const months = end.diff(start, 'month')
+  const years = end.diff(start, 'year')
+
+  return { days, months, years }
 }
 
 /**
@@ -27,5 +66,8 @@ export function formatTimestamp(isoString: string, format = 'YYYY-MM-DD HH:mm:ss
  * @returns e.g. "3 hours ago"
  */
 export function timeFromNow(isoString: string) {
+  if (!isoString) {
+    return ''
+  }
   return dayjs(isoString).fromNow()
 }

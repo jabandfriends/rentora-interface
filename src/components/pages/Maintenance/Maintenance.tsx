@@ -9,7 +9,7 @@ import { Button } from '@/components/common'
 import { MaintenanceTable } from '@/components/pages/Maintenance'
 import { PageTableHeader, PageTableSearch } from '@/components/ui'
 import { DEFAULT_MAINTENANCE_LIST_DATA, ROUTES } from '@/constants'
-import { MAINTENANCE_SORT, MAINTENANCE_STATUS } from '@/enum'
+import { MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiMaintenanceList } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
@@ -29,9 +29,6 @@ const Maintenance = () => {
     },
   })
 
-  // type sortType = 'createdAt' | 'updatedAt'
-  // type sortDirType = 'asc' | 'desc'
-
   const [search, status, sortBy, sortDir]: [string, string, string, string] = watch([
     'search',
     'status',
@@ -48,11 +45,12 @@ const Maintenance = () => {
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedSortBy = useDebounce(sortBy ? sortBy : undefined, 300)
   const debouncedSortDir = useDebounce(sortDir ? sortDir : undefined, 300)
+
   const {
     data,
     isLoading,
     pagination: { totalPages, totalElements },
-    metadata: { totalMaintenance, pendingCount, assignedCount, inProgressCount },
+    metadata: { totalMaintenance, pendingCount, inProgressCount, completedCount },
   } = useRentoraApiMaintenanceList({
     apartmentId: apartmentId,
     params: {
@@ -105,14 +103,14 @@ const Maintenance = () => {
   const maintenanceStats: Array<IStatsCardProps> = useMemo(
     () => [
       {
-        title: 'Total Reports',
+        title: 'Total Maintenances',
         count: totalMaintenance,
         type: 'primary',
         icon: <ScrollText />,
       },
       {
-        title: 'Assigned',
-        count: assignedCount,
+        title: 'Completed',
+        count: completedCount,
         type: 'success',
         icon: <CircleCheckBig />,
       },
@@ -123,13 +121,13 @@ const Maintenance = () => {
         icon: <Clock />,
       },
       {
-        title: 'Inprocess',
+        title: 'In Progress',
         count: inProgressCount,
         type: 'primary',
         icon: <Wrench />,
       },
     ],
-    [totalMaintenance, assignedCount, pendingCount, inProgressCount],
+    [totalMaintenance, completedCount, pendingCount, inProgressCount],
   )
 
   return (
@@ -138,14 +136,12 @@ const Maintenance = () => {
         title="Maintenance"
         description="Manage maintenance reports"
         stats={maintenanceStats}
-        actionButton={<Button onClick={handleCreate}>New Report</Button>}
+        isLoading={isLoading}
+        actionButton={<Button onClick={handleCreate}>New Maintenance</Button>}
       />
       {/* <PageTableSearch /> */}
       <PageTableSearch
-        selectedStatus={status?.toString()}
-        selectedSort={sortBy?.toString()}
         statusEnum={MAINTENANCE_STATUS}
-        sortEnum={MAINTENANCE_SORT}
         onSearchChange={handleSearchChange}
         onStatusChange={handleStatusChange}
         onSortChange={handleSortChange}

@@ -5,6 +5,8 @@ import type {
   IRentoraApiApartmentListParams,
   IRentoraApiClientApartmentDetailResponse,
   IRentoraApiClientApartmentListResponse,
+  IRentoraApiClientBuildingListResponse,
+  IRentoraApiClientContractDetailResponse,
   IRentoraApiClientInvoiceDetailResponse,
   IRentoraApiClientInvoiceListResponse,
   IRentoraApiClientMaintenanceDetailResponse,
@@ -46,6 +48,8 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     reportUtilityList: 'REPORT_UTILITY_LIST',
     reportReadingDateUtility: 'REPORT_READING_DATE_UTILITY',
     getUserData: 'GET_USER_DATA',
+    buildingListNoPaginate: 'BUILDING_LIST_NO_PAGINATE',
+    contractDetail: 'CONTRACT_DETAIL',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -188,10 +192,28 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     return response.data.data
   }
 
-  async readingUnitUtility(apartmentId: Maybe<string>) {
+  async readingUnitUtility(apartmentId: Maybe<string>): Promise<IRentoraApiClientReadingUnitUtilityResponse['data']> {
     const response = await this.axiosWithAuthInstance.get<IRentoraApiClientReadingUnitUtilityResponse>(
       `/api/apartments/report/${apartmentId}/reading/date/utility`,
     )
+    return response.data.data
+  }
+
+  async buildingListNoPaginate(apartmentId: Maybe<string>): Promise<IRentoraApiClientBuildingListResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientBuildingListResponse>(
+      `/api/apartments/${apartmentId}/buildings/no/paginate`,
+    )
+    return response.data.data
+  }
+
+  async contractDetail(
+    apartmentId: Maybe<string>,
+    unitId: Maybe<string>,
+  ): Promise<IRentoraApiClientContractDetailResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientContractDetailResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientContractDetailResponse>(
+        `/api/apartments/${apartmentId}/contracts/unit/${unitId}`,
+      )
     return response.data.data
   }
 }
