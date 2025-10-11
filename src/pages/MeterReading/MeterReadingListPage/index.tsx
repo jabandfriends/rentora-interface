@@ -67,6 +67,10 @@ const MeterReadingListPage = () => {
 
   const isReadingDateSelected: boolean = useMemo(() => !!debouncedReadingDate, [debouncedReadingDate])
 
+  const [isNodata, setIsNodata]: [boolean, Dispatch<SetStateAction<boolean>>] = useState<boolean>(false)
+  const handleNodata = useCallback(() => {
+    setIsNodata(true)
+  }, [])
   const handlePageChange = useCallback(
     (page: number) => {
       if (page < 1) return
@@ -111,14 +115,15 @@ const MeterReadingListPage = () => {
       <MeterReadingFilterBar
         handleReadingDateChange={handleReadingDateChange}
         handleBuildingChange={handleBuildingChange}
+        handleNodata={handleNodata}
         onSearchChange={handleSearchChange}
       />
 
       {/* No date yet */}
-      {!isReadingDateSelected && (
+      {!isReadingDateSelected && !isNodata && (
         <MeterReadingEmpty filterDate={debouncedReadingDate} filteredReadings={reportUtilityList} />
       )}
-      {isReadingDateSelected && (
+      {isReadingDateSelected && !isNodata && (
         <MeterReadingTable
           readingDate={debouncedReadingDate}
           filteredReadings={reportUtilityList}

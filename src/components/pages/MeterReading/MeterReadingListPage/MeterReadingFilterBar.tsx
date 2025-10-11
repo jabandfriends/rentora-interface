@@ -1,19 +1,23 @@
-import type { ChangeEvent } from 'react'
+import { ZapOff } from 'lucide-react'
+import { type ChangeEvent, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
 import { SearchBar } from '@/components/feature'
+import { LoadingPage } from '@/components/ui'
 import { useRentoraApiBuildingListNoPaginate, useRentoraApiReportReadingDateUtility } from '@/hooks'
 import type { IBuilding, IReadingUnitUtility } from '@/types'
 
 type IMeterReadingFilterBar = {
   handleReadingDateChange: (value: string) => void
   handleBuildingChange: (value: string) => void
+  handleNodata: (value: boolean) => void
   onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
 }
 const MeterReadingFilterBar = ({
   handleReadingDateChange,
   handleBuildingChange,
+  handleNodata,
   onSearchChange,
 }: IMeterReadingFilterBar) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
@@ -23,6 +27,30 @@ const MeterReadingFilterBar = ({
   const { data: filterDates, isLoading: isLoadingFilterDates } = useRentoraApiReportReadingDateUtility({
     apartmentId,
   })
+
+  const isLoading: boolean = useMemo(
+    () => isLoadingBuildingNames || isLoadingFilterDates,
+    [isLoadingBuildingNames, isLoadingFilterDates],
+  )
+
+  if (isLoading) {
+    return <LoadingPage />
+  }
+
+  if (!filterDates || filterDates.length === 0) {
+    handleNodata(true)
+    return (
+      <Card className="shadow- flex h-80 flex-col items-center rounded-2xl p-6">
+        <ZapOff size={32} className="text-theme-distribution" />
+        <div className="flex flex-col items-center">
+          <h4 className="text-center">No Meter Readings Yet</h4>
+          <p className="text-body-2 text-theme-secondary text-center">
+            Start by creating a new meter reading to see your records here.
+          </p>
+        </div>
+      </Card>
+    )
+  }
 
   return (
     <Card className="rounded-2xl p-6">

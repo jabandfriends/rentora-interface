@@ -11,9 +11,9 @@ const MeterReadingEmpty = ({ filterDate, filteredReadings }: IMeterReadingEmptyP
   if (!filterDate) {
     return (
       <Card className="rounded-2xl p-12 text-center">
-        <CalendarIcon className="text-theme-secondary mx-auto size-12" />
+        <CalendarIcon size={32} className="text-theme-secondary mx-auto opacity-90" />
         <div>
-          <h3>No Date Selected</h3>
+          <h4>No Date Selected</h4>
           <p className="text-theme-secondary text-body-2">Please select a date to view meter readings</p>
         </div>
       </Card>

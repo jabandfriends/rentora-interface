@@ -1,82 +1,108 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDebounce } from '@uidotdev/usehooks'
-import { Plus } from 'lucide-react'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
-import { useParams } from 'react-router-dom'
-import z from 'zod'
+import toast from 'react-hot-toast'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
+import { filterMeterReadingFormSchema, meterReadingFormSchema, ROUTES } from '@/constants'
 import {
-  Button,
-  Card,
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  InputNumber,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/common'
-import { useRentoraApiUnitList } from '@/hooks'
-import type { IUnit } from '@/types'
+  useRentoraApiBuildingListNoPaginate,
+  useRentoraApiUnitUtilityAvailableMonth,
+  useRentoraApiUnitUtilityAvailableYear,
+  useRentoraApiUnitUtilityCreateMeterReading,
+  useRentoraApiUnitUtilityUnitWithUtility,
+} from '@/hooks'
+import type {
+  IMeterReadingRequestPayload,
+  IUnitWithUtilityResponse,
+  Maybe,
+  MeterReadingFilterFormValues,
+  MeterReadingFormValues,
+} from '@/types'
+import { getErrorMessage } from '@/utilities'
 
-const formSchema = z.object({
-  readingDate: z.string(),
-  rooms: z.array(
-    z.object({
-      unitId: z.string(),
-      unitName: z.string(),
-      waterStart: z.number().optional(),
-      waterEnd: z.number().optional(),
-      electricStart: z.number().optional(),
-      electricEnd: z.number().optional(),
-    }),
-  ),
-})
-
-type FormValues = z.infer<typeof formSchema>
+import MeterReadingFormField from './MeterReadingFormField'
+import MeterReadingFormFiltered from './MeterReadingFormFiltered'
+import MeterReadingFormFilterEmpty from './MeterReadingFormFilterEmpty'
 
 const MeterReadingForm = () => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
-
+  const navigate: NavigateFunction = useNavigate()
   // Filter form
-  const filterForm = useForm({
-    defaultValues: { buildingName: '' },
+  const filterForm = useForm<MeterReadingFilterFormValues>({
+    defaultValues: { buildingName: '', year: '', month: '' },
+    resolver: zodResolver(filterMeterReadingFormSchema),
   })
-  const [buildingName] = filterForm.watch(['buildingName'])
-  const debouncedBuildingName = useDebounce(buildingName, 300)
+  const [buildingName, year, month]: [Maybe<string>, Maybe<string>, Maybe<string>] = filterForm.watch([
+    'buildingName',
+    'year',
+    'month',
+  ])
 
-  // Rooms API
-  const { data: rooms } = useRentoraApiUnitList({
-    apartmentId: apartmentId!,
+  const debouncedBuildingName = useDebounce(buildingName, 300)
+  const debouncedYear = useDebounce(year, 300)
+  const debouncedMonth = useDebounce(month, 300)
+
+  //available buildings
+  const { data: availableBuildings, isLoading: isLoadingBuildings } = useRentoraApiBuildingListNoPaginate({
+    apartmentId: apartmentId,
+  })
+
+  //available years
+  const { data: availableYears, isLoading: isLoadingYears } = useRentoraApiUnitUtilityAvailableYear({
+    apartmentId: apartmentId,
+  })
+
+  //available months
+  const { data: availableMonths, isLoading: isLoadingMonths } = useRentoraApiUnitUtilityAvailableMonth({
+    apartmentId: apartmentId,
+    params: {
+      year: Number(debouncedYear),
+      buildingName,
+    },
+  })
+
+  //get all units with utility
+  const { data: rooms, isLoading: isLoadingUnitsWithUtility } = useRentoraApiUnitUtilityUnitWithUtility({
+    apartmentId: apartmentId,
     params: {
       buildingName: debouncedBuildingName,
     },
-    enabled: !!debouncedBuildingName, // only fetch after filters selected
+    enabled: !!debouncedYear && !!debouncedMonth && !!debouncedBuildingName && !!apartmentId,
   })
 
+  //create meter
+  const { mutateAsync: createMeterReading, isPending: isLoadingCreateMeterReading } =
+    useRentoraApiUnitUtilityCreateMeterReading({ apartmentId: apartmentId })
+
+  const isSubmitDisabled: boolean = useMemo(() => isLoadingCreateMeterReading, [isLoadingCreateMeterReading])
+
+  const isUnitsLoading: boolean = useMemo(() => isLoadingUnitsWithUtility, [isLoadingUnitsWithUtility])
+  const isFilterLoading: boolean = useMemo(
+    () => isLoadingYears || isLoadingMonths || isLoadingBuildings,
+    [isLoadingYears, isLoadingMonths, isLoadingBuildings],
+  )
+
   // Meter reading form
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: { readingDate: '', rooms: [] },
+  const form = useForm<MeterReadingFormValues>({
+    resolver: zodResolver(meterReadingFormSchema),
+    defaultValues: { rooms: [] },
     mode: 'onChange',
   })
+
   const { fields, replace } = useFieldArray({ control: form.control, name: 'rooms' })
 
   useEffect(() => {
     if (rooms?.length) {
       replace(
-        rooms.map((room: IUnit) => ({
-          unitId: room.id,
+        rooms.map((room: IUnitWithUtilityResponse) => ({
+          unitId: room.unitId,
           unitName: room.unitName,
-          waterStart: 0,
+          unitStatus: room.unitStatus,
+          waterStart: room.waterMeterStart ?? 0,
           waterEnd: 0,
-          electricStart: 0,
+          electricStart: room.electricMeterStart ?? 0,
           electricEnd: 0,
         })),
       )
@@ -85,174 +111,57 @@ const MeterReadingForm = () => {
     }
   }, [rooms, replace])
 
-  const calculateTotal = (start?: number, end?: number) => ((end ?? 0) - (start ?? 0)).toFixed(2)
+  const onSubmit = useCallback(
+    async (data: MeterReadingFormValues) => {
+      const payload: IMeterReadingRequestPayload = {
+        readingMonth: Number(month),
+        readingYear: Number(year),
+        rooms: data.rooms.map((room) => ({
+          unitId: room.unitId,
+          unitName: room.unitName,
+          waterStart: room.waterStart ?? 0,
+          waterEnd: room.waterEnd ?? 0,
+          electricStart: room.electricStart ?? 0,
+          electricEnd: room.electricEnd ?? 0,
+        })),
+      }
+      try {
+        await createMeterReading(payload)
+        toast.success('Meter reading created successfully')
 
-  const onSubmit = (data: FormValues) => console.log('Form Data:', data)
+        setTimeout(() => {
+          navigate(ROUTES.meterReadingList.getPath(apartmentId))
+        }, 1000)
+      } catch (error) {
+        toast.error(getErrorMessage(error))
+      }
+    },
+    [createMeterReading, apartmentId, month, year, navigate],
+  )
 
   return (
     <div className="space-y-6">
       {/* --- Filter Section --- */}
-      <Card className="rounded-2xl p-6">
-        <div className="flex flex-wrap gap-4">
-          <Form {...filterForm}>
-            <FormField
-              control={filterForm.control}
-              name="buildingName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Building</FormLabel>
-                  <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select building" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Building A">Building A</SelectItem>
-                        <SelectItem value="Building B">Building B</SelectItem>
-                        {/* map from API if needed */}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="readingDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Reading Date</FormLabel>
-                  <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select month" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Array.from({ length: 12 }, (_, i) => (
-                          <SelectItem key={i + 1} value={`${i + 1}`}>
-                            {new Date(0, i).toLocaleString('default', { month: 'long' })}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </Form>
-        </div>
-      </Card>
+      <MeterReadingFormFiltered
+        debouncedYear={debouncedYear}
+        debouncedMonth={debouncedMonth}
+        availableBuildings={availableBuildings}
+        availableMonths={availableMonths?.months}
+        availableYears={availableYears?.years}
+        filterForm={filterForm}
+        isLoading={isFilterLoading}
+      />
 
-      {/* --- Meter Reading Form --- */}
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {fields.map((fieldItem, index) => (
-            <Card key={fieldItem.id} className="border-theme-secondary-300 rounded-2xl border p-4 shadow">
-              <h3 className="font-medium">{fieldItem.unitName}</h3>
-              <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
-                {/* Water */}
-                <div className="space-y-2">
-                  <h4 className="font-medium">Water Meter</h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    <FormField
-                      control={form.control}
-                      name={`rooms.${index}.waterStart`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Start Unit</FormLabel>
-                          <FormControl>
-                            <InputNumber
-                              maxLength={4}
-                              {...field}
-                              onChange={(e) => field.onChange(Number(e.target.value))}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`rooms.${index}.waterEnd`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>End Unit</FormLabel>
-                          <FormControl>
-                            <InputNumber
-                              maxLength={4}
-                              {...field}
-                              onChange={(e) => field.onChange(Number(e.target.value))}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <p>
-                    Total:{' '}
-                    {calculateTotal(form.watch(`rooms.${index}.waterStart`), form.watch(`rooms.${index}.waterEnd`))}
-                  </p>
-                </div>
-
-                {/* Electricity */}
-                <div className="space-y-2">
-                  <h4 className="font-medium">Electricity Meter</h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    <FormField
-                      control={form.control}
-                      name={`rooms.${index}.electricStart`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Start Unit</FormLabel>
-                          <FormControl>
-                            <InputNumber
-                              maxLength={4}
-                              {...field}
-                              onChange={(e) => field.onChange(Number(e.target.value))}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`rooms.${index}.electricEnd`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>End Unit</FormLabel>
-                          <FormControl>
-                            <InputNumber
-                              maxLength={4}
-                              {...field}
-                              onChange={(e) => field.onChange(Number(e.target.value))}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <p>
-                    Total:{' '}
-                    {calculateTotal(
-                      form.watch(`rooms.${index}.electricStart`),
-                      form.watch(`rooms.${index}.electricEnd`),
-                    )}
-                  </p>
-                </div>
-              </div>
-            </Card>
-          ))}
-
-          <Button type="submit" className="flex w-full items-center gap-2">
-            <Plus className="size-4" /> Create Meter Reading
-          </Button>
-        </form>
-      </Form>
+      {/* --- Form Section --- */}
+      <MeterReadingFormFilterEmpty month={month} year={year} buildingName={buildingName}>
+        <MeterReadingFormField
+          isButtonDisabled={isSubmitDisabled}
+          form={form}
+          fields={fields}
+          onSubmit={onSubmit}
+          isLoading={isUnitsLoading}
+        />
+      </MeterReadingFormFilterEmpty>
     </div>
   )
 }
