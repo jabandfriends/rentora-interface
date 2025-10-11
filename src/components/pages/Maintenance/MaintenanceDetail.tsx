@@ -15,7 +15,7 @@ import {
 } from '@/components/common'
 import { Badge, EmptyPage, FieldEmpty, LoadingPage } from '@/components/ui'
 import { MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
-import { useRentoraMaintenanceDetail } from '@/hooks'
+import { useRentoraApiMaintenanceDetail } from '@/hooks'
 import { formatDate } from '@/utilities'
 
 import MaintenanceBreadcrumb from './MaintenanceBreadcrumb'
@@ -25,7 +25,7 @@ const MaintenanceDetail = () => {
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
 
   //fetch maintenance detail
-  const { data: maintenance, isLoading, error } = useRentoraMaintenanceDetail({ apartmentId, maintenanceId: id })
+  const { data: maintenance, isLoading, error } = useRentoraApiMaintenanceDetail({ apartmentId, maintenanceId: id })
 
   const [status, setStatus] = useState<string>(MAINTENANCE_STATUS.IN_PROGRESS)
 
