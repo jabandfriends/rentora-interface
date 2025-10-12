@@ -1,4 +1,4 @@
-import type { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS, RecurringSchedule } from '@/enum'
+import type { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
 import type { IBaseUseMutation, IRentoraApiClientBaseResponse } from '@/types'
 
 //base payload type
@@ -20,7 +20,6 @@ export type IMaintenanceExecuteBasePayload = {
   category: MAINTENANCE_CATEGORY
   status: MAINTENANCE_STATUS
   priority: MAINTENANCE_PRIORITY
-  recurringSchedule: RecurringSchedule
 }
 //create payload type
 export type ICreateMaintenanceRequestPayload = {
@@ -40,14 +39,7 @@ export type ICreateMaintenanceRequestPayload = {
 export type IUpdateMaintenanceRequestPayload = Partial<
   Omit<
     IMaintenanceExecuteBasePayload,
-    | 'startAt'
-    | 'completedAt'
-    | 'estimatedCost'
-    | 'actualCost'
-    | 'actualHours'
-    | 'workSummary'
-    | 'isEmergency'
-    | 'isRecurring'
+    'startAt' | 'completedAt' | 'actualCost' | 'actualHours' | 'workSummary' | 'isRecurring'
   >
 >
 

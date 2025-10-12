@@ -1,63 +1,71 @@
 import { ArrowLeft, PenLine } from 'lucide-react'
-import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Spinner } from '@/components/common'
 import { PageHeader, PageSection } from '@/components/layout'
-import { UpdateMaintenanceForm } from '@/components/pages/Maintenance'
+import { MaintenanceForm } from '@/components/pages/Maintenance'
 import { ROUTES } from '@/constants'
-import { useRentoraApiMaintenanceDetail, useRentoraApiUnitList, useRentoraApiUpdateMaintenance } from '@/hooks'
-import type { IUpdateMaintenanceRequestPayload, UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
+import { useRentoraApiMaintenanceDetail, useRentoraApiUpdateMaintenance } from '@/hooks'
+import type { IUpdateMaintenanceRequestPayload, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
 const MaintenanceUpdate = () => {
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
   const navigate = useNavigate()
-  const [errorMessage, setErrorMessage]: [string, Dispatch<SetStateAction<string>>] = useState('')
-  const { data: unitList = [], isLoading: unitsLoading } = useRentoraApiUnitList({
-    apartmentId: apartmentId ?? '',
-    params: { page: 0, size: 50, search: '' },
-  })
   const { data, isLoading, isPending } = useRentoraApiMaintenanceDetail({
     maintenanceId: id ?? '',
     apartmentId: apartmentId ?? '',
   })
   const { mutateAsync: updateMaintenance } = useRentoraApiUpdateMaintenance()
+  const defaultValues: MAINTENANCE_FORM_SCHEMA_TYPE = useMemo(() => {
+    return {
+      unitId: (data as any)?.unitId ?? (data as any)?.unit?.id ?? null,
+      title: (data as any)?.title ?? '',
+      description: (data as any)?.description ?? '',
+      status: (data as any)?.status,
+      priority: (data as any)?.priority,
+      appointmentDate: (data as any)?.appointmentDate,
+      dueDate: (data as any)?.dueDate,
+      estimatedHours: (data as any)?.estimatedHours ?? '',
+      category: (data as any)?.category,
+      estimatedCost: (data as any)?.estimatedCost ?? '',
+      isEmergency: Boolean((data as any)?.isEmergency),
+    } as unknown as MAINTENANCE_FORM_SCHEMA_TYPE
+  }, [data])
   const onSubmit = useCallback(
-    async (data: UPDATE_MAINTENANCE_FORM_SCHEMA_TYPE) => {
+    async (data: MAINTENANCE_FORM_SCHEMA_TYPE) => {
       if (!apartmentId || !id) {
         throw new Error('Missing route params: apartmentId or maintenanceId')
       }
       const payload: IUpdateMaintenanceRequestPayload = {
-        title: data.title ? data.title : undefined,
-        description: data.description ? data.description : undefined,
-        appointmentDate: data.appointmentDate ? new Date(data.appointmentDate).toISOString() : undefined,
-        dueDate: data.dueDate ? new Date(data.dueDate).toISOString() : undefined,
-        priority: data.priority ? data.priority : undefined,
-        status: data.status ? data.status : undefined,
-        category: data.category ? data.category : undefined,
-        estimatedHours: data.estimatedHours ? data.estimatedHours : undefined,
-        recurringSchedule: data.recurringSchedule ? data.recurringSchedule : undefined,
-        unitId: data.unitId ? data.unitId : undefined,
+        unitId: data.unitId,
+        title: data.title,
+        description: data.description ?? '',
+        status: data.status,
+        priority: data.priority,
+        appointmentDate: data.appointmentDate,
+        dueDate: data.dueDate!,
+        estimatedHours: Number(data.estimatedHours),
+        category: data.category,
+        estimatedCost: Number(data.estimatedCost),
+        isEmergency: data.isEmergency,
       }
       try {
-        await updateMaintenance({
-          apartmentId: apartmentId ?? '',
-          maintenanceId: id ?? '',
-          payload,
-        })
-        toast.success('Maintenance updated successfully')
-        setTimeout(() => navigate(ROUTES.maintenance.getPath(apartmentId)), 1000)
-      } catch (error) {
-        toast.error(getErrorMessage(error))
-        setErrorMessage(getErrorMessage(error))
+        await updateMaintenance({ apartmentId: apartmentId ?? '', maintenanceId: id ?? '', payload })
+        toast.success('Update maintenance successfully')
+
+        setTimeout(() => {
+          navigate(ROUTES.maintenance.getPath(apartmentId ?? ''))
+        }, 500)
+      } catch (e) {
+        toast.error(getErrorMessage(e))
       }
     },
-    [updateMaintenance, apartmentId, id, navigate],
+    [apartmentId, updateMaintenance, id, navigate],
   )
 
-  //navigate before page
   const navigateBefore = useCallback(() => navigate(ROUTES.maintenance.getPath(apartmentId)), [navigate, apartmentId])
 
   if (!data || isLoading)
@@ -76,15 +84,13 @@ const MaintenanceUpdate = () => {
         actionIcon={<ArrowLeft />}
         actionOnClick={navigateBefore}
       />
-      <UpdateMaintenanceForm
+      <MaintenanceForm
+        defaultValues={defaultValues}
         onSubmit={onSubmit}
-        defaultValues={data}
-        buttonLabel="Update Maintenance"
-        iconLabel={<PenLine />}
-        isPending={isPending}
-        errorMessage={errorMessage}
-        units={unitList}
-        unitsLoading={unitsLoading}
+        buttonIcon={<PenLine />}
+        buttonLabel="Update a Task"
+        isSubmitting={isPending}
+        key={id}
       />
     </PageSection>
   )

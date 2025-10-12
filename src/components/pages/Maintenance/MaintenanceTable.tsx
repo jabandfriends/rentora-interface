@@ -156,7 +156,7 @@ const MaintenanceTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item: IMaintenance) => (
+          {rows.map((item: IMaintenance) => (
             <TableRow className="cursor-pointer" onClick={() => handleRowClick(item.id)} key={item.id}>
               <TableCell>{item.ticketNumber}</TableCell>
               <TableCell>{item.title}</TableCell>
@@ -170,27 +170,36 @@ const MaintenanceTable = ({
               <TableCell className="capitalize">
                 <Badge variant={statusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
-
-              <TableCell>
-                <MaintenanceAction
-                  maintenanceId={item.id}
-                  onUpdate={handleUpdateMaintenance}
-                  onDelete={() => handleRequestDelete(item.id)}
-                />
-                <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Are you sure you want to delete this maintenance item?
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel onClick={handleCancelDelete}>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleConfirmDelete}>Delete</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+              <TableCell
+                onClick={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
+                onDoubleClick={(e) => e.stopPropagation()}
+              >
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onTouchStart={(e) => e.stopPropagation()}
+                >
+                  <MaintenanceAction
+                    maintenanceId={item.id}
+                    onUpdate={handleUpdateMaintenance}
+                    onDelete={() => handleRequestDelete(item.id)}
+                  />
+                  <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete this maintenance item?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel onClick={handleCancelDelete}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleConfirmDelete}>Delete</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </TableCell>
             </TableRow>
           ))}

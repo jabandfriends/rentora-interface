@@ -1,13 +1,8 @@
 import { CircleCheckBig, Clock, ScrollText } from 'lucide-react'
 import { z } from 'zod'
 
-import { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS, RecurringSchedule } from '@/enum'
-import type {
-  FORM_SECTION,
-  IStatsCardProps,
-  MAINTENANCE_FORM_FIELDS_TYPE,
-  UPDATE_MAINTENANCE_FORM_FIELDS_TYPE,
-} from '@/types'
+import { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
+import type { FORM_SECTION, IStatsCardProps, MAINTENANCE_FORM_FIELDS_TYPE } from '@/types'
 
 export const MAINTENANCE_STATS: Array<IStatsCardProps> = [
   {
@@ -66,8 +61,8 @@ export const MAINTENANCE_FORM_SCHEMA = z.object({
     error: 'Category is required',
   }),
   isEmergency: z.boolean(),
-  estimatedHours: z.string().optional(),
-  estimatedCost: z.string().optional(),
+  estimatedHours: z.number().optional(),
+  estimatedCost: z.number().optional(),
 })
 
 export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS_TYPE>> = [
@@ -191,168 +186,6 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
         key: 'isEmergency',
         label: 'Emergency',
         fieldType: 'switch',
-      },
-    ],
-  },
-]
-
-export const UPDATE_MAINTENANCE_FORM_SCHEMA = z.object({
-  unitId: z.string().optional().nullable(),
-  title: z.string().max(100, 'Title must be at most 100 characters').optional().nullable(),
-  description: z.string().optional().nullable(),
-  appointmentDate: z.string().optional().nullable(),
-  dueDate: z.string().optional().nullable(),
-  priority: z
-    .enum([
-      MAINTENANCE_PRIORITY.LOW,
-      MAINTENANCE_PRIORITY.NORMAL,
-      MAINTENANCE_PRIORITY.HIGH,
-      MAINTENANCE_PRIORITY.URGENT,
-    ])
-    .optional()
-    .nullable(),
-  status: z
-    .enum([
-      MAINTENANCE_STATUS.PENDING,
-      MAINTENANCE_STATUS.ASSIGNED,
-      MAINTENANCE_STATUS.IN_PROGRESS,
-      MAINTENANCE_STATUS.COMPLETED,
-      MAINTENANCE_STATUS.CANCELLED,
-    ])
-    .optional()
-    .nullable(),
-  category: z
-    .enum([MAINTENANCE_CATEGORY.GENERAL, MAINTENANCE_CATEGORY.ELECTRICITY, MAINTENANCE_CATEGORY.PLUMBING])
-    .optional()
-    .nullable(),
-  recurringSchedule: z
-    .enum([RecurringSchedule.WEEKLY, RecurringSchedule.MONTHLY, RecurringSchedule.QUARTERLY])
-    .optional()
-    .nullable(),
-  estimatedHours: z.coerce.number().min(0, 'Estimated hours cannot be negative').optional().nullable(),
-})
-
-export const UPDATE_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<UPDATE_MAINTENANCE_FORM_FIELDS_TYPE>> = [
-  {
-    title: 'Task Detail',
-    description: 'Basic information about the maintenance task',
-    fields: [
-      {
-        key: 'title',
-        label: 'Title',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'input',
-        placeholder: 'Enter task title',
-      },
-      {
-        key: 'description',
-        label: 'Description',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'input',
-        inputType: 'textarea',
-        placeholder: 'Enter task description',
-      },
-      {
-        key: 'priority',
-        label: 'Priority',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'select',
-        options: [
-          { value: MAINTENANCE_PRIORITY.LOW, label: MAINTENANCE_PRIORITY.LOW },
-          { value: MAINTENANCE_PRIORITY.NORMAL, label: MAINTENANCE_PRIORITY.NORMAL },
-          { value: MAINTENANCE_PRIORITY.HIGH, label: MAINTENANCE_PRIORITY.HIGH },
-          { value: MAINTENANCE_PRIORITY.URGENT, label: MAINTENANCE_PRIORITY.URGENT },
-        ],
-        placeholder: 'Select Priority',
-      },
-      {
-        key: 'status',
-        label: 'Status',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'select',
-        options: [
-          { value: MAINTENANCE_STATUS.PENDING, label: MAINTENANCE_STATUS.PENDING },
-          { value: MAINTENANCE_STATUS.ASSIGNED, label: MAINTENANCE_STATUS.ASSIGNED },
-          { value: MAINTENANCE_STATUS.IN_PROGRESS, label: MAINTENANCE_STATUS.IN_PROGRESS },
-          { value: MAINTENANCE_STATUS.COMPLETED, label: MAINTENANCE_STATUS.COMPLETED },
-          { value: MAINTENANCE_STATUS.CANCELLED, label: MAINTENANCE_STATUS.CANCELLED },
-        ],
-        placeholder: 'Select Status',
-      },
-      {
-        key: 'category',
-        label: 'Category',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'select',
-        options: [
-          { value: MAINTENANCE_CATEGORY.GENERAL, label: MAINTENANCE_CATEGORY.GENERAL },
-          { value: MAINTENANCE_CATEGORY.ELECTRICITY, label: MAINTENANCE_CATEGORY.ELECTRICITY },
-          { value: MAINTENANCE_CATEGORY.PLUMBING, label: MAINTENANCE_CATEGORY.PLUMBING },
-        ],
-        placeholder: 'Select Category',
-      },
-    ],
-  },
-  {
-    title: 'Scheduling',
-    description: 'When and how often this task should be completed',
-    fields: [
-      {
-        fieldType: 'layout',
-        layout: 'row',
-        label: 'Scheduling',
-        description: 'When and how often this task should be completed',
-        key: 'appointmentDate',
-        fields: [
-          {
-            key: 'appointmentDate',
-            label: 'Appointment date',
-            description: 'Basic information about the maintenance task',
-            fieldType: 'input',
-            inputType: 'datetime',
-          },
-          {
-            key: 'dueDate',
-            label: 'Due date',
-            description: 'Basic information about the maintenance task',
-            fieldType: 'input',
-            inputType: 'datetime',
-          },
-        ],
-      },
-      {
-        key: 'estimatedHours',
-        label: 'Estimated hours',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'input',
-        inputType: 'number',
-        placeholder: 'Enter Estimated Hours',
-      },
-      {
-        key: 'recurringSchedule',
-        label: 'Recurring schedule',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'select',
-        options: [
-          { value: RecurringSchedule.WEEKLY, label: RecurringSchedule.WEEKLY },
-          { value: RecurringSchedule.MONTHLY, label: RecurringSchedule.MONTHLY },
-          { value: RecurringSchedule.QUARTERLY, label: RecurringSchedule.QUARTERLY },
-        ],
-        placeholder: 'Select Recurring Schedule',
-      },
-    ],
-  },
-  {
-    title: 'Location',
-    description: 'Select the room where this task should be completed',
-    fields: [
-      {
-        key: 'unitId',
-        label: 'Room number',
-        placeholder: 'Select Room Number',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'select',
-        options: [],
       },
     ],
   },

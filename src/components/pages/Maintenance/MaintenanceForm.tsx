@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -34,12 +34,13 @@ type Props = {
   buttonIcon?: React.ReactNode
   onSubmit: (data: MAINTENANCE_FORM_SCHEMA_TYPE) => void | Promise<void>
   isSubmitting?: boolean
+  defaultValues?: MAINTENANCE_FORM_SCHEMA_TYPE
 }
 
-const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Props) => {
+const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defaultValues }: Props) => {
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(MAINTENANCE_FORM_SCHEMA),
-    defaultValues: {
+    defaultValues: defaultValues ?? {
       unitId: '',
       title: '',
       description: '',
@@ -47,13 +48,19 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
       priority: MAINTENANCE_PRIORITY.NORMAL,
       appointmentDate: '',
       dueDate: '',
-      estimatedHours: '',
-      estimatedCost: '',
+      estimatedHours: undefined,
+      estimatedCost: undefined,
       category: MAINTENANCE_CATEGORY.GENERAL,
       isEmergency: false,
     },
     mode: 'onChange',
   })
+
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset(defaultValues)
+    }
+  }, [defaultValues, form])
 
   const isButtonDisabled: boolean = useMemo(
     () => isSubmitting || !form.formState.isDirty || !form.formState.isValid,
@@ -127,6 +134,7 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
                             ) : item.inputType === 'datetime' ? (
                               <DateTimePicker
                                 id={field.name}
+                                value={field.value ? new Date(field.value as string) : undefined}
                                 onChange={(val) => field.onChange(val?.toISOString() ?? '')}
                                 onBlur={field.onBlur}
                                 name={field.name}
@@ -201,6 +209,7 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
                                   </p>
                                   <DateTimePicker
                                     id={field.name}
+                                    value={field.value ? new Date(field.value as string) : undefined}
                                     onChange={(val) => field.onChange(val?.toISOString() ?? '')}
                                     onBlur={field.onBlur}
                                     name={field.name}
