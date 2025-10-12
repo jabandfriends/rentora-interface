@@ -148,7 +148,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   ): Promise<IRentoraApiClientCreateAdhocInvoiceResponse['data']> {
     const response: AxiosResponse<IRentoraApiClientCreateAdhocInvoiceResponse, unknown> =
       await this.axiosWithAuthInstance.post<IRentoraApiClientCreateAdhocInvoiceResponse>(
-        `/api/apartments/${apartmentId}/adhocInvoice/create`,
+        `/api/invoices/${apartmentId}/adhocInvoice/create`,
         payload,
       )
     return response.data.data

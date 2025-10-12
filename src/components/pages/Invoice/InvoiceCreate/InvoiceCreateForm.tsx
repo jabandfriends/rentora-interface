@@ -45,7 +45,7 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
       invoiceDate: '',
       dueDate: '',
       category: ADHOC_INVOICE_CATEGORY.MISCELLANEOUS,
-      finalAmount: 1,
+      finalAmount: undefined,
       paymentStatus: ADHOC_INVOICE_PAYMENT_STATUS.UNPAID,
       notes: '',
       includeInMonthly: false,
@@ -82,7 +82,14 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
                         render={({ field }) => (
                           <div className="space-y-1">
                             <p>{item.label}</p>
-                            <Select onValueChange={field.onChange} defaultValue={field.value?.toString() || ''}>
+                            <Select
+                              onValueChange={(val) => {
+                                if (val === 'true') field.onChange(true)
+                                else if (val === 'false') field.onChange(false)
+                                else field.onChange(val)
+                              }}
+                              defaultValue={String(field.value ?? '')}
+                            >
                               <SelectTrigger>
                                 <SelectValue placeholder={item.placeholder} />
                               </SelectTrigger>
@@ -90,7 +97,7 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
                                 {item.options.map((fieldItem, index) => (
                                   <SelectItem
                                     key={'select-value' + fieldItem.value + index}
-                                    value={fieldItem.value.toString()}
+                                    value={String(fieldItem.value)}
                                   >
                                     {fieldItem.label}
                                   </SelectItem>
@@ -160,6 +167,10 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
                                       {...field}
                                       value={field.value?.toString() || ''}
                                       placeholder={fieldItem.placeholder}
+                                      onChange={(e) => {
+                                        const val = e.target.value
+                                        field.onChange(val === '' ? undefined : Number(val))
+                                      }}
                                     />
                                   ) : fieldItem.inputType === 'textarea' ? (
                                     <Textarea
