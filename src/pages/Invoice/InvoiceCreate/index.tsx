@@ -33,10 +33,10 @@ const InvoiceCreatePage = () => {
       }
       try {
         await createAdhocInvoice({ apartmentId: apartmentId ?? '', payload })
-        toast.success('Create maintenance successfully')
+        toast.success('Create Adhoc Invoice successfully')
 
         setTimeout(() => {
-          navigate(ROUTES.maintenance.getPath(apartmentId ?? ''))
+          navigate(ROUTES.normalInvoice.getPath(apartmentId ?? ''))
         }, 500)
       } catch (e) {
         toast.error(getErrorMessage(e))

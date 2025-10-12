@@ -45,7 +45,7 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
       invoiceDate: '',
       dueDate: '',
       category: ADHOC_INVOICE_CATEGORY.MISCELLANEOUS,
-      finalAmount: undefined,
+      finalAmount: 100,
       paymentStatus: ADHOC_INVOICE_PAYMENT_STATUS.UNPAID,
       notes: '',
       includeInMonthly: false,
