@@ -62,6 +62,7 @@ const RoomReport = () => {
     throw new Error('Function not implemented.')
   }
   function handleSortChange(value: string): void {
+    // eslint-disable-next-line no-console
     console.log('Sort changed:', value)
   }
   return (

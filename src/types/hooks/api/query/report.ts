@@ -1,6 +1,7 @@
 import type {
   IBasePaginateQueryResult,
   IBaseUseQuery,
+  IPaginate,
   IRentoraApiClientBasePaginateWithMetadataResponse,
   IRentoraApiClientBaseResponse,
 } from '@/types'
@@ -73,10 +74,16 @@ export type IRentoraApiClientReportRoomListResponse = IRentoraApiClientBasePagin
   IReportRoomListMetadata
 >
 
-export type IRentoraApiClientReportReceiptListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
-  IReportReceipt,
-  IReportReceiptListMetadata
->
+export type IRentoraApiClientReportReceiptListResponse = {
+  data: {
+    data: Array<IReportReceipt>
+    pagination: IPaginate
+    metadata: IReportReceiptListMetadata
+  }
+  success: boolean
+  message: string
+}
+export type IReportReceiptListData = IRentoraApiClientReportReceiptListResponse['data']
 
 //metadata
 export type IReportUtilityListMetadata = {
@@ -94,6 +101,8 @@ export type IReportRoomListMetadata = {
 }
 
 export type IReportReceiptListMetadata = {
+  overdueBills: number
+  paidBills: number
   totalBill: number
   receiptPaid: number
   receiptUnpaid: number
@@ -109,6 +118,13 @@ export type IRentoraApiReportUtilityListParams = {
   readingDate?: string
 }
 export type IRentoraApiReportRoomListParams = {
+  page?: number
+  size?: number
+  sortBy?: string
+  sortDir?: string
+  search?: string
+}
+export type IRentoraApiReportReceiptListParams = {
   page?: number
   size?: number
   sortBy?: string

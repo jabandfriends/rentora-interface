@@ -6,6 +6,7 @@ import type {
   IRentoraApiClientApartmentDetailResponse,
   IRentoraApiClientApartmentListResponse,
   IRentoraApiClientReadingUnitUtilityResponse,
+  IRentoraApiClientReportReceiptListResponse,
   IRentoraApiClientReportRoomListResponse,
   IRentoraApiClientReportUtilityListResponse,
   IRentoraApiClientTenantDetailResponse,
@@ -32,6 +33,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     reportUtilityList: 'REPORT_UTILITY_LIST',
     reportReadingDateUtility: 'REPORT_READING_DATE_UTILITY',
     reportRoomList: 'REPORT_ROOM_LIST',
+    reportReceiptList: 'REPORT_RECEIPT_LIST',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -114,6 +116,17 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
   ): Promise<IRentoraApiClientReportRoomListResponse['data']> {
     const response = await this.axiosWithAuthInstance.get<IRentoraApiClientReportRoomListResponse>(
       `/api/apartments/report/${apartmentId}/room-report`,
+      { params },
+    )
+    return response.data.data
+  }
+
+  async reportReceiptList(
+    apartmentId: Maybe<string>,
+    params: any,
+  ): Promise<IRentoraApiClientReportReceiptListResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientReportReceiptListResponse>(
+      `/api/apartments/report/${apartmentId}/receipt-report`,
       { params },
     )
     return response.data.data
