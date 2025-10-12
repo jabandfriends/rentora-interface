@@ -23,6 +23,8 @@ import MaintenanceCreate from '@/pages/Maintenance/MaintenanceCreate'
 import MaintenanceDetailPage from '@/pages/Maintenance/MaintenanceDetailPage'
 import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
 import MaintenanceUpdate from '@/pages/Maintenance/MaintenanceUpdate'
+import MeterReadingCreatePage from '@/pages/MeterReading/MeterReadingCreatePage'
+import MeterReadingListPage from '@/pages/MeterReading/MeterReadingListPage'
 import OverviewPage from '@/pages/Overview'
 import PageNotFound from '@/pages/PageNotFound'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
@@ -299,6 +301,14 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.contractCreate.path,
         element: <ContractCreate />,
+      },
+      {
+        path: ROUTES.meterReadingList.path,
+        element: <MeterReadingListPage />,
+      },
+      {
+        path: ROUTES.meterReadingCreate.path,
+        element: <MeterReadingCreatePage />,
       },
       {
         path: '*',

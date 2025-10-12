@@ -17,6 +17,9 @@ import type {
   IRentoraApiClientTenantDetailResponse,
   IRentoraApiClientTenantListResponse,
   IRentoraApiClientUnitListResponse,
+  IRentoraApiClientUnitUtilityAvailableMonthResponse,
+  IRentoraApiClientUnitUtilityAvailableYearResponse,
+  IRentoraApiClientUnitWithUtilityResponse,
   IRentoraApiClientUserResponse,
   IRentoraApiInvoiceListParams,
   IRentoraApiMaintenanceApartmentIdParams,
@@ -26,6 +29,8 @@ import type {
   IRentoraApiReportUtilityListParams,
   IRentoraApiTenantListParams,
   IRentoraApiUnitListParams,
+  IRentoraApiUnitUtilityAvailableMonthParams,
+  IRentoraApiUnitWithUtilityParams,
   Maybe,
   RentoraApiQueryClientKey,
 } from '@/types'
@@ -50,6 +55,9 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     getUserData: 'GET_USER_DATA',
     buildingListNoPaginate: 'BUILDING_LIST_NO_PAGINATE',
     contractDetail: 'CONTRACT_DETAIL',
+    unitUtilityAvailableYear: 'UNIT_UTILITY_AVAILABLE_YEAR',
+    unitUtilityAvailableMonth: 'UNIT_UTILITY_AVAILABLE_MONTH',
+    unitWithUtility: 'UNIT_WITH_UTILITY',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -214,6 +222,44 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
       await this.axiosWithAuthInstance.get<IRentoraApiClientContractDetailResponse>(
         `/api/apartments/${apartmentId}/contracts/unit/${unitId}`,
       )
+    return response.data.data
+  }
+
+  //unit utility (meter) available year
+  async unitUtilityAvailableYear(
+    apartmentId: Maybe<string>,
+  ): Promise<IRentoraApiClientUnitUtilityAvailableYearResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientUnitUtilityAvailableYearResponse>(
+      `/api/apartments/${apartmentId}/unit/utility/years`,
+    )
+    return response.data.data
+  }
+
+  //unit utility (meter) available month
+  async unitUtilityAvailableMonth(
+    apartmentId: Maybe<string>,
+    params: IRentoraApiUnitUtilityAvailableMonthParams,
+  ): Promise<IRentoraApiClientUnitUtilityAvailableMonthResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientUnitUtilityAvailableMonthResponse>(
+      `/api/apartments/${apartmentId}/unit/utility/months`,
+      {
+        params,
+      },
+    )
+    return response.data.data
+  }
+
+  //unit with utility
+  async unitWithUtility(
+    apartmentId: Maybe<string>,
+    params: IRentoraApiUnitWithUtilityParams,
+  ): Promise<IRentoraApiClientUnitWithUtilityResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientUnitWithUtilityResponse>(
+      `/api/apartments/${apartmentId}/unit/utility`,
+      {
+        params,
+      },
+    )
     return response.data.data
   }
 }

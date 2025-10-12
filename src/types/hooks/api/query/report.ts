@@ -17,6 +17,12 @@ export type IReportUtility = {
   electricCost: number
   waterUsage: number
   waterCost: number
+  waterMeterStart: number
+  waterMeterEnd: number
+  waterUnitUtilityId: string
+  electricMeterStart: number
+  electricMeterEnd: number
+  electricUnitUtilityId: string
 }
 
 //hook type
@@ -47,6 +53,7 @@ export type IRentoraApiReportUtilityListParams = {
   sortBy?: string
   sortDir?: string
   readingDate?: string
+  buildingName?: string
 }
 
 export type IReadingUnitUtility = {
