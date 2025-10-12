@@ -2,6 +2,7 @@ import type { AxiosResponse } from 'axios'
 
 import type {
   IAuthRequest,
+  ICreateAdhocInvoiceRequestPayload,
   ICreateApartmentRequestApi,
   ICreateContractRequestPayload,
   ICreateMaintenanceRequestPayload,
@@ -9,6 +10,7 @@ import type {
   IFirsttimePasswordResetRequestPayload,
   IPutPresignedUrlRequest,
   IRentoraApiClientAuthenticateResponse,
+  IRentoraApiClientCreateAdhocInvoiceResponse,
   IRentoraApiClientCreateApartmentResponse,
   IRentoraApiClientCreateMaintenanceResponse,
   IRentoraApiClientDeleteMaintenanceResponse,
@@ -36,6 +38,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     updateTenant: 'UPDATE_TENANT',
     updateTenantPassword: 'UPDATE_TENANT_PASSWORD',
     createContract: 'CREATE_CONTRACT',
+    createAdhocInvoice: 'CREATE_ADHOC_INVOICE',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -136,5 +139,18 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   async createContract(apartmentId: string, payload: ICreateContractRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/${apartmentId}/contracts`, payload)
     return response.data
+  }
+
+  //create Adhoc Invoice
+  async createAdhocInvoice(
+    apartmentId: string,
+    payload: ICreateAdhocInvoiceRequestPayload,
+  ): Promise<IRentoraApiClientCreateAdhocInvoiceResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientCreateAdhocInvoiceResponse, unknown> =
+      await this.axiosWithAuthInstance.post<IRentoraApiClientCreateAdhocInvoiceResponse>(
+        `/api/apartments/${apartmentId}/adhocInvoice/create`,
+        payload,
+      )
+    return response.data.data
   }
 }

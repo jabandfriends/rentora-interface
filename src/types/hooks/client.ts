@@ -30,3 +30,4 @@ export type RentoraApiExecuteClientKey =
   | 'updateTenant'
   | 'updateTenantPassword'
   | 'createContract'
+  | 'createAdhocInvoice'

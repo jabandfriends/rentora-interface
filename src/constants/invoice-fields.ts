@@ -1,30 +1,53 @@
 import z from 'zod'
 
+import {
+  ADHOC_INVOICE_CATEGORY,
+  ADHOC_INVOICE_PAYMENT_STATUS,
+  ADHOC_INVOICE_PRIORITY,
+  ADHOC_INVOICE_STATUS,
+} from '@/enum/adhocInvoice'
 import type { FORM_SECTION, INVOICE_FORM_FIELDS_TYPE } from '@/types'
-
 // Enums
 
 export const AdhocInvoiceSchema = z.object({
-  //invoice detail
-  title: z.string({ error: 'Title is required' }).min(1, 'Title is required').max(200),
-  description: z.string().max(200).optional(),
-  category: z.string({ error: 'Category is required' }),
-
-  // amount detail
-  final_amount: z.string({ error: 'Final amount is required' }),
-
-  //date detail
-  due_date: z.string({ error: 'Due date is required' }),
-
-  // monthly invoice integration
-  include_in_monthly: z.string({ error: 'Include in monthly is required' }),
-
-  //payment tracking
-  payment_status: z.string({ error: 'Payment status is required' }),
-
-  //status
-  status: z.string({ error: 'Status is required' }),
-  priority: z.string({ error: 'Priority is required' }),
+  unitId: z.string({ error: 'Unit is required.' }).min(1, 'Unit is required.'),
+  title: z.string({ error: 'Title is required.' }).min(1, 'Title is required.'),
+  description: z.string().optional(),
+  invoiceDate: z.string({ error: 'Invoice date is required.' }).min(1, 'Invoice date is required.'),
+  dueDate: z.string({ error: 'Due date is required.' }).min(1, 'Due date is required.'),
+  category: z.enum([ADHOC_INVOICE_CATEGORY.MISCELLANEOUS, ADHOC_INVOICE_CATEGORY.PENALTY], {
+    error: 'Category is required',
+  }),
+  finalAmount: z.number({ error: 'Final amount is required.' }),
+  paymentStatus: z.enum(
+    [
+      ADHOC_INVOICE_PAYMENT_STATUS.OVERDUE,
+      ADHOC_INVOICE_PAYMENT_STATUS.PAID,
+      ADHOC_INVOICE_PAYMENT_STATUS.UNPAID,
+      ADHOC_INVOICE_PAYMENT_STATUS.CANCELLED,
+    ],
+    { error: 'Payment status is required' },
+  ),
+  notes: z.string().optional(),
+  includeInMonthly: z.boolean(),
+  priority: z.enum(
+    [
+      ADHOC_INVOICE_PRIORITY.HIGH,
+      ADHOC_INVOICE_PRIORITY.NORMAL,
+      ADHOC_INVOICE_PRIORITY.LOW,
+      ADHOC_INVOICE_PRIORITY.URGENT,
+    ],
+    { error: 'Priority is required' },
+  ),
+  status: z.enum(
+    [
+      ADHOC_INVOICE_STATUS.ACTIVE,
+      ADHOC_INVOICE_STATUS.CANCELLED,
+      ADHOC_INVOICE_STATUS.DRAFT,
+      ADHOC_INVOICE_STATUS.INCLUDED,
+    ],
+    { error: 'Status is required' },
+  ),
 })
 
 export const INVOICE_FORM_FIELDS: Array<FORM_SECTION<INVOICE_FORM_FIELDS_TYPE>> = [
@@ -52,11 +75,24 @@ export const INVOICE_FORM_FIELDS: Array<FORM_SECTION<INVOICE_FORM_FIELDS_TYPE>> 
       {
         fieldType: 'layout',
         layout: 'row',
-        key: 'due_date',
+        key: 'invoiceDate',
         fields: [
           {
-            key: 'due_date',
-            label: 'Due Date',
+            key: 'invoiceDate',
+            label: 'Start date',
+            fieldType: 'input',
+            inputType: 'datetime',
+          },
+        ],
+      },
+      {
+        fieldType: 'layout',
+        layout: 'row',
+        key: 'dueDate',
+        fields: [
+          {
+            key: 'dueDate',
+            label: 'Due date',
             fieldType: 'input',
             inputType: 'datetime',
           },
@@ -74,27 +110,42 @@ export const INVOICE_FORM_FIELDS: Array<FORM_SECTION<INVOICE_FORM_FIELDS_TYPE>> 
         fieldType: 'select',
         placeholder: 'Select category',
         options: [
-          { value: 'penalty', label: 'Penalty' },
-          { value: 'miscellaneous', label: 'Miscellaneous' },
+          { value: ADHOC_INVOICE_CATEGORY.MISCELLANEOUS, label: ADHOC_INVOICE_CATEGORY.MISCELLANEOUS },
+          { value: ADHOC_INVOICE_CATEGORY.PENALTY, label: ADHOC_INVOICE_CATEGORY.PENALTY },
         ],
       },
       {
-        key: 'final_amount',
+        key: 'finalAmount',
         label: 'Amount',
         fieldType: 'input',
         inputType: 'number',
         placeholder: 'Enter amount',
       },
       {
-        key: 'payment_status',
+        key: 'paymentStatus',
         label: 'Payment Status',
         fieldType: 'select',
         placeholder: 'Select payment status',
         options: [
-          { value: 'paid', label: 'Paid' },
-          { value: 'unpaid', label: 'Unpaid' },
-          { value: 'cancelled', label: 'Cancelled' },
+          { value: ADHOC_INVOICE_PAYMENT_STATUS.PAID, label: ADHOC_INVOICE_PAYMENT_STATUS.PAID },
+          { value: ADHOC_INVOICE_PAYMENT_STATUS.UNPAID, label: ADHOC_INVOICE_PAYMENT_STATUS.UNPAID },
+          { value: ADHOC_INVOICE_PAYMENT_STATUS.OVERDUE, label: ADHOC_INVOICE_PAYMENT_STATUS.OVERDUE },
+          { value: ADHOC_INVOICE_PAYMENT_STATUS.CANCELLED, label: ADHOC_INVOICE_PAYMENT_STATUS.CANCELLED },
         ],
+      },
+    ],
+  },
+  {
+    title: 'Notes',
+    description: 'Additional notes for the invoice',
+    fields: [
+      {
+        key: 'notes',
+        label: 'Notes',
+        fieldType: 'input',
+        inputType: 'textarea',
+        description: 'Any additional notes regarding the invoice',
+        placeholder: 'Enter additional notes',
       },
     ],
   },
@@ -103,13 +154,13 @@ export const INVOICE_FORM_FIELDS: Array<FORM_SECTION<INVOICE_FORM_FIELDS_TYPE>> 
     description: 'Additional details and notes',
     fields: [
       {
-        key: 'include_in_monthly',
+        key: 'includeInMonthly',
         fieldType: 'select',
         label: 'Include in Monthly Invoice',
         placeholder: 'Select include in monthly',
         options: [
-          { value: 'true', label: 'Yes' },
-          { value: 'false', label: 'No' },
+          { value: true, label: 'Yes' },
+          { value: false, label: 'No' },
         ],
       },
       {
@@ -118,10 +169,10 @@ export const INVOICE_FORM_FIELDS: Array<FORM_SECTION<INVOICE_FORM_FIELDS_TYPE>> 
         fieldType: 'select',
         placeholder: 'Select priority',
         options: [
-          { value: 'low', label: 'Low' },
-          { value: 'normal', label: 'Normal' },
-          { value: 'high', label: 'High' },
-          { value: 'urgent', label: 'Urgent' },
+          { value: ADHOC_INVOICE_PRIORITY.LOW, label: ADHOC_INVOICE_PRIORITY.LOW },
+          { value: ADHOC_INVOICE_PRIORITY.NORMAL, label: ADHOC_INVOICE_PRIORITY.NORMAL },
+          { value: ADHOC_INVOICE_PRIORITY.HIGH, label: ADHOC_INVOICE_PRIORITY.HIGH },
+          { value: ADHOC_INVOICE_PRIORITY.URGENT, label: ADHOC_INVOICE_PRIORITY.URGENT },
         ],
       },
     ],
@@ -136,10 +187,10 @@ export const INVOICE_FORM_FIELDS: Array<FORM_SECTION<INVOICE_FORM_FIELDS_TYPE>> 
         fieldType: 'select',
         placeholder: 'Select status',
         options: [
-          { value: 'draft', label: 'Draft' },
-          { value: 'active', label: 'Active' },
-          { value: 'cancelled', label: 'Cancelled' },
-          { value: 'included', label: 'Included' },
+          { value: ADHOC_INVOICE_STATUS.ACTIVE, label: ADHOC_INVOICE_STATUS.ACTIVE },
+          { value: ADHOC_INVOICE_STATUS.CANCELLED, label: ADHOC_INVOICE_STATUS.CANCELLED },
+          { value: ADHOC_INVOICE_STATUS.DRAFT, label: ADHOC_INVOICE_STATUS.DRAFT },
+          { value: ADHOC_INVOICE_STATUS.INCLUDED, label: ADHOC_INVOICE_STATUS.INCLUDED },
         ],
       },
     ],

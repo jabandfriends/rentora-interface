@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 import {
   Button,
@@ -19,16 +19,47 @@ import {
   SelectValue,
   Textarea,
 } from '@/components/common'
+import { SelectRoomModal } from '@/components/ui'
 import { AdhocInvoiceSchema, INVOICE_FORM_FIELDS } from '@/constants'
-import type { AdhocInvoice } from '@/types'
+import {
+  ADHOC_INVOICE_CATEGORY,
+  ADHOC_INVOICE_PAYMENT_STATUS,
+  ADHOC_INVOICE_PRIORITY,
+  ADHOC_INVOICE_STATUS,
+} from '@/enum/adhocInvoice'
+import { type ADHOC_INVOICE_FORM_SCHEMA_TYPE } from '@/types'
 
 type IInvoiceCreateFormProps = {
-  onSubmit: (data: AdhocInvoice) => void
+  buttonLabel: string
+  buttonIcon?: React.ReactNode
+  onSubmit: (data: ADHOC_INVOICE_FORM_SCHEMA_TYPE) => void | Promise<void>
+  isSubmitting?: boolean
 }
-const InvoiceCreateForm = ({ onSubmit }: IInvoiceCreateFormProps) => {
-  const form = useForm<z.infer<typeof AdhocInvoiceSchema>>({
+const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: IInvoiceCreateFormProps) => {
+  const form = useForm<ADHOC_INVOICE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(AdhocInvoiceSchema),
+    defaultValues: {
+      unitId: '',
+      title: '',
+      description: '',
+      invoiceDate: '',
+      dueDate: '',
+      category: ADHOC_INVOICE_CATEGORY.MISCELLANEOUS,
+      finalAmount: 1,
+      paymentStatus: ADHOC_INVOICE_PAYMENT_STATUS.UNPAID,
+      notes: '',
+      includeInMonthly: false,
+      priority: ADHOC_INVOICE_PRIORITY.NORMAL,
+      status: ADHOC_INVOICE_STATUS.ACTIVE,
+    },
+    mode: 'onChange',
   })
+
+  const isButtonDisabled: boolean = useMemo(
+    () => isSubmitting || !form.formState.isDirty || !form.formState.isValid,
+    [isSubmitting, form.formState.isDirty, form.formState.isValid],
+  )
+
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -181,10 +212,28 @@ const InvoiceCreateForm = ({ onSubmit }: IInvoiceCreateFormProps) => {
             </div>
           </Card>
         ))}
-
+        <Card className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
+          <div>
+            <h3>
+              Location <span className="text-theme-error">*</span>
+            </h3>
+            <p className="text-theme-secondary">Select the room for this adhoc invoice</p>
+          </div>
+          <FormField
+            control={form.control}
+            name="unitId"
+            render={({ field }) => (
+              <div className="space-y-1">
+                <SelectRoomModal onRoomSelect={field.onChange} selectedRoomId={field.value} />
+                <FormMessage />
+              </div>
+            )}
+          />
+        </Card>
         <div className="flex justify-end">
-          <Button type="submit" className="flex items-center gap-2">
-            <Plus /> Create a invoice
+          <Button type="submit" className="flex items-center gap-2" disabled={isButtonDisabled}>
+            {isSubmitting ? <Plus /> : buttonLabel}
+            {buttonIcon}
           </Button>
         </div>
       </form>
