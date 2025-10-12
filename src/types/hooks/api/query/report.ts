@@ -19,8 +19,10 @@ export type IReportUtility = {
   waterCost: number
   waterMeterStart: number
   waterMeterEnd: number
+  waterUnitUtilityId: string
   electricMeterStart: number
   electricMeterEnd: number
+  electricUnitUtilityId: string
 }
 
 //hook type

@@ -58,6 +58,7 @@ const MeterReadingListPage = () => {
       readingDate: debouncedReadingDate,
       buildingName: debouncedBuildingName,
     },
+    enabled: !!apartmentId && !!readingDate,
   })
 
   const isSearched: boolean = useMemo(

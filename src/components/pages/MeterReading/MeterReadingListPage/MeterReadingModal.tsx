@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Edit, InfoIcon } from 'lucide-react'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import z from 'zod'
+import toast from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
 
 import {
   Button,
@@ -17,59 +18,76 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/common'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/feature'
-import type { IReportUtility } from '@/types'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/feature'
+import { updateMeterReadingFormSchema } from '@/constants'
+import { useRentoraApiUnitUtilityUpdateMeterReading } from '@/hooks'
+import type { IMeterReadingUpdateRequestPayload, IReportUtility, UpdateMeterReadingFormValues } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
 type IMeterReadingModalProps = {
   room: IReportUtility
 }
-const formSchema = z
-  .object({
-    waterMeterStart: z.number({ error: 'Water start is required' }).min(0, 'Must be 0 or greater'),
-    waterMeterEnd: z.number({ error: 'Water end is required' }).min(0, 'Must be 0 or greater'),
-    electricMeterStart: z.number({ error: 'Electric start is required' }).min(0, 'Must be 0 or greater'),
-    electricMeterEnd: z.number({ error: 'Electric end is required' }).min(0, 'Must be 0 or greater'),
-  })
-  .superRefine((data, ctx) => {
-    // 🔹 Water
-    if (data.waterMeterStart > data.waterMeterEnd) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['waterMeterEnd'],
-        message: 'Water end must be greater than or equal to start',
-      })
-    }
 
-    // 🔹 Electric
-    if (data.electricMeterStart > data.electricMeterEnd) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['electricMeterEnd'],
-        message: 'Electric end must be greater than or equal to start',
-      })
-    }
-  })
 const MeterReadingModal = ({ room }: IMeterReadingModalProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   const calculateTotal = useCallback((start: number, end: number) => {
     return end - start >= 0 ? (end - start).toFixed(2) : '0.00'
   }, [])
 
+  //api mutate
+  const { mutateAsync: updateMeterReading, isPending } = useRentoraApiUnitUtilityUpdateMeterReading({
+    apartmentId: apartmentId!,
+  })
+
   //form
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<UpdateMeterReadingFormValues>({
+    resolver: zodResolver(updateMeterReadingFormSchema),
     defaultValues: {
-      waterMeterStart: room?.waterMeterStart ?? 0,
-      waterMeterEnd: room?.waterMeterEnd ?? 0,
-      electricMeterStart: room?.electricMeterStart ?? 0,
-      electricMeterEnd: room?.electricMeterEnd ?? 0,
+      waterUnitUtilityId: room?.waterUnitUtilityId ?? '',
+      waterStart: room?.waterMeterStart ?? 0,
+      waterEnd: room?.waterMeterEnd ?? 0,
+      electricUnitUtilityId: room?.electricUnitUtilityId ?? '',
+      electricStart: room?.electricMeterStart ?? 0,
+      electricEnd: room?.electricMeterEnd ?? 0,
     },
     mode: 'onChange',
   })
 
   //onsubmit
-  const onSubmit = useCallback((data: z.infer<typeof formSchema>) => {
-    console.log(data) //api
-  }, [])
+  const onSubmit = useCallback(
+    (data: UpdateMeterReadingFormValues) => {
+      const payload: IMeterReadingUpdateRequestPayload = {
+        ...data,
+      }
+      try {
+        updateMeterReading(payload)
+        toast.success('Meter reading updated successfully')
+      } catch (error) {
+        toast.error(getErrorMessage(error))
+      }
+    },
+    [updateMeterReading],
+  )
+
+  const [waterStart, waterEnd, electricStart, electricEnd] = form.watch([
+    'waterStart',
+    'waterEnd',
+    'electricStart',
+    'electricEnd',
+  ])
+
+  const isButtonDisabled: boolean = useMemo(
+    () => !form.formState.isValid || isPending || !form.formState.isDirty,
+    [form.formState.isValid, isPending, form.formState.isDirty],
+  )
 
   return (
     <Dialog>
@@ -90,7 +108,7 @@ const MeterReadingModal = ({ room }: IMeterReadingModalProps) => {
               <div>
                 <FormField
                   control={form.control}
-                  name="waterMeterStart"
+                  name="waterStart"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
@@ -105,7 +123,11 @@ const MeterReadingModal = ({ room }: IMeterReadingModalProps) => {
                         </Tooltip>
                       </FormLabel>
                       <FormControl>
-                        <InputNumber {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+                        <InputNumber
+                          maxLength={4}
+                          {...field}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                        />
                       </FormControl>
 
                       <FormMessage />
@@ -117,12 +139,16 @@ const MeterReadingModal = ({ room }: IMeterReadingModalProps) => {
               <div>
                 <FormField
                   control={form.control}
-                  name="waterMeterEnd"
+                  name="waterEnd"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Water End Unit</FormLabel>
                       <FormControl>
-                        <InputNumber {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+                        <InputNumber
+                          maxLength={4}
+                          {...field}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -136,7 +162,7 @@ const MeterReadingModal = ({ room }: IMeterReadingModalProps) => {
               <div>
                 <FormField
                   control={form.control}
-                  name="electricMeterStart"
+                  name="electricStart"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
@@ -151,7 +177,11 @@ const MeterReadingModal = ({ room }: IMeterReadingModalProps) => {
                         </Tooltip>
                       </FormLabel>
                       <FormControl>
-                        <InputNumber {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+                        <InputNumber
+                          maxLength={4}
+                          {...field}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                        />
                       </FormControl>
 
                       <FormMessage />
@@ -163,12 +193,16 @@ const MeterReadingModal = ({ room }: IMeterReadingModalProps) => {
               <div>
                 <FormField
                   control={form.control}
-                  name="electricMeterEnd"
+                  name="electricEnd"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Electricity End Unit</FormLabel>
                       <FormControl>
-                        <InputNumber {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+                        <InputNumber
+                          maxLength={4}
+                          {...field}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -181,23 +215,25 @@ const MeterReadingModal = ({ room }: IMeterReadingModalProps) => {
             <div className="flex gap-4">
               <div className="bg-theme-primary/10 flex-1 rounded-md p-3">
                 <p className="text-theme-primary text-body-2">Water Total</p>
-                <p className="text-theme-primary font-semibold">
-                  {calculateTotal(form.watch('waterMeterStart') ?? 0, form.watch('waterMeterEnd') ?? 0)}
-                </p>
+                <p className="text-theme-primary font-semibold">{calculateTotal(waterStart ?? 0, waterEnd ?? 0)}</p>
               </div>
 
               <div className="bg-theme-secondary/10 flex-1 rounded-md p-3">
                 <p className="text-theme-secondary text-body-2">Electricity Total</p>
                 <p className="text-theme-secondary font-semibold">
-                  {calculateTotal(form.watch('electricMeterStart') ?? 0, form.watch('electricMeterEnd') ?? 0)}
+                  {calculateTotal(electricStart ?? 0, electricEnd ?? 0)}
                 </p>
               </div>
             </div>
 
             {/* --- Submit Button --- */}
-            <Button type="submit" className="w-full">
-              Save Changes
-            </Button>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="submit" disabled={isButtonDisabled} className="w-full">
+                  Save Changes
+                </Button>
+              </DialogClose>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>

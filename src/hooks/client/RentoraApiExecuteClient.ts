@@ -8,6 +8,7 @@ import type {
   ICreateTenantRequestPayload,
   IFirsttimePasswordResetRequestPayload,
   IMeterReadingRequestPayload,
+  IMeterReadingUpdateRequestPayload,
   IPutPresignedUrlRequest,
   IRentoraApiClientAuthenticateResponse,
   IRentoraApiClientCreateApartmentResponse,
@@ -38,6 +39,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     updateTenantPassword: 'UPDATE_TENANT_PASSWORD',
     createContract: 'CREATE_CONTRACT',
     createMeterReading: 'CREATE_METER_READING',
+    updateMeterReading: 'UPDATE_METER_READING',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -143,6 +145,12 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   //create meter reading
   async createMeterReading(apartmentId: string, payload: IMeterReadingRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/${apartmentId}/unit/utility`, payload)
+    return response.data
+  }
+
+  //update meter reading
+  async updateMeterReading(apartmentId: string, payload: IMeterReadingUpdateRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.put<void>(`/api/apartments/${apartmentId}/unit/utility`, payload)
     return response.data
   }
 }

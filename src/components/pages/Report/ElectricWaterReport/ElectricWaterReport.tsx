@@ -54,6 +54,7 @@ const ElectricWaterReport = () => {
       sortDir: debouncedSortDir,
       readingDate: debouncedReadingDate,
     },
+    enabled: !!apartmentId && !!readingDate,
   })
 
   const isSearched: boolean = useMemo(

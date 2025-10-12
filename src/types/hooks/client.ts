@@ -34,3 +34,4 @@ export type RentoraApiExecuteClientKey =
   | 'updateTenantPassword'
   | 'createContract'
   | 'createMeterReading'
+  | 'updateMeterReading'

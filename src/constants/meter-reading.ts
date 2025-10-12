@@ -57,3 +57,32 @@ export const filterMeterReadingFormSchema = z.object({
   year: z.string().optional(),
   month: z.string().optional(),
 })
+
+export const updateMeterReadingFormSchema = z
+  .object({
+    waterUnitUtilityId: z.string().min(1, 'Water unit is required'),
+    waterStart: z.number({ error: 'Water start is required' }).min(0, 'Must be 0 or greater'),
+    waterEnd: z.number({ error: 'Water end is required' }).min(0, 'Must be 0 or greater'),
+    electricUnitUtilityId: z.string().min(1, 'Electric unit is required'),
+    electricStart: z.number({ error: 'Electric start is required' }).min(0, 'Must be 0 or greater'),
+    electricEnd: z.number({ error: 'Electric end is required' }).min(0, 'Must be 0 or greater'),
+  })
+  .superRefine((data, ctx) => {
+    // 🔹 Water
+    if (data.waterStart > data.waterEnd) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['waterEnd'],
+        message: 'Water end must be greater than or equal to start',
+      })
+    }
+
+    // 🔹 Electric
+    if (data.electricStart > data.electricEnd) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['electricEnd'],
+        message: 'Electric end must be greater than or equal to start',
+      })
+    }
+  })

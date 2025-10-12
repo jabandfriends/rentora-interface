@@ -39,7 +39,7 @@ const MeterReadingTable = ({
   if (isLoading)
     return (
       <Card className="rounded-2xl p-6">
-        <PageTableLoading bodyRows={8} />
+        <PageTableLoading bodyRows={12} />
       </Card>
     )
   if ((isSearch && !filteredReadings) || (isSearch && filteredReadings?.length === 0))
