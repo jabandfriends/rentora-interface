@@ -1,22 +1,55 @@
 import { Plus, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
-import { Button, Card, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
+import {
+  Button,
+  Card,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Spinner,
+} from '@/components/common'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { useRentoraApartmentServices } from '@/hooks/api/queries'
 
 type IRoomDetailServicesProps = {
-  services: Array<any>
   selectedService: string
   setSelectedService: (service: string) => void
   addService: () => void
   removeService: (id: number) => void
 }
 const RoomDetailServices = ({
-  services,
   selectedService,
   setSelectedService,
   addService,
   removeService,
 }: IRoomDetailServicesProps) => {
+  const { apartmentId, unitId } = useParams<{ apartmentId: string; unitId: string }>()
+  const { data, isLoading, isError } = useRentoraApartmentServices({
+    apartmentId: apartmentId!,
+    unitId: unitId!,
+  })
+
+  const [services, setServices] = useState<Array<any>>([])
+  useEffect(() => {
+    if (data) {
+      setServices(
+        data.map((s: any) => ({
+          id: s.id,
+          name: s.serviceName,
+          price: s.price,
+        })),
+      )
+    }
+  }, [data])
+
+  if (isLoading) return <Spinner />
+  if (isError) return <div>loading failed</div>
+
   return (
     <Card className="border-border justify-start overflow-auto rounded-2xl shadow-lg hover:shadow-xl">
       <div className="border-theme-secondary-400 border-b pb-4">
@@ -35,12 +68,11 @@ const RoomDetailServices = ({
                 <SelectValue placeholder="Select service to add" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="common">Common Area Maintenance</SelectItem>
-                <SelectItem value="parking">Parking Space</SelectItem>
-                <SelectItem value="water">Water Supply</SelectItem>
-                <SelectItem value="electric">Electricity</SelectItem>
-                <SelectItem value="internet">Internet Service</SelectItem>
-                <SelectItem value="security">Security Fee</SelectItem>
+                {services?.map((service) => (
+                  <SelectItem key={service.id} value={service.serviceName}>
+                    {service.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Button size="icon" onClick={addService} className="flex items-center justify-center gap-2">
@@ -60,7 +92,7 @@ const RoomDetailServices = ({
           <TableBody>
             {services.map((service) => (
               <TableRow key={service.id}>
-                <TableCell>{service.name}</TableCell>
+                <TableCell>{service.serviceName}</TableCell>
                 <TableCell className="font-mono text-base font-semibold">฿{service.price.toFixed(2)}</TableCell>
                 <TableCell className="flex w-12 justify-center">
                   <Button

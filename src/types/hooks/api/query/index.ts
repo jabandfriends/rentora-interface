@@ -1,4 +1,5 @@
 export * from './apartment'
+export * from './apartment-service'
 export * from './authentication'
 export * from './building'
 export * from './contract'

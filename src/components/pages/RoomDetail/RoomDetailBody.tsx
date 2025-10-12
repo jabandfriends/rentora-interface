@@ -54,7 +54,6 @@ const RoomDetailBody = () => {
 
         {/* Right Column - Service Addition */}
         <RoomDetailServices
-          services={services}
           selectedService={selectedService}
           setSelectedService={setSelectedService}
           addService={addService}
