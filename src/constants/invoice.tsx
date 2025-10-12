@@ -1,6 +1,13 @@
 import { CircleAlert, CircleCheckBig, Clock, DollarSign } from 'lucide-react'
+import z from 'zod'
 
 import type { IStatsCardProps } from '@/types'
+
+export const filterFormSchema = z.object({
+  month: z.number({ error: 'Month is required' }),
+  year: z.number({ error: 'Year is required' }),
+  buildingName: z.string({ error: 'Building name is required' }),
+})
 
 export enum INVOICE_STATUS {
   Paid = 'paid',

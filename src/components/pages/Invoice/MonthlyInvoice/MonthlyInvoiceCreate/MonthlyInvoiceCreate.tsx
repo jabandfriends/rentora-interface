@@ -1,12 +1,75 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useDebounce } from '@uidotdev/usehooks'
 import { AlertCircle, ArrowLeft, Building, CheckCircle, FileText } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useCallback, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Button, Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
+import { Button, Card } from '@/components/common'
+import { filterFormSchema } from '@/constants'
+import { useRentoraApiUnitUtilityUnitWithUtility } from '@/hooks'
+import type { FilterFormType } from '@/types'
 
+import MonthlyInvoiceCreateFilter from './MonthlyInvoiceCreateFilter'
 import MonthlyInvoiceCreateTable from './MonthlyInvoiceCreateTable'
 
 const MonthlyInvoiceCreate = () => {
-  const navigate = useNavigate()
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const filterForm = useForm<FilterFormType>({
+    resolver: zodResolver(filterFormSchema),
+    defaultValues: {
+      month: undefined,
+      year: undefined,
+      buildingName: '',
+    },
+  })
+
+  const [month, year, buildingName]: [number, number, string] = filterForm.watch(['month', 'year', 'buildingName'])
+
+  const debouncedBuildingName = useDebounce(buildingName, 300)
+  const debouncedYear = useDebounce(year, 300)
+  const debouncedMonth = useDebounce(month, 300)
+
+  const isFilterSelected: boolean = useMemo(
+    () => !!debouncedYear && !!debouncedMonth && !!debouncedBuildingName,
+    [debouncedYear, debouncedMonth, debouncedBuildingName],
+  )
+  //get all units with utility
+  const { data: rooms, isLoading: isLoadingUnitsWithUtility } = useRentoraApiUnitUtilityUnitWithUtility({
+    apartmentId: apartmentId,
+    params: {
+      buildingName: debouncedBuildingName!,
+    },
+    enabled: isFilterSelected,
+  })
+
+  const navigate: NavigateFunction = useNavigate()
+
+  const handleYearChange = useCallback(
+    (value: number) => {
+      filterForm.setValue('year', value)
+    },
+    [filterForm],
+  )
+
+  const handleMonthChange = useCallback(
+    (value: number) => {
+      filterForm.setValue('month', value)
+    },
+    [filterForm],
+  )
+
+  const handleBuildingChange = useCallback(
+    (value: string) => {
+      filterForm.setValue('buildingName', value)
+    },
+    [filterForm],
+  )
+
+  const handleFilterReset = useCallback(() => {
+    filterForm.reset()
+  }, [filterForm])
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
@@ -27,69 +90,24 @@ const MonthlyInvoiceCreate = () => {
           </div>
 
           {/* Controls */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="space-y-1">
-              <label className="text-body-2">Meter Reading Date</label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a date" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1/09/2025">1/09/2025</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-body-2">Billing Month</label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a date" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1/09/2025">1/09/2025</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button block className="flex items-center gap-x-2">
-              Generate All Invoices
-            </Button>
-          </div>
-
-          {/* Statistics */}
-          <div className="desktop:grid-cols-3 grid gap-4">
-            <div className="bg-theme-primary-100 rounded-lg p-4">
-              <div className="flex items-center gap-2">
-                <Building className="text-theme-primary size-5" />
-                <h4 className="text-theme-primary">Total Rooms</h4>
-              </div>
-              <p className="text-theme-primary-800">5</p>
-            </div>
-
-            <div className="bg-theme-success-100 rounded-lg p-4">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="text-theme-success-600 size-5" />
-                <h4 className="text-theme-success-600">Generated</h4>
-              </div>
-              <p className="text-theme-success-800">3</p>
-            </div>
-
-            <div className="bg-theme-warning-100 rounded-lg p-4">
-              <div className="flex items-center gap-2">
-                <AlertCircle className="text-theme-warning-600 size-5" />
-                <h4 className="text-theme-warning-600">Pending</h4>
-              </div>
-              <p className="text-theme-warning-800">1</p>
-            </div>
-          </div>
+          <MonthlyInvoiceCreateFilter
+            debouncedYear={debouncedYear}
+            debouncedMonth={debouncedMonth}
+            debouncedBuildingName={debouncedBuildingName}
+            onBuildingChange={handleBuildingChange}
+            onMonthChange={handleMonthChange}
+            onYearChange={handleYearChange}
+            onFilterReset={handleFilterReset}
+          />
         </Card>
 
         {/* Rooms List */}
         <Card className="rounded-xl py-4 shadow-sm">
           <div>
             <h3>Rooms Invoice Status</h3>
-            <p className="text-body-2 text-theme-secondary">Billing Period: September 2025</p>
+            <p className="text-body-2 text-theme-secondary">
+              Billing Period: {debouncedMonth} {debouncedYear}
+            </p>
           </div>
 
           <div className="overflow-x-auto">
