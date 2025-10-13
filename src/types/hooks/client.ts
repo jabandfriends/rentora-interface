@@ -20,6 +20,7 @@ export type RentoraApiQueryClientKey =
   | 'unitUtilityAvailableYear'
   | 'unitUtilityAvailableMonth'
   | 'unitWithUtility'
+  | 'allUnitMonthlyInvoiceStatus'
 export type RentoraApiExecuteClientKey =
   | 'authenticate'
   | 'createApartment'
@@ -35,3 +36,4 @@ export type RentoraApiExecuteClientKey =
   | 'createContract'
   | 'createMeterReading'
   | 'updateMeterReading'
+  | 'generateMonthlyInvoice'

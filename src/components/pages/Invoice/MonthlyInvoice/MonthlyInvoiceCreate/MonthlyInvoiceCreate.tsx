@@ -1,13 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDebounce } from '@uidotdev/usehooks'
-import { AlertCircle, ArrowLeft, Building, CheckCircle, FileText } from 'lucide-react'
+import { ArrowLeft, Calendar, FileText } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Card } from '@/components/common'
+import { PageTableEmpty } from '@/components/ui'
 import { filterFormSchema } from '@/constants'
-import { useRentoraApiUnitUtilityUnitWithUtility } from '@/hooks'
+import { useRentoraApiUnitWithMonthlyInvoiceStatus } from '@/hooks'
 import type { FilterFormType } from '@/types'
 
 import MonthlyInvoiceCreateFilter from './MonthlyInvoiceCreateFilter'
@@ -18,43 +19,47 @@ const MonthlyInvoiceCreate = () => {
   const filterForm = useForm<FilterFormType>({
     resolver: zodResolver(filterFormSchema),
     defaultValues: {
-      month: undefined,
-      year: undefined,
+      paymentDueDate: undefined,
+      readingDate: '',
       buildingName: '',
     },
   })
 
-  const [month, year, buildingName]: [number, number, string] = filterForm.watch(['month', 'year', 'buildingName'])
+  const [readingDate, buildingName, paymentDueDate]: [string, string, number] = filterForm.watch([
+    'readingDate',
+    'buildingName',
+    'paymentDueDate',
+  ])
 
   const debouncedBuildingName = useDebounce(buildingName, 300)
-  const debouncedYear = useDebounce(year, 300)
-  const debouncedMonth = useDebounce(month, 300)
+  const debouncedReadingDate = useDebounce(readingDate, 300)
 
   const isFilterSelected: boolean = useMemo(
-    () => !!debouncedYear && !!debouncedMonth && !!debouncedBuildingName,
-    [debouncedYear, debouncedMonth, debouncedBuildingName],
+    () => !!debouncedReadingDate && !!debouncedBuildingName && !!paymentDueDate,
+    [debouncedReadingDate, debouncedBuildingName, paymentDueDate],
   )
   //get all units with utility
-  const { data: rooms, isLoading: isLoadingUnitsWithUtility } = useRentoraApiUnitUtilityUnitWithUtility({
+  const { data: rooms } = useRentoraApiUnitWithMonthlyInvoiceStatus({
     apartmentId: apartmentId,
     params: {
+      readingDate: debouncedReadingDate!,
       buildingName: debouncedBuildingName!,
+      status: 'occupied',
     },
     enabled: isFilterSelected,
   })
 
   const navigate: NavigateFunction = useNavigate()
 
-  const handleYearChange = useCallback(
-    (value: number) => {
-      filterForm.setValue('year', value)
+  const handleReadingDateChange = useCallback(
+    (value: string) => {
+      filterForm.setValue('readingDate', value)
     },
     [filterForm],
   )
-
-  const handleMonthChange = useCallback(
-    (value: number) => {
-      filterForm.setValue('month', value)
+  const handlePaymentDueDateChange = useCallback(
+    (value: string) => {
+      filterForm.setValue('paymentDueDate', Number(value))
     },
     [filterForm],
   )
@@ -91,29 +96,48 @@ const MonthlyInvoiceCreate = () => {
 
           {/* Controls */}
           <MonthlyInvoiceCreateFilter
-            debouncedYear={debouncedYear}
-            debouncedMonth={debouncedMonth}
+            paymentDueDate={paymentDueDate}
+            debouncedReadingDate={debouncedReadingDate}
             debouncedBuildingName={debouncedBuildingName}
             onBuildingChange={handleBuildingChange}
-            onMonthChange={handleMonthChange}
-            onYearChange={handleYearChange}
+            onReadingDateChange={handleReadingDateChange}
+            onPaymentDueDateChange={handlePaymentDueDateChange}
             onFilterReset={handleFilterReset}
           />
         </Card>
 
         {/* Rooms List */}
-        <Card className="rounded-xl py-4 shadow-sm">
-          <div>
-            <h3>Rooms Invoice Status</h3>
-            <p className="text-body-2 text-theme-secondary">
-              Billing Period: {debouncedMonth} {debouncedYear}
-            </p>
-          </div>
+        {isFilterSelected ? (
+          <Card className="rounded-xl py-4 shadow-sm">
+            <div>
+              <h3>Rooms Invoice Status</h3>
+              <p className="text-body-2 text-theme-secondary">Billing Period: {debouncedReadingDate}</p>
+            </div>
 
-          <div className="overflow-x-auto">
-            <MonthlyInvoiceCreateTable />
-          </div>
-        </Card>
+            {rooms?.length === 0 ? (
+              <>
+                <PageTableEmpty message="No rooms found" />
+              </>
+            ) : (
+              <div className="desktop:grid-cols-4 grid gap-4">
+                {rooms?.map((room) => (
+                  <MonthlyInvoiceCreateTable
+                    key={room.unitId}
+                    room={room}
+                    debouncedReadingDate={debouncedReadingDate}
+                    paymentDueDate={paymentDueDate}
+                  />
+                ))}
+              </div>
+            )}
+          </Card>
+        ) : (
+          <PageTableEmpty
+            icon={<Calendar className="size-10" />}
+            message="Please select a billing period"
+            description="Please select a billing period to view the rooms invoice status."
+          />
+        )}
       </div>
     </div>
   )

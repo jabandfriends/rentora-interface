@@ -1,4 +1,4 @@
-import { Calendar } from 'lucide-react'
+import { Calendar, FileWarning, Info } from 'lucide-react'
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -11,6 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
   Spinner,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
 } from '@/components/common'
 import {
   Dialog,
@@ -22,45 +25,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/feature'
-import {
-  useRentoraApiBuildingListNoPaginate,
-  useRentoraApiUnitUtilityAvailableMonth,
-  useRentoraApiUnitUtilityAvailableYear,
-} from '@/hooks'
-import { getMonthNameByNumber } from '@/utilities'
+import { PageTableEmpty } from '@/components/ui'
+import { useRentoraApiBuildingListNoPaginate, useRentoraApiReportReadingDateUtility } from '@/hooks'
+import type { IReadingUnitUtility } from '@/types'
 
 type IMonthlyInvoiceCreateFilter = {
-  debouncedYear: number
-  debouncedMonth: number
+  debouncedReadingDate: string
   debouncedBuildingName: string
   onBuildingChange: (buildingName: string) => void
-  onMonthChange: (month: number) => void
+  onReadingDateChange: (readingDate: string) => void
+  onPaymentDueDateChange: (paymentDueDate: string) => void
+  paymentDueDate: number
   onFilterReset: () => void
-  onYearChange: (year: number) => void
 }
 const MonthlyInvoiceCreateFilter = ({
-  debouncedYear,
-  debouncedMonth,
+  debouncedReadingDate,
   debouncedBuildingName,
   onBuildingChange,
-  onMonthChange,
+  onReadingDateChange,
+  paymentDueDate,
+  onPaymentDueDateChange,
   onFilterReset,
-  onYearChange,
 }: IMonthlyInvoiceCreateFilter) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
 
-  //available years
-  const { data: availableYears, isLoading: isLoadingYears } = useRentoraApiUnitUtilityAvailableYear({
-    apartmentId: apartmentId,
-  })
-
-  //available months
-  const { data: availableMonths, isLoading: isLoadingMonths } = useRentoraApiUnitUtilityAvailableMonth({
-    apartmentId: apartmentId,
-    params: {
-      year: debouncedYear,
-      buildingName: debouncedBuildingName,
-    },
+  const { data: readingDateUtility, isLoading: isLoadingReadingDateUtility } = useRentoraApiReportReadingDateUtility({
+    apartmentId,
   })
 
   //available buildings
@@ -69,9 +59,27 @@ const MonthlyInvoiceCreateFilter = ({
   })
 
   const isLoading: boolean = useMemo(
-    () => isLoadingYears || isLoadingMonths || isLoadingBuildings,
-    [isLoadingYears, isLoadingMonths, isLoadingBuildings],
+    () => isLoadingBuildings || isLoadingReadingDateUtility,
+    [isLoadingBuildings, isLoadingReadingDateUtility],
   )
+
+  if (isLoadingReadingDateUtility)
+    return (
+      <PageTableEmpty
+        message="Loading meter reading..."
+        description="Please wait while we load the meter reading."
+        icon={<Spinner />}
+      />
+    )
+
+  if (!readingDateUtility || (!availableBuildings && readingDateUtility.length === 0))
+    return (
+      <PageTableEmpty
+        message="No meter reading found"
+        description="Please add meter reading to generate invoice"
+        icon={<FileWarning className="text-theme-error size-10" />}
+      />
+    )
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -91,15 +99,15 @@ const MonthlyInvoiceCreateFilter = ({
 
         <div className="my-6 space-y-6">
           <div className="space-y-2">
-            <Label className="text-theme-secondary font-medium">Reading Year</Label>
-            <Select value={debouncedYear?.toString()} onValueChange={(value) => onYearChange(Number(value))}>
+            <Label className="text-theme-secondary font-medium">Reading Date</Label>
+            <Select value={debouncedReadingDate} onValueChange={(value) => onReadingDateChange(value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a year" />
               </SelectTrigger>
               <SelectContent>
-                {availableYears?.years?.map((year) => (
-                  <SelectItem key={year} value={year.toString()}>
-                    {year}
+                {readingDateUtility?.map((item: IReadingUnitUtility) => (
+                  <SelectItem key={item.readingDate} value={item.readingDate}>
+                    {item.readingDate}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -120,31 +128,31 @@ const MonthlyInvoiceCreateFilter = ({
               </SelectContent>
             </Select>
           </div>
-          {debouncedYear && (
-            <div className="space-y-2">
-              <Label className="text-theme-secondary font-medium">Reading Month</Label>
-              <Select value={debouncedMonth?.toString()} onValueChange={(value) => onMonthChange(Number(value))}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a month" />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableMonths?.months?.map((month, index) => (
-                    <SelectItem key={index} value={month.toString()}>
-                      {getMonthNameByNumber(month)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+          <div className="space-y-2">
+            <Label className="text-theme-secondary flex items-center font-medium">
+              <span>Payment Due Date</span>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="size-5" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Payment due date is the day of the month when the payment is due.</p>
+                </TooltipContent>
+              </Tooltip>
+            </Label>
 
-          <div className="border-theme-primary bg-theme-primary/10 rounded-md border p-4">
-            <p className="text-theme-primary">
-              <span className="font-medium">Selected Period :</span>
-              {debouncedMonth && debouncedYear
-                ? `${getMonthNameByNumber(debouncedMonth)}, ${debouncedYear}`
-                : ' Not selected'}
-            </p>
+            <Select value={paymentDueDate?.toString()} onValueChange={onPaymentDueDateChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a payment due date" />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
+                  <SelectItem key={day} value={day.toString()}>
+                    {day}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -155,7 +163,7 @@ const MonthlyInvoiceCreateFilter = ({
             </Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button disabled={isLoading}>{isLoading ? <Spinner /> : 'Submit'}</Button>
+            <Button disabled={isLoading}>{isLoading ? <Spinner /> : 'Save'}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
