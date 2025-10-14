@@ -9,46 +9,57 @@ import {
 import type { FORM_SECTION, INVOICE_FORM_FIELDS_TYPE } from '@/types'
 // Enums
 
-export const AdhocInvoiceSchema = z.object({
-  unitId: z.string({ error: 'Unit is required.' }).min(1, 'Unit is required.'),
-  title: z.string({ error: 'Title is required.' }).min(1, 'Title is required.'),
-  description: z.string().optional(),
-  invoiceDate: z.string({ error: 'Invoice date is required.' }).min(1, 'Invoice date is required.'),
-  dueDate: z.string({ error: 'Due date is required.' }).min(1, 'Due date is required.'),
-  category: z.enum([ADHOC_INVOICE_CATEGORY.MISCELLANEOUS, ADHOC_INVOICE_CATEGORY.PENALTY], {
-    error: 'Category is required',
-  }),
-  finalAmount: z.number({ error: 'Final amount is required.' }),
-  paymentStatus: z.enum(
-    [
-      ADHOC_INVOICE_PAYMENT_STATUS.OVERDUE,
-      ADHOC_INVOICE_PAYMENT_STATUS.PAID,
-      ADHOC_INVOICE_PAYMENT_STATUS.UNPAID,
-      ADHOC_INVOICE_PAYMENT_STATUS.CANCELLED,
-    ],
-    { error: 'Payment status is required' },
-  ),
-  notes: z.string().optional(),
-  includeInMonthly: z.boolean(),
-  priority: z.enum(
-    [
-      ADHOC_INVOICE_PRIORITY.HIGH,
-      ADHOC_INVOICE_PRIORITY.NORMAL,
-      ADHOC_INVOICE_PRIORITY.LOW,
-      ADHOC_INVOICE_PRIORITY.URGENT,
-    ],
-    { error: 'Priority is required' },
-  ),
-  status: z.enum(
-    [
-      ADHOC_INVOICE_STATUS.ACTIVE,
-      ADHOC_INVOICE_STATUS.CANCELLED,
-      ADHOC_INVOICE_STATUS.DRAFT,
-      ADHOC_INVOICE_STATUS.INCLUDED,
-    ],
-    { error: 'Status is required' },
-  ),
-})
+export const AdhocInvoiceSchema = z
+  .object({
+    unitId: z.string({ error: 'Unit is required.' }).min(1, 'Unit is required.'),
+    title: z.string({ error: 'Title is required.' }).min(1, 'Title is required.'),
+    description: z.string().optional(),
+    invoiceDate: z.string({ error: 'Invoice date is required.' }).min(1, 'Invoice date is required.'),
+    dueDate: z.string({ error: 'Due date is required.' }).min(1, 'Due date is required.'),
+    category: z.enum([ADHOC_INVOICE_CATEGORY.MISCELLANEOUS, ADHOC_INVOICE_CATEGORY.PENALTY], {
+      error: 'Category is required',
+    }),
+    finalAmount: z.string({ error: 'Final amount is required.' }),
+    paymentStatus: z.enum(
+      [
+        ADHOC_INVOICE_PAYMENT_STATUS.OVERDUE,
+        ADHOC_INVOICE_PAYMENT_STATUS.PAID,
+        ADHOC_INVOICE_PAYMENT_STATUS.UNPAID,
+        ADHOC_INVOICE_PAYMENT_STATUS.CANCELLED,
+      ],
+      { error: 'Payment status is required' },
+    ),
+    notes: z.string().optional(),
+    includeInMonthly: z.boolean(),
+    priority: z.enum(
+      [
+        ADHOC_INVOICE_PRIORITY.HIGH,
+        ADHOC_INVOICE_PRIORITY.NORMAL,
+        ADHOC_INVOICE_PRIORITY.LOW,
+        ADHOC_INVOICE_PRIORITY.URGENT,
+      ],
+      { error: 'Priority is required' },
+    ),
+    status: z.enum(
+      [
+        ADHOC_INVOICE_STATUS.ACTIVE,
+        ADHOC_INVOICE_STATUS.CANCELLED,
+        ADHOC_INVOICE_STATUS.DRAFT,
+        ADHOC_INVOICE_STATUS.INCLUDED,
+      ],
+      { error: 'Status is required' },
+    ),
+  })
+  .superRefine((data, ctx) => {
+    // Check finalAmount is a valid number
+    if (data.finalAmount.trim() === '' || isNaN(Number(data.finalAmount))) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Final amount must be a valid number.',
+        path: ['finalAmount'],
+      })
+    }
+  })
 
 export const INVOICE_FORM_FIELDS: Array<FORM_SECTION<INVOICE_FORM_FIELDS_TYPE>> = [
   {

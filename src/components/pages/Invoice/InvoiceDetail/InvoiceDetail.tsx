@@ -13,7 +13,7 @@ import {
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Card } from '@/components/common'
-import { Badge, Separator } from '@/components/ui'
+import { Badge, FieldEmpty, Separator } from '@/components/ui'
 import { useRentoraApiInvoiceDetails } from '@/hooks'
 import { formatCurrency } from '@/utilities'
 
@@ -165,16 +165,24 @@ const InvoiceDetail = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between text-2xl font-bold">
               <span>Total Amount</span>
-              <span className="text-theme-primary">{formatCurrency(data.finalAmount)}</span>
+              <span className="text-theme-primary">
+                {data.finalAmount ? formatCurrency(data.finalAmount) : <FieldEmpty />}
+              </span>
             </div>
 
             <div className="flex items-center justify-between">
               <label className="font-medium">Paid Amount</label>
-              <span>{formatCurrency(data.paidAmount)}</span>
+              <span>{data.paidAmount ? formatCurrency(data.paidAmount) : <FieldEmpty />}</span>
             </div>
             <div className="flex items-center justify-between font-semibold">
               <label className="font-medium">Outstanding Balance</label>
-              <span className="text-theme-error">{formatCurrency(data.finalAmount - data.paidAmount)}</span>
+              <span className="text-theme-error">
+                {data.finalAmount && data.paidAmount ? (
+                  formatCurrency(data.finalAmount - data.paidAmount)
+                ) : (
+                  <FieldEmpty />
+                )}
+              </span>
             </div>
           </div>
         </div>
@@ -193,11 +201,11 @@ const InvoiceDetail = () => {
           <div className="desktop:grid-cols-2 grid gap-6">
             <div className="space-y-2">
               <label className="font-medium">Invoice Date</label>
-              <p className="text-body-2">{formatDate(data.invoiceDate)}</p>
+              <p className="text-body-2">{data.invoiceDate ? formatDate(data.invoiceDate) : ''}</p>
             </div>
             <div className="space-y-2">
               <label className="font-medium">Due Date</label>
-              <p className="text-body-2">{formatDate(data.dueDate)}</p>
+              <p className="text-body-2">{data.dueDate ? formatDate(data.dueDate) : ''}</p>
             </div>
           </div>
         </div>

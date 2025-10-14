@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Plus } from 'lucide-react'
 import { useMemo } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, type UseFormReturn } from 'react-hook-form'
 
 import {
   Button,
@@ -17,6 +16,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Spinner,
   Textarea,
 } from '@/components/common'
 import { SelectRoomModal } from '@/components/ui'
@@ -36,7 +36,7 @@ type IInvoiceCreateFormProps = {
   isSubmitting?: boolean
 }
 const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: IInvoiceCreateFormProps) => {
-  const form = useForm<ADHOC_INVOICE_FORM_SCHEMA_TYPE>({
+  const form: UseFormReturn<ADHOC_INVOICE_FORM_SCHEMA_TYPE> = useForm<ADHOC_INVOICE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(AdhocInvoiceSchema),
     defaultValues: {
       unitId: '',
@@ -45,7 +45,7 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
       invoiceDate: '',
       dueDate: '',
       category: ADHOC_INVOICE_CATEGORY.MISCELLANEOUS,
-      finalAmount: 100,
+      finalAmount: '0',
       paymentStatus: ADHOC_INVOICE_PAYMENT_STATUS.UNPAID,
       notes: '',
       includeInMonthly: false,
@@ -90,12 +90,13 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
                               }}
                               defaultValue={String(field.value ?? '')}
                             >
-                              <SelectTrigger>
+                              <SelectTrigger className="capitalize">
                                 <SelectValue placeholder={item.placeholder} />
                               </SelectTrigger>
                               <SelectContent>
                                 {item.options.map((fieldItem, index) => (
                                   <SelectItem
+                                    className="capitalize"
                                     key={'select-value' + fieldItem.value + index}
                                     value={String(fieldItem.value)}
                                   >
@@ -121,6 +122,7 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
                             {item.inputType === 'number' ? (
                               <InputNumber
                                 {...field}
+                                maxLength={9}
                                 value={field.value?.toString() || ''}
                                 placeholder={item.placeholder}
                               />
@@ -171,6 +173,7 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
                                         const val = e.target.value
                                         field.onChange(val === '' ? undefined : Number(val))
                                       }}
+                                      maxLength={9}
                                     />
                                   ) : fieldItem.inputType === 'textarea' ? (
                                     <Textarea
@@ -197,11 +200,12 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
                                 ) : fieldItem.fieldType === 'select' ? (
                                   <Select onValueChange={field.onChange} defaultValue={field.value?.toString() || ''}>
                                     <SelectTrigger>
-                                      <SelectValue placeholder={fieldItem.placeholder} />
+                                      <SelectValue className="capitalize" placeholder={fieldItem.placeholder} />
                                     </SelectTrigger>
                                     <SelectContent>
                                       {fieldItem.options.map((fieldItem, index) => (
                                         <SelectItem
+                                          className="capitalize"
                                           key={'select-value' + fieldItem.value + index}
                                           value={fieldItem.value.toString()}
                                         >
@@ -243,7 +247,7 @@ const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: 
         </Card>
         <div className="flex justify-end">
           <Button type="submit" className="flex items-center gap-2" disabled={isButtonDisabled}>
-            {isSubmitting ? <Plus /> : buttonLabel}
+            {isSubmitting ? <Spinner /> : buttonLabel}
             {buttonIcon}
           </Button>
         </div>
