@@ -39,3 +39,4 @@ export type RentoraApiExecuteClientKey =
   | 'createMeterReading'
   | 'updateMeterReading'
   | 'generateMonthlyInvoice'
+  | 'updateApartment'
