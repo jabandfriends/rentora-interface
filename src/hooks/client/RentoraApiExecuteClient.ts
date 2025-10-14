@@ -110,6 +110,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
       )
     return response.data.data
   }
+
   //create tenant
   async createTenant(apartmentId: string, payload: ICreateTenantRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(

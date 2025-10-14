@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMemo } from 'react'
+import { type ReactNode, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -27,16 +27,17 @@ import { Switch } from '@/components/feature'
 import { SelectRoomModal } from '@/components/ui'
 import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
 import { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
-import type { MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
+import type { IMaintenanceDetail, MAINTENANCE_FORM_SCHEMA_TYPE, Maybe } from '@/types'
 
-type Props = {
+type IMaintenanceFormProps = {
   buttonLabel: string
-  buttonIcon?: React.ReactNode
+  buttonIcon?: ReactNode
   onSubmit: (data: MAINTENANCE_FORM_SCHEMA_TYPE) => void | Promise<void>
-  isSubmitting?: boolean
+  isSubmitting: boolean
+  defaultValues?: Maybe<IMaintenanceDetail>
 }
 
-const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Props) => {
+const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defaultValues }: IMaintenanceFormProps) => {
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(MAINTENANCE_FORM_SCHEMA),
     defaultValues: {
@@ -47,13 +48,31 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
       priority: MAINTENANCE_PRIORITY.NORMAL,
       appointmentDate: '',
       dueDate: '',
-      estimatedHours: '',
-      estimatedCost: '',
+      estimatedHours: undefined,
+      estimatedCost: undefined,
       category: MAINTENANCE_CATEGORY.GENERAL,
       isEmergency: false,
     },
     mode: 'onChange',
   })
+
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset({
+        unitId: defaultValues.unitId,
+        title: defaultValues.title,
+        description: defaultValues.description,
+        status: defaultValues.status,
+        priority: defaultValues.priority,
+        appointmentDate: defaultValues.appointmentDate,
+        dueDate: defaultValues.dueDate || '',
+        estimatedHours: defaultValues.estimatedHours?.toString(),
+        category: defaultValues.category,
+        estimatedCost: defaultValues.estimatedCost?.toString(),
+        isEmergency: defaultValues.isEmergency,
+      })
+    }
+  }, [defaultValues, form])
 
   const isButtonDisabled: boolean = useMemo(
     () => isSubmitting || !form.formState.isDirty || !form.formState.isValid,
@@ -127,6 +146,7 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
                             ) : item.inputType === 'datetime' ? (
                               <DateTimePicker
                                 id={field.name}
+                                value={field.value ? new Date(field.value as string) : undefined}
                                 onChange={(val) => field.onChange(val?.toISOString() ?? '')}
                                 onBlur={field.onBlur}
                                 name={field.name}
@@ -201,6 +221,7 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
                                   </p>
                                   <DateTimePicker
                                     id={field.name}
+                                    value={field.value ? new Date(field.value as string) : undefined}
                                     onChange={(val) => field.onChange(val?.toISOString() ?? '')}
                                     onBlur={field.onBlur}
                                     name={field.name}
@@ -242,7 +263,7 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: Pr
         </Card>
 
         <div className="flex justify-end">
-          <Button className="flex items-center gap-2" disabled={isButtonDisabled} type="submit">
+          <Button className="flex items-center gap-2" type="submit" disabled={isButtonDisabled}>
             {isSubmitting ? <Spinner /> : buttonLabel}
             {buttonIcon}
           </Button>
