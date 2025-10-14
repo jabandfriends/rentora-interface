@@ -44,9 +44,9 @@ const MaintenanceDetail = () => {
       <div className="gap-6">
         {/* Main Content */}
         <div className="space-y-6">
-          <div className="desktop:grid-cols-3 grid gap-4">
+          <div className="grid gap-4">
             {/* Description */}
-            <Card className="desktop:col-span-2 justify-start rounded-xl shadow-sm">
+            <Card className="rounded-xl shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Description</CardTitle>
               </CardHeader>
