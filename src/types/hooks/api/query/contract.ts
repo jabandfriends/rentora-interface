@@ -1,5 +1,10 @@
 import type { CONTRACT_RENTAL_TYPE, CONTRACT_STATUS } from '@/enum'
-import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '@/types'
+import type {
+  IBasePaginateQueryResult,
+  IBaseUseQuery,
+  IRentoraApiClientBasePaginateResponse,
+  IRentoraApiClientBaseResponse,
+} from '@/types'
 
 export type IContract = {
   contractId: string
@@ -44,3 +49,36 @@ export type IContract = {
 export type IUseRentoraApiContractDetail = IBaseUseQuery<IRentoraApiClientContractDetailResponse['data']>
 //reponse
 export type IRentoraApiClientContractDetailResponse = IRentoraApiClientBaseResponse<IContract>
+
+export type IContractSummary = {
+  id: string
+  contractNumber: string
+  unitName: string
+  buildingName: string
+  apartmentName: string
+  tenantName: string
+  tenantEmail: string
+  rentalType: CONTRACT_RENTAL_TYPE
+  startDate: string
+  endDate: string
+  rentalPrice: number
+  status: CONTRACT_STATUS
+  createdAt: string
+
+  // Additional summary info
+  isExpiringSoon: boolean // within 30 days
+  daysUntilExpiry: number
+  totalDeposit: number
+}
+
+export type IRentoraApiContractListParams = {
+  page?: number
+  size?: number
+  contractStatus?: CONTRACT_STATUS
+  unitId?: string
+}
+//response
+export type IRentoraApiClientContractListResponse = IRentoraApiClientBasePaginateResponse<IContractSummary>
+
+//hook
+export type IUseRentoraApiContractList = IBasePaginateQueryResult<IRentoraApiClientContractListResponse['data']>
