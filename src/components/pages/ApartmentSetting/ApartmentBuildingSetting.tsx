@@ -1,9 +1,24 @@
 import { Plus, X } from 'lucide-react'
+import { useParams } from 'react-router-dom'
 
-import { Button, Card, Input, InputNumber, Label } from '@/components/common'
-import { Badge } from '@/components/ui'
+import { Button, Card, Input, InputNumber, Label, Spinner } from '@/components/common'
+import { Badge, PageTableEmpty } from '@/components/ui'
+import { useRentoraApiBuildingListNoPaginate } from '@/hooks'
+import type { IBuilding } from '@/types'
 
 const ApartmentBuildingSetting = () => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const { data: buildings, isLoading: isLoadingBuildings } = useRentoraApiBuildingListNoPaginate({ apartmentId })
+
+  if (isLoadingBuildings) {
+    return (
+      <PageTableEmpty
+        icon={<Spinner />}
+        description="Please wait while loading buildings..."
+        message="Loading buildings..."
+      />
+    )
+  }
   return (
     <Card className="justify-start rounded-xl shadow">
       <div>
@@ -16,14 +31,16 @@ const ApartmentBuildingSetting = () => {
           <Label>Buildings</Label>
           <div className="flex flex-col gap-2">
             {/* Example building items */}
-            <Badge variant="secondary" className="flex items-center gap-1">
-              Building A: 5 Floors
-              <X className="hover:text-destructive h-3 w-3 cursor-pointer" />
-            </Badge>
-            <Badge variant="secondary" className="flex items-center gap-1">
-              Building B: 3 Floors
-              <X className="hover:text-destructive h-3 w-3 cursor-pointer" />
-            </Badge>
+            {buildings ? (
+              buildings.map((building: IBuilding) => (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  {building.name}: {building.floorCount} Floors
+                  <X className="hover:text-theme-error h-3 w-3 cursor-pointer" />
+                </Badge>
+              ))
+            ) : (
+              <p className="text-body-2 text-theme-secondary">No buildings found</p>
+            )}
           </div>
         </div>
 

@@ -24,6 +24,7 @@ import type {
   IUpdateMaintenanceRequestPayload,
   IUpdateTenantPasswordRequestPayload,
   IUpdateTenantRequestPayload,
+  IUpdateUnitServiceRequestPayload,
   RentoraApiExecuteClientKey,
 } from '@/types'
 
@@ -49,6 +50,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     generateMonthlyInvoice: 'GENERATE_MONTHLY_INVOICE',
     updateApartment: 'UPDATE_APARTMENT',
     createUnitService: 'CREATE_UNIT_SERVICE',
+    updateUnitService: 'UPDATE_UNIT_SERVICE',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -197,6 +199,12 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
       `/api/apartments/${apartmentId}/all-room/detail/${unitId}`,
       payload,
     )
+    return response.data
+  }
+
+  //update Utility service
+  async updateUtilityService(apartmentId: string, payload: IUpdateUnitServiceRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.put<void>(`/api/apartments/${apartmentId}/utility`, payload)
     return response.data
   }
 }

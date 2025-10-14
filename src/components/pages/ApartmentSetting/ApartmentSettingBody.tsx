@@ -13,12 +13,12 @@ const ApartmentSettingBody = () => {
   return (
     <div className="w-full">
       <Tabs defaultValue="information" className="w-full">
-        <TabsList className="bg-theme-secondary-200/60 desktop:grid-cols-6 grid h-auto w-full grid-cols-2 gap-1 p-2">
+        <TabsList className="border-theme-secondary-300 bg-theme-light desktop:grid-cols-6 grid h-auto w-full grid-cols-2 gap-1 border p-2 shadow-sm">
           {TAB_APARTMNET_SETTING_LIST.map((tab: TTabApartmentSetting) => (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
-              className="data-[state=active]:bg-theme-primary hover:bg-theme-secondary-300/50 hover:text-theme-primary data-[state=active]:text-theme-white flex items-center gap-2 p-2 duration-100"
+              className="data-[state=active]:bg-theme-primary hover:bg-theme-secondary-200/50 hover:text-theme-primary data-[state=active]:text-theme-white flex items-center gap-2 p-2 duration-100"
             >
               {tab.icon}
               <span className="hidden">{tab.label}</span>
