@@ -5,6 +5,8 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
+import { Spinner } from '@/components/common'
+import { PageTableEmpty } from '@/components/ui'
 import { filterMeterReadingFormSchema, meterReadingFormSchema, ROUTES } from '@/constants'
 import {
   useRentoraApiBuildingListNoPaginate,
@@ -138,6 +140,15 @@ const MeterReadingForm = () => {
     },
     [createMeterReading, apartmentId, month, year, navigate],
   )
+
+  if (isLoadingYears)
+    return (
+      <PageTableEmpty
+        message="Loading meter reading..."
+        description="Please wait while we load the meter reading."
+        icon={<Spinner />}
+      />
+    )
 
   return (
     <div className="space-y-6">

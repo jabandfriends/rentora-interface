@@ -13,8 +13,9 @@ import {
   FormLabel,
   FormMessage,
   InputNumber,
+  Spinner,
 } from '@/components/common'
-import { Badge, LoadingPage, PageTableSearchEmpty } from '@/components/ui'
+import { Badge, PageTableEmpty, PageTableSearchEmpty } from '@/components/ui'
 import type { MeterReadingFormValues } from '@/types'
 
 type IMeterReadingFormFieldProps = {
@@ -44,7 +45,13 @@ const MeterReadingFormField = ({
     }
   }, [])
   if (isLoading) {
-    return <LoadingPage />
+    return (
+      <PageTableEmpty
+        message="Loading meter reading..."
+        description="Please wait while we load the meter reading."
+        icon={<Spinner />}
+      />
+    )
   }
   //empty unit
   if (fields.length === 0) {

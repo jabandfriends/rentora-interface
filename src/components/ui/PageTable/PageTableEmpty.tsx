@@ -7,8 +7,8 @@ type IPageTableEmptyProps = {
   icon?: ReactNode
 }
 const PageTableEmpty = ({
-  message,
-  description = 'Please try again later.',
+  message = 'No data to show right now.',
+  description = 'Everything looks quiet here — try again later or check your filters.',
   icon = <PackageOpen size={50} />,
 }: IPageTableEmptyProps) => {
   return (
