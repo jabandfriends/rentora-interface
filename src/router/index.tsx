@@ -11,6 +11,7 @@ import ApartmentSetting from '@/pages/ApartmentSetting'
 import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication/Authentication'
 import FirstTimePasswordResetPage from '@/pages/Authentication/FirstTimePasswordReset'
+import ContractCreate from '@/pages/ContractCreate'
 import InvoiceCreatePage from '@/pages/Invoice/InvoiceCreate'
 import InvoiceDetailPage from '@/pages/Invoice/InvoiceDetail'
 import MonthlyInvoicePage from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoice'
@@ -23,10 +24,14 @@ import MaintenanceCreate from '@/pages/Maintenance/MaintenanceCreate'
 import MaintenanceDetailPage from '@/pages/Maintenance/MaintenanceDetailPage'
 import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
 import MaintenanceUpdate from '@/pages/Maintenance/MaintenanceUpdate'
+import MeterReadingCreatePage from '@/pages/MeterReading/MeterReadingCreatePage'
+import MeterReadingListPage from '@/pages/MeterReading/MeterReadingListPage'
 import OverviewPage from '@/pages/Overview'
+import PageNotFound from '@/pages/PageNotFound'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import ReceiptReport from '@/pages/Report/ReceiptReport'
 import RoomReport from '@/pages/Report/RoomReport'
+import RoomDetail from '@/pages/RoomDetail'
 import TenantPage from '@/pages/Tenant/Tenant'
 import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
@@ -37,20 +42,21 @@ import { parseStorageKey } from '@/utilities'
 import RequireApartmentWrapper from './RequireApartmentWrapper'
 import RequireAuthWrapper from './RequireAuthWrapper'
 
-const authLoader = async (): Promise<{ valid: boolean }> => {
+const authLoader = async (): Promise<{ valid: boolean; mustChangePassword: boolean }> => {
   const rentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
   const auth: Maybe<string> = localStorage.getItem(parseStorageKey('auth'))
   if (!auth) {
-    return { valid: false }
+    return { valid: false, mustChangePassword: false }
   }
   const { accessToken }: { accessToken: string } = JSON.parse(auth)
 
   try {
-    await rentoraApiQueryClient.checkAuth(accessToken)
-    return { valid: true }
+    const { mustChangePassword }: { mustChangePassword: boolean } = await rentoraApiQueryClient.checkAuth(accessToken)
+
+    return { valid: true, mustChangePassword }
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_: unknown) {
-    return { valid: false }
+    return { valid: false, mustChangePassword: false }
   }
 }
 
@@ -90,6 +96,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         index: true,
         element: <Authentication />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
   {
@@ -105,6 +115,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.firstTimePasswordReset.path,
         element: <FirstTimePasswordResetPage />,
+      },
+      {
+        path: '*',
+        element: <PageNotFound />,
       },
     ],
   },
@@ -122,21 +136,38 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         index: true,
         element: <AllApartmentPage />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
   {
     path: '/setup/:apartmentId',
-    loader: authLoader,
+    loader: async (args) => {
+      const [authData, apartmentData] = await Promise.all([authLoader(), apartmentStatusLoader(args)])
+
+      return {
+        ...authData,
+        ...apartmentData,
+      }
+    },
     element: (
       <RequireAuthWrapper>
-        <ScrollRestoration />
-        <Layout isSidebar={false} />
+        <RequireApartmentWrapper>
+          <ScrollRestoration />
+          <Layout isSidebar={false} />
+        </RequireApartmentWrapper>
       </RequireAuthWrapper>
     ),
     children: [
       {
         index: true,
         element: <ApartmentSetup />,
+      },
+      {
+        path: '*',
+        element: <PageNotFound />,
       },
     ],
   },
@@ -154,16 +185,22 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         path: ROUTES.apartmentCreate.path,
         element: <ApartmentCreatePage />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
 
   {
     path: '/dashboard/:apartmentId',
     loader: async (args) => {
-      const { valid } = await authLoader()
-      const { status, id } = await apartmentStatusLoader(args)
+      const [authData, apartmentData] = await Promise.all([authLoader(), apartmentStatusLoader(args)])
 
-      return { valid, status, id }
+      return {
+        ...authData,
+        ...apartmentData,
+      }
     },
     element: (
       <RequireAuthWrapper>
@@ -215,6 +252,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <AllRoomsPage />,
       },
       {
+        path: ROUTES.roomDetail.path,
+        element: <RoomDetail />,
+      },
+      {
         path: ROUTES.roomReport.path,
         element: <RoomReport />,
       },
@@ -261,6 +302,22 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.invoiceDetail.path,
         element: <InvoiceDetailPage />,
+      },
+      {
+        path: ROUTES.contractCreate.path,
+        element: <ContractCreate />,
+      },
+      {
+        path: ROUTES.meterReadingList.path,
+        element: <MeterReadingListPage />,
+      },
+      {
+        path: ROUTES.meterReadingCreate.path,
+        element: <MeterReadingCreatePage />,
+      },
+      {
+        path: '*',
+        element: <PageNotFound />,
       },
     ],
   },

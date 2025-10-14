@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate } from 'react-router-dom'
 
-import { Button, Card, Form } from '@/components/common'
+import { Button, Card, Form, Spinner } from '@/components/common'
 import { ApartmentFormField, ApartmentUpload } from '@/components/pages/ApartmentCreate'
 import { APARTMENT_FORM_SCHEMA, APARTMENT_FORM_SECTIONS, ROUTES } from '@/constants'
 import { LateFeeType } from '@/enum'
@@ -105,7 +105,7 @@ const ApartmentCreateForm = () => {
           ))}
 
           <Button disabled={isButtonDisabled} type="submit">
-            Save Information
+            {isPending ? <Spinner /> : 'Save Information'}
           </Button>
         </div>
       </form>

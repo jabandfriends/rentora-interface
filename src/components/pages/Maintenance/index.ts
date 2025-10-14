@@ -1,4 +1,6 @@
 export { default as Maintenance } from './Maintenance'
+export { default as MaintenanceAction } from './MaintenanceAction'
 export { default as MaintenanceDetail } from './MaintenanceDetail'
 export { default as MaintenanceForm } from './MaintenanceForm'
 export { default as MaintenanceTable } from './MaintenanceTable'
+// export { default as UpdateMaintenanceForm } from './UpdateMaintenanceForm'

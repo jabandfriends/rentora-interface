@@ -4,25 +4,50 @@ import { cn } from '@/utilities'
 
 function Table({ className, ...props }: ComponentProps<'table'>) {
   return (
-    <div data-slot="table-container" className="relative w-full overflow-x-auto">
-      <table data-slot="table" className={cn('text-body-2 w-full caption-bottom', className)} {...props} />
+    <div
+      data-slot="table-container"
+      className="border-theme-secondary-300 relative w-full overflow-x-auto rounded-xl border shadow"
+    >
+      <table
+        data-slot="table"
+        className={cn(
+          'text-body-2 border-theme-secondary-300 w-full caption-bottom border-collapse overflow-hidden rounded-xl',
+          className,
+        )}
+        {...props}
+      />
     </div>
   )
 }
 
 function TableHeader({ className, ...props }: ComponentProps<'thead'>) {
-  return <thead data-slot="table-header" className={cn('[&_tr]:border-b', className)} {...props} />
+  return (
+    <thead
+      data-slot="table-header"
+      className={cn('border-b-theme-secondary-300 bg-theme-secondary-200/80 border-b p-4', className)}
+      {...props}
+    />
+  )
 }
 
 function TableBody({ className, ...props }: ComponentProps<'tbody'>) {
-  return <tbody data-slot="table-body" className={cn('[&_tr:last-child]:border-0', className)} {...props} />
+  return (
+    <tbody
+      data-slot="table-body"
+      className={cn('border-b-theme-secondary-300 [&_tr:last-child]:border-0', className)}
+      {...props}
+    />
+  )
 }
 
 function TableFooter({ className, ...props }: ComponentProps<'tfoot'>) {
   return (
     <tfoot
       data-slot="table-footer"
-      className={cn('bg-theme-secondary-200/50 border-t font-medium [&>tr]:last:border-b-0', className)}
+      className={cn(
+        'bg-theme-secondary-200/50 border-t-theme-secondary-300 font-medium [&>tr]:last:border-b-0',
+        className,
+      )}
       {...props}
     />
   )
@@ -32,7 +57,10 @@ function TableRow({ className, ...props }: ComponentProps<'tr'>) {
   return (
     <tr
       data-slot="table-row"
-      className={cn('hover:bg-theme-secondary-100/80 data-[state=selected]:bg-theme-secondary duration-75', className)}
+      className={cn(
+        'hover:bg-theme-secondary-100/80 data-[state=selected]:bg-theme-secondary-100 duration-75',
+        className,
+      )}
       {...props}
     />
   )
@@ -43,7 +71,7 @@ function TableHead({ className, ...props }: ComponentProps<'th'>) {
     <th
       data-slot="table-head"
       className={cn(
-        'text-theme-night h-10 whitespace-nowrap px-2 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+        'text-theme-secondary-600 border-b-theme-secondary-300 h-10 whitespace-nowrap px-2 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
         className,
       )}
       {...props}

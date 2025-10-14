@@ -1,6 +1,6 @@
 import { Button } from '@/components/common'
 import { ServiceInvoiceTable } from '@/components/pages/Invoice'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableHeader } from '@/components/ui'
 import { SERVICE_INVOICE_DATA, SERVICE_INVOICE_STATS } from '@/constants'
 
 const ServiceInvoice = () => {
@@ -12,7 +12,7 @@ const ServiceInvoice = () => {
         stats={SERVICE_INVOICE_STATS}
         actionButton={<Button>New Invoice</Button>}
       />
-      <PageTableSearch />
+      {/* <PageTableSearch /> */}
       <ServiceInvoiceTable data={SERVICE_INVOICE_DATA} />
     </>
   )

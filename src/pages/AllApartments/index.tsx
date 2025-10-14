@@ -5,9 +5,8 @@ import { useForm } from 'react-hook-form'
 import type { NavigateFunction } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-import { SearchBar } from '@/components/feature'
-import { PageHeader } from '@/components/layout'
-import { AllApartments } from '@/components/pages/AllApartments'
+import { PageHeader, PageSection } from '@/components/layout'
+import { AllApartmentHeader, AllApartments, AllApartmentSearchBar } from '@/components/pages/AllApartments'
 import { DEFAULT_APARTMENT_LIST_DATA, ROUTES } from '@/constants'
 import { useRentoraApiApartmentList } from '@/hooks'
 import type { ISearchBarProps } from '@/types'
@@ -20,21 +19,25 @@ const AllApartmentPage = () => {
   const { watch, setValue } = useForm({
     defaultValues: {
       search: '',
+      status: '',
     },
   })
 
-  const [search]: [string] = watch(['search'])
+  const [search, status]: [string, string] = watch(['search', 'status'])
 
   const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const {
     data: apartments,
     pagination: { totalPages, totalElements },
+    metadata: { totalApartments, totalActiveApartments },
     isLoading,
   } = useRentoraApiApartmentList({
     params: {
       page: currentPage,
       size: DEFAULT_APARTMENT_LIST_DATA.size,
       search: debouncedSearch,
+      status: debouncedStatus,
     },
   })
 
@@ -46,9 +49,17 @@ const AllApartmentPage = () => {
     [setValue, setCurrentPage],
   )
 
+  const handleStatusChange = useCallback(
+    (value: string) => {
+      setValue('status', value)
+      setCurrentPage(DEFAULT_APARTMENT_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
+
   const isSearched = useMemo(() => {
-    return !!debouncedSearch
-  }, [debouncedSearch])
+    return !!debouncedSearch || !!debouncedStatus
+  }, [debouncedSearch, debouncedStatus])
 
   const handlePageChange = useCallback(
     (page: number) => {
@@ -63,7 +74,7 @@ const AllApartmentPage = () => {
   }, [navigate])
 
   return (
-    <div className="container mx-auto space-y-4 px-4 py-4">
+    <PageSection middle>
       <PageHeader
         title="All Apartments"
         description="A quick overview of the apartments you manage."
@@ -72,7 +83,12 @@ const AllApartmentPage = () => {
         actionIcon={<Plus />}
         actionOnClick={handleCreateApartment}
       />
-      <SearchBar onChange={handleSearchChange} />
+      <AllApartmentHeader
+        totalApartments={totalApartments}
+        totalActiveApartments={totalActiveApartments}
+        isLoading={isLoading}
+      />
+      <AllApartmentSearchBar onChange={handleSearchChange} onStatusChange={handleStatusChange} />
       <AllApartments
         data={apartments}
         isLoading={isLoading}
@@ -85,7 +101,7 @@ const AllApartmentPage = () => {
       <p className="text-body-2 text-theme-secondary text-center">
         © 2025 Rentora. Simplifying property management for landlords everywhere.
       </p>
-    </div>
+    </PageSection>
   )
 }
 

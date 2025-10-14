@@ -10,8 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/common'
 import { ROUTES } from '@/constants'
+import type { IUser, Maybe } from '@/types'
 
-const SidebarUserProfile = () => {
+const SidebarUserProfile = ({ userData }: { userData: Maybe<IUser> }) => {
   // hooks
   const navigate: NavigateFunction = useNavigate()
   const handleLogout = useCallback(() => {
@@ -26,8 +27,8 @@ const SidebarUserProfile = () => {
               <User className="text-theme-primary size-4" />
             </div>
             <div className="text-theme-night-300 text-start">
-              <h5>John Doe</h5>
-              <p className="text-body-3 text-theme-secondary">john@example.com</p>
+              <h5>{userData?.firstName + ' ' + userData?.lastName}</h5>
+              <p className="text-body-3 text-theme-secondary">{userData?.email}</p>
             </div>
           </div>
 
@@ -35,16 +36,6 @@ const SidebarUserProfile = () => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-62 flex flex-col" align="end" side="right">
-        <div className="flex items-center gap-x-2 p-2">
-          <div className="flex size-8 items-center justify-center rounded-lg border">
-            <User className="text-theme-primary size-4" />
-          </div>
-          <div className="text-theme-night-300">
-            <h5>John Doe</h5>
-            <p className="text-body-3 text-theme-secondary">john@example.com</p>
-          </div>
-        </div>
-        <DropdownMenuSeparator />
         <DropdownMenuItem>
           <User className="text-theme-secondary-400" /> Account
         </DropdownMenuItem>

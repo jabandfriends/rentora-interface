@@ -1,12 +1,80 @@
-import { AlertCircle, ArrowLeft, Building, CheckCircle, FileText } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useDebounce } from '@uidotdev/usehooks'
+import { ArrowLeft, Calendar, FileText } from 'lucide-react'
+import { useCallback, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Button, Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
+import { Button, Card } from '@/components/common'
+import { PageTableEmpty } from '@/components/ui'
+import { filterFormSchema } from '@/constants'
+import { useRentoraApiUnitWithMonthlyInvoiceStatus } from '@/hooks'
+import type { FilterFormType } from '@/types'
 
+import MonthlyInvoiceCreateFilter from './MonthlyInvoiceCreateFilter'
 import MonthlyInvoiceCreateTable from './MonthlyInvoiceCreateTable'
 
 const MonthlyInvoiceCreate = () => {
-  const navigate = useNavigate()
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const filterForm = useForm<FilterFormType>({
+    resolver: zodResolver(filterFormSchema),
+    defaultValues: {
+      paymentDueDate: undefined,
+      readingDate: '',
+      buildingName: '',
+    },
+  })
+
+  const [readingDate, buildingName, paymentDueDate]: [string, string, number] = filterForm.watch([
+    'readingDate',
+    'buildingName',
+    'paymentDueDate',
+  ])
+
+  const debouncedBuildingName = useDebounce(buildingName, 300)
+  const debouncedReadingDate = useDebounce(readingDate, 300)
+
+  const isFilterSelected: boolean = useMemo(
+    () => !!debouncedReadingDate && !!debouncedBuildingName && !!paymentDueDate,
+    [debouncedReadingDate, debouncedBuildingName, paymentDueDate],
+  )
+  //get all units with utility
+  const { data: rooms } = useRentoraApiUnitWithMonthlyInvoiceStatus({
+    apartmentId: apartmentId,
+    params: {
+      readingDate: debouncedReadingDate!,
+      buildingName: debouncedBuildingName!,
+      status: 'occupied',
+    },
+    enabled: isFilterSelected,
+  })
+
+  const navigate: NavigateFunction = useNavigate()
+
+  const handleReadingDateChange = useCallback(
+    (value: string) => {
+      filterForm.setValue('readingDate', value)
+    },
+    [filterForm],
+  )
+  const handlePaymentDueDateChange = useCallback(
+    (value: string) => {
+      filterForm.setValue('paymentDueDate', Number(value))
+    },
+    [filterForm],
+  )
+
+  const handleBuildingChange = useCallback(
+    (value: string) => {
+      filterForm.setValue('buildingName', value)
+    },
+    [filterForm],
+  )
+
+  const handleFilterReset = useCallback(() => {
+    filterForm.reset()
+  }, [filterForm])
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
@@ -27,75 +95,49 @@ const MonthlyInvoiceCreate = () => {
           </div>
 
           {/* Controls */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="space-y-1">
-              <label className="text-body-2">Meter Reading Date</label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a date" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1/09/2025">1/09/2025</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-body-2">Billing Month</label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a date" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1/09/2025">1/09/2025</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button block className="flex items-center gap-x-2">
-              Generate All Invoices
-            </Button>
-          </div>
-
-          {/* Statistics */}
-          <div className="desktop:grid-cols-3 grid gap-4">
-            <div className="bg-theme-primary-100 rounded-lg p-4">
-              <div className="flex items-center gap-2">
-                <Building className="text-theme-primary size-5" />
-                <h4 className="text-theme-primary">Total Rooms</h4>
-              </div>
-              <p className="text-theme-primary-800">5</p>
-            </div>
-
-            <div className="bg-theme-success-100 rounded-lg p-4">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="text-theme-success-600 size-5" />
-                <h4 className="text-theme-success-600">Generated</h4>
-              </div>
-              <p className="text-theme-success-800">3</p>
-            </div>
-
-            <div className="bg-theme-warning-100 rounded-lg p-4">
-              <div className="flex items-center gap-2">
-                <AlertCircle className="text-theme-warning-600 size-5" />
-                <h4 className="text-theme-warning-600">Pending</h4>
-              </div>
-              <p className="text-theme-warning-800">1</p>
-            </div>
-          </div>
+          <MonthlyInvoiceCreateFilter
+            paymentDueDate={paymentDueDate}
+            debouncedReadingDate={debouncedReadingDate}
+            debouncedBuildingName={debouncedBuildingName}
+            onBuildingChange={handleBuildingChange}
+            onReadingDateChange={handleReadingDateChange}
+            onPaymentDueDateChange={handlePaymentDueDateChange}
+            onFilterReset={handleFilterReset}
+          />
         </Card>
 
         {/* Rooms List */}
-        <Card className="rounded-xl py-4 shadow-sm">
-          <div>
-            <h3>Rooms Invoice Status</h3>
-            <p className="text-body-2 text-theme-secondary">Billing Period: September 2025</p>
-          </div>
+        {isFilterSelected ? (
+          <Card className="rounded-xl py-4 shadow-sm">
+            <div>
+              <h3>Rooms Invoice Status</h3>
+              <p className="text-body-2 text-theme-secondary">Billing Period: {debouncedReadingDate}</p>
+            </div>
 
-          <div className="overflow-x-auto">
-            <MonthlyInvoiceCreateTable />
-          </div>
-        </Card>
+            {rooms?.length === 0 ? (
+              <>
+                <PageTableEmpty message="No rooms found" />
+              </>
+            ) : (
+              <div className="desktop:grid-cols-4 grid gap-4">
+                {rooms?.map((room) => (
+                  <MonthlyInvoiceCreateTable
+                    key={room.unitId}
+                    room={room}
+                    debouncedReadingDate={debouncedReadingDate}
+                    paymentDueDate={paymentDueDate}
+                  />
+                ))}
+              </div>
+            )}
+          </Card>
+        ) : (
+          <PageTableEmpty
+            icon={<Calendar className="size-10" />}
+            message="Please select a billing period"
+            description="Please select a billing period to view the rooms invoice status."
+          />
+        )}
       </div>
     </div>
   )

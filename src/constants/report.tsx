@@ -1,4 +1,4 @@
-import { Building, CircleAlert, CircleCheckBig, Clock, DollarSign, Droplet, Zap } from 'lucide-react'
+import { Building, CircleAlert, CircleCheckBig, Clock, DollarSign } from 'lucide-react'
 
 import type { IStatsCardProps } from '@/types'
 
@@ -71,69 +71,15 @@ export const ROOM_REPORT_DATA = [
   },
 ]
 
-//electric & water report stats
-export const ELECTRIC_WATER_REPORT_STATS: Array<IStatsCardProps> = [
-  {
-    title: 'Electric usage',
-    count: '฿6,000,000',
-    icon: <Zap size={22} />,
-    type: 'warning',
-  },
-  {
-    title: 'Water usage',
-    count: '฿7,000,000',
-    icon: <Droplet size={22} />,
-    type: 'primary',
-  },
-]
-
 export const ELECTRIC_WATER_REPORT_TABLE_HEADER: Array<string> = [
   'Room',
+  'Building',
   'Tenant',
   'Electric Usage',
   'Electric Bills',
   'Water Usage',
   'Water Bills',
   'Total Bills',
-]
-
-export const ELECTRIC_WATER_REPORT_DATA = [
-  {
-    room: 1,
-    tenant: 'John Doe',
-    electricUsage: '100Units',
-    electricBills: '฿500',
-    waterUsage: '100Units',
-    waterBills: '฿200',
-    totalBills: '฿700',
-  },
-  {
-    room: 1,
-    tenant: 'John Doe',
-    electricUsage: '100Units',
-    electricBills: '฿500',
-    waterUsage: '100Units',
-    waterBills: '฿200',
-    totalBills: '฿700',
-  },
-  {
-    room: 1,
-    tenant: 'John Doe',
-    electricUsage: '100Units',
-    electricBills: '฿500',
-    waterUsage: '100Units',
-    waterBills: '฿200',
-    totalBills: '฿700',
-  },
-  {
-    room: 1,
-    tenant: 'John Doe',
-    electricUsage: '100Units',
-    electricBills: '฿500',
-    waterUsage: '100Units',
-    waterBills: '฿200',
-    totalBills: '฿700',
-  },
 ]
 
 export const RECEIPT_REPORT_STATS: Array<IStatsCardProps> = [

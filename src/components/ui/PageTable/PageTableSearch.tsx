@@ -1,54 +1,69 @@
-import { ChevronDown, Download, Search } from 'lucide-react'
+import { Download } from 'lucide-react'
+import type { ChangeEvent } from 'react'
 
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  Input,
-} from '@/components/common'
-import { INVOICE_SORT, INVOICE_STATUS } from '@/constants'
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
+import { SearchBar } from '@/components/feature'
 
-const PageTableSearch = () => {
+type IPageTableSearchProps<StatusEnum extends string, SortEnum extends string> = {
+  statusEnum?: Record<string, StatusEnum>
+  sortEnum?: Record<string, SortEnum>
+  onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
+  onStatusChange?: (value: StatusEnum) => void
+  onSortChange?: (value: SortEnum) => void
+}
+
+const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
+  statusEnum,
+  sortEnum,
+  onSearchChange,
+  onStatusChange,
+  onSortChange,
+}: IPageTableSearchProps<StatusEnum, SortEnum>) => {
   return (
     <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
       {/* Search */}
-      <Input placeholder="Search by invoice " prefix={<Search className="text-theme-secondary-400" />} />
+      <SearchBar onChange={onSearchChange} />
 
-      <div className="flex gap-x-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outlineSecondary" className="flex items-center gap-2">
-              <ChevronDown size={18} /> Status
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" sideOffset={10}>
-            {INVOICE_STATUS.map((status) => (
-              <DropdownMenuItem key={status}>{status}</DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <div className="desktop:flex-row flex flex-col gap-2">
+        <div className="flex gap-2">
+          {/* Status Dropdown */}
+          {statusEnum && (
+            <Select onValueChange={onStatusChange}>
+              <SelectTrigger className="capitalize">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent align="start" sideOffset={10}>
+                {Object.entries(statusEnum).map(([key, value]) => (
+                  <SelectItem className="capitalize" key={key} value={value}>
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
 
-        {/* Sort By */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outlineSecondary" className="flex items-center gap-2">
-              <ChevronDown size={18} /> Sort By
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" sideOffset={10}>
-            {INVOICE_SORT.map((sort) => (
-              <DropdownMenuItem key={sort}>{sort}</DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          {/* Sort By Dropdown */}
+          {sortEnum && (
+            <Select onValueChange={onSortChange}>
+              <SelectTrigger className="capitalize">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent align="start" sideOffset={10}>
+                {Object.entries(sortEnum).map(([key, value]) => (
+                  <SelectItem className="capitalize" value={value} key={key}>
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
+
         {/* Export PDF */}
+        <Button className="flex items-center gap-2">
+          <Download size={18} /> Export PDF
+        </Button>
       </div>
-      <Button className="flex items-center gap-2">
-        <Download size={18} />
-        Export PDF
-      </Button>
     </div>
   )
 }

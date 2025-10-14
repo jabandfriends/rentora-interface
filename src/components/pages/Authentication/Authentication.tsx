@@ -17,6 +17,7 @@ const Authentication = () => {
   const navigate: NavigateFunction = useNavigate()
   const [isNavigate, setIsNavigate]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
   const form = useForm<AUTHENTICATION_FORM_SCHEMA_TYPE>({
+    mode: 'onChange',
     resolver: zodResolver(AUTHENTICATION_FORM_SCHEMA),
     defaultValues: {
       email: '',

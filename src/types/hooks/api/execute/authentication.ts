@@ -9,6 +9,9 @@ export interface IAuthRequest {
 //hooks type useRentoraApiAuthenticate
 export type IUseRentoraApiAuthenticate = IBaseUseMutation<IRentoraApiClientAuthenticateResponse['data'], IAuthRequest>
 
+//hooks type useRentoraApiFirstTimeResetPassword
+export type IUseRentoraApiFirstTimeResetPassword = IBaseUseMutation<void, IFirsttimePasswordResetRequestPayload>
+
 export type IRentoraApiClientAuthenticateResponse = IRentoraApiClientBaseResponse<{
   accessToken: string
   expireIn: number
@@ -29,3 +32,7 @@ export type IRentoraApiClientAuthenticateResponse = IRentoraApiClientBaseRespons
   }
   tokenType: string
 }>
+
+export type IFirsttimePasswordResetRequestPayload = {
+  newPassword: string
+}

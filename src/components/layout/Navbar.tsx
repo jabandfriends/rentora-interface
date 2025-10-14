@@ -1,5 +1,6 @@
-import { LogOut, Menu, User, X } from 'lucide-react'
-import { useCallback } from 'react'
+import type { SetStateAction } from 'jotai'
+import { ChevronDown, LogOut, Menu, User, X } from 'lucide-react'
+import { type Dispatch, useCallback, useState } from 'react'
 import { Link, type NavigateFunction, useNavigate } from 'react-router-dom'
 
 import {
@@ -10,18 +11,26 @@ import {
   DropdownMenuTrigger,
 } from '@/components/common'
 import { ROUTES } from '@/constants'
+import type { IUser, Maybe } from '@/types'
+import { cn } from '@/utilities'
 
 const NavBar = ({
   onSidebarToggle,
   isSidebar,
   sidebarOpen,
+  userData,
 }: {
   onSidebarToggle: () => void
   isSidebar: boolean
   sidebarOpen: boolean
+  userData: Maybe<IUser>
 }) => {
   // hooks
   const navigate: NavigateFunction = useNavigate()
+  const [isDropdownOpen, setIsDropdownOpen]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
+  const handleSetDropdown = useCallback(() => {
+    setIsDropdownOpen((prev) => !prev)
+  }, [])
   const handleLogout = useCallback(() => {
     navigate(ROUTES.auth.path)
   }, [navigate])
@@ -47,11 +56,16 @@ const NavBar = ({
         </div>
 
         {/* Right Profile*/}
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <div className="hover:bg-theme-night-800/15 flex cursor-pointer items-center space-x-4 rounded-lg px-2 py-1">
+        <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+          <DropdownMenuTrigger onClick={handleSetDropdown}>
+            <div className="hover:bg-theme-night-800/15 text-theme-secondary flex cursor-pointer items-center space-x-2 rounded-lg px-2 py-1 duration-200 focus:outline-none">
               <div className="bg-theme-night-600 flex size-8 items-center justify-center rounded-full">
-                <span className="text-body-2">JD</span>
+                <span className="text-body-2">{userData?.firstName.charAt(0)}</span>
+              </div>
+              <p className="text-body-2">{userData?.firstName + ' ' + userData?.lastName}</p>
+
+              <div className={cn('text-theme-secondary-400 duration-200', [isDropdownOpen && 'rotate-180'])}>
+                <ChevronDown size={16} />
               </div>
             </div>
           </DropdownMenuTrigger>
@@ -61,8 +75,8 @@ const NavBar = ({
                 <User className="text-theme-primary size-4" />
               </div>
               <div className="text-theme-night-300">
-                <h5>John Doe</h5>
-                <p className="text-body-3 text-theme-secondary">john@example.com</p>
+                <h5>{userData?.firstName}</h5>
+                <p className="text-body-3 text-theme-secondary">{userData?.email}</p>
               </div>
             </div>
             <DropdownMenuSeparator />

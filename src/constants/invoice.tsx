@@ -1,9 +1,19 @@
 import { CircleAlert, CircleCheckBig, Clock, DollarSign } from 'lucide-react'
+import z from 'zod'
 
 import type { IStatsCardProps } from '@/types'
 
-export const INVOICE_STATUS: Array<string> = ['All', 'Paid', 'Unpaid', 'Overdue']
-export const INVOICE_SORT: Array<string> = ['Date', 'Amount', 'Status']
+export const filterFormSchema = z.object({
+  paymentDueDate: z.number({ error: 'Payment due date is required' }),
+  readingDate: z.string({ error: 'Reading date is required' }),
+  buildingName: z.string({ error: 'Building name is required' }),
+})
+
+export enum INVOICE_STATUS {
+  Paid = 'paid',
+  Unpaid = 'unpaid',
+  Overdue = 'overdue',
+}
 
 export const NORMAL_INVOICE_STATS: Array<IStatsCardProps> = [
   {
@@ -67,7 +77,6 @@ export const SERVICE_INVOICE_STATS: Array<IStatsCardProps> = [
   },
 ]
 
-//RECHECK : API TYPE LATER
 export const NORMAL_INVOICE_DATA = [
   {
     invoice: 'INV-001-123',
@@ -101,7 +110,6 @@ export const NORMAL_INVOICE_DATA = [
   },
 ]
 
-//RECHECK : API TYPE LATER
 export const OVERDUE_INVOICE_DATA = [
   {
     invoice: 'INV-001-123',
@@ -164,10 +172,11 @@ export const SERVICE_INVOICE_DATA = [
 
 //NORMAL INVOICE TABLE
 export const NORMAL_INVOICE_TABLE_HEADER = [
-  'Invoice',
+  'Invoice Number',
+  'Title',
+  'Description',
   'Tenant',
   'Room',
-  'Description',
   'Amount',
   'Issue Date',
   'Due Date',
@@ -176,22 +185,12 @@ export const NORMAL_INVOICE_TABLE_HEADER = [
 ]
 
 //overdue invoice table
-export const OVERDUE_INVOICE_TABLE_HEADER = [
-  'Invoice',
-  'Tenant',
-  'Room',
-  'Description',
-  'Amount',
-  'Issue Date',
-  'Due Date',
-  'Status',
-]
+export const OVERDUE_INVOICE_TABLE_HEADER = ['Invoice', 'Tenant', 'Room', 'Amount', 'Issue Date', 'Due Date', 'Status']
 
 export const SERVICE_INVOICE_TABLE_HEADER = [
   'Invoice',
   'Tenant',
   'Room',
-  'Description',
   'Amount',
   'Issue Date',
   'Due Date',
