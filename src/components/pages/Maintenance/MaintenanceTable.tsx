@@ -15,11 +15,12 @@ import {
   AlertDialogTitle,
 } from '@/components/feature/AlertDialog'
 import { TenantTableLoading } from '@/components/pages/Tenant'
-import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { Badge, FieldEmpty, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { MAINTENANCE_TABLE_HEADER, ROUTES } from '@/constants'
-import { MAINTENANCE_STATUS } from '@/enum'
+import { MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiDeleteMaintenance } from '@/hooks/api/execute/useRentoraApiDeleteMaintenance'
 import type { IMaintenance } from '@/types'
+import { formatDate } from '@/utilities'
 
 import { MaintenanceAction } from '.'
 
@@ -119,13 +120,13 @@ const MaintenanceTable = ({
 
   const priorityBadgeVariant = useCallback((maintenancePriority: string): VariantProps<typeof Badge>['variant'] => {
     switch (maintenancePriority) {
-      case 'urgent':
+      case MAINTENANCE_PRIORITY.URGENT:
         return 'error'
-      case 'high':
+      case MAINTENANCE_PRIORITY.HIGH:
         return 'error'
-      case 'normal':
+      case MAINTENANCE_PRIORITY.NORMAL:
         return 'warning'
-      case 'low':
+      case MAINTENANCE_PRIORITY.LOW:
         return 'default'
       default:
         return 'default'
@@ -162,8 +163,10 @@ const MaintenanceTable = ({
               <TableCell>{item.title}</TableCell>
               <TableCell>{item.unitName}</TableCell>
               <TableCell>{item.buildingsName}</TableCell>
-              <TableCell>{item.appointmentDate}</TableCell>
-              <TableCell>{item.dueDate || '-'}</TableCell>
+              <TableCell>
+                {item.appointmentDate ? formatDate(new Date(item.appointmentDate), 'DD/MM/YYYY') : <FieldEmpty />}
+              </TableCell>
+              <TableCell>{item.dueDate ? formatDate(new Date(item.dueDate), 'DD/MM/YYYY') : <FieldEmpty />}</TableCell>
               <TableCell className="capitalize">
                 <Badge variant={priorityBadgeVariant(item.priority)}>{item.priority}</Badge>
               </TableCell>

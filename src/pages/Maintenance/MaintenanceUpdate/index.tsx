@@ -1,5 +1,5 @@
 import { ArrowLeft, PenLine } from 'lucide-react'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -19,26 +19,9 @@ const MaintenanceUpdate = () => {
     apartmentId: apartmentId ?? '',
   })
   const { mutateAsync: updateMaintenance } = useRentoraApiUpdateMaintenance()
-  const defaultValues: MAINTENANCE_FORM_SCHEMA_TYPE = useMemo(() => {
-    return {
-      unitId: (data as any)?.unitId ?? (data as any)?.unit?.id ?? null,
-      title: (data as any)?.title ?? '',
-      description: (data as any)?.description ?? '',
-      status: (data as any)?.status,
-      priority: (data as any)?.priority,
-      appointmentDate: (data as any)?.appointmentDate,
-      dueDate: (data as any)?.dueDate,
-      estimatedHours: (data as any)?.estimatedHours ?? '',
-      category: (data as any)?.category,
-      estimatedCost: (data as any)?.estimatedCost ?? '',
-      isEmergency: Boolean((data as any)?.isEmergency),
-    } as unknown as MAINTENANCE_FORM_SCHEMA_TYPE
-  }, [data])
+
   const onSubmit = useCallback(
     async (data: MAINTENANCE_FORM_SCHEMA_TYPE) => {
-      if (!apartmentId || !id) {
-        throw new Error('Missing route params: apartmentId or maintenanceId')
-      }
       const payload: IUpdateMaintenanceRequestPayload = {
         unitId: data.unitId,
         title: data.title,
@@ -47,9 +30,9 @@ const MaintenanceUpdate = () => {
         priority: data.priority,
         appointmentDate: data.appointmentDate,
         dueDate: data.dueDate!,
-        estimatedHours: Number(data.estimatedHours),
+        estimatedHours: data.estimatedHours ? Number(data.estimatedHours) : undefined,
         category: data.category,
-        estimatedCost: Number(data.estimatedCost),
+        estimatedCost: data.estimatedCost ? Number(data.estimatedCost) : undefined,
         isEmergency: data.isEmergency,
       }
       try {
@@ -85,7 +68,7 @@ const MaintenanceUpdate = () => {
         actionOnClick={navigateBefore}
       />
       <MaintenanceForm
-        defaultValues={defaultValues}
+        defaultValues={data}
         onSubmit={onSubmit}
         buttonIcon={<PenLine />}
         buttonLabel="Update a Task"

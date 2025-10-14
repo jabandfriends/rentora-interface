@@ -56,13 +56,13 @@ export const MAINTENANCE_FORM_SCHEMA = z.object({
     { error: 'Priority is required' },
   ),
   appointmentDate: z.string({ error: 'Appointment date is required.' }).min(1, 'Appointment date is required.'),
-  dueDate: z.string({ error: 'Due date is required.' }).optional(),
+  dueDate: z.string({ error: 'Due date is wrong format.' }).optional(),
   category: z.enum([MAINTENANCE_CATEGORY.GENERAL, MAINTENANCE_CATEGORY.PLUMBING, MAINTENANCE_CATEGORY.ELECTRICITY], {
     error: 'Category is required',
   }),
   isEmergency: z.boolean(),
-  estimatedHours: z.number().optional(),
-  estimatedCost: z.number().optional(),
+  estimatedHours: z.string().optional(),
+  estimatedCost: z.string().optional(),
 })
 
 export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS_TYPE>> = [
