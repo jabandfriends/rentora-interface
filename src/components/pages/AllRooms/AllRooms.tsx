@@ -120,7 +120,12 @@ const AllRooms = () => {
 
   return (
     <>
-      <PageTableHeader title="All Rooms" description="All rooms with category dashboard" stats={All_ROOMS_STAT} />
+      <PageTableHeader
+        title="All Rooms"
+        description="All rooms with category dashboard"
+        stats={All_ROOMS_STAT}
+        isLoading={isLoading}
+      />
       <AllRoomSearch
         onSearchChange={handleSearchChange}
         onStatusChange={handleStatusChange}

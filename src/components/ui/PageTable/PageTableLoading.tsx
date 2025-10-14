@@ -13,7 +13,7 @@ const PageTableLoading = ({ headerRows = 8, bodyRows = 16 }: IPageTableLoadingPr
           <TableRow>
             {Array.from({ length: headerRows }).map((_, index) => (
               <TableHead key={index}>
-                <Skeleton />
+                <Skeleton className="desktop:w-40 w-20" />
               </TableHead>
             ))}
           </TableRow>
@@ -23,7 +23,7 @@ const PageTableLoading = ({ headerRows = 8, bodyRows = 16 }: IPageTableLoadingPr
             <TableRow key={index}>
               {Array.from({ length: headerRows }).map((_, index) => (
                 <TableCell key={index}>
-                  <Skeleton />
+                  <Skeleton className="desktop:w-40 w-20" />
                 </TableCell>
               ))}
             </TableRow>

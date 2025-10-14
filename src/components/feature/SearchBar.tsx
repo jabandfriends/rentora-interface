@@ -15,7 +15,7 @@ const SearchBar = (props: ISearchBarProps) => {
       <SearchIcon className="size-5" />
       <input
         type="text"
-        placeholder="Search"
+        placeholder={props.placeholder ?? 'Search'}
         className="bg-theme-light text-body-2 flex w-full flex-row gap-x-4 p-2 outline-none ring-0"
         {...props}
       />

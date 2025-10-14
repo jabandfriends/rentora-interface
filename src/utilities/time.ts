@@ -71,3 +71,22 @@ export function timeFromNow(isoString: string) {
   }
   return dayjs(isoString).fromNow()
 }
+
+//getmonth name by number
+export function getMonthNameByNumber(monthNumber: number) {
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
+  return monthNames[monthNumber - 1]
+}
