@@ -3,12 +3,12 @@ import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } fr
 import { useForm } from 'react-hook-form'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Button } from '@/components/common'
+import { Button, Spinner } from '@/components/common'
 import { PageSection } from '@/components/layout'
 import { MeterReadingEmpty, MeterReadingFilterBar, MeterReadingTable } from '@/components/pages/MeterReading'
-import { PageTableHeader } from '@/components/ui'
+import { PageTableEmpty, PageTableHeader } from '@/components/ui'
 import { DEFAULT_REPORT_UTILITY_LIST_DATA, ROUTES } from '@/constants'
-import { useRentoraApiReportUtility } from '@/hooks'
+import { useRentoraApiReportReadingDateUtility, useRentoraApiReportUtility } from '@/hooks'
 import type { ISearchBarProps, Maybe } from '@/types'
 
 const MeterReadingListPage = () => {
@@ -37,6 +37,11 @@ const MeterReadingListPage = () => {
     'readingDate',
     'buildingName',
   ])
+
+  //filter dates
+  const { data: filterDates, isLoading: isLoadingFilterDates } = useRentoraApiReportReadingDateUtility({
+    apartmentId,
+  })
 
   const debouncedUnitName = useDebounce(unitName ? unitName : undefined, 500)
 
@@ -104,6 +109,28 @@ const MeterReadingListPage = () => {
     [setValue, setCurrentPage],
   )
 
+  if (isLoadingFilterDates) {
+    return (
+      <PageSection>
+        <PageTableEmpty
+          icon={<Spinner />}
+          message="Loading your meter readings..."
+          description="Hang tight! This will only take a moment 😊"
+        />
+      </PageSection>
+    )
+  }
+  if (!filterDates || filterDates.length === 0) {
+    return (
+      <PageSection>
+        <PageTableEmpty
+          message="No meter readings found"
+          description="It looks like there aren’t any meter readings for this apartment yet."
+        />
+      </PageSection>
+    )
+  }
+
   return (
     <PageSection>
       <PageTableHeader
@@ -117,6 +144,8 @@ const MeterReadingListPage = () => {
         handleReadingDateChange={handleReadingDateChange}
         handleBuildingChange={handleBuildingChange}
         handleNodata={handleNodata}
+        filterDates={filterDates}
+        isLoadingFilterDates={isLoadingFilterDates}
         onSearchChange={handleSearchChange}
       />
 

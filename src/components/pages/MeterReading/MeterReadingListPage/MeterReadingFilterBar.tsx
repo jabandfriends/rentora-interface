@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
 import { SearchBar } from '@/components/feature'
 import { LoadingPage } from '@/components/ui'
-import { useRentoraApiBuildingListNoPaginate, useRentoraApiReportReadingDateUtility } from '@/hooks'
+import { useRentoraApiBuildingListNoPaginate } from '@/hooks'
 import type { IBuilding, IReadingUnitUtility } from '@/types'
 
 type IMeterReadingFilterBar = {
@@ -13,18 +13,19 @@ type IMeterReadingFilterBar = {
   handleBuildingChange: (value: string) => void
   handleNodata: (value: boolean) => void
   onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
+  filterDates: Array<IReadingUnitUtility>
+  isLoadingFilterDates: boolean
 }
 const MeterReadingFilterBar = ({
   handleReadingDateChange,
   handleBuildingChange,
   handleNodata,
+  filterDates,
+  isLoadingFilterDates,
   onSearchChange,
 }: IMeterReadingFilterBar) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const { data: buildingNames, isLoading: isLoadingBuildingNames } = useRentoraApiBuildingListNoPaginate({
-    apartmentId,
-  })
-  const { data: filterDates, isLoading: isLoadingFilterDates } = useRentoraApiReportReadingDateUtility({
     apartmentId,
   })
 
