@@ -24,3 +24,8 @@ export enum RecurringSchedule {
   MONTHLY = 'monthly',
   QUARTERLY = 'quarterly',
 }
+
+export enum MAINTENANCE_SORT {
+  CreatedAt = 'createdAt',
+  UpdatedAt = 'updatedAt',
+}

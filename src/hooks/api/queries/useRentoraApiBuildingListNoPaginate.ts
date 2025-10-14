@@ -9,7 +9,7 @@ export const useRentoraApiBuildingListNoPaginate = (props: {
 }): IUseRentoraApiClientBuildingListResponse => {
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
   return useQuery<IRentoraApiClientBuildingListResponse['data']>({
-    queryKey: [rentoraApiQueryClient.key.reportReadingDateUtility, props.apartmentId],
+    queryKey: [rentoraApiQueryClient.key.buildingListNoPaginate, props.apartmentId],
     queryFn: () => {
       return rentoraApiQueryClient.buildingListNoPaginate(props.apartmentId)
     },

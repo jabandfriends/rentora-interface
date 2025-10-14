@@ -15,12 +15,16 @@ export const useRentoraApiUpdateMaintenance = (): IUseRentoraApiUpdateMaintenanc
   return useMutation<
     IRentoraApiClientUpdateMaintenanceResponse['data'],
     AxiosError,
-    { apartmentId: string; maintenanceId: string; payload: IUpdateMaintenanceRequestPayload }
+    {
+      apartmentId: string
+      maintenanceId: string
+      payload: IUpdateMaintenanceRequestPayload | Partial<IUpdateMaintenanceRequestPayload>
+    }
   >({
     mutationKey: [rentoraApiExecuteClient.key.updateMaintenance],
     mutationFn: async ({
-      apartmentId,
-      maintenanceId,
+      apartmentId: apartmentId,
+      maintenanceId: maintenanceId,
       payload,
     }): Promise<IRentoraApiClientUpdateMaintenanceResponse['data']> => {
       const response: IRentoraApiClientUpdateMaintenanceResponse['data'] =

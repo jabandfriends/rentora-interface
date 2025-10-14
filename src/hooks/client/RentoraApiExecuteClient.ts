@@ -8,6 +8,9 @@ import type {
   ICreateMaintenanceRequestPayload,
   ICreateTenantRequestPayload,
   IFirsttimePasswordResetRequestPayload,
+  IGenerateMonthlyInvoiceRequestPayload,
+  IMeterReadingRequestPayload,
+  IMeterReadingUpdateRequestPayload,
   IPutPresignedUrlRequest,
   IRentoraApiClientAuthenticateResponse,
   IRentoraApiClientCreateAdhocInvoiceResponse,
@@ -39,6 +42,9 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     updateTenantPassword: 'UPDATE_TENANT_PASSWORD',
     createContract: 'CREATE_CONTRACT',
     createAdhocInvoice: 'CREATE_ADHOC_INVOICE',
+    createMeterReading: 'CREATE_METER_READING',
+    updateMeterReading: 'UPDATE_METER_READING',
+    generateMonthlyInvoice: 'GENERATE_MONTHLY_INVOICE',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -107,6 +113,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
       )
     return response.data.data
   }
+
   //create tenant
   async createTenant(apartmentId: string, payload: ICreateTenantRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(
@@ -152,5 +159,22 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
         payload,
       )
     return response.data.data
+  }
+  //create meter reading
+  async createMeterReading(apartmentId: string, payload: IMeterReadingRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/${apartmentId}/unit/utility`, payload)
+    return response.data
+  }
+
+  //update meter reading
+  async updateMeterReading(apartmentId: string, payload: IMeterReadingUpdateRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.put<void>(`/api/apartments/${apartmentId}/unit/utility`, payload)
+    return response.data
+  }
+
+  //generate monthly invoice
+  async generateMonthlyInvoice(payload: IGenerateMonthlyInvoiceRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(`/api/monthly/invoices`, payload)
+    return response.data
   }
 }

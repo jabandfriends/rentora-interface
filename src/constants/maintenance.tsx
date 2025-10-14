@@ -1,5 +1,5 @@
 import { CircleCheckBig, Clock, ScrollText } from 'lucide-react'
-import z from 'zod'
+import { z } from 'zod'
 
 import { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
 import type { FORM_SECTION, IStatsCardProps, MAINTENANCE_FORM_FIELDS_TYPE } from '@/types'
@@ -56,7 +56,7 @@ export const MAINTENANCE_FORM_SCHEMA = z.object({
     { error: 'Priority is required' },
   ),
   appointmentDate: z.string({ error: 'Appointment date is required.' }).min(1, 'Appointment date is required.'),
-  dueDate: z.string({ error: 'Due date is required.' }).optional(),
+  dueDate: z.string({ error: 'Due date is wrong format.' }).optional(),
   category: z.enum([MAINTENANCE_CATEGORY.GENERAL, MAINTENANCE_CATEGORY.PLUMBING, MAINTENANCE_CATEGORY.ELECTRICITY], {
     error: 'Category is required',
   }),

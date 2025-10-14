@@ -1,21 +1,9 @@
 import { Calendar, Check, Clock, Mail, MapPin, Phone, Wrench } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/common'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/common'
 import { Badge, EmptyPage, FieldEmpty, LoadingPage } from '@/components/ui'
-import { MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
-import { useRentoraMaintenanceDetail } from '@/hooks'
+import { useRentoraApiMaintenanceDetail } from '@/hooks'
 import { formatDate } from '@/utilities'
 
 import MaintenanceBreadcrumb from './MaintenanceBreadcrumb'
@@ -25,27 +13,10 @@ const MaintenanceDetail = () => {
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
 
   //fetch maintenance detail
-  const { data: maintenance, isLoading, error } = useRentoraMaintenanceDetail({ apartmentId, maintenanceId: id })
-
-  const [status, setStatus] = useState<string>(MAINTENANCE_STATUS.IN_PROGRESS)
-
-  useEffect(() => {
-    if (maintenance?.status) {
-      setStatus(maintenance.status)
-    }
-  }, [maintenance])
-
-  const handleStatusChange = (newStatus: string) => {
-    setStatus(newStatus)
-    // In real app, this would make an API call
-  }
+  const { data: maintenance, isLoading } = useRentoraApiMaintenanceDetail({ apartmentId, maintenanceId: id })
 
   if (isLoading) {
     return <LoadingPage />
-  }
-
-  if (error) {
-    return <EmptyPage title="Maintenance Not Found" description="The maintenance you're looking for doesn't exist. " />
   }
 
   if (!maintenance) {
@@ -73,9 +44,9 @@ const MaintenanceDetail = () => {
       <div className="gap-6">
         {/* Main Content */}
         <div className="space-y-6">
-          <div className="desktop:grid-cols-3 grid gap-4">
+          <div className="grid gap-4">
             {/* Description */}
-            <Card className="desktop:col-span-2 justify-start rounded-xl shadow-sm">
+            <Card className="rounded-xl shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Description</CardTitle>
               </CardHeader>
@@ -85,7 +56,7 @@ const MaintenanceDetail = () => {
                 </p>
               </CardContent>
             </Card>
-            {/* Quick Actions */}
+            {/* Quick Actions
             <Card className="rounded-xl shadow-sm">
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>
@@ -117,7 +88,7 @@ const MaintenanceDetail = () => {
                   </SelectContent>
                 </Select>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
 
           {/* Request Details */}

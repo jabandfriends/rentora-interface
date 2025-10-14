@@ -177,11 +177,7 @@ const InvoiceDetail = () => {
             <div className="flex items-center justify-between font-semibold">
               <label className="font-medium">Outstanding Balance</label>
               <span className="text-theme-error">
-                {data.finalAmount && data.paidAmount ? (
-                  formatCurrency(data.finalAmount - data.paidAmount)
-                ) : (
-                  <FieldEmpty />
-                )}
+                {data.paidAmount ? formatCurrency(data.finalAmount - data.paidAmount) : <FieldEmpty />}
               </span>
             </div>
           </div>
@@ -273,18 +269,15 @@ const InvoiceDetail = () => {
         </div>
       </Card> */}
 
-      {/* Notes */}
-      {data.notes && (
-        <Card className="rounded-2xl shadow">
-          <div>
-            <h4>Notes</h4>
-          </div>
-          <Separator />
-          <div>
-            <p className="text-body-2 leading-relaxed">{data.notes}</p>
-          </div>
-        </Card>
-      )}
+      <Card className="rounded-2xl shadow">
+        <div>
+          <h4>Notes</h4>
+        </div>
+        <Separator />
+        <div>
+          <p className="text-body-2 leading-relaxed">{data?.notes}</p>
+        </div>
+      </Card>
 
       {/* Administrative Details */}
       <Card className="rounded-2xl shadow">

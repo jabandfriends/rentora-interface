@@ -1,8 +1,9 @@
 import { Download } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 
-import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Spinner } from '@/components/common'
 import { SearchBar } from '@/components/feature'
+import { PageTableEmpty } from '@/components/ui'
 import type { IReadingUnitUtility, Maybe } from '@/types'
 
 type IElectricWaterSearchBarProps = {
@@ -16,13 +17,27 @@ type IElectricWaterSearchBarProps = {
 const ElectricWaterSearchBar = ({
   onSearchChange,
   onSortChange,
-
   sortEnum,
   isLoadingDate,
   readingDateUtility,
   onReadingDateChange,
 }: IElectricWaterSearchBarProps) => {
-  if (!readingDateUtility || isLoadingDate) return null
+  if (isLoadingDate)
+    return (
+      <PageTableEmpty
+        icon={<Spinner />}
+        message="Loading your report..."
+        description="Hang tight! This will only take a moment 😊"
+      />
+    )
+  if (!readingDateUtility || readingDateUtility.length === 0) {
+    return (
+      <PageTableEmpty
+        message="No meter readings found"
+        description="It looks like there aren’t any meter readings for this apartment yet."
+      />
+    )
+  }
   return (
     <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
       {/* Search */}

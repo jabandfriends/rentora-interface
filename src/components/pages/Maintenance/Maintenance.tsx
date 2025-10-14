@@ -130,10 +130,6 @@ const Maintenance = () => {
     [totalMaintenance, completedCount, pendingCount, inProgressCount],
   )
 
-  enum MAINTENANCE_SORT {
-    CreatedAt = 'createdAt',
-    UpdatedAt = 'updatedAt',
-  }
   return (
     <>
       <PageTableHeader
@@ -146,7 +142,6 @@ const Maintenance = () => {
       {/* <PageTableSearch /> */}
       <PageTableSearch
         statusEnum={MAINTENANCE_STATUS}
-        sortEnum={MAINTENANCE_SORT}
         onSearchChange={handleSearchChange}
         onStatusChange={handleStatusChange}
         onSortChange={handleSortChange}

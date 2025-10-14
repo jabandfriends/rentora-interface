@@ -70,7 +70,9 @@ export type IRentoraApiMaintenanceListParams = {
 export type IRentoraApiMaintenanceApartmentIdParams = string
 
 //Maintenance detail type
-export type IMaintenanceDetail = IMaintenance
+export type IMaintenanceDetail = IMaintenance & {
+  unitId: string
+}
 
 //detail response type
 export type IRentoraApiClientMaintenanceDetailResponse = IRentoraApiClientBaseResponse<IMaintenanceDetail>
