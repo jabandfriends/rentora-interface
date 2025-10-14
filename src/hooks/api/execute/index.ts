@@ -1,4 +1,5 @@
 export * from './useRentoraApiAuthenticate'
+export * from './useRentoraApiCreateAdhocInvoice'
 export * from './useRentoraApiCreateApartment'
 export * from './useRentoraApiCreateContract'
 export * from './useRentoraApiCreateContract'

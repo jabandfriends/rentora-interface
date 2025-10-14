@@ -6,6 +6,7 @@ import type { VariantProps } from 'tailwind-variants'
 import { PaginationBar } from '@/components/feature'
 import {
   Badge,
+  FieldEmpty,
   PageTableEmpty,
   PageTableLoading,
   PageTableSearchEmpty,
@@ -18,6 +19,7 @@ import {
 } from '@/components/ui'
 import { NORMAL_INVOICE_TABLE_HEADER, ROUTES } from '@/constants'
 import type { IInvoiceSummary, IPaginate } from '@/types'
+import { formatCurrency } from '@/utilities'
 
 import InvoiceAction from './NormalInvoiceAction'
 
@@ -94,14 +96,14 @@ const NormalInvoiceTable = ({
         <TableBody>
           {data.map((item: IInvoiceSummary, index) => (
             <TableRow className="cursor-pointer" key={index} onClick={() => handleDetailInvoice(item.id)}>
-              <TableCell>{item.invoiceNumber ? item.invoiceNumber : 'N/A'}</TableCell>
-              <TableCell>{item.title ? item.title : 'N/A'}</TableCell>
-              <TableCell>{item.description ? item.description : 'N/A'}</TableCell>
-              <TableCell>{item.tenant ? item.tenant : 'N/A'}</TableCell>
-              <TableCell>{item.room ? item.room : 'N/A'}</TableCell>
-              <TableCell>{item.amount ? item.amount : 'N/A'}</TableCell>
-              <TableCell>{item.issueDate ? item.issueDate : 'N/A'}</TableCell>
-              <TableCell>{item.dueDate ? item.dueDate : 'N/A'}</TableCell>
+              <TableCell className="text-theme-primary">{item.invoiceNumber ? item.invoiceNumber : 'N/A'}</TableCell>
+              <TableCell>{item.title ? item.title : <FieldEmpty />}</TableCell>
+              <TableCell>{item.description ? item.description : <FieldEmpty />}</TableCell>
+              <TableCell>{item.tenant ? item.tenant : <FieldEmpty />}</TableCell>
+              <TableCell>{item.room ? item.room : <FieldEmpty />}</TableCell>
+              <TableCell>{item.amount ? formatCurrency(item.amount) : <FieldEmpty />}</TableCell>
+              <TableCell>{item.issueDate ? item.issueDate : <FieldEmpty />}</TableCell>
+              <TableCell>{item.dueDate ? item.dueDate : <FieldEmpty />}</TableCell>
               <TableCell className="capitalize">
                 <Badge variant={maintenanceStatusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>

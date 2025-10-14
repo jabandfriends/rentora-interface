@@ -2,6 +2,7 @@ import type { AxiosResponse } from 'axios'
 
 import type {
   IAuthRequest,
+  ICreateAdhocInvoiceRequestPayload,
   ICreateApartmentRequestApi,
   ICreateContractRequestPayload,
   ICreateMaintenanceRequestPayload,
@@ -12,6 +13,7 @@ import type {
   IMeterReadingUpdateRequestPayload,
   IPutPresignedUrlRequest,
   IRentoraApiClientAuthenticateResponse,
+  IRentoraApiClientCreateAdhocInvoiceResponse,
   IRentoraApiClientCreateApartmentResponse,
   IRentoraApiClientCreateMaintenanceResponse,
   IRentoraApiClientDeleteMaintenanceResponse,
@@ -39,6 +41,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     updateTenant: 'UPDATE_TENANT',
     updateTenantPassword: 'UPDATE_TENANT_PASSWORD',
     createContract: 'CREATE_CONTRACT',
+    createAdhocInvoice: 'CREATE_ADHOC_INVOICE',
     createMeterReading: 'CREATE_METER_READING',
     updateMeterReading: 'UPDATE_METER_READING',
     generateMonthlyInvoice: 'GENERATE_MONTHLY_INVOICE',
@@ -145,6 +148,18 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     return response.data
   }
 
+  //create Adhoc Invoice
+  async createAdhocInvoice(
+    apartmentId: string,
+    payload: ICreateAdhocInvoiceRequestPayload,
+  ): Promise<IRentoraApiClientCreateAdhocInvoiceResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientCreateAdhocInvoiceResponse, unknown> =
+      await this.axiosWithAuthInstance.post<IRentoraApiClientCreateAdhocInvoiceResponse>(
+        `/api/invoices/${apartmentId}/adhocInvoice/create`,
+        payload,
+      )
+    return response.data.data
+  }
   //create meter reading
   async createMeterReading(apartmentId: string, payload: IMeterReadingRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/${apartmentId}/unit/utility`, payload)

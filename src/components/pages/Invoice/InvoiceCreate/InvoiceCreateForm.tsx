@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Plus } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { type ReactNode, useMemo } from 'react'
+import { useForm, type UseFormReturn } from 'react-hook-form'
 
 import {
   Button,
@@ -17,18 +16,50 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Spinner,
   Textarea,
 } from '@/components/common'
+import { SelectRoomModal } from '@/components/ui'
 import { AdhocInvoiceSchema, INVOICE_FORM_FIELDS } from '@/constants'
-import type { AdhocInvoice } from '@/types'
+import {
+  ADHOC_INVOICE_CATEGORY,
+  ADHOC_INVOICE_PAYMENT_STATUS,
+  ADHOC_INVOICE_PRIORITY,
+  ADHOC_INVOICE_STATUS,
+} from '@/enum'
+import { type ADHOC_INVOICE_FORM_SCHEMA_TYPE } from '@/types'
 
 type IInvoiceCreateFormProps = {
-  onSubmit: (data: AdhocInvoice) => void
+  buttonLabel: string
+  buttonIcon?: ReactNode
+  onSubmit: (data: ADHOC_INVOICE_FORM_SCHEMA_TYPE) => void | Promise<void>
+  isSubmitting?: boolean
 }
-const InvoiceCreateForm = ({ onSubmit }: IInvoiceCreateFormProps) => {
-  const form = useForm<z.infer<typeof AdhocInvoiceSchema>>({
+const InvoiceCreateForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting }: IInvoiceCreateFormProps) => {
+  const form: UseFormReturn<ADHOC_INVOICE_FORM_SCHEMA_TYPE> = useForm<ADHOC_INVOICE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(AdhocInvoiceSchema),
+    defaultValues: {
+      unitId: '',
+      title: '',
+      description: '',
+      invoiceDate: '',
+      dueDate: '',
+      category: ADHOC_INVOICE_CATEGORY.MISCELLANEOUS,
+      finalAmount: '0',
+      paymentStatus: ADHOC_INVOICE_PAYMENT_STATUS.UNPAID,
+      notes: '',
+      includeInMonthly: false,
+      priority: ADHOC_INVOICE_PRIORITY.NORMAL,
+      status: ADHOC_INVOICE_STATUS.ACTIVE,
+    },
+    mode: 'onChange',
   })
+
+  const isButtonDisabled: boolean = useMemo(
+    () => isSubmitting || !form.formState.isDirty || !form.formState.isValid,
+    [isSubmitting, form.formState.isDirty, form.formState.isValid],
+  )
+
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -51,15 +82,23 @@ const InvoiceCreateForm = ({ onSubmit }: IInvoiceCreateFormProps) => {
                         render={({ field }) => (
                           <div className="space-y-1">
                             <p>{item.label}</p>
-                            <Select onValueChange={field.onChange} defaultValue={field.value?.toString() || ''}>
-                              <SelectTrigger>
+                            <Select
+                              onValueChange={(val) => {
+                                if (val === 'true') field.onChange(true)
+                                else if (val === 'false') field.onChange(false)
+                                else field.onChange(val)
+                              }}
+                              defaultValue={String(field.value ?? '')}
+                            >
+                              <SelectTrigger className="capitalize">
                                 <SelectValue placeholder={item.placeholder} />
                               </SelectTrigger>
                               <SelectContent>
                                 {item.options.map((fieldItem, index) => (
                                   <SelectItem
+                                    className="capitalize"
                                     key={'select-value' + fieldItem.value + index}
-                                    value={fieldItem.value.toString()}
+                                    value={String(fieldItem.value)}
                                   >
                                     {fieldItem.label}
                                   </SelectItem>
@@ -83,6 +122,7 @@ const InvoiceCreateForm = ({ onSubmit }: IInvoiceCreateFormProps) => {
                             {item.inputType === 'number' ? (
                               <InputNumber
                                 {...field}
+                                maxLength={9}
                                 value={field.value?.toString() || ''}
                                 placeholder={item.placeholder}
                               />
@@ -129,6 +169,11 @@ const InvoiceCreateForm = ({ onSubmit }: IInvoiceCreateFormProps) => {
                                       {...field}
                                       value={field.value?.toString() || ''}
                                       placeholder={fieldItem.placeholder}
+                                      onChange={(e) => {
+                                        const val = e.target.value
+                                        field.onChange(val === '' ? undefined : Number(val))
+                                      }}
+                                      maxLength={9}
                                     />
                                   ) : fieldItem.inputType === 'textarea' ? (
                                     <Textarea
@@ -155,11 +200,12 @@ const InvoiceCreateForm = ({ onSubmit }: IInvoiceCreateFormProps) => {
                                 ) : fieldItem.fieldType === 'select' ? (
                                   <Select onValueChange={field.onChange} defaultValue={field.value?.toString() || ''}>
                                     <SelectTrigger>
-                                      <SelectValue placeholder={fieldItem.placeholder} />
+                                      <SelectValue className="capitalize" placeholder={fieldItem.placeholder} />
                                     </SelectTrigger>
                                     <SelectContent>
                                       {fieldItem.options.map((fieldItem, index) => (
                                         <SelectItem
+                                          className="capitalize"
                                           key={'select-value' + fieldItem.value + index}
                                           value={fieldItem.value.toString()}
                                         >
@@ -181,10 +227,28 @@ const InvoiceCreateForm = ({ onSubmit }: IInvoiceCreateFormProps) => {
             </div>
           </Card>
         ))}
-
+        <Card className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
+          <div>
+            <h3>
+              Location <span className="text-theme-error">*</span>
+            </h3>
+            <p className="text-theme-secondary">Select the room for this adhoc invoice</p>
+          </div>
+          <FormField
+            control={form.control}
+            name="unitId"
+            render={({ field }) => (
+              <div className="space-y-1">
+                <SelectRoomModal onRoomSelect={field.onChange} selectedRoomId={field.value} />
+                <FormMessage />
+              </div>
+            )}
+          />
+        </Card>
         <div className="flex justify-end">
-          <Button type="submit" className="flex items-center gap-2">
-            <Plus /> Create a invoice
+          <Button type="submit" className="flex items-center gap-2" disabled={isButtonDisabled}>
+            {isSubmitting ? <Spinner /> : buttonLabel}
+            {buttonIcon}
           </Button>
         </div>
       </form>
