@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import type { NavigateFunction } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-import { PageHeader } from '@/components/layout'
+import { PageHeader, PageSection } from '@/components/layout'
 import { AllApartmentHeader, AllApartments, AllApartmentSearchBar } from '@/components/pages/AllApartments'
 import { DEFAULT_APARTMENT_LIST_DATA, ROUTES } from '@/constants'
 import { useRentoraApiApartmentList } from '@/hooks'
@@ -74,7 +74,7 @@ const AllApartmentPage = () => {
   }, [navigate])
 
   return (
-    <div className="container mx-auto space-y-4 px-4 py-4">
+    <PageSection middle>
       <PageHeader
         title="All Apartments"
         description="A quick overview of the apartments you manage."
@@ -101,7 +101,7 @@ const AllApartmentPage = () => {
       <p className="text-body-2 text-theme-secondary text-center">
         © 2025 Rentora. Simplifying property management for landlords everywhere.
       </p>
-    </div>
+    </PageSection>
   )
 }
 
