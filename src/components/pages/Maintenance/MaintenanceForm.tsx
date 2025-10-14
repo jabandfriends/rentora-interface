@@ -34,7 +34,7 @@ type IMaintenanceFormProps = {
   buttonIcon?: ReactNode
   onSubmit: (data: MAINTENANCE_FORM_SCHEMA_TYPE) => void | Promise<void>
   isSubmitting: boolean
-  defaultValues: Maybe<IMaintenanceDetail>
+  defaultValues?: Maybe<IMaintenanceDetail>
 }
 
 const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defaultValues }: IMaintenanceFormProps) => {
