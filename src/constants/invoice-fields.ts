@@ -59,6 +59,14 @@ export const AdhocInvoiceSchema = z
         path: ['finalAmount'],
       })
     }
+    //final amount should > 0
+    if (Number(data.finalAmount) <= 0) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Final amount must be greater than 0.',
+        path: ['finalAmount'],
+      })
+    }
   })
 
 export const INVOICE_FORM_FIELDS: Array<FORM_SECTION<INVOICE_FORM_FIELDS_TYPE>> = [

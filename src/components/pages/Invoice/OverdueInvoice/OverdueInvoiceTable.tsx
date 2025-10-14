@@ -4,6 +4,7 @@ import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { PaginationBar } from '@/components/feature'
 import {
   Badge,
+  FieldEmpty,
   PageTableEmpty,
   PageTableLoading,
   PageTableSearchEmpty,
@@ -16,6 +17,7 @@ import {
 } from '@/components/ui'
 import { OVERDUE_INVOICE_TABLE_HEADER, ROUTES } from '@/constants'
 import { type IOverdueInvoice, type IPaginate } from '@/types'
+import { formatCurrency } from '@/utilities'
 
 type IOverdueInvoiceTableProps = {
   data: Array<IOverdueInvoice>
@@ -70,12 +72,14 @@ const OverdueInvoiceTable = ({
           {/* RECHECK : API TYPE */}
           {data?.map((item: IOverdueInvoice, index) => (
             <TableRow className="cursor-pointer" key={index} onClick={() => handleDetailInvoice(item.id)}>
-              <TableCell>{item.invoiceNumber ? item.invoiceNumber : 'N/A'}</TableCell>
-              <TableCell>{item.tenant ? item.tenant : 'N/A'}</TableCell>
-              <TableCell>{item.room ? item.room : 'N/A'}</TableCell>
-              <TableCell>{item.amount ? item.amount : 'N/A'}</TableCell>
-              <TableCell>{item.issueDate ? item.issueDate : 'N/A'}</TableCell>
-              <TableCell>{item.dueDate ? item.dueDate : 'N/A'}</TableCell>
+              <TableCell className="text-theme-primary">
+                {item.invoiceNumber ? item.invoiceNumber : <FieldEmpty />}
+              </TableCell>
+              <TableCell>{item.tenant ? item.tenant : <FieldEmpty />}</TableCell>
+              <TableCell>{item.room ? item.room : <FieldEmpty />}</TableCell>
+              <TableCell>{item.amount ? formatCurrency(item.amount) : <FieldEmpty />}</TableCell>
+              <TableCell>{item.issueDate ? item.issueDate : <FieldEmpty />}</TableCell>
+              <TableCell>{item.dueDate ? item.dueDate : <FieldEmpty />}</TableCell>
               <TableCell className="capitalize">
                 <Badge variant="error">{item.status}</Badge>
               </TableCell>

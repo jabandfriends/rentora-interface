@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMemo } from 'react'
+import { type ReactNode, useMemo } from 'react'
 import { useForm, type UseFormReturn } from 'react-hook-form'
 
 import {
@@ -26,12 +26,12 @@ import {
   ADHOC_INVOICE_PAYMENT_STATUS,
   ADHOC_INVOICE_PRIORITY,
   ADHOC_INVOICE_STATUS,
-} from '@/enum/adhocInvoice'
+} from '@/enum'
 import { type ADHOC_INVOICE_FORM_SCHEMA_TYPE } from '@/types'
 
 type IInvoiceCreateFormProps = {
   buttonLabel: string
-  buttonIcon?: React.ReactNode
+  buttonIcon?: ReactNode
   onSubmit: (data: ADHOC_INVOICE_FORM_SCHEMA_TYPE) => void | Promise<void>
   isSubmitting?: boolean
 }

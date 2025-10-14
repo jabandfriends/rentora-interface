@@ -32,11 +32,12 @@ const InvoiceCreatePage = () => {
         status: data.status,
       }
       try {
-        await createAdhocInvoice({ apartmentId: apartmentId ?? '', payload })
+        if (!apartmentId) throw new Error('Apartment ID is required')
+        await createAdhocInvoice({ apartmentId: apartmentId, payload })
         toast.success('Create Adhoc Invoice successfully')
 
         setTimeout(() => {
-          navigate(ROUTES.normalInvoice.getPath(apartmentId ?? ''))
+          navigate(ROUTES.normalInvoice.getPath(apartmentId))
         }, 500)
       } catch (e) {
         toast.error(getErrorMessage(e))
