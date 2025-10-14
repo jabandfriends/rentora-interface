@@ -35,8 +35,8 @@ const RoomDetailBody = () => {
   }
 
   //api
-  const removeService = (id: number) => {
-    setServices((prevServices) => prevServices.filter((service) => service.id !== id))
+  const removeService = (id: string) => {
+    setServices((prevServices) => prevServices.filter((service) => Number(service.id) !== Number(id)))
   }
 
   return (

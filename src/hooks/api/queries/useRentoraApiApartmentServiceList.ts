@@ -8,14 +8,15 @@ import type {
   IUseRentoraApiApartmentServices,
 } from '@/types'
 
-export const useRentoraApartmentServices = (
+export const useRentoraApiApartmentServiceList = (
   props: IRentoraApiApartmentServiceParams,
 ): IUseRentoraApiApartmentServices => {
-  const rentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
+  const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
 
   return useQuery<IRentoraApiClientApartmentServiceResponse['data']>({
     queryKey: [rentoraApiQueryClient.key.apartmentServicesList, props.apartmentId, props.unitId],
-    queryFn: async () => await rentoraApiQueryClient.apartmentServicesList(props.apartmentId, props.unitId),
+    queryFn: () => rentoraApiQueryClient.apartmentServicesList(props.apartmentId, props.unitId),
+    retry: 1,
     enabled: !!props.apartmentId && !!props.unitId,
   })
 }

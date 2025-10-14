@@ -1,5 +1,6 @@
 export * from './useRentoraApiAuthenticate'
 export * from './useRentoraApiCreateApartment'
+export * from './useRentoraApiCreateApartmentService'
 export * from './useRentoraApiCreateContract'
 export * from './useRentoraApiCreateContract'
 export * from './useRentoraApiCreateMaintenance'
