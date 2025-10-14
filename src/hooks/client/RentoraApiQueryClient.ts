@@ -13,6 +13,7 @@ import type {
   IRentoraApiClientInvoiceListResponse,
   IRentoraApiClientMaintenanceDetailResponse,
   IRentoraApiClientMaintenanceListResponse,
+  IRentoraApiClientMonthlyInvoiceDetailResponse,
   IRentoraApiClientOverdueInvoiceListResponse,
   IRentoraApiClientReadingUnitUtilityResponse,
   IRentoraApiClientReportUtilityListResponse,
@@ -61,6 +62,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     unitUtilityAvailableMonth: 'UNIT_UTILITY_AVAILABLE_MONTH',
     unitWithUtility: 'UNIT_WITH_UTILITY',
     allUnitMonthlyInvoiceStatus: 'ALL_UNIT_MONTHLY_INVOICE_STATUS',
+    monthlyInvoiceDetail: 'MONTHLY_INVOICE_DETAIL',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -276,6 +278,16 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
       {
         params,
       },
+    )
+    return response.data.data
+  }
+
+  //get monthly invoice detail
+  async monthlyInvoiceDetail(
+    invoiceNumber: Maybe<string>,
+  ): Promise<IRentoraApiClientMonthlyInvoiceDetailResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientMonthlyInvoiceDetailResponse>(
+      `/api/monthly/invoices/detail/${invoiceNumber}`,
     )
     return response.data.data
   }
