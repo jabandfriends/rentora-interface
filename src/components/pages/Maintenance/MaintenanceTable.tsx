@@ -1,28 +1,29 @@
-import { PackageOpen } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
 
 import { PaginationBar } from '@/components/feature'
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/feature/AlertDialog'
-import { TenantTableLoading } from '@/components/pages/Tenant'
-import { Badge, FieldEmpty, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+  Badge,
+  FieldEmpty,
+  PageTableEmpty,
+  PageTableLoading,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui'
 import { MAINTENANCE_TABLE_HEADER, ROUTES } from '@/constants'
 import { MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiDeleteMaintenance } from '@/hooks/api/execute/useRentoraApiDeleteMaintenance'
-import type { IMaintenance } from '@/types'
-import { formatDate } from '@/utilities'
+import type { IMaintenance, Maybe } from '@/types'
+import { formatDate, getErrorMessage } from '@/utilities'
 
 import { MaintenanceAction } from '.'
+import MaintenanceDeleteAlert from './MaintenanceDeleteAlert'
 
 type IMaintenanceTableProps = {
   data: Array<IMaintenance>
@@ -44,12 +45,13 @@ const MaintenanceTable = ({
 }: IMaintenanceTableProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const navigate: NavigateFunction = useNavigate()
-  const deleteMaintenance = useRentoraApiDeleteMaintenance()
 
-  const [isAlertOpen, setIsAlertOpen] = useState(false)
-  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
+  //delete maintenance api
+  const { mutateAsync: deleteMaintenance } = useRentoraApiDeleteMaintenance()
 
-  const [rows, setRows] = useState<Array<IMaintenance>>(data)
+  const [isAlertOpen, setIsAlertOpen]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
+  const [pendingDeleteId, setPendingDeleteId]: [Maybe<string>, Dispatch<SetStateAction<Maybe<string>>>] =
+    useState<Maybe<string>>(null)
 
   const handleRowClick = useCallback(
     (id: string) => {
@@ -58,44 +60,21 @@ const MaintenanceTable = ({
     [navigate, apartmentId],
   )
 
-  // keep local rows in sync when props.data changes (e.g., page change or refetch)
-  useEffect(() => {
-    setRows(data)
-  }, [data])
-
   const handleRequestDelete = useCallback((id: string) => {
     setPendingDeleteId(id)
     setIsAlertOpen(true)
   }, [])
 
-  const handleConfirmDelete = useCallback(() => {
-    if (!apartmentId || !pendingDeleteId) return
+  const handleConfirmDelete = useCallback(async () => {
+    if (!apartmentId || !pendingDeleteId) return toast.error('Something went wrong')
 
-    // Optimistically remove the row from UI
-    setRows((prev) => prev.filter((r) => r.id !== pendingDeleteId))
-
-    deleteMaintenance.mutate(
-      { apartmentId, maintenanceId: pendingDeleteId },
-      {
-        onSuccess: () => {
-          // Close dialog and clear selection
-          setIsAlertOpen(false)
-          setPendingDeleteId(null)
-        },
-        onError: () => {
-          // Revert UI if delete failed
-          setRows(data)
-          setIsAlertOpen(false)
-          setPendingDeleteId(null)
-        },
-      },
-    )
-  }, [apartmentId, pendingDeleteId, deleteMaintenance, data])
-
-  const handleCancelDelete = useCallback(() => {
-    setIsAlertOpen(false)
-    setPendingDeleteId(null)
-  }, [])
+    try {
+      await deleteMaintenance({ apartmentId, maintenanceId: pendingDeleteId })
+      toast.success('Maintenance deleted successfully')
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
+  }, [apartmentId, pendingDeleteId, deleteMaintenance])
 
   const handleUpdateMaintenance = useCallback(
     (id: string) => {
@@ -134,20 +113,20 @@ const MaintenanceTable = ({
   }, [])
 
   if (isLoading) {
-    return <TenantTableLoading />
+    return <PageTableLoading />
   }
 
   if (!data || data.length === 0) {
-    return (
-      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
-        <PackageOpen size={50} />
-        <p className="text-theme-secondary text-body-1">No maintenance found</p>
-      </div>
-    )
+    return <PageTableEmpty message="No maintenances found" />
   }
 
   return (
     <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+      <MaintenanceDeleteAlert
+        isAlertOpen={isAlertOpen}
+        setIsAlertOpen={setIsAlertOpen}
+        handleConfirmDelete={handleConfirmDelete}
+      />
       <Table>
         <TableHeader>
           <TableRow>
@@ -157,8 +136,12 @@ const MaintenanceTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rows.map((item: IMaintenance) => (
-            <TableRow className="cursor-pointer" onClick={() => handleRowClick(item.id)} key={item.id}>
+          {data.map((item: IMaintenance) => (
+            <TableRow
+              className="cursor-pointer"
+              onClick={() => handleRowClick(item.id)}
+              key={item.id + item.ticketNumber}
+            >
               <TableCell>{item.ticketNumber}</TableCell>
               <TableCell>{item.title}</TableCell>
               <TableCell>{item.unitName}</TableCell>
@@ -173,36 +156,12 @@ const MaintenanceTable = ({
               <TableCell className="capitalize">
                 <Badge variant={statusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
-              <TableCell
-                onClick={(e) => e.stopPropagation()}
-                onMouseDown={(e) => e.stopPropagation()}
-                onDoubleClick={(e) => e.stopPropagation()}
-              >
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onTouchStart={(e) => e.stopPropagation()}
-                >
-                  <MaintenanceAction
-                    maintenanceId={item.id}
-                    onUpdate={handleUpdateMaintenance}
-                    onDelete={() => handleRequestDelete(item.id)}
-                  />
-                  <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Are you sure you want to delete this maintenance item?
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel onClick={handleCancelDelete}>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleConfirmDelete}>Delete</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
+              <TableCell>
+                <MaintenanceAction
+                  maintenanceId={item.id}
+                  onUpdate={handleUpdateMaintenance}
+                  onDelete={() => handleRequestDelete(item.id)}
+                />
               </TableCell>
             </TableRow>
           ))}
@@ -210,7 +169,7 @@ const MaintenanceTable = ({
       </Table>
       <div className="flex items-center justify-between">
         <p className="text-theme-secondary text-body-2">
-          Showing {rows.length} of {totalElements} items
+          Showing {data.length} of {totalElements} items
         </p>
         <PaginationBar
           isLoading={isLoading}
