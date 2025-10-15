@@ -6,7 +6,7 @@ import { SearchBar } from '@/components/feature'
 
 type IReceiptReportSearchBarProps = {
   onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
-  onSortChange?: (value: string) => void
+  onSortChange: (value: string) => void
   sortEnum?: Record<string, string>
 }
 

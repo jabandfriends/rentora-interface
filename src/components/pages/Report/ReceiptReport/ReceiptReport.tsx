@@ -21,11 +21,13 @@ const ReceiptReport = () => {
   const { watch, setValue } = useForm({
     defaultValues: {
       search: '',
+      sortDir: '',
     },
   })
 
-  const [search]: [string] = watch(['search'])
+  const [search, sortDir]: [string, string] = watch(['search', 'sortDir'])
   const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSortDir = useDebounce(sortDir ? sortDir : undefined, 500)
   //data
   const {
     data: receiptReportList,
@@ -37,6 +39,7 @@ const ReceiptReport = () => {
     params: {
       page: currentPage,
       search: debouncedSearch,
+      sortDir: debouncedSortDir,
       size: DEFAULT_REPORT_RECEIPT_LIST_DATA.size,
     },
   })
@@ -86,6 +89,14 @@ const ReceiptReport = () => {
     [setCurrentPage],
   )
 
+  const handleSortChange = useCallback(
+    (value: string) => {
+      setValue('sortDir', value)
+      setCurrentPage(DEFAULT_REPORT_RECEIPT_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
+
   const isSearched: boolean = useMemo(() => {
     return !!debouncedSearch
   }, [debouncedSearch])
@@ -98,7 +109,11 @@ const ReceiptReport = () => {
         description="Manage and view all customer receipt"
         stats={receiptReportStats}
       />
-      <ReceiptReportSearchBar onSearchChange={handleSearchChange} sortEnum={{ Ascending: 'asc', Descending: 'desc' }} />
+      <ReceiptReportSearchBar
+        onSearchChange={handleSearchChange}
+        sortEnum={{ Ascending: 'asc', Descending: 'desc' }}
+        onSortChange={handleSortChange}
+      />
       <ReceiptReportTable
         data={receiptReportList}
         isLoading={isLoadingReceiptReport}
