@@ -1,6 +1,5 @@
 import type {
   IApartmentListMetadata,
-  IReportReceiptListMetadata,
   IReportRoomListMetadata,
   IReportUtilityListMetadata,
   ITenantListMetadata,
@@ -39,11 +38,4 @@ export const DEFAULT_REPORT_ROOM_LIST_METADATA: IReportRoomListMetadata = {
   totalRooms: 0,
   availableRooms: 0,
   unavailableRooms: 0,
-}
-
-export const DEFAULT_REPORT_RECEIPT_LIST_METADATA: IReportReceiptListMetadata = {
-  totalBill: 0,
-  receiptPaid: 0,
-  receiptUnpaid: 0,
-  receiptOverdue: 0,
 }

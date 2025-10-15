@@ -24,8 +24,6 @@ import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
 import MaintenanceUpdate from '@/pages/Maintenance/MaintenanceUpdate'
 import OverviewPage from '@/pages/Overview'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
-import ReceiptReport from '@/pages/Report/ReceiptReport'
-import RoomReport from '@/pages/Report/RoomReport'
 import TenantPage from '@/pages/Tenant/Tenant'
 import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
@@ -220,14 +218,6 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.allRoom.path,
         element: <AllRoomsPage />,
-      },
-      {
-        path: ROUTES.roomReport.path,
-        element: <RoomReport />,
-      },
-      {
-        path: ROUTES.receiptReport.path,
-        element: <ReceiptReport />,
       },
       {
         path: ROUTES.electricWaterReport.path,

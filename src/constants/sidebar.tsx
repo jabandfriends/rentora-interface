@@ -21,8 +21,6 @@ export const getSidebarItems = (
   ]
   // sidebar reports
   const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [
-    { label: 'Room Report', to: ROUTES.roomReport.getPath(apartmentId) },
-    { label: 'Receipt Report', to: ROUTES.receiptReport.getPath(apartmentId) },
     { label: 'Electric & Water Report', to: ROUTES.electricWaterReport.getPath(apartmentId) },
   ]
 
