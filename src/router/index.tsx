@@ -10,6 +10,7 @@ import ApartmentCreatePage from '@/pages/ApartmentCreate'
 import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication/Authentication'
 import FirstTimePasswordResetPage from '@/pages/Authentication/FirstTimePasswordReset'
+import ContractCreate from '@/pages/ContractCreate'
 import InvoiceCreatePage from '@/pages/Invoice/InvoiceCreate'
 import InvoiceDetailPage from '@/pages/Invoice/InvoiceDetail'
 import MonthlyInvoicePage from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoice'
@@ -22,8 +23,12 @@ import MaintenanceCreate from '@/pages/Maintenance/MaintenanceCreate'
 import MaintenanceDetailPage from '@/pages/Maintenance/MaintenanceDetailPage'
 import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
 import MaintenanceUpdate from '@/pages/Maintenance/MaintenanceUpdate'
+import MeterReadingCreatePage from '@/pages/MeterReading/MeterReadingCreatePage'
+import MeterReadingListPage from '@/pages/MeterReading/MeterReadingListPage'
 import OverviewPage from '@/pages/Overview'
+import PageNotFound from '@/pages/PageNotFound'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
+import RoomDetail from '@/pages/RoomDetail'
 import TenantPage from '@/pages/Tenant/Tenant'
 import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
@@ -88,6 +93,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         index: true,
         element: <Authentication />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
   {
@@ -104,6 +113,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         path: ROUTES.firstTimePasswordReset.path,
         element: <FirstTimePasswordResetPage />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
   {
@@ -119,6 +132,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         index: true,
         element: <AllApartmentPage />,
+      },
+      {
+        path: '*',
+        element: <PageNotFound />,
       },
     ],
   },
@@ -145,6 +162,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         index: true,
         element: <ApartmentSetup />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
   {
@@ -160,6 +181,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.apartmentCreate.path,
         element: <ApartmentCreatePage />,
+      },
+      {
+        path: '*',
+        element: <PageNotFound />,
       },
     ],
   },
@@ -220,6 +245,11 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <AllRoomsPage />,
       },
       {
+        path: ROUTES.roomDetail.path,
+        element: <RoomDetail />,
+      },
+
+      {
         path: ROUTES.electricWaterReport.path,
         element: <ElectricWaterReportPage />,
       },
@@ -258,6 +288,22 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.invoiceDetail.path,
         element: <InvoiceDetailPage />,
+      },
+      {
+        path: ROUTES.contractCreate.path,
+        element: <ContractCreate />,
+      },
+      {
+        path: ROUTES.meterReadingList.path,
+        element: <MeterReadingListPage />,
+      },
+      {
+        path: ROUTES.meterReadingCreate.path,
+        element: <MeterReadingCreatePage />,
+      },
+      {
+        path: '*',
+        element: <PageNotFound />,
       },
     ],
   },

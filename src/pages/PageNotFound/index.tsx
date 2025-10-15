@@ -1,0 +1,55 @@
+import type { SetStateAction } from 'jotai'
+import { FolderX, Home } from 'lucide-react'
+import { type Dispatch, useCallback, useEffect, useState } from 'react'
+import { type NavigateFunction, useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/common'
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/feature'
+import { ROUTES } from '@/constants'
+
+const PageNotFound = () => {
+  const navigate: NavigateFunction = useNavigate()
+  const [countdown, setCountdown]: [number, Dispatch<SetStateAction<number>>] = useState(10)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown((prev) => prev - 1)
+    }, 1000)
+
+    const timer = setTimeout(() => {
+      navigate(ROUTES.allApartment.path)
+    }, 10000)
+
+    // cleanup timers when component unmounts
+    return () => {
+      clearInterval(interval)
+      clearTimeout(timer)
+    }
+  }, [navigate])
+
+  const handleNavigate = useCallback(() => {
+    navigate(ROUTES.allApartment.path)
+  }, [navigate])
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <FolderX />
+        </EmptyMedia>
+        <EmptyTitle>404 - Not Found</EmptyTitle>
+        <EmptyDescription>
+          The page you&apos;re looking for doesn&apos;t exist. Redirecting to the home page in{' '}
+          <strong>{countdown}</strong> seconds... <br />
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <Button className="flex items-center gap-x-2" size="sm" onClick={handleNavigate}>
+          <Home size={16} />
+          Take Me Home
+        </Button>
+      </EmptyContent>
+    </Empty>
+  )
+}
+
+export default PageNotFound

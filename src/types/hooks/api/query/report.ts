@@ -11,11 +11,18 @@ export type IReportUtilityListParams = {
 
 export type IReportUtility = {
   roomName: string
+  buildingName: string
   tenantName: string
   electricUsage: number
   electricCost: number
   waterUsage: number
   waterCost: number
+  waterMeterStart: number
+  waterMeterEnd: number
+  waterUnitUtilityId: string
+  electricMeterStart: number
+  electricMeterEnd: number
+  electricUnitUtilityId: string
 }
 
 export type IReportRoom = {
@@ -82,6 +89,7 @@ export type IRentoraApiReportUtilityListParams = {
   sortBy?: string
   sortDir?: string
   readingDate?: string
+  buildingName?: string
 }
 export type IRentoraApiReportRoomListParams = {
   page?: number

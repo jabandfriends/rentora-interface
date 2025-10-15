@@ -140,6 +140,7 @@ export const Tenant = () => {
         title="Tenants Management"
         description="Manage and view all tenants"
         stats={tenantStats}
+        isLoading={isLoading}
         actionButton={
           <Button onClick={navigateToCreateTenant} className="flex items-center gap-2">
             <Plus size={18} /> New Tenant
@@ -147,8 +148,6 @@ export const Tenant = () => {
         }
       />
       <PageTableSearch
-        selectedStatus={watch('status')}
-        selectedSort={watch('sortBy')}
         statusEnum={TENANT_STATUS}
         sortEnum={TENANT_SORT}
         onSearchChange={handleSearchChange}

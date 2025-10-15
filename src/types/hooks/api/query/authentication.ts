@@ -1,4 +1,4 @@
-import type { IRentoraApiClientBaseResponse, Maybe } from '@/types'
+import type { IBaseUseQuery, IRentoraApiClientBaseResponse, Maybe } from '@/types'
 
 export type IUser = {
   id: string
@@ -12,3 +12,6 @@ export type IUser = {
 }
 
 export type IRentoraApiClientUserResponse = IRentoraApiClientBaseResponse<IUser>
+
+//hook
+export type IUseRentoraApiClientUserResponse = IBaseUseQuery<IRentoraApiClientUserResponse['data']>

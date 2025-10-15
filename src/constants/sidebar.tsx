@@ -1,4 +1,4 @@
-import { BookUser, FileSpreadsheet, FileText, Home, Settings, Table, Wrench } from 'lucide-react'
+import { BookUser, FileSpreadsheet, FileText, Home, Settings, Table, Wrench, Zap } from 'lucide-react'
 
 import { ROUTES } from '@/constants'
 import type { Maybe, SidebarMenu, SidebarNavMenu } from '@/types'
@@ -15,6 +15,11 @@ export const getSidebarItems = (
   // sidebar all rooms
   const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
     { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.getPath(apartmentId) },
+  ]
+
+  // sidebar meter reading
+  const SIDEBAR_METER_READING: Array<SidebarMenu> = [
+    { icon: <Zap size={16} />, label: 'Meter Reading', to: ROUTES.meterReadingList.getPath(apartmentId) },
   ]
   const SIDEBAR_TENANTS_MANAGEMENT: Array<SidebarMenu> = [
     { icon: <BookUser size={16} />, label: 'Tenants Management', to: ROUTES.tenant.getPath(apartmentId) },
@@ -60,6 +65,7 @@ export const getSidebarItems = (
         icon: <Home size={16} />,
         menu: SIDEBAR_ITEMS,
       },
+
       {
         type: 'collapsible',
         title: 'Invoices',
@@ -71,6 +77,11 @@ export const getSidebarItems = (
         title: 'All Room',
         icon: <Table size={16} />,
         menu: SIDEBAR_ALL_ROOMS,
+      },
+      {
+        type: 'item',
+        icon: <Table size={16} />,
+        menu: SIDEBAR_METER_READING,
       },
       {
         type: 'collapsible',

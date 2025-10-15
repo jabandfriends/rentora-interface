@@ -1,7 +1,8 @@
 import { useCallback, useRef, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
-import { useDeviceWatcher } from '@/hooks'
+import { Spinner } from '@/components/common'
+import { useDeviceWatcher, useRentoraApiUser } from '@/hooks'
 
 import NavBar from './Navbar'
 import { OutletWrapper } from './OutletWrapper'
@@ -15,6 +16,7 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const toggleRef = useRef(false)
 
+  const { data: userData, isLoading } = useRentoraApiUser()
   const setSidebar = useCallback(() => {
     if (toggleRef.current) return
     toggleRef.current = true
@@ -25,11 +27,23 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
   }, [])
 
   useDeviceWatcher()
+  if (isLoading) {
+    return (
+      <div className="bg-page flex h-screen w-full items-center justify-center">
+        <Spinner />
+      </div>
+    )
+  }
+
   return (
     <div className="relative min-h-screen">
-      <>{isNavbar && <NavBar sidebarOpen={sidebarOpen} onSidebarToggle={setSidebar} isSidebar={isSidebar} />}</>
+      <>
+        {isNavbar && (
+          <NavBar userData={userData} sidebarOpen={sidebarOpen} onSidebarToggle={setSidebar} isSidebar={isSidebar} />
+        )}
+      </>
       <OutletWrapper>
-        {isSidebar && <Sidebar className="h-full" isOpen={sidebarOpen} onClose={setSidebar} />}
+        {isSidebar && <Sidebar userData={userData} className="h-full" isOpen={sidebarOpen} onClose={setSidebar} />}
         <Outlet />
       </OutletWrapper>
     </div>
