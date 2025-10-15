@@ -4,6 +4,7 @@ import { Layout } from '@/components/layout'
 import { RENTORA_API_BASE_URL } from '@/config'
 import { ROUTES } from '@/constants'
 import { RentoraApiQueryClient } from '@/hooks'
+import AccountSettingsPage from '@/pages/AccountSetting/AccountUpdate'
 import AllApartmentPage from '@/pages/AllApartments'
 import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
@@ -134,6 +135,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         index: true,
         element: <AllApartmentPage />,
+      },
+      {
+        path: ROUTES.accountSettings.path,
+        element: <AccountSettingsPage />,
       },
       {
         path: '*',

@@ -40,3 +40,4 @@ export type RentoraApiExecuteClientKey =
   | 'createMeterReading'
   | 'updateMeterReading'
   | 'generateMonthlyInvoice'
+  | 'updateUser'
