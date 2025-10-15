@@ -27,8 +27,6 @@ export const ROUTES: IRoutes = {
   overdueInvoice: apartmentRoute('/overdue-invoice'),
   overview: apartmentRoute('/overview'),
   allRoom: apartmentRoute('/all-room'),
-  roomReport: apartmentRoute('/report/room'),
-  receiptReport: apartmentRoute('/report/receipt'),
   electricWaterReport: apartmentRoute('/report/electric-water'),
   serviceInvoice: apartmentRoute('/service-invoice'),
   monthlyInvoiceCreate: apartmentRoute('/monthly-invoice/create'),

@@ -34,7 +34,6 @@ export const ROOM_REPORT_TABLE_HEADER: Array<string> = [
   'Due Date',
   'Check-out Date',
   'Status',
-  'Action',
 ]
 
 //room report table data
@@ -131,5 +130,4 @@ export const RECEIPT_REPORT_TABLE_HEADER: Array<string> = [
   'Issue Date',
   'Due Date',
   'Status',
-  'Action',
 ]
