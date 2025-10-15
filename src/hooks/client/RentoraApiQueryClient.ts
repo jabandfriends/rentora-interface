@@ -16,8 +16,6 @@ import type {
   IRentoraApiClientMonthlyInvoiceDetailResponse,
   IRentoraApiClientOverdueInvoiceListResponse,
   IRentoraApiClientReadingUnitUtilityResponse,
-  IRentoraApiClientReportReceiptListResponse,
-  IRentoraApiClientReportRoomListResponse,
   IRentoraApiClientReportUtilityListResponse,
   IRentoraApiClientTenantDetailResponse,
   IRentoraApiClientTenantListResponse,
