@@ -25,37 +25,15 @@ export type IReportUtility = {
   electricUnitUtilityId: string
 }
 
-export type IReportRoom = {
-  id: string | null
-  roomName: string
-  tenantName: string | null
-  reservedName: string | null
-  totalAmount: number | null
-  issueDate: string | null
-  dueDate: string | null
-  checkoutDate: string | null
-  status: string
-  currentContractId: string | null
-  currentTenantId: string | null
-  currentTenantName: string | null
-  currentTenantEmail: string | null
-  currentRentalPrice: number | null
-}
-
 //hook type
 export type IUseRentoraApiReportUtilityList = IBasePaginateQueryResult<
   IRentoraApiClientReportUtilityListResponse['data']
 >
-export type IUseRentoraApiReportRoomList = IBasePaginateQueryResult<IRentoraApiClientReportRoomListResponse['data']>
 
 //reponse
 export type IRentoraApiClientReportUtilityListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
   IReportUtility,
   IReportUtilityListMetadata
->
-export type IRentoraApiClientReportRoomListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
-  IReportRoom,
-  IReportRoomListMetadata
 >
 
 //metadata
@@ -67,20 +45,7 @@ export type IReportUtilityListMetadata = {
   waterUsagePrices: number
   totalAmount: number
 }
-export type IReportRoomListMetadata = {
-  totalRooms: number
-  availableRooms: number
-  unavailableRooms: number
-}
 
-export type IReportReceiptListMetadata = {
-  overdueBills: number
-  paidBills: number
-  totalBill: number
-  receiptPaid: number
-  receiptUnpaid: number
-  receiptOverdue: number
-}
 //params
 export type IRentoraApiReportUtilityListParams = {
   page?: number
@@ -90,13 +55,6 @@ export type IRentoraApiReportUtilityListParams = {
   sortDir?: string
   readingDate?: string
   buildingName?: string
-}
-export type IRentoraApiReportRoomListParams = {
-  page?: number
-  size?: number
-  sortBy?: string
-  sortDir?: string
-  search?: string
 }
 
 export type IReadingUnitUtility = {
@@ -110,41 +68,3 @@ export type IRentoraApiClientReadingUnitUtilityResponse = IRentoraApiClientBaseR
 
 //hook
 export type IUseRentoraApiReadingUnitUtility = IBaseUseQuery<IRentoraApiClientReadingUnitUtilityResponse['data']>
-
-//hook
-export type IUseRentoraApiReportReceiptList = IBasePaginateQueryResult<
-  IRentoraApiClientReportReceiptListResponse['data']
->
-
-export type IReportReceipt = {
-  id: string
-  adhocNumber: string
-  apartmentId: string
-  unitId: string
-  tenantUserId: string
-  title: string
-  description: string
-  category: string
-  finalAmount: number
-  paidAmount: number
-  invoiceDate: string
-  dueDate: string
-  paymentStatus: string
-  createdAt: string
-  updatedAt: string
-}
-
-//response
-export type IRentoraApiClientReportReceiptListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
-  IReportReceipt,
-  IReportReceiptListMetadata
->
-
-//param
-export type IRentoraApiReportReceiptListParams = {
-  page?: number
-  size?: number
-  sortBy?: string
-  sortDir?: string
-  search?: string
-}
