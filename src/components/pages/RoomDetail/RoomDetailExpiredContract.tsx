@@ -8,17 +8,17 @@ import { useRentoraApiContractList } from '@/hooks'
 
 import RoomDetailContractTable from './RoomDetailContractTable'
 
-const RoomDetailOutStandingContract = () => {
+const RoomDetailExpiredContract = () => {
   const { apartmentId, unitId } = useParams<{ apartmentId: string; unitId: string }>()
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
     DEFAULT_CONTRACT_LIST_DATA.page,
   )
   const {
-    data: terminatedContracts,
+    data: expiredContracts,
     pagination: { totalPages, totalElements },
-    isLoading: isLoadingTerminatedContracts,
+    isLoading: isLoadingExpiredContracts,
   } = useRentoraApiContractList(apartmentId, {
-    contractStatus: CONTRACT_STATUS.TERMINATED,
+    contractStatus: CONTRACT_STATUS.EXPIRED,
     unitId,
     page: currentPage,
     size: DEFAULT_CONTRACT_LIST_DATA.size,
@@ -34,14 +34,14 @@ const RoomDetailOutStandingContract = () => {
       <div className="border-theme-secondary-400 border-b pb-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3>Terminated Contract Contracts</h3>
+            <h3>Expired Contract Contracts</h3>
             <p className="text-body-2 text-theme-secondary-600">Track pending contract transitions</p>
           </div>
         </div>
       </div>
       <RoomDetailContractTable
-        isLoading={isLoadingTerminatedContracts}
-        contracts={terminatedContracts}
+        isLoading={isLoadingExpiredContracts}
+        contracts={expiredContracts}
         totalElements={totalElements}
         currentPage={currentPage}
         totalPages={totalPages}
@@ -51,4 +51,4 @@ const RoomDetailOutStandingContract = () => {
   )
 }
 
-export default RoomDetailOutStandingContract
+export default RoomDetailExpiredContract

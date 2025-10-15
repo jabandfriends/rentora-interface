@@ -5,8 +5,8 @@ import { ContractDetail, ContractDetailLoading } from '@/components/pages/RoomDe
 import { useRentoraApiContractDetail } from '@/hooks'
 
 import RoomDetailContract from './RoomDetailContract'
+import RoomDetailExpiredContract from './RoomDetailExpiredContract'
 import RoomDetailOutStandingContract from './RoomDetailOutStandingContract'
-import RoomDetailReservationList from './RoomDetailReservationList'
 import RoomDetailServices from './RoomDetailServices'
 
 const RoomDetailBody = () => {
@@ -63,7 +63,7 @@ const RoomDetailBody = () => {
       </div>
 
       <RoomDetailOutStandingContract />
-      <RoomDetailReservationList />
+      <RoomDetailExpiredContract />
     </>
   )
 }
