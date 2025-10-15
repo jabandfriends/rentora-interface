@@ -1,13 +1,14 @@
+import { useDebounce } from '@uidotdev/usehooks'
 import { AlertCircle, CheckCircle, DollarSign, XCircle } from 'lucide-react'
-import { type ChangeEvent, type Dispatch, type SetStateAction, useMemo, useState } from 'react'
+import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
-import { Button } from '@/components/common'
 import { ReceiptReportTable } from '@/components/pages/Report/ReceiptReport'
 import { PageTableHeader } from '@/components/ui'
 import { DEFAULT_REPORT_RECEIPT_LIST_DATA } from '@/constants'
 import { useRentoraApiReportReceipt } from '@/hooks'
-import type { IStatsCardProps } from '@/types'
+import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
 import ReceiptReportSearchBar from './ReceiptReportSearchBar'
 
@@ -16,21 +17,27 @@ const ReceiptReport = () => {
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
     DEFAULT_REPORT_RECEIPT_LIST_DATA.page,
   )
+
+  const { watch, setValue } = useForm({
+    defaultValues: {
+      search: '',
+    },
+  })
+
+  const [search]: [string] = watch(['search'])
+  const debouncedSearch = useDebounce(search ? search : undefined, 500)
   //data
   const {
     data: receiptReportList,
-    isLoading,
-    pagination,
-    metadata,
+    isLoading: isLoadingReceiptReport,
+    pagination: { totalPages, totalElements },
+    metadata: { totalBill, receiptPaid, receiptUnpaid, receiptOverdue },
   } = useRentoraApiReportReceipt({
-    enabled: !!apartmentId,
     apartmentId,
     params: {
       page: currentPage,
-      size: 10,
-      sortBy: 'invoiceDate',
-      sortDir: 'desc',
-      search: '',
+      search: debouncedSearch,
+      size: DEFAULT_REPORT_RECEIPT_LIST_DATA.size,
     },
   })
 
@@ -38,66 +45,68 @@ const ReceiptReport = () => {
     return [
       {
         title: 'Total Bills',
-        count: metadata?.totalBill ?? 0,
+        count: totalBill,
         icon: <DollarSign size={22} />,
         type: 'primary',
       },
       {
         title: 'Paid',
-        count: metadata?.receiptPaid ?? 0,
+        count: receiptPaid,
         icon: <CheckCircle size={22} />,
         type: 'success',
       },
       {
         title: 'Unpaid',
-        count: metadata?.receiptUnpaid ?? 0,
+        count: receiptUnpaid,
         icon: <XCircle size={22} />,
         type: 'error',
       },
       {
         title: 'Overdue',
-        count: metadata?.receiptOverdue ?? 0,
+        count: receiptOverdue,
         icon: <AlertCircle size={22} />,
         type: 'warning',
       },
     ]
-  }, [metadata])
+  }, [receiptPaid, receiptUnpaid, receiptOverdue, totalBill])
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function handleSearchChange(_e: ChangeEvent<HTMLInputElement>): void {
-    throw new Error('Function not implemented.')
-  }
-  function handleSortChange(value: string): void {
-    // eslint-disable-next-line no-console
-    console.log('Sort changed:', value)
-  }
+  const handleSearchChange: ISearchBarProps['onChange'] = useCallback(
+    ({ target: { value } }: Parameters<ISearchBarProps['onChange']>[0]) => {
+      setValue('search', value)
+      setCurrentPage(DEFAULT_REPORT_RECEIPT_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      if (page < 1) return
+      setCurrentPage(page)
+    },
+    [setCurrentPage],
+  )
+
+  const isSearched: boolean = useMemo(() => {
+    return !!debouncedSearch
+  }, [debouncedSearch])
 
   return (
     <>
       <PageTableHeader
         title="Receipt Report"
+        isLoading={isLoadingReceiptReport}
         description="Manage and view all customer receipt"
         stats={receiptReportStats}
-        actionButton={
-          <Button className="flex items-center gap-2">
-            {/* You may want to use an icon here, e.g. DollarSign or Plus */}
-            <DollarSign size={18} /> New Receipt
-          </Button>
-        }
       />
-      <ReceiptReportSearchBar
-        onSearchChange={handleSearchChange}
-        onSortChange={handleSortChange}
-        sortEnum={{ Ascending: 'asc', Descending: 'desc' }}
-      />
+      <ReceiptReportSearchBar onSearchChange={handleSearchChange} sortEnum={{ Ascending: 'asc', Descending: 'desc' }} />
       <ReceiptReportTable
-        data={receiptReportList ?? []}
-        isLoading={isLoading}
-        isSearched={false}
-        currentPage={pagination?.page ?? 1}
-        totalPages={pagination?.totalPages ?? 0}
-        totalElements={pagination?.totalElements ?? 0}
-        onPageChange={(newPage) => setCurrentPage(newPage)}
+        data={receiptReportList}
+        isLoading={isLoadingReceiptReport}
+        isSearched={isSearched}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalElements={totalElements}
+        onPageChange={handlePageChange}
       />
     </>
   )
