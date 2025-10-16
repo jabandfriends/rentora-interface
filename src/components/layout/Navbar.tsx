@@ -34,6 +34,9 @@ const NavBar = ({
   const handleLogout = useCallback(() => {
     navigate(ROUTES.auth.path)
   }, [navigate])
+  const handleSetting = useCallback(() => {
+    navigate(ROUTES.accountSetting.path)
+  }, [navigate])
 
   return (
     <header className="bg-theme-white border-theme-night-600 sticky top-0 z-50 border-b shadow-sm">
@@ -83,7 +86,7 @@ const NavBar = ({
             <DropdownMenuItem>
               <User className="text-theme-secondary-400" /> Account
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSetting}>
               <Settings className="text-theme-secondary-400" /> Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />

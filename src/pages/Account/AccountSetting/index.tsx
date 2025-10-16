@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { PenLine } from 'lucide-react'
+import { ArrowLeft, PenLine } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate } from 'react-router-dom'
@@ -41,6 +41,8 @@ const AccountSettingsPage = () => {
     [updateUser, navigate],
   )
 
+  const navigateBefore = useCallback(() => navigate(-1), [navigate])
+
   if (!data || isLoading)
     return (
       <div className="bg-page flex h-screen w-full items-center justify-center">
@@ -50,7 +52,14 @@ const AccountSettingsPage = () => {
 
   return (
     <PageSection>
-      <PageHeader title="Account" description="Update your account." />
+      <PageHeader
+        title="Account"
+        description="Update your account."
+        isAction
+        actionLabel="Back"
+        actionIcon={<ArrowLeft />}
+        actionOnClick={navigateBefore}
+      />
       <AccountForm
         defaultValues={data}
         onSubmit={onSubmit}

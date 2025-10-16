@@ -137,7 +137,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <AllApartmentPage />,
       },
       {
-        path: ROUTES.accountSettings.path,
+        path: ROUTES.accountSetting.path,
         element: <AccountSettingsPage />,
       },
       {
