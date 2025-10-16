@@ -6,21 +6,27 @@ import type { VariantProps } from 'tailwind-variants'
 import { Button, Card, Spinner } from '@/components/common'
 import { Badge } from '@/components/ui'
 import { CONTRACT_STATUS } from '@/enum'
-import { type IContract } from '@/types'
+import { type IContract, type Maybe } from '@/types'
 import { contractHandlePDFDownload, formatCurrency, formatDate } from '@/utilities'
 
+import RoomDetailContract from '../RoomDetailContract'
+import ContractAction from './ContractAction'
+import ContractDetailLoading from './ContractDetailLoading'
 import InfoRow from './InfoRow'
 import Section from './Section'
 
 type IContractDetailProps = {
-  data: IContract
+  data: Maybe<IContract>
+  isLoading: boolean
+  handleOpenDeleteModal: () => void
 }
 
-const ContractDetail = ({ data }: IContractDetailProps) => {
+const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDetailProps) => {
   const [isCollapse, setIsCollapse]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
   const [isExporting, setIsExporting]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
+
   const contractStatusBadge: VariantProps<typeof Badge>['variant'] = useMemo(() => {
-    switch (data.status) {
+    switch (data?.status) {
       case CONTRACT_STATUS.ACTIVE:
         return 'success'
       case CONTRACT_STATUS.EXPIRED:
@@ -30,7 +36,7 @@ const ContractDetail = ({ data }: IContractDetailProps) => {
       default:
         return 'default'
     }
-  }, [data.status])
+  }, [data?.status])
 
   const buttonText: string = useMemo(() => {
     return isCollapse ? 'See less detail' : 'See more detail'
@@ -41,6 +47,9 @@ const ContractDetail = ({ data }: IContractDetailProps) => {
   }, [])
 
   const handleDownload = useCallback(async () => {
+    if (!data) {
+      return
+    }
     try {
       setIsExporting(true)
       await contractHandlePDFDownload(data)
@@ -53,9 +62,16 @@ const ContractDetail = ({ data }: IContractDetailProps) => {
     }
   }, [data])
 
+  if (isLoading) {
+    return <ContractDetailLoading />
+  }
+
+  if (!data) {
+    return <RoomDetailContract />
+  }
+
   return (
     <Card className="justify-start rounded-2xl shadow">
-      {/* Content - always visible and in DOM */}
       <div className="space-y-2">
         {/* Header */}
         <div className="border-theme-secondary-300 space-y-6 rounded-lg border p-6 shadow-sm">
@@ -66,7 +82,10 @@ const ContractDetail = ({ data }: IContractDetailProps) => {
                 Created by {data.createdByUserName} on {formatDate(new Date(data.createdAt))}
               </p>
             </div>
-            <Badge variant={contractStatusBadge}>{data.status.toUpperCase()}</Badge>
+            <div className="desktop:flex-col desktop:w-auto desktop:items-end flex w-full items-center justify-between gap-y-2">
+              <Badge variant={contractStatusBadge}>{data.status.toUpperCase()}</Badge>
+              <ContractAction handleOpenDeleteModal={handleOpenDeleteModal} />
+            </div>
           </div>
 
           {data.daysUntilExpiry <= 30 && data.daysUntilExpiry > 0 && (
