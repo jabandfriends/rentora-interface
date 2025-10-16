@@ -1,9 +1,11 @@
 import type { CONTRACT_RENTAL_TYPE, CONTRACT_STATUS } from '@/enum'
 import type {
   IBasePaginateQueryResult,
+  IBaseUseMutation,
   IBaseUseQuery,
   IRentoraApiClientBasePaginateResponse,
   IRentoraApiClientBaseResponse,
+  Maybe,
 } from '@/types'
 
 export type IContract = {
@@ -48,7 +50,7 @@ export type IContract = {
 //hook
 export type IUseRentoraApiContractDetail = IBaseUseQuery<IRentoraApiClientContractDetailResponse['data']>
 //reponse
-export type IRentoraApiClientContractDetailResponse = IRentoraApiClientBaseResponse<IContract>
+export type IRentoraApiClientContractDetailResponse = IRentoraApiClientBaseResponse<Maybe<IContract>>
 
 export type IContractSummary = {
   id: string
@@ -82,3 +84,15 @@ export type IRentoraApiClientContractListResponse = IRentoraApiClientBasePaginat
 
 //hook
 export type IUseRentoraApiContractList = IBasePaginateQueryResult<IRentoraApiClientContractListResponse['data']>
+
+export type ITerminateContractRequestPayload = {
+  terminationReason: string
+}
+
+export type IUseRentoraApiContractTerminate = IBaseUseMutation<void, ITerminateContractRequestPayload>
+
+//param
+export type IUseRentoraApiContractTerminateParams = {
+  apartmentId?: string
+  unitId?: string
+}

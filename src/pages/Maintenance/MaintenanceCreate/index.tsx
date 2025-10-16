@@ -29,6 +29,8 @@ const MaintenanceCreate = () => {
         category: data.category,
         estimatedCost: data.estimatedCost ? Number(data.estimatedCost) : 0,
         isEmergency: data.isEmergency,
+        isRecurring: data.isRecurring,
+        ...(data.isRecurring && data.recurringSchedule.trim() !== '' && { recurringSchedule: data.recurringSchedule }),
       }
       try {
         await createMaintenance({ apartmentId: apartmentId ?? '', payload })

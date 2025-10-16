@@ -19,6 +19,7 @@ import type {
   IRentoraApiClientDeleteMaintenanceResponse,
   IRentoraApiClientUpdateMaintenanceResponse,
   ISetupApartmentRequestPayload,
+  ITerminateContractRequestPayload,
   IUpdateMaintenanceRequestPayload,
   IUpdateTenantPasswordRequestPayload,
   IUpdateTenantRequestPayload,
@@ -45,6 +46,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createMeterReading: 'CREATE_METER_READING',
     updateMeterReading: 'UPDATE_METER_READING',
     generateMonthlyInvoice: 'GENERATE_MONTHLY_INVOICE',
+    terminateContract: 'TERMINATE_CONTRACT',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -175,6 +177,19 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   //generate monthly invoice
   async generateMonthlyInvoice(payload: IGenerateMonthlyInvoiceRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(`/api/monthly/invoices`, payload)
+    return response.data
+  }
+
+  //terminate contract
+  async terminateContract(
+    apartmentId: string,
+    roomNumber: string,
+    payload: ITerminateContractRequestPayload,
+  ): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(
+      `/api/apartments/${apartmentId}/contracts/${roomNumber}/terminate`,
+      payload,
+    )
     return response.data
   }
 }
