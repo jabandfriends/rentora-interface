@@ -38,16 +38,16 @@ export type IFirsttimePasswordResetRequestPayload = {
 }
 
 //payload
-export type IUpdateUserRequestPayload = {
-  id: string
+export type IUpdateUserRequestPayload = Partial<{
   firstName: string
   lastName: string
   email: string
   phoneNumber: string
-  profileImageUrl?: string
   birthDate: string
   nationalId: string
-}
+  emergencyContactName: string
+  emergencyContactPhone: string
+}>
 
 //hooks type useRentoraApiUpdateUser
 export type IUseRentoraApiUpdateUser = IBaseUseMutation<void, IUpdateUserRequestPayload>
