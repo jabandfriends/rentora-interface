@@ -20,3 +20,4 @@ export const DEFAULT_REPORT_UTILITY_LIST_DATA: IPaginate = {
   totalPages: 0,
   totalElements: 0,
 }
+export const DEFAULT_MONTHLY_INVOICE_DATA: IPaginate = DEFAULT_PAGINATION_DATA
