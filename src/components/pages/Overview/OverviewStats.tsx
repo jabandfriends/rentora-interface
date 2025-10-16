@@ -44,9 +44,6 @@ const OverviewStats = ({
         </CardHeader>
         <CardContent>
           <h4 className="font-bold">{monthlyRevenue ? formatCurrency(monthlyRevenue) : '฿0'}</h4>
-          {/* <p className="text-body-2 mt-1 flex items-center gap-1 text-theme-success-600">
-            <TrendingUp size={12} /> +12% from last month
-          </p> */}
         </CardContent>
       </Card>
 
@@ -57,7 +54,6 @@ const OverviewStats = ({
         </CardHeader>
         <CardContent>
           <h4 className="font-bold">{maintenanceRequests ? formatNumber(maintenanceRequests) : '0'}</h4>
-          <p className="text-body-2 text-theme-warning-600/60 mt-1 font-medium">4 require immediate attention</p>
         </CardContent>
       </Card>
 

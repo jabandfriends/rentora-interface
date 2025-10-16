@@ -1,25 +1,14 @@
 import { Calendar, Clock } from 'lucide-react'
 
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
-import { Badge } from '@/components/ui'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
+import { Badge, FieldEmpty, PageTableEmpty } from '@/components/ui'
+import type { IMaintenance } from '@/types'
+import { formatDate, getDateDiff, timeFromNow } from '@/utilities'
 
 type IOvUpcomingRecurringMaintenanceProps = {
-  maintenance: Array<{
-    unit: string
-    type: string
-    tenant: string
-    priority: string
-    daysUntil: number
-    dueDate: string
-    lastCompleted: string
-    recurring: string
-  }>
-  handleFilterPriority: (priority: string) => void
+  maintenance: Array<IMaintenance>
 }
-const OverviewUpcomingRecurringMaintenance = ({
-  maintenance,
-  handleFilterPriority,
-}: IOvUpcomingRecurringMaintenanceProps) => {
+const OverviewUpcomingRecurringMaintenance = ({ maintenance }: IOvUpcomingRecurringMaintenanceProps) => {
   const getPriorityVariant = (priority: string) => {
     switch (priority) {
       case 'high':
@@ -37,6 +26,23 @@ const OverviewUpcomingRecurringMaintenance = ({
     return 'text-theme-secondary-600'
   }
 
+  if (!maintenance || maintenance.length === 0)
+    return (
+      <Card className="justify-start rounded-2xl">
+        <CardHeader>
+          <div className="desktop:flex-row flex flex-col items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="size-5" />
+                Upcoming Recurring Maintenance
+              </CardTitle>
+              <CardDescription>Scheduled maintenance tasks for your units</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <PageTableEmpty message="No maintenance requests found" />
+      </Card>
+    )
   return (
     <Card className="justify-start rounded-2xl">
       <CardHeader>
@@ -47,17 +53,6 @@ const OverviewUpcomingRecurringMaintenance = ({
               Upcoming Recurring Maintenance
             </CardTitle>
             <CardDescription>Scheduled maintenance tasks for your units</CardDescription>
-          </div>
-          <div className="flex gap-2">
-            <Button size="sm" onClick={() => handleFilterPriority('all')}>
-              All
-            </Button>
-            <Button size="sm" onClick={() => handleFilterPriority('high')}>
-              High
-            </Button>
-            <Button size="sm" onClick={() => handleFilterPriority('medium')}>
-              Medium
-            </Button>
           </div>
         </div>
       </CardHeader>
@@ -71,34 +66,34 @@ const OverviewUpcomingRecurringMaintenance = ({
               <div className="mb-2 flex items-start justify-between">
                 <div className="flex-1">
                   <div className="mb-1 flex items-center gap-2">
-                    <Badge variant="default" className="font-mono">
-                      Unit {item.unit}
-                    </Badge>
+                    <Badge variant="default">{item.unitName}</Badge>
                     <Badge className="capitalize" variant={getPriorityVariant(item.priority)}>
                       {item.priority}
                     </Badge>
                   </div>
-                  <h4 className="font-semibold">{item.type}</h4>
-                  <p className="text-body-2 text-theme-secondary mt-1">Tenant: {item.tenant}</p>
+                  <h4 className="font-semibold">{item.title}</h4>
+                  <p className="text-body-2 text-theme-secondary mt-1">
+                    Tenant: {item.tenantName ? item.tenantName : <FieldEmpty />}
+                  </p>
                 </div>
                 <div className="text-right">
-                  <div className={`text-body-2 ${getDaysUntilColor(item.daysUntil)}`}>
-                    {item.daysUntil === 1 ? 'Tomorrow' : `${item.daysUntil} days`}
+                  <div
+                    className={`text-body-2 ${getDaysUntilColor(getDateDiff(new Date(), new Date(item.appointmentDate)).days)}`}
+                  >
+                    {timeFromNow(item.appointmentDate)}
                   </div>
-                  <div className="text-theme-secondary text-body-2 mt-1">{item.dueDate}</div>
+                  <div className="text-theme-secondary text-body-2 mt-1">
+                    {formatDate(new Date(item.appointmentDate), 'DD MMM YYYY')}
+                  </div>
                 </div>
               </div>
               <div className="text-body-2 flex items-center justify-between border-t pt-2">
                 <div className="text-theme-secondary flex items-center gap-4">
                   <span className="flex items-center gap-1">
                     <Clock size={14} />
-                    {item.recurring}
+                    {item.isRecurring ? 'Recurring' : 'One-time'}
                   </span>
-                  <span className="text-body-2">Last: {item.lastCompleted}</span>
                 </div>
-                <Button size="sm" variant="outline">
-                  Schedule
-                </Button>
               </div>
             </div>
           ))}

@@ -50,6 +50,7 @@ export type IMaintenanceListMetadata = {
   pendingCount: number
   inProgressCount: number
   completedCount: number
+  urgentCount: number
 }
 
 // response
@@ -67,6 +68,7 @@ export type IRentoraApiMaintenanceListParams = {
   status?: string
   isRecurring?: boolean
   unitId?: string
+  priority?: string
 }
 
 export type IRentoraApiMaintenanceApartmentIdParams = string
