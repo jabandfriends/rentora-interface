@@ -6,6 +6,7 @@ import { useRentoraApiContractDetail } from '@/hooks'
 
 import RoomDetailContract from './RoomDetailContract'
 import RoomDetailExpiredContract from './RoomDetailExpiredContract'
+import RoomDetailMaintenanceList from './RoomDetailMaintenanceList'
 import RoomDetailOutStandingContract from './RoomDetailOutStandingContract'
 import RoomDetailServices from './RoomDetailServices'
 
@@ -64,6 +65,7 @@ const RoomDetailBody = () => {
 
       <RoomDetailOutStandingContract />
       <RoomDetailExpiredContract />
+      <RoomDetailMaintenanceList />
     </>
   )
 }
