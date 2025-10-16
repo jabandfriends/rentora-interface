@@ -1,11 +1,13 @@
-import { ArrowLeft, Download, Send } from 'lucide-react'
+import { ArrowLeft, Download } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Spinner } from '@/components/common'
 import { BillSection, MonthlyInvoiceDetailTable } from '@/components/pages/Invoice'
 import { PageTableEmpty } from '@/components/ui'
 import { useRentoraApiMonthlyInvoiceDetail } from '@/hooks'
-import { formatCurrency, formatDate } from '@/utilities'
+import { exportInvoiceToPDF, formatCurrency, formatDate } from '@/utilities'
 
 const MonthlyInvoiceDetail = () => {
   const navigate: NavigateFunction = useNavigate()
@@ -14,6 +16,22 @@ const MonthlyInvoiceDetail = () => {
   const { data: monthlyInvoice, isLoading: isMonthlyInvoiceDetailLoading } = useRentoraApiMonthlyInvoiceDetail({
     invoiceNumber: id,
   })
+
+  const [isExportingInvoicePDF, setIsExportingInvoicePDF] = useState<boolean>(false)
+
+  const handleExportInvoicePDF = useCallback(async () => {
+    if (!monthlyInvoice) return
+    try {
+      setIsExportingInvoicePDF(true)
+      await exportInvoiceToPDF(monthlyInvoice)
+      toast.success('Invoice PDF exported successfully')
+      //eslint-disable-next-line
+    } catch (_) {
+      toast.error('Failed to export invoice PDF')
+    } finally {
+      setIsExportingInvoicePDF(false)
+    }
+  }, [monthlyInvoice])
 
   if (isMonthlyInvoiceDetailLoading) {
     return (
@@ -59,30 +77,32 @@ const MonthlyInvoiceDetail = () => {
             <MonthlyInvoiceDetailTable invoice={monthlyInvoice} />
 
             {/* Total */}
-            <div>
-              <div className="flex justify-end">
-                <div className="w-64">
-                  <div className="flex justify-between py-2">
-                    <h4 className="text-theme-primary">TOTAL AMOUNT (THB):</h4>
-                    <h4>{formatCurrency(monthlyInvoice.totalAmount)}</h4>
-                  </div>
-                </div>
+            <div className="desktop:flex-row flex flex-col justify-between">
+              {/* payment method */}
+              <div className="flex justify-between py-2">
+                <h4 className="text-theme-primary">PAYMENT METHOD:</h4>
+                <h4>
+                  {monthlyInvoice.bankAccountNumber} - {monthlyInvoice.bankName} - {monthlyInvoice.accountHolderName}
+                </h4>
               </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex flex-wrap gap-4">
-              <Button className="flex items-center gap-x-2">
-                <Download className="h-4 w-4" />
-                Download PDF
-              </Button>
-              <Button className="flex items-center gap-x-2">
-                <Send className="h-4 w-4" />
-                Send to Tenant
-              </Button>
+              <div className="flex justify-between py-2">
+                <h4 className="text-theme-primary">TOTAL AMOUNT (THB):</h4>
+                <h4>{formatCurrency(monthlyInvoice.totalAmount)}</h4>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex flex-wrap gap-4">
+        <Button
+          disabled={isExportingInvoicePDF}
+          className="desktop:w-auto flex w-full items-center gap-x-2"
+          onClick={handleExportInvoicePDF}
+        >
+          {isExportingInvoicePDF && <Spinner />}
+          <Download className="h-4 w-4" />
+          Download PDF
+        </Button>
       </div>
     </div>
   )

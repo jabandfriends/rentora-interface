@@ -1,6 +1,9 @@
 import jsPDF from 'jspdf'
 
-import type { IContract } from '@/types'
+import { ApartmentPaymentMethodType, CONTRACT_RENTAL_TYPE, UtilityPriceType } from '@/enum'
+import type { IContract, IMonthlyInvoiceDetail } from '@/types'
+
+import { formatCurrency, formatDate } from '.'
 
 export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -176,6 +179,254 @@ export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
 
       // Resolve the promise after a short delay to ensure file download starts
       setTimeout(() => resolve(), 100)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const exportInvoiceToPDF = async (
+  invoice: IMonthlyInvoiceDetail,
+  apartmentName: string = 'Apartment Monthly Invoice',
+) => {
+  return new Promise<void>((resolve, reject) => {
+    try {
+      const doc = new jsPDF()
+      const pageWidth = doc.internal.pageSize.getWidth()
+      const pageHeight = doc.internal.pageSize.getHeight()
+      let yPos = 20
+
+      // Header
+      doc.setFillColor(41, 128, 185)
+      doc.rect(0, 0, pageWidth, 35, 'F')
+
+      doc.setTextColor(255, 255, 255)
+      doc.setFontSize(24)
+      doc.setFont('bold')
+      doc.text('INVOICE', pageWidth / 2, 15, { align: 'center' })
+
+      doc.setFontSize(10)
+      doc.setFont('normal')
+      doc.text(apartmentName, pageWidth / 2, 25, { align: 'center' })
+
+      yPos = 45
+      doc.setTextColor(0, 0, 0)
+
+      // Invoice Info Section
+      doc.setFontSize(10)
+      doc.setFont('bold')
+      doc.text('Invoice Number:', 15, yPos)
+      doc.setFont('normal')
+      doc.text(invoice.invoiceNumber, 60, yPos)
+
+      yPos += 7
+      doc.setFont('bold')
+      doc.text('Contract Number:', 15, yPos)
+      doc.setFont('normal')
+      doc.text(invoice.contractNumber, 60, yPos)
+
+      yPos += 7
+      doc.setFont('bold')
+      doc.text('Issue Date:', 15, yPos)
+      doc.setFont('normal')
+      doc.text(formatDate(new Date(invoice.createdAt)), 60, yPos)
+
+      yPos += 7
+      doc.setFont('bold')
+      doc.text('Due Date:', 15, yPos)
+      doc.setFont('normal')
+      doc.setTextColor(220, 53, 69)
+      doc.text(formatDate(new Date(invoice.dueDate)), 60, yPos)
+      doc.setTextColor(0, 0, 0)
+
+      // Billing Period
+      yPos += 7
+      doc.setFont('bold')
+      doc.text('Billing Period:', 15, yPos)
+      doc.setFont('normal')
+      doc.text(`${formatDate(new Date(invoice.billStart))} - ${formatDate(new Date(invoice.billEnd))}`, 60, yPos)
+
+      // Tenant Info Section
+      yPos += 12
+      doc.setFillColor(52, 73, 94)
+      doc.rect(15, yPos - 5, pageWidth - 30, 8, 'F')
+      doc.setTextColor(255, 255, 255)
+      doc.setFont('bold')
+      doc.text('TENANT INFORMATION', 17, yPos)
+
+      yPos += 10
+      doc.setTextColor(0, 0, 0)
+      doc.setFont('bold')
+      doc.text('Email:', 15, yPos)
+      doc.setFont('normal')
+      doc.text(invoice.tenantEmail, 40, yPos)
+
+      yPos += 7
+      doc.setFont('bold')
+      doc.text('Unit:', 15, yPos)
+      doc.setFont('normal')
+      doc.text(invoice.floorName, 40, yPos)
+
+      yPos += 7
+      doc.setFont('bold')
+      doc.text('Rental Type:', 15, yPos)
+      doc.setFont('normal')
+      doc.text(
+        invoice.rentalType === CONTRACT_RENTAL_TYPE.MONTHLY
+          ? 'Monthly'
+          : invoice.rentalType === CONTRACT_RENTAL_TYPE.DAILY
+            ? 'Daily'
+            : 'Yearly',
+        40,
+        yPos,
+      )
+
+      // Charges Table
+      yPos += 15
+      doc.setFillColor(52, 73, 94)
+      doc.rect(15, yPos - 5, pageWidth - 30, 8, 'F')
+      doc.setTextColor(255, 255, 255)
+      doc.setFont('bold')
+      doc.text('CHARGES BREAKDOWN', 17, yPos)
+
+      yPos += 10
+      doc.setTextColor(0, 0, 0)
+
+      // Table Header
+      doc.setFillColor(236, 240, 241)
+      doc.rect(15, yPos - 5, pageWidth - 30, 8, 'F')
+      doc.setFont('bold')
+      doc.text('Description', 17, yPos)
+      doc.text('Amount ', pageWidth - 45, yPos, { align: 'right' })
+
+      yPos += 10
+
+      // Rent
+      doc.setFont('normal')
+      doc.text('Rent', 17, yPos)
+      doc.text(formatCurrency(invoice.contractRentAmount, 2, ''), pageWidth - 17, yPos, { align: 'right' })
+
+      yPos += 7
+
+      // Water Charges
+      if (invoice.waterTotalCost > 0) {
+        doc.setFont('bold')
+        doc.text('Water Charges', 17, yPos)
+        doc.setFont('normal')
+        doc.text(formatCurrency(invoice.waterTotalCost, 2, ''), pageWidth - 17, yPos, { align: 'right' })
+
+        yPos += 5
+        doc.setFontSize(8)
+        doc.setTextColor(100, 100, 100)
+        if (invoice.waterPriceRateType === UtilityPriceType.METER) {
+          doc.text(
+            `  Previous: ${invoice.waterMeterStart.toFixed(2)} | Current: ${invoice.waterMeterEnd.toFixed(2)} | Usage: ${invoice.totalWaterUsageUnit.toFixed(2)} units @ ${formatCurrency(invoice.waterPricePerUnit, 2, '')}/unit`,
+            17,
+            yPos,
+          )
+        } else {
+          doc.text(`  Fixed Rate: ${formatCurrency(invoice.waterFixedPrice, 2, '')}`, 17, yPos)
+        }
+        yPos += 5
+        doc.setFontSize(10)
+        doc.setTextColor(0, 0, 0)
+      }
+
+      // Electric Charges
+      if (invoice.electricTotalCost > 0) {
+        doc.setFont('bold')
+        doc.text('Electric Charges', 17, yPos)
+        doc.setFont('normal')
+        doc.text(formatCurrency(invoice.electricTotalCost, 2, ''), pageWidth - 17, yPos, { align: 'right' })
+
+        yPos += 5
+        doc.setFontSize(8)
+        doc.setTextColor(100, 100, 100)
+        if (invoice.electricPriceRateType === UtilityPriceType.METER) {
+          doc.text(
+            `  Previous: ${invoice.electricMeterStart.toFixed(2)} | Current: ${invoice.electricMeterEnd.toFixed(2)} | Usage: ${invoice.totalElectricUsageUnit.toFixed(2)} units @ ${formatCurrency(invoice.electricPricePerUnit, 2, '')}/unit`,
+            17,
+            yPos,
+          )
+        } else {
+          doc.text(`  Fixed Rate: ${formatCurrency(invoice.electricFixedPrice, 2, '')}`, 17, yPos)
+        }
+        yPos += 7
+        doc.setFontSize(10)
+        doc.setTextColor(0, 0, 0)
+      }
+
+      // Total Section
+      yPos += 5
+      doc.setDrawColor(200, 200, 200)
+      doc.line(15, yPos, pageWidth - 15, yPos)
+      yPos += 8
+
+      doc.setFont('bold')
+      doc.setFontSize(12)
+      doc.text('TOTAL AMOUNT:', pageWidth - 80, yPos)
+      doc.setFontSize(14)
+      doc.text(`${formatCurrency(invoice.totalAmount, 2, '')}`, pageWidth - 17, yPos, { align: 'right' })
+
+      // Payment Information
+      yPos += 15
+      doc.setFillColor(52, 73, 94)
+      doc.rect(15, yPos - 5, pageWidth - 30, 8, 'F')
+      doc.setTextColor(255, 255, 255)
+      doc.setFont('bold')
+      doc.text('PAYMENT INFORMATION', 17, yPos)
+
+      yPos += 10
+      doc.setTextColor(0, 0, 0)
+      doc.setFont('bold')
+      doc.text('Payment Method:', 15, yPos)
+      doc.setFont('normal')
+
+      const paymentMethodLabels: Record<ApartmentPaymentMethodType, string> = {
+        [ApartmentPaymentMethodType.BANK_TRANSFER]: 'Bank Transfer',
+        [ApartmentPaymentMethodType.PROMPTPAY]: 'PromptPay',
+        [ApartmentPaymentMethodType.CASH]: 'Cash',
+        [ApartmentPaymentMethodType.CREDIT_CARD]: 'Credit Card',
+        [ApartmentPaymentMethodType.CHEQUE]: 'Cheque',
+      }
+      doc.text(paymentMethodLabels[invoice.apartmentPaymentMethodType], 60, yPos)
+
+      yPos += 7
+
+      if (invoice.apartmentPaymentMethodType === ApartmentPaymentMethodType.BANK_TRANSFER) {
+        doc.setFont('bold')
+        doc.text('Bank Name:', 15, yPos)
+        doc.setFont('normal')
+        doc.text(invoice.bankName, 60, yPos)
+
+        yPos += 7
+        doc.setFont('bold')
+        doc.text('Account Number:', 15, yPos)
+        doc.setFont('normal')
+        doc.text(invoice.bankAccountNumber, 60, yPos)
+
+        yPos += 7
+        doc.setFont('bold')
+        doc.text('Account Holder:', 15, yPos)
+        doc.setFont('normal')
+        doc.text(invoice.accountHolderName, 60, yPos)
+      } else if (invoice.apartmentPaymentMethodType === ApartmentPaymentMethodType.PROMPTPAY) {
+        doc.setFont('bold')
+        doc.text('PromptPay Number:', 15, yPos)
+        doc.setFont('normal')
+        doc.text(invoice.promptpayNumber, 60, yPos)
+      }
+
+      // Footer
+      yPos = pageHeight - 20
+      doc.setFontSize(8)
+      doc.setTextColor(150, 150, 150)
+      doc.text('Thank you for your payment!', pageWidth / 2, yPos, { align: 'center' })
+      doc.text(`Generated on ${new Date().toLocaleString('th-TH')}`, pageWidth / 2, yPos + 5, { align: 'center' })
+
+      // Save PDF
+      doc.save(`Invoice_${invoice.invoiceNumber}.pdf`)
+      resolve()
     } catch (error) {
       reject(error)
     }
