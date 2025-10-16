@@ -22,15 +22,15 @@ import { getErrorMessage } from '@/utilities'
 type IRoomDetailServicesProps = {
   selectedService: string
   setSelectedService: (service: string) => void
-  addService: (id: string) => void
-  removeService: (id: string) => void
+  // addService: (id: string) => void
+  // removeService: (id: string) => void
 }
 
 const RoomDetailServices = ({
   selectedService,
   setSelectedService,
   // addService,
-  removeService,
+  // removeService,
 }: IRoomDetailServicesProps) => {
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
   const {
@@ -113,7 +113,7 @@ const RoomDetailServices = ({
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => removeService(unitServices.id)}
+                    // onClick={() => removeService(unitServices.id)}
                     className="text-theme-error-800 hover:bg-theme-error/10 hover:text-theme-error flex items-center"
                   >
                     <Trash2 className="size-4" />

@@ -11,10 +11,10 @@ import RoomDetailServices from './RoomDetailServices'
 
 const RoomDetailBody = () => {
   //unit services
-  const [services, setServices] = useState([
-    { id: 1, name: 'Common Area Maintenance', price: 50 },
-    { id: 2, name: 'Parking Space', price: 100 },
-  ])
+  // const [setServices] = useState([
+  //   { id: 1, name: 'Common Area Maintenance', price: 50 },
+  //   { id: 2, name: 'Parking Space', price: 100 },
+  // ])
 
   const [selectedService, setSelectedService] = useState('')
 
@@ -26,18 +26,16 @@ const RoomDetailBody = () => {
     unitId: unitId!,
   })
 
-  //api
-  const addService = () => {
-    if (selectedService) {
-      setServices((prevServices) => [...prevServices, { id: prevServices.length + 1, name: selectedService, price: 0 }])
-      setSelectedService('')
-    }
-  }
+  // const addService = () => {
+  //   if (selectedService) {
+  //     setServices((prev) => [...prev, { id: prev.length + 1, name: selectedService, price: 0 }])
+  //     setSelectedService('')
+  //   }
+  // }
 
-  //api
-  const removeService = (id: string) => {
-    setServices((prevServices) => prevServices.filter((service) => Number(service.id) !== Number(id)))
-  }
+  // const removeService = (id: number) => {
+  //   setServices((prev) => prev.filter((s) => s.id !== id))
+  // }
 
   return (
     <>
@@ -56,8 +54,8 @@ const RoomDetailBody = () => {
         <RoomDetailServices
           selectedService={selectedService}
           setSelectedService={setSelectedService}
-          addService={addService}
-          removeService={removeService}
+        // addService={addService}
+        // removeService={removeService}
         />
       </div>
 
