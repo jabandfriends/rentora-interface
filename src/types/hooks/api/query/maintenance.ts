@@ -65,6 +65,7 @@ export type IRentoraApiMaintenanceListParams = {
   sortBy?: string
   sortDir?: string
   status?: string
+  isRecurring?: boolean
 }
 
 export type IRentoraApiMaintenanceApartmentIdParams = string

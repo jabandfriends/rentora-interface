@@ -52,6 +52,8 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
       estimatedCost: undefined,
       category: MAINTENANCE_CATEGORY.GENERAL,
       isEmergency: false,
+      isRecurring: false,
+      recurringSchedule: '',
     },
     mode: 'onChange',
   })
@@ -70,6 +72,8 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
         category: defaultValues.category,
         estimatedCost: defaultValues.estimatedCost?.toString(),
         isEmergency: defaultValues.isEmergency,
+        isRecurring: defaultValues.isRecurring,
+        recurringSchedule: defaultValues.recurringSchedule || '',
       })
     }
   }, [defaultValues, form])
@@ -241,6 +245,64 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
             </div>
           </Card>
         ))}
+
+        {/* Recurring */}
+        <Card className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
+          <div>
+            <h3>
+              Recurring <span className="text-theme-error">*</span>
+            </h3>
+            <p className="text-theme-secondary">Select if this task should be recurring</p>
+          </div>
+          <FormField
+            control={form.control}
+            name="isRecurring"
+            render={({ field }) => (
+              <div className="flex gap-x-2">
+                <Switch
+                  id={field.name}
+                  onBlur={field.onBlur}
+                  checked={Boolean(field.value)}
+                  onCheckedChange={field.onChange}
+                />
+                <FormLabel htmlFor={field.name}>Recurring</FormLabel>
+                <FormMessage />
+              </div>
+            )}
+          />
+
+          {form.watch('isRecurring') && (
+            <FormField
+              control={form.control}
+              name="recurringSchedule"
+              render={({ field }) => (
+                <div className="space-y-1">
+                  <FormLabel htmlFor={field.name}>Recurring Schedule</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value} key={defaultValues?.recurringSchedule}>
+                    <SelectTrigger className="capitalize">
+                      <SelectValue placeholder="Select recurring schedule" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem className="capitalize" value="weekly">
+                        Weekly
+                      </SelectItem>
+                      <SelectItem className="capitalize" value="monthly">
+                        Monthly
+                      </SelectItem>
+                      <SelectItem className="capitalize" value="quarterly">
+                        Quarterly
+                      </SelectItem>
+                      <SelectItem className="capitalize" value="yearly">
+                        Yearly
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </div>
+              )}
+            />
+          )}
+        </Card>
 
         {/* Location */}
         <Card className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
