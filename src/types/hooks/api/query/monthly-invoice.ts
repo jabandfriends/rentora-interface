@@ -1,4 +1,9 @@
-import type { CONTRACT_RENTAL_TYPE, MonthlyInvoicePaymentStatus, UtilityPriceType } from '@/enum'
+import type {
+  ApartmentPaymentMethodType,
+  CONTRACT_RENTAL_TYPE,
+  MonthlyInvoicePaymentStatus,
+  UtilityPriceType,
+} from '@/enum'
 import type {
   IBasePaginateQueryResult,
   IBaseUseQuery,
@@ -44,6 +49,13 @@ export type IMonthlyInvoiceDetail = IMonthlyInvoice & {
   electricPriceRateType: UtilityPriceType
   electricTotalCost: number
   createdAt: string
+
+  //payment
+  apartmentPaymentMethodType: ApartmentPaymentMethodType
+  bankName: string
+  bankAccountNumber: string
+  accountHolderName: string
+  promptpayNumber: string
 }
 
 //response

@@ -102,6 +102,7 @@ const MonthlyInvoice = () => {
         title="Monthly Invoices"
         description="Manage monthly rent invoices"
         stats={monthlyInvoiceStats}
+        isLoading={isLoading}
         actionButton={
           <Button
             onClick={() => navigate(ROUTES.monthlyInvoiceCreate.getPath(apartmentId))}
