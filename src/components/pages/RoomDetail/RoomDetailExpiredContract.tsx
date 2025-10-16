@@ -9,7 +9,7 @@ import { useRentoraApiContractList } from '@/hooks'
 import RoomDetailContractTable from './RoomDetailContractTable'
 
 const RoomDetailExpiredContract = () => {
-  const { apartmentId, unitId } = useParams<{ apartmentId: string; unitId: string }>()
+  const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
     DEFAULT_CONTRACT_LIST_DATA.page,
   )
