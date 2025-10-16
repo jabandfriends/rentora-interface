@@ -15,6 +15,7 @@ import type {
   IRentoraApiClientMaintenanceDetailResponse,
   IRentoraApiClientMaintenanceListResponse,
   IRentoraApiClientMonthlyInvoiceDetailResponse,
+  IRentoraApiClientMonthlyInvoiceListResponse,
   IRentoraApiClientOverdueInvoiceListResponse,
   IRentoraApiClientReadingUnitUtilityResponse,
   IRentoraApiClientReportUtilityListResponse,
@@ -30,6 +31,7 @@ import type {
   IRentoraApiMaintenanceApartmentIdParams,
   IRentoraApiMaintenanceDetailParams,
   IRentoraApiMaintenanceListParams,
+  IRentoraApiMonthlyInvoiceListParams,
   IRentoraApiOverdueInvoiceListParams,
   IRentoraApiReportUtilityListParams,
   IRentoraApiTenantListParams,
@@ -66,6 +68,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     allUnitMonthlyInvoiceStatus: 'ALL_UNIT_MONTHLY_INVOICE_STATUS',
     monthlyInvoiceDetail: 'MONTHLY_INVOICE_DETAIL',
     contractList: 'CONTRACT_LIST',
+    monthlyInvoiceList: 'MONTHLY_INVOICE_LIST',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -305,6 +308,20 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
   ): Promise<IRentoraApiClientMonthlyInvoiceDetailResponse['data']> {
     const response = await this.axiosWithAuthInstance.get<IRentoraApiClientMonthlyInvoiceDetailResponse>(
       `/api/monthly/invoices/detail/${invoiceNumber}`,
+    )
+    return response.data.data
+  }
+
+  //get all monthly invoice
+  async monthlyInvoiceList(
+    apartmentId: Maybe<string>,
+    params: IRentoraApiMonthlyInvoiceListParams,
+  ): Promise<IRentoraApiClientMonthlyInvoiceListResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientMonthlyInvoiceListResponse>(
+      `/api/monthly/invoices/${apartmentId}`,
+      {
+        params,
+      },
     )
     return response.data.data
   }
