@@ -16,3 +16,7 @@ export type IBuilding = {
 
 export type IRentoraApiClientBuildingListResponse = IRentoraApiClientBaseResponse<Array<IBuilding>>
 export type IUseRentoraApiClientBuildingListResponse = IBaseUseQuery<IRentoraApiClientBuildingListResponse['data']>
+
+//response
+export type IRentoraApiClientBuildingDetailResponse = IRentoraApiClientBaseResponse<IBuilding>
+export type IUseRentoraApiClientBuildingDetailResponse = IBaseUseQuery<IRentoraApiClientBuildingDetailResponse['data']>

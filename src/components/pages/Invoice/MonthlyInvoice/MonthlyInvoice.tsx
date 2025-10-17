@@ -6,7 +6,7 @@ import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { MonthlyInvoiceBody } from '@/components/pages/Invoice'
-import { PageTableBar, PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableHeader, PageTableSearch } from '@/components/ui'
 import { DEFAULT_MAINTENANCE_LIST_DATA, DEFAULT_UNIT_LIST_DATA, ROUTES } from '@/constants'
 import { MonthlyInvoicePaymentStatus } from '@/enum'
 import { useRentoraMonthlyInvoiceList } from '@/hooks'
@@ -112,7 +112,6 @@ const MonthlyInvoice = () => {
           </Button>
         }
       />
-      <PageTableBar title="Total Amount" count="฿8,000,000" />
       <PageTableSearch placeholder="Search invoice by unit name" onSearchChange={handleSearchChange} />
       <MonthlyInvoiceBody
         isLoading={isLoading}

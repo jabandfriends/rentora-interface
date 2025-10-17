@@ -44,7 +44,7 @@ export const getSidebarItems = (
 
   // sidebar bottom items (static)
   const SIDEBAR_BOTTOM_ITEMS: Array<SidebarMenu> = [
-    { icon: <Settings size={16} />, label: 'Settings', to: ROUTES.auth.path },
+    { icon: <Settings size={16} />, label: 'Apartment Settings', to: ROUTES.apartmentSetting.getPath(apartmentId) },
   ]
 
   const SIDEBAR_ALL_APARTMENTS: Array<SidebarMenu> = [
@@ -105,7 +105,8 @@ export const getSidebarItems = (
     bottomNav: [
       {
         type: 'item',
-        icon: <Home size={16} />,
+        title: 'Settings',
+        icon: <Settings size={16} />,
         menu: SIDEBAR_BOTTOM_ITEMS,
       },
     ],

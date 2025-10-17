@@ -7,6 +7,7 @@ import { RentoraApiQueryClient } from '@/hooks'
 import AllApartmentPage from '@/pages/AllApartments'
 import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
+import ApartmentSetting from '@/pages/ApartmentSetting'
 import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication/Authentication'
 import FirstTimePasswordResetPage from '@/pages/Authentication/FirstTimePasswordReset'
@@ -208,6 +209,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       </RequireAuthWrapper>
     ),
     children: [
+      {
+        path: ROUTES.apartmentSetting.path,
+        element: <ApartmentSetting />,
+      },
       {
         path: ROUTES.overview.path,
         element: <OverviewPage />,

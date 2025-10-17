@@ -35,13 +35,11 @@ const AllRoomSearch = ({ onSearchChange, onStatusChange, onBuildingChange }: IAl
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                {Object.values(UnitStatus)
-                  .filter((status) => status !== UnitStatus.all)
-                  .map((status) => (
-                    <SelectItem className="capitalize" key={status} value={status}>
-                      {status}
-                    </SelectItem>
-                  ))}
+                {Object.values(UnitStatus).map((status) => (
+                  <SelectItem className="capitalize" key={status} value={status}>
+                    {status}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           )}

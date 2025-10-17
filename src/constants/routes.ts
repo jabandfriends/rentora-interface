@@ -18,6 +18,7 @@ export const ROUTES: IRoutes = {
   apartmentCreate: { path: '/create/apartment' },
   apartmentSetup: { path: '/setup/:apartmentId', getUrl: (apartmentId: Maybe<string>) => `/setup/${apartmentId}` },
   //dashbord
+  apartmentSetting: apartmentRoute('/setting'),
   normalInvoice: apartmentRoute('/normal-invoice'),
   monthlyInvoice: apartmentRoute('/monthly-invoice'),
   maintenance: apartmentRoute('/maintenance'),

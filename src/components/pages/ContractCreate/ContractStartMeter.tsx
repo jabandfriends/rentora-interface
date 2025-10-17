@@ -21,7 +21,7 @@ const ContractStartMeter = ({ form }: IContractStartMeter) => {
                   Water Meter Start <span className="text-theme-error">*</span>
                 </FormLabel>
                 <FormControl>
-                  <InputNumber maxLength={9} decimal placeholder="0.00" {...field} />
+                  <InputNumber maxLength={8} decimal placeholder="0.00" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -39,7 +39,7 @@ const ContractStartMeter = ({ form }: IContractStartMeter) => {
                   Electric Meter Start <span className="text-theme-error">*</span>
                 </FormLabel>
                 <FormControl>
-                  <InputNumber maxLength={9} decimal placeholder="0.00" {...field} />
+                  <InputNumber maxLength={8} decimal placeholder="0.00" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
