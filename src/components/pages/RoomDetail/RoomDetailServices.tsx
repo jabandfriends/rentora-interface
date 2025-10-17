@@ -13,7 +13,7 @@ import {
   SelectValue,
   Spinner,
 } from '@/components/common'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { PageTableEmpty, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { useRentoraApiApartmentServiceList, useRentoraApiCreateApartmentService } from '@/hooks'
 import { useRentoraApiUnitServiceList } from '@/hooks/api/queries/useRentoraApiUnitServiceList'
 import type { IApartmentService, IUnitService } from '@/types'
@@ -33,11 +33,7 @@ const RoomDetailServices = ({
   removeService,
 }: IRoomDetailServicesProps) => {
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
-  const {
-    data: services,
-    isLoading,
-    isError,
-  } = useRentoraApiApartmentServiceList({
+  const { data: services, isLoading } = useRentoraApiApartmentServiceList({
     apartmentId: apartmentId!,
     unitId: id!,
   })
@@ -59,7 +55,7 @@ const RoomDetailServices = ({
   }
 
   if (isLoading) return <Spinner />
-  if (isError) return <div>loading failed</div>
+  if (!services || services.length === 0) return <PageTableEmpty message="No services found" />
 
   return (
     <Card className="border-border justify-start overflow-auto rounded-2xl shadow-lg hover:shadow-xl">
