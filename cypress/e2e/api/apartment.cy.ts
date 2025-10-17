@@ -73,6 +73,36 @@ describe('Apartment , Maintenance API', () => {
     })
   })
 
+  it('Setup Apartment', () => {
+    const setupPayload = {
+      apartmentId,
+      bankName: 'Test Bank',
+      bankAccountHolder: 'John Doe',
+      bankAccountNumber: '1234567890',
+      buildings: [{ buildingName: 'Building B', totalFloors: 20, totalUnitPerFloor: 4 }],
+      electricityFlat: 500,
+      electricityPrice: 5,
+      electricityType: 'meter',
+      services: [
+        { name: 'Internet', price: 100 },
+        { name: 'Cleaning', price: 50 },
+      ],
+      waterFlat: 300,
+      waterPrice: 2,
+      waterType: 'meter',
+    }
+
+    cy.request({
+      method: 'POST',
+      url: `${Cypress.env('apiBaseUrl')}/api/apartments/setup/${apartmentId}`,
+      headers: { 'Rentora-Auth-Token': token },
+      body: setupPayload,
+    }).then((res) => {
+      expect(res.status).to.eq(200)
+      cy.log('Apartment setup completed for apartmentId: ' + apartmentId)
+    })
+  })
+
   it('Create Floor', () => {
     const floorPayload = {
       buildingId, // now this is defined
