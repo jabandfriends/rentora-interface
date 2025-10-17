@@ -1,4 +1,4 @@
-import type { IBaseUseMutation } from '@/types'
+import type { IBaseUseMutation, IRentoraApiClientBaseResponse } from '@/types'
 
 export type IUnitServiceExecuteBasePayload = {
   serviceId: string
@@ -13,4 +13,15 @@ export type ICreateUnitServiceResponseParams = {
   unitId?: string
 }
 
+export type IDeleteUnitServiceRequestParams = {
+  apartmentId?: string
+  unitId?: string
+}
+
 export type IUseRentoraApiCreateUnitService = IBaseUseMutation<void, IUnitServiceExecuteBasePayload>
+
+//delete unit service hook
+export type IRenotaApiDeleteUnitService = IBaseUseMutation<void, IUnitServiceExecuteBasePayload>
+
+//delete unit service response type
+export type IRenotaApiDeleteUnitServicePayload = IUnitServiceExecuteBasePayload

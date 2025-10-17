@@ -11,6 +11,7 @@ import type {
   IMeterReadingRequestPayload,
   IMeterReadingUpdateRequestPayload,
   IPutPresignedUrlRequest,
+  IRenotaApiDeleteUnitServicePayload,
   IRentoraApiClientAuthenticateResponse,
   IRentoraApiClientCreateApartmentResponse,
   IRentoraApiClientCreateMaintenanceResponse,
@@ -42,6 +43,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createMeterReading: 'CREATE_METER_READING',
     updateMeterReading: 'UPDATE_METER_READING',
     createUnitService: 'CREATE_UNIT_SERVICE',
+    deleteUnitService: 'DELETE_UNIT_SERVICE',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -165,6 +167,19 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     const response = await this.axiosWithAuthInstance.post<void>(
       `/api/apartments/${apartmentId}/all-room/detail/${unitId}`,
       payload,
+    )
+    return response.data
+  }
+
+  async deleteUnitService(apartmentId: string, unitId: string, unitServiceId: string): Promise<void> {
+    const response = await this.axiosWithAuthInstance.delete<void>(
+      `/api/apartments/${apartmentId}/all-room/detail/${unitId}`,
+      {
+        // 🎯 ใช้ 'params' เพื่อสร้าง Query String (?unitServiceId=...)
+        params: {
+          unitServiceId: unitServiceId,
+        },
+      },
     )
     return response.data
   }

@@ -14,7 +14,11 @@ import {
   Spinner,
 } from '@/components/common'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { useRentoraApiApartmentServiceList, useRentoraApiCreateApartmentService } from '@/hooks'
+import {
+  useRentoraApiApartmentServiceList,
+  useRentoraApiCreateApartmentService,
+  useRentoraApiDeleteUnitService,
+} from '@/hooks'
 import { useRentoraApiUnitServiceList } from '@/hooks/api/queries/useRentoraApiUnitServiceList'
 import type { IApartmentService, IUnitService } from '@/types'
 import { getErrorMessage } from '@/utilities'
@@ -22,16 +26,9 @@ import { getErrorMessage } from '@/utilities'
 type IRoomDetailServicesProps = {
   selectedService: string
   setSelectedService: (service: string) => void
-  // addService: (id: string) => void
-  // removeService: (id: string) => void
 }
 
-const RoomDetailServices = ({
-  selectedService,
-  setSelectedService,
-  // addService,
-  // removeService,
-}: IRoomDetailServicesProps) => {
+const RoomDetailServices = ({ selectedService, setSelectedService }: IRoomDetailServicesProps) => {
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
   const {
     data: services,
@@ -46,6 +43,10 @@ const RoomDetailServices = ({
     unitId: id!,
   })
   const { mutateAsync: createUnitService } = useRentoraApiCreateApartmentService({ apartmentId, unitId: id })
+  const { mutateAsync: deleteUnitService } = useRentoraApiDeleteUnitService({
+    apartmentId,
+    unitId: id,
+  })
 
   const addService = async (serviceId: string) => {
     try {
@@ -53,6 +54,17 @@ const RoomDetailServices = ({
         serviceId,
       })
       toast.success('Service added successfully!')
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
+  }
+
+  const removeService = async (serviceId: string) => {
+    try {
+      await deleteUnitService({
+        serviceId,
+      })
+      toast.success('Service removed successfully!')
     } catch (error) {
       toast.error(getErrorMessage(error))
     }
@@ -80,8 +92,9 @@ const RoomDetailServices = ({
               </SelectTrigger>
               <SelectContent>
                 {services?.map((service: IApartmentService) => (
-                  <SelectItem key={service.id} value={service.id}>
-                    {service.serviceName}
+                  <SelectItem className="flex items-center justify-between" key={service.id} value={service.id}>
+                    <div>{service.serviceName}</div>
+                    <div>฿{service.price.toFixed(2)}</div>
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -113,7 +126,7 @@ const RoomDetailServices = ({
                   <Button
                     variant="ghost"
                     size="icon"
-                    // onClick={() => removeService(unitServices.id)}
+                    onClick={() => removeService(unitServices.id)}
                     className="text-theme-error-800 hover:bg-theme-error/10 hover:text-theme-error flex items-center"
                   >
                     <Trash2 className="size-4" />
@@ -125,7 +138,7 @@ const RoomDetailServices = ({
               <TableCell className="text-base font-semibold">Total</TableCell>
               <TableCell />
               <TableCell className="text-theme-primary font-bold">
-                ${services?.reduce((sum, s) => sum + s.price, 0).toFixed(2)}
+                ${unitServices?.reduce((sum, s) => sum + s.price, 0).toFixed(2)}
               </TableCell>
             </TableRow>
           </TableBody>

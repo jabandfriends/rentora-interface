@@ -38,3 +38,4 @@ export type RentoraApiExecuteClientKey =
   | 'createMeterReading'
   | 'updateMeterReading'
   | 'createUnitService'
+  | 'deleteUnitService'
