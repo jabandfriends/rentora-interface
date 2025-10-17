@@ -7,6 +7,7 @@ describe('Apartment , Maintenance API', () => {
   let buildingId: string
   let floorId: string
   let unitId: string
+  let userId: string
 
   const payload = {
     name: 'ACHIRAYA 4',
@@ -209,7 +210,35 @@ describe('Apartment , Maintenance API', () => {
       expect(res.status).to.eq(200) // or 201 depending on backend
       expect(res.body.success).to.eq(true)
       // apartmentUserId
-      cy.log('Tenant created successfully')
+      userId = res.body.data.apartmentUserId
+      cy.log('Tenant created successfully' + userId)
+    })
+  })
+
+  it('Create a new maintenance request', () => {
+    const payload = {
+      unitId,
+      title: 'Fix AC',
+      description: 'Air conditioner maintenance',
+      status: 'pending', // MAINTENANCE_STATUS.PENDING
+      priority: 'high', // MAINTENANCE_PRIORITY.HIGH
+      appointmentDate: '2025-10-20T09:00:00+07:00', // <-- full datetime
+      dueDate: '2025-10-22T17:00:00+07:00', // <-- full datetime
+      estimatedHours: 4,
+      estimatedCost: 1500,
+      category: 'electrical', // MAINTENANCE_CATEGORY.ELECTRICITY
+      isEmergency: true,
+      isRecurring: true,
+      recurringSchedule: 'weekly', // RecurringSchedule.WEEKLY
+    }
+
+    cy.request({
+      method: 'POST',
+      url: `${Cypress.env('apiBaseUrl')}/api/apartment/${apartmentId}/maintenance/users/create`,
+      headers: { 'Rentora-Auth-Token': token },
+      body: payload,
+    }).then((res) => {
+      expect(res.status).to.eq(201)
     })
   })
 
@@ -308,6 +337,38 @@ describe('Apartment , Maintenance API', () => {
       qs: params,
     }).then((res) => {
       expect(res.status).to.eq(200)
+    })
+  })
+
+  it('Delete unit', () => {
+    cy.request({
+      method: 'DELETE',
+      url: `${Cypress.env('apiBaseUrl')}/api/apartments/${apartmentId}/units/${unitId}`,
+      headers: { 'Rentora-Auth-Token': token },
+    }).then((res) => {
+      expect(res.status).to.eq(200) // or 204 if backend returns no content
+      cy.log('Unit deleted successfully')
+    })
+  })
+  it('Delete floor', () => {
+    cy.request({
+      method: 'DELETE',
+      url: `${Cypress.env('apiBaseUrl')}/api/apartments/floor/${floorId}`,
+      headers: { 'Rentora-Auth-Token': token },
+    }).then((res) => {
+      expect(res.status).to.eq(200) // or 204 depending on backend
+      cy.log('Floor deleted successfully')
+    })
+  })
+
+  it('Delete building', () => {
+    cy.request({
+      method: 'DELETE',
+      url: `${Cypress.env('apiBaseUrl')}/api/apartments/${apartmentId}/buildings/${buildingId}`,
+      headers: { 'Rentora-Auth-Token': token },
+    }).then((res) => {
+      expect(res.status).to.eq(200) // or 204 depending on backend
+      cy.log('Building deleted successfully')
     })
   })
 })
