@@ -60,7 +60,7 @@ const Authentication = () => {
   return (
     <Card className="desktop:size-3/5 desktop:flex-col desktop:px-16 flex flex-col justify-center gap-y-4 rounded-3xl px-8 shadow">
       <div className="flex flex-col">
-        <h2>Guess Who's Back</h2>
+        <h2>Hi!, Guess Who's Back</h2>
         <p>Let's Get You Signed in</p>
       </div>
       <div className="desktop:flex-row flex w-full flex-col items-center justify-between gap-x-4 gap-y-4">
