@@ -11,10 +11,6 @@ import RoomDetailServices from './RoomDetailServices'
 
 const RoomDetailBody = () => {
   //unit services
-  // const [setServices] = useState([
-  //   { id: 1, name: 'Common Area Maintenance', price: 50 },
-  //   { id: 2, name: 'Parking Space', price: 100 },
-  // ])
 
   const [selectedService, setSelectedService] = useState('')
 
@@ -25,17 +21,6 @@ const RoomDetailBody = () => {
     apartmentId: apartmentId!,
     unitId: unitId!,
   })
-
-  // const addService = () => {
-  //   if (selectedService) {
-  //     setServices((prev) => [...prev, { id: prev.length + 1, name: selectedService, price: 0 }])
-  //     setSelectedService('')
-  //   }
-  // }
-
-  // const removeService = (id: number) => {
-  //   setServices((prev) => prev.filter((s) => s.id !== id))
-  // }
 
   return (
     <>
@@ -51,12 +36,7 @@ const RoomDetailBody = () => {
         )}
 
         {/* Right Column - Service Addition */}
-        <RoomDetailServices
-          selectedService={selectedService}
-          setSelectedService={setSelectedService}
-        // addService={addService}
-        // removeService={removeService}
-        />
+        <RoomDetailServices selectedService={selectedService} setSelectedService={setSelectedService} />
       </div>
 
       <RoomDetailOutStandingContract />
