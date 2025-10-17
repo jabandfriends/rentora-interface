@@ -9,6 +9,7 @@ import type {
   ICreateFloorRequestPayload,
   ICreateMaintenanceRequestPayload,
   ICreateTenantRequestPayload,
+  ICreateUnitRequestPayload,
   ICreateUnitServiceRequestPayload,
   IFirsttimePasswordResetRequestPayload,
   IGenerateMonthlyInvoiceRequestPayload,
@@ -28,6 +29,7 @@ import type {
   IUpdateMaintenanceRequestPayload,
   IUpdateTenantPasswordRequestPayload,
   IUpdateTenantRequestPayload,
+  IUpdateUnitRequestPayload,
   IUpdateUnitServiceRequestPayload,
   RentoraApiExecuteClientKey,
 } from '@/types'
@@ -61,6 +63,11 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createBuilding: 'CREATE_BUILDING',
     updateBuilding: 'UPDATE_BUILDING',
     deleteBuilding: 'DELETE_BUILDING',
+
+    //unit
+    createUnit: 'CREATE_UNIT',
+    updateUnit: 'UPDATE_UNIT',
+    deleteUnit: 'DELETE_UNIT',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -256,6 +263,27 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     const response = await this.axiosWithAuthInstance.delete<void>(
       `/api/apartments/${apartmentId}/buildings/${buildingId}`,
     )
+    return response.data
+  }
+
+  //create unit
+  async createUnit(apartmentId: string, payload: ICreateUnitRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/${apartmentId}/units`, payload)
+    return response.data
+  }
+
+  //update unit
+  async updateUnit(apartmentId: string, unitId: string, payload: IUpdateUnitRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.put<void>(
+      `/api/apartments/${apartmentId}/units/${unitId}`,
+      payload,
+    )
+    return response.data
+  }
+
+  //delete unit
+  async deleteUnit(apartmentId: string, unitId: string): Promise<void> {
+    const response = await this.axiosWithAuthInstance.delete<void>(`/api/apartments/${apartmentId}/units/${unitId}`)
     return response.data
   }
 }

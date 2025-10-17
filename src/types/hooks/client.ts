@@ -27,6 +27,7 @@ export type RentoraApiQueryClientKey =
   | 'utilityList'
   | 'buildingDetail'
   | 'floorList'
+  | 'unitDetail'
 export type RentoraApiExecuteClientKey =
   | 'authenticate'
   | 'createApartment'
@@ -53,3 +54,6 @@ export type RentoraApiExecuteClientKey =
   | 'createBuilding'
   | 'updateBuilding'
   | 'deleteBuilding'
+  | 'createUnit'
+  | 'updateUnit'
+  | 'deleteUnit'

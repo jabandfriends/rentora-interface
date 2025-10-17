@@ -1,8 +1,10 @@
 import type { UnitStatus } from '@/enum'
 import type {
   IBasePaginateQueryResult,
+  IBaseUseQuery,
   IRentoraApiClientBasePaginateResponse,
   IRentoraApiClientBasePaginateWithMetadataResponse,
+  IRentoraApiClientBaseResponse,
 } from '@/types'
 
 //hook
@@ -73,3 +75,8 @@ export type IRentoraApiClientAllUnitMonthlyInvoiceStatusResponse =
 export type IUseRentoraApiAllUnitMonthlyInvoiceStatus = IBasePaginateQueryResult<
   IRentoraApiClientAllUnitMonthlyInvoiceStatusResponse['data']
 >
+
+//response unit detail
+export type IRentoraApiClientUnitDetailResponse = IRentoraApiClientBaseResponse<IUnit>
+//hook
+export type IUseRentoraApiUnitDetail = IBaseUseQuery<IRentoraApiClientUnitDetailResponse['data']>
