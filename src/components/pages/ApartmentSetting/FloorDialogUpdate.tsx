@@ -1,29 +1,28 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { SetStateAction } from 'jotai'
-import { type Dispatch, useCallback, useState } from 'react'
+import { type Dispatch, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { useParams } from 'react-router-dom'
 
 import { Button, Form, FormField, FormMessage, Input, InputNumber, Label } from '@/components/common'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/feature'
-import { floorCreateSchema } from '@/constants'
-import { useRentoraApiCreateFloor } from '@/hooks'
-import type { FloorCreateSchema } from '@/types'
+import { floorUpdateSchema } from '@/constants'
+import { useRentoraUpdateFloor } from '@/hooks'
+import type { FloorUpdateSchema, IFloor, IUpdateFloorPayload } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
 interface FloorDialogProps {
   buildingId: string
   open: boolean
   onOpenChange: (open: boolean) => void
+  floor: IFloor
 }
 
-const FloorDialog = ({ buildingId, open, onOpenChange }: FloorDialogProps) => {
+const FloorDialogUpdate = ({ buildingId, open, onOpenChange, floor }: FloorDialogProps) => {
   const [errorMessage, setErrorMessage]: [string, Dispatch<SetStateAction<string>>] = useState('')
-  const { apartmentId } = useParams<{ apartmentId: string }>()
   //create form
-  const form = useForm<FloorCreateSchema>({
-    resolver: zodResolver(floorCreateSchema),
+  const form = useForm<FloorUpdateSchema>({
+    resolver: zodResolver(floorUpdateSchema),
     defaultValues: {
       floorName: '',
       floorNumber: undefined,
@@ -32,19 +31,30 @@ const FloorDialog = ({ buildingId, open, onOpenChange }: FloorDialogProps) => {
     mode: 'onChange',
   })
 
-  const { mutateAsync: createFloor } = useRentoraApiCreateFloor({ apartmentId: apartmentId!, buildingId })
+  useEffect(() => {
+    if (floor) {
+      form.reset({
+        floorName: floor.floorName,
+        floorNumber: floor.floorNumber,
+        totalUnits: floor.totalUnits,
+      })
+    }
+  }, [floor, form])
+
+  //update hook
+  const { mutateAsync: updateFloor } = useRentoraUpdateFloor({ buildingId, floorId: floor.floorId })
 
   const handleDialogClose = useCallback(() => onOpenChange(false), [onOpenChange])
 
   const handleCreateFloor = useCallback(
-    async (data: FloorCreateSchema) => {
-      const payload = {
+    async (data: FloorUpdateSchema) => {
+      const payload: IUpdateFloorPayload = {
         ...data,
         buildingId,
       }
       try {
-        await createFloor(payload)
-        toast.success('Floor created successfully')
+        await updateFloor(payload)
+        toast.success('Floor updated successfully')
         form.reset()
         handleDialogClose()
       } catch (error) {
@@ -52,16 +62,14 @@ const FloorDialog = ({ buildingId, open, onOpenChange }: FloorDialogProps) => {
         setErrorMessage(getErrorMessage(error))
       }
     },
-    [buildingId, createFloor, form, handleDialogClose],
+    [buildingId, updateFloor, form, handleDialogClose],
   )
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Floor</DialogTitle>
-          <DialogDescription>
-            Add a new floor to the building. This will allow you to manage the units and amenities on that floor.
-          </DialogDescription>
+          <DialogTitle>Update Floor</DialogTitle>
+          <DialogDescription>Update floor information</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleCreateFloor)} className="space-y-4 py-4">
@@ -116,7 +124,7 @@ const FloorDialog = ({ buildingId, open, onOpenChange }: FloorDialogProps) => {
                 Cancel
               </Button>
               <Button type="submit" className="desktop:w-auto w-full">
-                Create new floor
+                Update floor
               </Button>
             </div>
           </form>
@@ -126,4 +134,4 @@ const FloorDialog = ({ buildingId, open, onOpenChange }: FloorDialogProps) => {
   )
 }
 
-export default FloorDialog
+export default FloorDialogUpdate

@@ -1,5 +1,7 @@
 import { Edit, Home, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
 
 import { Button, Card, CardContent } from '@/components/common'
 import {
@@ -14,8 +16,11 @@ import {
 } from '@/components/feature'
 import { Badge } from '@/components/ui'
 import { UnitStatus } from '@/enum'
+import { useRentoraDeleteUnit } from '@/hooks'
 import type { IUnit } from '@/types'
-import { cn } from '@/utilities'
+import { cn, getErrorMessage } from '@/utilities'
+
+import UnitDialogUpdate from './UnitDialogUpdate'
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -32,13 +37,38 @@ const getStatusColor = (status: string) => {
 
 type IUnitCardProps = {
   unit: IUnit
-  onEdit: (unit: IUnit) => void
-  onDelete: (id: string) => void
 }
-const UnitCard = ({ unit, onEdit, onDelete }: IUnitCardProps) => {
+const UnitCard = ({ unit }: IUnitCardProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [unitUpdateDialogOpen, setUnitUpdateDialogOpen] = useState(false)
+
+  const handleUpdateDialogOpen = useCallback(() => setUnitUpdateDialogOpen(true), [])
+
+  //delete unit
+  const { mutateAsync: deleteUnit } = useRentoraDeleteUnit()
+
+  const handleDeleteUnit = useCallback(async () => {
+    try {
+      await deleteUnit({ apartmentId: apartmentId!, unitId: unit.id })
+      toast.success('Unit deleted successfully')
+      setDeleteDialogOpen(false)
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
+  }, [deleteUnit, apartmentId, unit])
+
+  //handle delete alert
+  const handleDeleteAlertOpen = useCallback(() => setDeleteDialogOpen(true), [])
+  const handleDeleteAlertClose = useCallback(() => setDeleteDialogOpen(false), [])
   return (
     <>
+      <UnitDialogUpdate
+        buildingName={unit.buildingName}
+        open={unitUpdateDialogOpen}
+        onOpenChange={setUnitUpdateDialogOpen}
+        unit={unit}
+      />
       <Card className="border-theme-secondary-300 group rounded-2xl border duration-200 hover:shadow-md">
         <CardContent className="p-4">
           <div className="mb-3 flex items-start justify-between">
@@ -48,15 +78,25 @@ const UnitCard = ({ unit, onEdit, onDelete }: IUnitCardProps) => {
               </div>
               <div>
                 <h6 className="text-body-2 font-semibold">{unit.unitName}</h6>
-                <p className="text-theme-secondary text-body-2">{unit.unitType}</p>
+                <p className="text-theme-secondary text-body-2 capitalize">{unit.unitType}</p>
               </div>
             </div>
             <div className="desktop:opacity-0 flex gap-1 transition-opacity group-hover:opacity-100">
-              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => onEdit(unit)}>
-                <Edit className="h-3 w-3" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="flex size-7 items-center gap-x-2"
+                onClick={handleUpdateDialogOpen}
+              >
+                <Edit className="size-4" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setDeleteDialogOpen(true)}>
-                <Trash2 className="text-theme-error h-3 w-3" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="flex size-7 items-center gap-x-2"
+                onClick={handleDeleteAlertOpen}
+              >
+                <Trash2 className="text-theme-error size-4" />
               </Button>
             </div>
           </div>
@@ -66,7 +106,7 @@ const UnitCard = ({ unit, onEdit, onDelete }: IUnitCardProps) => {
         </CardContent>
       </Card>
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+      <AlertDialog open={deleteDialogOpen} onOpenChange={handleDeleteAlertClose}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Unit</AlertDialogTitle>
@@ -74,7 +114,7 @@ const UnitCard = ({ unit, onEdit, onDelete }: IUnitCardProps) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => onDelete(unit.id)} className="bg-theme-error hover:bg-theme-error/90">
+            <AlertDialogAction onClick={handleDeleteUnit} className="bg-theme-error hover:bg-theme-error/90">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

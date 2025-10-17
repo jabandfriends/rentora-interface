@@ -1,5 +1,5 @@
 import { Plus } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Button, Card, Spinner } from '@/components/common'
@@ -14,7 +14,9 @@ const ApartmentBuildingSetting = () => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const { data: buildings, isLoading: isLoadingBuildings } = useRentoraApiBuildingListNoPaginate({ apartmentId })
 
+  //delete hook
   const [dialogOpen, setDialogOpen] = useState(false)
+  const handleCreateBuildingDialogOpen = useCallback(() => setDialogOpen(true), [])
 
   if (isLoadingBuildings) {
     return (
@@ -25,14 +27,15 @@ const ApartmentBuildingSetting = () => {
       />
     )
   }
+
   return (
     <Card className="justify-start space-y-4 rounded-xl shadow">
       <div className="flex items-center justify-between">
         <div>
-          <h5>Building Information</h5>
+          <h4>Building Information</h4>
           <p className="text-body-2 text-theme-secondary">Add and manage buildings in your apartment complex</p>
         </div>
-        <Button onClick={() => setDialogOpen(true)} className="flex items-center gap-2">
+        <Button onClick={handleCreateBuildingDialogOpen} className="flex items-center gap-2">
           <Plus className="size-4" />
           Add Building
         </Button>
@@ -41,18 +44,10 @@ const ApartmentBuildingSetting = () => {
         {/* Building List */}
         <div className="space-y-2">
           <div className="flex flex-col gap-2">
-            {/* Example building items */}
             <BuildingDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+
             {buildings ? (
-              buildings.map((building: IBuilding) => (
-                <BuildingCard
-                  key={building.id}
-                  building={building}
-                  onUpdate={() => console.log('Update')}
-                  onEdit={() => console.log('Update')}
-                  onDelete={() => console.log('Delete')}
-                />
-              ))
+              buildings.map((building: IBuilding) => <BuildingCard key={building.id} building={building} />)
             ) : (
               <p className="text-body-2 text-theme-secondary">No buildings found</p>
             )}

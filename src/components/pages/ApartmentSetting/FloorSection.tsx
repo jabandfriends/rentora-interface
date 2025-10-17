@@ -1,5 +1,6 @@
-import { Edit, Layers, Plus, Trash2 } from 'lucide-react'
+import { Edit, Layers, PackageOpen, Plus, Trash2 } from 'lucide-react'
 import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
@@ -14,19 +15,22 @@ import {
   AlertDialogTitle,
   PaginationBar,
 } from '@/components/feature'
+import { PageTableEmpty } from '@/components/ui'
 import { DEFAULT_UNIT_LIST_DATA } from '@/constants'
-import { useRentoraApiUnitList } from '@/hooks'
+import { useRentoraApiDeleteFloor, useRentoraApiUnitList } from '@/hooks'
 import type { IFloor, IUnit } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
-import FloorDialog from './FloorDialog'
+import FloorDialogUpdate from './FloorDialogUpdate'
 import UnitCard from './UnitCard'
 import UnitDialog from './UnitDialog'
 
 type IFloorSectionProps = {
   floor: IFloor
+  buildingId: string
 }
 
-const FloorSection = ({ floor }: IFloorSectionProps) => {
+const FloorSection = ({ floor, buildingId }: IFloorSectionProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [floorDialogOpen, setFloorDialogOpen] = useState(false)
@@ -34,6 +38,7 @@ const FloorSection = ({ floor }: IFloorSectionProps) => {
 
   const [currentPage, setCurrentPage] = useState(DEFAULT_UNIT_LIST_DATA.page)
 
+  //unit list
   const {
     data: units,
     pagination: { totalElements, totalPages },
@@ -45,10 +50,27 @@ const FloorSection = ({ floor }: IFloorSectionProps) => {
     },
   })
 
+  //floor delete
+  const { mutateAsync: deleteFloor } = useRentoraApiDeleteFloor({ buildingId })
+
   const handlePageChange = useCallback((page: number) => {
     if (page < 1) return
     setCurrentPage(page)
   }, [])
+
+  //handle dialog update open
+  const handleUpdateDialogOpen = useCallback(() => setFloorDialogOpen(true), [])
+  //handle dialog delete open
+  const handleDeleteDialogOpen = useCallback(() => setDeleteDialogOpen(true), [])
+  //handle delete
+  const handleDeleteFloor = useCallback(async () => {
+    try {
+      await deleteFloor(floor.floorId)
+      toast.success('Floor deleted successfully')
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
+  }, [deleteFloor, floor.floorId])
 
   return (
     <>
@@ -66,20 +88,10 @@ const FloorSection = ({ floor }: IFloorSectionProps) => {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button
-              onClick={() => setFloorDialogOpen(true)}
-              className="flex items-center gap-2"
-              variant="outline"
-              size="icon"
-            >
+            <Button onClick={handleUpdateDialogOpen} className="flex items-center gap-2" variant="outline" size="icon">
               <Edit className="h-3 w-3" />
             </Button>
-            <Button
-              onClick={() => setDeleteDialogOpen(true)}
-              className="flex items-center gap-2"
-              variant="outline"
-              size="icon"
-            >
+            <Button onClick={handleDeleteDialogOpen} className="flex items-center gap-2" variant="outline" size="icon">
               <Trash2 className="text-theme-error h-3 w-3" />
             </Button>
             <Button onClick={() => setUnitDialogOpen(true)} className="flex items-center gap-2" variant="outline">
@@ -99,16 +111,15 @@ const FloorSection = ({ floor }: IFloorSectionProps) => {
           </div>
         ) : (
           <div>
-            <div className="desktop:grid-cols-3 grid grid-cols-2 gap-3">
-              {units?.map((unit: IUnit) => (
-                <UnitCard
-                  key={unit.id}
-                  unit={unit}
-                  onEdit={() => console.log('edit')}
-                  onDelete={() => console.log('delete')}
-                />
-              ))}
-            </div>
+            {units?.length > 0 ? (
+              <div className="desktop:grid-cols-3 grid grid-cols-2 gap-3">
+                {units?.map((unit: IUnit) => (
+                  <UnitCard key={unit.id} unit={unit} />
+                ))}
+              </div>
+            ) : (
+              <PageTableEmpty icon={<PackageOpen />} message="No units found on this floor" />
+            )}
             {units?.length > 0 && (
               <PaginationBar
                 page={currentPage}
@@ -131,7 +142,7 @@ const FloorSection = ({ floor }: IFloorSectionProps) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogAction onClick={handleDeleteFloor} className="bg-theme-error hover:bg-theme-error/90">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -139,13 +150,17 @@ const FloorSection = ({ floor }: IFloorSectionProps) => {
       </AlertDialog>
 
       <UnitDialog
-        onSave={() => console.log('save')}
-        unit={null}
+        floorId={floor.floorId}
         open={unitDialogOpen}
         onOpenChange={setUnitDialogOpen}
+        buildingName={floor.buildingName}
       />
-
-      <FloorDialog open={floorDialogOpen} onOpenChange={setFloorDialogOpen} floor={floor} />
+      <FloorDialogUpdate
+        buildingId={buildingId}
+        floor={floor}
+        open={floorDialogOpen}
+        onOpenChange={setFloorDialogOpen}
+      />
     </>
   )
 }

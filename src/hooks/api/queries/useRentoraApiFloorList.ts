@@ -8,7 +8,7 @@ export const useRentoraApiFloorList = (props: { buildingId: string }): IUseFloor
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
 
   return useQuery<IRentoraApiClientFloorListResponse['data']>({
-    queryKey: [rentoraApiQueryClient.key.floorList],
+    queryKey: [rentoraApiQueryClient.key.floorList, props.buildingId],
     queryFn: () => rentoraApiQueryClient.floorList(props.buildingId),
     enabled: !!props.buildingId,
   })

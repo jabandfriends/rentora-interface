@@ -108,7 +108,7 @@ const ApartmentUtilitySetting = () => {
   return (
     <Card className="justify-start rounded-xl shadow">
       <div>
-        <h5>Utility Water and Electric</h5>
+        <h4>Utility Water and Electric</h4>
         <p className="text-body-2 text-theme-secondary">
           Manage utility water and electric in your complex (will add to monthly rent)
         </p>

@@ -96,7 +96,7 @@ const ApartmentInformationSetting = () => {
   return (
     <Card className="justify-start rounded-xl shadow">
       <div>
-        <h5>Apartment Information</h5>
+        <h4>Apartment Information</h4>
         <p className="text-body-2 text-theme-secondary">General details about your apartment complex</p>
       </div>
       <Form {...form}>

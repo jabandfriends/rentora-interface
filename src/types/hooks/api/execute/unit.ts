@@ -15,7 +15,7 @@ export type IUpdateUnitParams = {
   apartmentId: string
   unitId: string
 }
-export type IUpdateUnitRequestPayload = {
+export type IUpdateUnitRequestPayload = Partial<{
   unitName: string
   bedrooms: number
   bathrooms: number
@@ -23,7 +23,7 @@ export type IUpdateUnitRequestPayload = {
   balconyCount: number
   parkingSpaces: number
   status: UnitStatus
-}
+}>
 
 //hook
 export type IUseCreateUnit = IBaseUseMutation<void, ICreateUnitRequestPayload>

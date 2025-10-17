@@ -27,7 +27,7 @@ export type IUnit = {
   bedrooms: number
   bathrooms: number
   squareMeters: number
-  unitStatus: string
+  unitStatus: UnitStatus
   furnishingStatus: string
   floorName: string
   buildingName: string
@@ -39,6 +39,8 @@ export type IUnit = {
   contractStatus: string
   contractStartDate: string
   contractEndDate: string
+  balconyCount: number
+  parkingSpaces: number
 }
 
 export type IRentoraApiUnitListParams = {

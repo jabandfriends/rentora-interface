@@ -193,7 +193,7 @@ const ContractDetail = ({ form }: IContractDetail) => {
                 Rental Price <span className="text-theme-error">*</span>
               </FormLabel>
               <FormControl>
-                <InputNumber maxLength={9} decimal placeholder="12000.00" {...field} />
+                <InputNumber maxLength={8} decimal placeholder="12000.00" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -211,7 +211,7 @@ const ContractDetail = ({ form }: IContractDetail) => {
                 Deposit Amount <span className="text-theme-error">*</span>
               </FormLabel>
               <FormControl>
-                <InputNumber maxLength={9} decimal placeholder="24000.00" {...field} />
+                <InputNumber maxLength={8} decimal placeholder="24000.00" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -229,7 +229,7 @@ const ContractDetail = ({ form }: IContractDetail) => {
                 Late Fee Amount <span className="text-theme-error">*</span>
               </FormLabel>
               <FormControl>
-                <InputNumber maxLength={9} decimal placeholder="500.00" {...field} />
+                <InputNumber maxLength={8} decimal placeholder="500.00" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

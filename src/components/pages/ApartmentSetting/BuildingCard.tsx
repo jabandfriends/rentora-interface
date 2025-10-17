@@ -1,5 +1,7 @@
-import { Building2, ChevronDown, ChevronUp, Edit, Plus, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { Building2, ChevronDown, ChevronUp, Edit, PackageOpen, Plus, Trash2 } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
 
 import { Button, Card, CardContent, CardHeader } from '@/components/common'
 import {
@@ -12,25 +14,48 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/feature'
-import { useRentoraApiFloorList } from '@/hooks'
+import { useRentoraApiDeleteBuilding, useRentoraApiFloorList } from '@/hooks'
 import type { IBuilding, IFloor } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
+import BuildingDialogUpdate from './BuildingDialogUpdate'
 import FloorDialog from './FloorDialog'
 import FloorSection from './FloorSection'
 
 interface BuildingCardProps {
   building: IBuilding
-  onEdit: (building: IBuilding) => void
-  onDelete: (id: string) => void
-  onUpdate: (building: IBuilding) => void
 }
-const BuildingCard = ({ building, onEdit, onDelete }: BuildingCardProps) => {
+const BuildingCard = ({ building }: BuildingCardProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   const [expanded, setExpanded] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [floorDialogOpen, setFloorDialogOpen] = useState(false)
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false)
 
   const { data: floors } = useRentoraApiFloorList({ buildingId: building.id })
 
+  //delete hook
+  const { mutateAsync: deleteBuilding } = useRentoraApiDeleteBuilding({ apartmentId: apartmentId! })
+
+  //building
+  const handleDeleteDialogOpen = useCallback(() => setDeleteDialogOpen(true), [])
+  const handleUpdateDialogOpen = useCallback(() => setUpdateDialogOpen(true), [])
+
+  //floor
+  const handleFloorCreateDialogOpen = useCallback(() => setFloorDialogOpen(true), [])
+
+  //handle delete
+  const handleDeleteBuilding = useCallback(async () => {
+    try {
+      await deleteBuilding({ buildingId: building.id })
+      toast.success('Building deleted successfully')
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
+  }, [deleteBuilding, building.id])
+
+  //handle expand
+  const handleExpand = useCallback(() => setExpanded(!expanded), [expanded])
   return (
     <>
       <Card className="border-theme-secondary-300 overflow-hidden rounded-2xl border duration-200">
@@ -51,14 +76,14 @@ const BuildingCard = ({ building, onEdit, onDelete }: BuildingCardProps) => {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="ghost" size="icon" onClick={() => onEdit(building)}>
-                <Edit className="h-4 w-4" />
+              <Button variant="ghost" className="flex items-center" size="icon" onClick={handleUpdateDialogOpen}>
+                <Edit className="size-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={() => setDeleteDialogOpen(true)}>
-                <Trash2 className="text-destructive h-4 w-4" />
+              <Button variant="ghost" className="flex items-center" size="icon" onClick={handleDeleteDialogOpen}>
+                <Trash2 className="text-theme-error size-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)}>
-                {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              <Button variant="ghost" size="icon" className="flex items-center" onClick={handleExpand}>
+                {expanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
               </Button>
             </div>
           </div>
@@ -71,7 +96,7 @@ const BuildingCard = ({ building, onEdit, onDelete }: BuildingCardProps) => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setFloorDialogOpen(true)}
+                onClick={handleFloorCreateDialogOpen}
                 className="flex items-center gap-2"
               >
                 <Plus className="size-4" />
@@ -80,9 +105,15 @@ const BuildingCard = ({ building, onEdit, onDelete }: BuildingCardProps) => {
             </div>
 
             {floors?.length === 0 ? (
-              <div className="bg-theme-secondary-200/30 border-border rounded-lg border-2 border-dashed py-8 text-center">
-                <p className="text-muted-foreground mb-3">No floors added yet</p>
-                <Button variant="outline" size="sm" onClick={() => setFloorDialogOpen(true)} className="gap-2">
+              <div className="bg-theme-secondary-100/30 border-theme-secondary-300 flex flex-col items-center space-y-2 rounded-lg border-2 border-dashed py-8 text-center">
+                <PackageOpen className="text-theme-secondary size-8" />
+                <p className="text-theme-secondary text-body-2">No floors added yet</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setFloorDialogOpen(true)}
+                  className="flex items-center gap-2"
+                >
                   <Plus className="size-3" />
                   Add First Floor
                 </Button>
@@ -90,7 +121,11 @@ const BuildingCard = ({ building, onEdit, onDelete }: BuildingCardProps) => {
             ) : (
               <div className="space-y-4">
                 {floors?.map((floor: IFloor) => (
-                  <FloorSection key={floor.buildingId + floor.floorName + floor.floorNumber} floor={floor} />
+                  <FloorSection
+                    buildingId={building.id}
+                    key={floor.buildingId + floor.floorName + floor.floorNumber}
+                    floor={floor}
+                  />
                 ))}
               </div>
             )}
@@ -98,6 +133,7 @@ const BuildingCard = ({ building, onEdit, onDelete }: BuildingCardProps) => {
         )}
       </Card>
 
+      <BuildingDialogUpdate open={updateDialogOpen} onOpenChange={setUpdateDialogOpen} buildingId={building.id} />
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -109,17 +145,14 @@ const BuildingCard = ({ building, onEdit, onDelete }: BuildingCardProps) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => onDelete(building.id)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
+            <AlertDialogAction onClick={handleDeleteBuilding} className="bg-theme-error hover:bg-theme-error/90">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      <FloorDialog open={floorDialogOpen} onOpenChange={setFloorDialogOpen} />
+      <FloorDialog buildingId={building.id} open={floorDialogOpen} onOpenChange={setFloorDialogOpen} />
     </>
   )
 }

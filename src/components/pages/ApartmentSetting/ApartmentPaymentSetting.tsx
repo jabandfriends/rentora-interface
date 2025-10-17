@@ -7,7 +7,7 @@ const ApartmentPaymentSetting = () => {
   return (
     <Card className="justify-start rounded-xl shadow">
       <div>
-        <h5>Payment Methods</h5>
+        <h4>Payment Methods</h4>
         <p className="text-body-2 text-theme-secondary">Manage bank accounts for rent payments</p>
       </div>
       <div className="space-y-4">

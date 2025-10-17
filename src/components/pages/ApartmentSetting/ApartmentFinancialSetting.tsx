@@ -98,7 +98,7 @@ const ApartmentFinancialSetting = () => {
   return (
     <Card className="justify-start rounded-xl shadow">
       <div>
-        <h5>Apartment Financial Setting</h5>
+        <h4>Apartment Financial Setting</h4>
         <p className="text-body-2 text-theme-secondary">Configure payment due day and late fee</p>
       </div>
       <Form {...form}>

@@ -38,7 +38,7 @@ const ApartmentMainServiceSetting = () => {
   return (
     <Card className="justify-start rounded-xl shadow">
       <div>
-        <h5>Main Service</h5>
+        <h4>Main Service</h4>
         <p className="text-body-2 text-theme-secondary">
           Manage main service in your complex (will add to monthly rent)
         </p>
