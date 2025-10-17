@@ -28,8 +28,8 @@ const buttonVariants: ICompVariantConfig<IButtonVariants> = tv({
       vanilla: 'hover:bg-theme-white/10 border-transparent focus-visible:ring-[0px]',
       outline: 'text-theme-primary hover:bg-theme-primary hover:text-theme-white border bg-transparent',
       error: 'text-theme-white bg-theme-error hover:bg-theme-error-400 border-transparent',
-      ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-      link: 'text-primary underline-offset-4 hover:underline',
+      ghost: 'hover:bg-theme-secondary-200',
+      link: 'text-theme-primary underline-offset-4 hover:underline',
     },
     size: {
       default: '!text-heading-5 h-11 px-7 py-3',

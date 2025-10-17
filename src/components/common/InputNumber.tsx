@@ -1,8 +1,10 @@
+import type { ChangeEvent } from 'react'
+
 import { Input } from '@/components/common'
 import type { IInputNumberProps } from '@/types'
 
 function InputNumber({ decimal = false, maxChars, onChange, ...props }: IInputNumberProps) {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value
 
     if (decimal) {

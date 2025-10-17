@@ -66,3 +66,23 @@ export type ISetupApartmentRequestPayload = {
   waterPrice: number
   waterType: string
 }
+
+export type IUpdateApartmentRequestPayload = Partial<{
+  name: string
+  phoneNumber: string
+  taxId: string
+  paymentDueDay: number
+  lateFee: number
+  lateFeeType: LateFeeType
+  gracePeriodDays: number
+  address: string
+  city: string
+  state: string
+  postalCode: string
+  country: string
+  timezone: string
+  currency: string
+}>
+
+//hook type
+export type IUseRentoraApiUpdateApartment = IBaseUseMutation<void, IUpdateApartmentRequestPayload>
