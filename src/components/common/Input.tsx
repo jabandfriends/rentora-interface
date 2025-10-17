@@ -6,11 +6,11 @@ const INPUT_CLASSNAME: string =
 
 function Input({ className, type, prefix, suffix, ref, error, ...props }: IInputProps) {
   return (
-    <div className="flex w-full flex-col gap-3">
+    <div className="focus-within:ring-theme-primary flex w-full flex-col justify-center gap-3 rounded-md duration-75 focus-within:ring-2">
       <div
         className={cn(
           'border-default border-theme-night-600 bg-theme-night-600/10 flex items-center gap-x-2 rounded-md border focus:ring-2',
-          [error && 'border-error', prefix && 'px-2'],
+          [error && 'border-error', prefix && 'px-2', suffix && 'pr-2'],
           className,
         )}
       >

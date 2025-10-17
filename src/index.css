@@ -155,44 +155,61 @@
   /* Colors Palette */
   --color-*: initial;
   --color-transparent: transparent;
-  /* Primary: Mint Green */
-  --color-theme-primary: #0BCCBF;
-  --color-theme-primary-900: #03485F;
-  --color-theme-primary-800: #057177;
-  --color-theme-primary-700: #079A8F;
-  --color-theme-primary-600: #09B3A7;
-  --color-theme-primary-400: #2DD5CD;
-  --color-theme-primary-300: #5ADFDA;
-  --color-theme-primary-200: #88E8E7;
-  --color-theme-primary-100: #E2FAF9;
-  --color-theme-primary-50: #E2FAF9;
 
-  /* Secondary: Lemon Yellow */
-  --color-theme-secondary: #FFD600;
-  --color-theme-secondary-900: #8C7700;
-  --color-theme-secondary-800: #B39800;
-  --color-theme-secondary-700: #CCAD00;
-  --color-theme-secondary-600: #E6C100;
-  --color-theme-secondary-400: #FFDB1A;
-  --color-theme-secondary-300: #FFE34D;
-  --color-theme-secondary-200: #FFEB80;
-  --color-theme-secondary-100: #FFF3B3;
-  --color-theme-secondary-50: #FFFBE5;
+  /* Primary: Professional Blue */
+  --color-theme-primary: #3b82f6;
+  --color-theme-primary-900: #1e3a8a;
+  --color-theme-primary-800: #1e40af;
+  --color-theme-primary-700: #1d4ed8;
+  --color-theme-primary-600: #2563eb;
+  --color-theme-primary-500: #3b82f6;
+  --color-theme-primary-400: #60a5fa;
+  --color-theme-primary-300: #93c5fd;
+  --color-theme-primary-200: #bfdbfe;
+  --color-theme-primary-100: #dbeafe;
+  --color-theme-primary-50: #eff6ff;
+
+  /* Secondary: Warm Slate */
+  --color-theme-secondary: #64748b;
+  --color-theme-secondary-900: #0f172a;
+  --color-theme-secondary-800: #1e293b;
+  --color-theme-secondary-700: #334155;
+  --color-theme-secondary-600: #475569;
+  --color-theme-secondary-500: #64748b;
+  --color-theme-secondary-400: #94a3b8;
+  --color-theme-secondary-300: #cbd5e1;
+  --color-theme-secondary-200: #e2e8f0;
+  --color-theme-secondary-100: #f1f5f9;
+  --color-theme-secondary-50: #f8fafc;
 
   /* White: */
   --color-theme-white: #FFFFFF;
 
-  /* Gray: */
-  --color-theme-gray: #92A5AD;
-  --color-theme-gray-50: #263B4C;
-  --color-theme-gray-100: #3D5363;
-  --color-theme-gray-200: #556A79;
-  --color-theme-gray-300: #6D8290;
-  --color-theme-gray-400: #8599A6;
-  --color-theme-gray-600: #A9B8BF;
-  --color-theme-gray-700: #C1CBD1;
-  --color-theme-gray-800: #D9DEE3;
-  --color-theme-gray-900: #D9DEE3;
+  /* Success :  Emerald Green*/
+  --color-theme-success: #10b981;
+  --color-theme-success-50: #ecfdf5;
+  --color-theme-success-100: #d1fae5;
+  --color-theme-success-200: #a7f3d0;
+  --color-theme-success-300: #6ee7b7;
+  --color-theme-success-400: #34d399;
+  --color-theme-success-500: #10b981;
+  --color-theme-success-600: #059669;
+  --color-theme-success-700: #047857;
+  --color-theme-success-800: #065f46;
+  --color-theme-success-900: #064e3b;
+
+  /* Warning :  Amber*/
+  --color-theme-warning: #f59e0b;
+  --color-theme-warning-50: #fffbeb;
+  --color-theme-warning-100: #fef3c7;
+  --color-theme-warning-200: #fde68a;
+  --color-theme-warning-300: #fcd34d;
+  --color-theme-warning-400: #fbbf24;
+  --color-theme-warning-500: #f59e0b;
+  --color-theme-warning-600: #d97706;
+  --color-theme-warning-700: #b45309;
+  --color-theme-warning-800: #92400e;
+  --color-theme-warning-900: #78350f;
 
 
   /* Night: */
@@ -209,12 +226,25 @@
 
   /* Light: */
   --color-theme-light: #fafafa;
+  --color-theme-light-50: #F2F0EF;
 
-  /* Error: */
-  --color-theme-error: #F53341;
+  /* Error: Red */
+  --color-theme-error: #ef4444;
+  --color-theme-error-50: #fef2f2;
+  --color-theme-error-100: #fee2e2;
+  --color-theme-error-200: #fecaca;
+  --color-theme-error-300: #fca5a5;
+  --color-theme-error-400: #f87171;
+  --color-theme-error-500: #ef4444;
+  --color-theme-error-600: #dc2626;
+  --color-theme-error-700: #b91c1c;
+  --color-theme-error-800: #991b1b;
+  --color-theme-error-900: #7f1d1d;
+
+
 
   /* Border Colors */
-  --border-color-page: var(--color-theme-white);
+  --border-color-page: var(--color-theme-light-50);
 
   /* Typography Color */
   --text-color-primary: var(--color-theme-night);
@@ -362,7 +392,7 @@
     --header-height: 64px;
 
     /* background */
-    background-color: var(--color-theme-light);
+    background-color: var(--color-theme-light-50);
 
   }
 

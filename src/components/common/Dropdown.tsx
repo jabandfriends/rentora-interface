@@ -141,7 +141,7 @@ function DropdownMenuSeparator({ className, ...props }: ComponentProps<typeof Se
   return (
     <Separator
       data-slot="dropdown-menu-separator"
-      className={cn('bg-theme-gray-400 -mx-1 my-1 h-px', className)}
+      className={cn('bg-theme-secondary-300 -mx-1 my-1 h-px', className)}
       {...props}
     />
   )
@@ -174,7 +174,7 @@ function DropdownMenuSubTrigger({
       data-slot="dropdown-menu-sub-trigger"
       data-inset={inset}
       className={cn(
-        'focus:bg-theme-gray-400 focus:text-primary data-[state=open]:bg-theme-gray-400 data-[state=open]:text-primary outline-hidden flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm data-[inset]:pl-8',
+        'focus:bg-theme-night-400 focus:text-primary data-[state=open]:bg-theme-gray-400 data-[state=open]:text-primary outline-hidden flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm data-[inset]:pl-8',
         className,
       )}
       {...props}
