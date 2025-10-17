@@ -12,6 +12,7 @@ FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY ./public/env.js /usr/share/nginx/html/env.js
 COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 RUN rm /etc/nginx/conf.d/default.conf \
     && echo 'server { \
