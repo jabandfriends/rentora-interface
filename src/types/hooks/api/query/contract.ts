@@ -76,6 +76,8 @@ export type IContractSummary = {
 export type IRentoraApiContractListParams = {
   page?: number
   size?: number
+  sortBy?: string
+  sortDir?: string
   contractStatus?: CONTRACT_STATUS
   unitId?: string
 }
