@@ -1,14 +1,20 @@
-import { Plus, X } from 'lucide-react'
+import { Plus } from 'lucide-react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { Button, Card, Input, InputNumber, Label, Spinner } from '@/components/common'
-import { Badge, PageTableEmpty } from '@/components/ui'
+import { Button, Card, Spinner } from '@/components/common'
+import { PageTableEmpty } from '@/components/ui'
 import { useRentoraApiBuildingListNoPaginate } from '@/hooks'
 import type { IBuilding } from '@/types'
+
+import BuildingCard from './BuildingCard'
+import BuildingDialog from './BuildingDialog'
 
 const ApartmentBuildingSetting = () => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const { data: buildings, isLoading: isLoadingBuildings } = useRentoraApiBuildingListNoPaginate({ apartmentId })
+
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   if (isLoadingBuildings) {
     return (
@@ -20,47 +26,37 @@ const ApartmentBuildingSetting = () => {
     )
   }
   return (
-    <Card className="justify-start rounded-xl shadow">
-      <div>
-        <h5>Building Information</h5>
-        <p className="text-body-2 text-theme-secondary">Add and manage buildings in your apartment complex</p>
+    <Card className="justify-start space-y-4 rounded-xl shadow">
+      <div className="flex items-center justify-between">
+        <div>
+          <h5>Building Information</h5>
+          <p className="text-body-2 text-theme-secondary">Add and manage buildings in your apartment complex</p>
+        </div>
+        <Button onClick={() => setDialogOpen(true)} className="flex items-center gap-2">
+          <Plus className="size-4" />
+          Add Building
+        </Button>
       </div>
       <div className="space-y-4">
         {/* Building List */}
         <div className="space-y-2">
-          <Label>Buildings</Label>
           <div className="flex flex-col gap-2">
             {/* Example building items */}
+            <BuildingDialog open={dialogOpen} onOpenChange={setDialogOpen} />
             {buildings ? (
               buildings.map((building: IBuilding) => (
-                <Badge variant="secondary" className="flex items-center gap-1">
-                  {building.name}: {building.floorCount} Floors
-                  <X className="hover:text-theme-error h-3 w-3 cursor-pointer" />
-                </Badge>
+                <BuildingCard
+                  key={building.id}
+                  building={building}
+                  onUpdate={() => console.log('Update')}
+                  onEdit={() => console.log('Update')}
+                  onDelete={() => console.log('Delete')}
+                />
               ))
             ) : (
               <p className="text-body-2 text-theme-secondary">No buildings found</p>
             )}
           </div>
-        </div>
-
-        {/* Add New Building */}
-        <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-2">
-            <Label htmlFor="buildingName">Building Name</Label>
-            <Input id="buildingName" placeholder="Enter building name" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="floors">Number of Floors</Label>
-            <InputNumber placeholder="Floors" />
-          </div>
-        </div>
-
-        <div className="flex justify-end">
-          <Button className="flex items-center gap-2" variant="outline">
-            <Plus className="h-4 w-4" />
-            Add Building
-          </Button>
         </div>
       </div>
     </Card>

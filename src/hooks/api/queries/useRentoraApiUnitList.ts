@@ -23,9 +23,10 @@ export const useRentoraApiUnitList = (props: {
       props?.params?.sortDir,
       props?.params?.status,
       props?.params?.buildingName,
+      props?.params?.floorId,
     ],
     queryFn: async () => {
-      const { page, size, search, sortBy, sortDir, status, buildingName }: IRentoraApiUnitListParams =
+      const { page, size, search, sortBy, sortDir, status, buildingName, floorId }: IRentoraApiUnitListParams =
         props?.params ?? {}
       return await rentoraApiQueryClient.unitList(props?.apartmentId, {
         ...(props?.params ?? {}),
@@ -34,6 +35,7 @@ export const useRentoraApiUnitList = (props: {
         ...(sortDir ? { sortDir } : {}),
         ...(status ? { status } : {}),
         ...(buildingName ? { buildingName } : {}),
+        ...(floorId ? { floorId } : {}),
         page,
         size,
       })

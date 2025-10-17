@@ -47,6 +47,7 @@ export type IRentoraApiUnitListParams = {
   sortDir?: string
   status?: UnitStatus
   buildingName?: string
+  floorId?: string
 }
 
 // room type
