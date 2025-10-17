@@ -185,6 +185,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
       )
     return response.data.data
   }
+
   //create meter reading
   async createMeterReading(apartmentId: string, payload: IMeterReadingRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/${apartmentId}/unit/utility`, payload)
