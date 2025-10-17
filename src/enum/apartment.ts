@@ -4,3 +4,11 @@ export enum APARTMENT_STATUS {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
 }
+
+export enum ApartmentPaymentMethodType {
+  BANK_TRANSFER = 'bank_transfer',
+  PROMPTPAY = 'promptpay',
+  CREDIT_CARD = 'credit_card',
+  CASH = 'cash',
+  CHEQUE = 'cheque',
+}

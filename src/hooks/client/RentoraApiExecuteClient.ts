@@ -23,6 +23,7 @@ import type {
   IRentoraApiClientDeleteMaintenanceResponse,
   IRentoraApiClientUpdateMaintenanceResponse,
   ISetupApartmentRequestPayload,
+  ITerminateContractRequestPayload,
   IUpdateApartmentRequestPayload,
   IUpdateBuildingRequestPayload,
   IUpdateFloorPayload,
@@ -68,6 +69,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createUnit: 'CREATE_UNIT',
     updateUnit: 'UPDATE_UNIT',
     deleteUnit: 'DELETE_UNIT',
+    terminateContract: 'TERMINATE_CONTRACT',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -214,6 +216,18 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   ): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(
       `/api/apartments/${apartmentId}/all-room/detail/${unitId}`,
+      payload,
+    )
+    return response.data
+  }
+  //terminate contract
+  async terminateContract(
+    apartmentId: string,
+    roomNumber: string,
+    payload: ITerminateContractRequestPayload,
+  ): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(
+      `/api/apartments/${apartmentId}/contracts/${roomNumber}/terminate`,
       payload,
     )
     return response.data

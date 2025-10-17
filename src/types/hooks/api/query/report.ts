@@ -46,6 +46,7 @@ export type IReportUtilityListMetadata = {
   totalAmount: number
 }
 
+//params
 export type IRentoraApiReportUtilityListParams = {
   page?: number
   size?: number
@@ -57,6 +58,9 @@ export type IRentoraApiReportUtilityListParams = {
 }
 
 export type IReadingUnitUtility = {
+  readingDate: string
+}
+export type IReadingRoomReport = {
   readingDate: string
 }
 

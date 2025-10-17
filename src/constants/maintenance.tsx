@@ -34,36 +34,53 @@ export const MAINTENANCE_TABLE_HEADER = [
   'Due Date',
   'Priority',
   'Status',
+  'Recurring',
+  'Recurring Schedule',
   'Action',
 ]
 
-export const MAINTENANCE_FORM_SCHEMA = z.object({
-  unitId: z.string({ error: 'Room number is required.' }).min(1, 'Room number is required.'),
-  title: z.string({ error: 'Task title is required.' }).min(1, 'Task title is required.'),
-  description: z.string().optional(),
-  status: z.enum(
-    [
-      MAINTENANCE_STATUS.COMPLETED,
-      MAINTENANCE_STATUS.PENDING,
-      MAINTENANCE_STATUS.ASSIGNED,
-      MAINTENANCE_STATUS.IN_PROGRESS,
-      MAINTENANCE_STATUS.CANCELLED,
-    ],
-    { error: 'Status is required' },
-  ),
-  priority: z.enum(
-    [MAINTENANCE_PRIORITY.LOW, MAINTENANCE_PRIORITY.NORMAL, MAINTENANCE_PRIORITY.HIGH, MAINTENANCE_PRIORITY.URGENT],
-    { error: 'Priority is required' },
-  ),
-  appointmentDate: z.string({ error: 'Appointment date is required.' }).min(1, 'Appointment date is required.'),
-  dueDate: z.string({ error: 'Due date is wrong format.' }).optional(),
-  category: z.enum([MAINTENANCE_CATEGORY.GENERAL, MAINTENANCE_CATEGORY.PLUMBING, MAINTENANCE_CATEGORY.ELECTRICITY], {
-    error: 'Category is required',
-  }),
-  isEmergency: z.boolean(),
-  estimatedHours: z.string().optional(),
-  estimatedCost: z.string().optional(),
-})
+export const MAINTENANCE_FORM_SCHEMA = z
+  .object({
+    unitId: z.string({ error: 'Room number is required.' }).min(1, 'Room number is required.'),
+    title: z.string({ error: 'Task title is required.' }).min(1, 'Task title is required.'),
+    description: z.string().optional(),
+    status: z.enum(
+      [
+        MAINTENANCE_STATUS.COMPLETED,
+        MAINTENANCE_STATUS.PENDING,
+        MAINTENANCE_STATUS.ASSIGNED,
+        MAINTENANCE_STATUS.IN_PROGRESS,
+        MAINTENANCE_STATUS.CANCELLED,
+      ],
+      { error: 'Status is required' },
+    ),
+    priority: z.enum(
+      [MAINTENANCE_PRIORITY.LOW, MAINTENANCE_PRIORITY.NORMAL, MAINTENANCE_PRIORITY.HIGH, MAINTENANCE_PRIORITY.URGENT],
+      { error: 'Priority is required' },
+    ),
+    appointmentDate: z.string({ error: 'Appointment date is required.' }).min(1, 'Appointment date is required.'),
+    recurringSchedule: z.string(),
+    dueDate: z.string({ error: 'Due date is wrong format.' }).optional(),
+    category: z.enum([MAINTENANCE_CATEGORY.GENERAL, MAINTENANCE_CATEGORY.PLUMBING, MAINTENANCE_CATEGORY.ELECTRICITY], {
+      error: 'Category is required',
+    }),
+    isEmergency: z.boolean(),
+    isRecurring: z.boolean(),
+    estimatedHours: z.string().optional(),
+    estimatedCost: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.isRecurring) {
+        return data.recurringSchedule && data.recurringSchedule.trim() !== ''
+      }
+      return true
+    },
+    {
+      message: 'Recurring schedule is required when recurring is enabled.',
+      path: ['recurringSchedule'],
+    },
+  )
 
 export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS_TYPE>> = [
   {

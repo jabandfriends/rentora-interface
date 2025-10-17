@@ -112,6 +112,11 @@ const MeterReadingListPage = () => {
   if (isLoadingFilterDates) {
     return (
       <PageSection>
+        <PageTableHeader
+          title="Meter Readings"
+          description="View and manage meter readings by date"
+          actionButton={<Button onClick={handleNavigateToCreate}>Create New Reading</Button>}
+        />
         <PageTableEmpty
           icon={<Spinner />}
           message="Loading your meter readings..."
@@ -123,6 +128,11 @@ const MeterReadingListPage = () => {
   if (!filterDates || filterDates.length === 0) {
     return (
       <PageSection>
+        <PageTableHeader
+          title="Meter Readings"
+          description="View and manage meter readings by date"
+          actionButton={<Button onClick={handleNavigateToCreate}>Create New Reading</Button>}
+        />
         <PageTableEmpty
           message="No meter readings found"
           description="It looks like there aren’t any meter readings for this apartment yet."

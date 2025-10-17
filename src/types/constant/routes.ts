@@ -25,8 +25,6 @@ export type IRoutes = {
   apartmentSetting: IRoute
   overview: IRoute
   allRoom: IRoute
-  roomReport: IRoute
-  receiptReport: IRoute
   electricWaterReport: IRoute
   serviceInvoice: IRoute
   maintenanceCreate: IRoute
