@@ -8,6 +8,7 @@ export const useRentoraApiCreateFloor = (): IUseFloorCreate => {
   const rentoraApiExecuteClient: RentoraApiExecuteClient = new RentoraApiExecuteClient(RENTORA_API_BASE_URL)
 
   return useMutation<void, Error, ICreateFloorRequestPayload>({
+    mutationKey: [rentoraApiExecuteClient.key.createFloor],
     mutationFn: (payload: ICreateFloorRequestPayload) => rentoraApiExecuteClient.createFloor(payload),
   })
 }

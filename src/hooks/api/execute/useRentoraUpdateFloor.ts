@@ -8,6 +8,7 @@ export const useRentoraUpdateFloor = (props: { buildingId: string }): IUseFloorU
   const rentoraApiExecuteClient: RentoraApiExecuteClient = new RentoraApiExecuteClient(RENTORA_API_BASE_URL)
 
   return useMutation<void, Error, IUpdateFloorPayload>({
+    mutationKey: [rentoraApiExecuteClient.key.updateFloor],
     mutationFn: (payload: IUpdateFloorPayload) => rentoraApiExecuteClient.updateFloor(props.buildingId, payload),
   })
 }

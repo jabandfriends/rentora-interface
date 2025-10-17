@@ -58,6 +58,9 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createFloor: 'CREATE_FLOOR',
     updateFloor: 'UPDATE_FLOOR',
     deleteFloor: 'DELETE_FLOOR',
+    createBuilding: 'CREATE_BUILDING',
+    updateBuilding: 'UPDATE_BUILDING',
+    deleteBuilding: 'DELETE_BUILDING',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
