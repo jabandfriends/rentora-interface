@@ -11,7 +11,6 @@ import type {
   IMeterReadingRequestPayload,
   IMeterReadingUpdateRequestPayload,
   IPutPresignedUrlRequest,
-  IRenotaApiDeleteUnitServicePayload,
   IRentoraApiClientAuthenticateResponse,
   IRentoraApiClientCreateApartmentResponse,
   IRentoraApiClientCreateMaintenanceResponse,

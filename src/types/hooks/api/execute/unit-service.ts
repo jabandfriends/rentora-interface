@@ -1,4 +1,4 @@
-import type { IBaseUseMutation, IRentoraApiClientBaseResponse } from '@/types'
+import type { IBaseUseMutation } from '@/types'
 
 export type IUnitServiceExecuteBasePayload = {
   serviceId: string
