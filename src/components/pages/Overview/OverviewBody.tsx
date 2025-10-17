@@ -90,9 +90,7 @@ const OverviewBody = () => {
         occupiedUnits={totalUnitsOccupied}
         totalUnits={totalUnits}
         occupancyRate={occupancyRate}
-        monthlyRevenue={0} //mock
         maintenanceRequests={totalMaintenance}
-        pendingPayments={0} //mock
       />
 
       {/* Urgent Maintenance Alert */}
