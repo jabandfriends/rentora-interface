@@ -1,0 +1,1 @@
+window.__RENTORA_API_BASE_URL__ = 'REPLACE_API_URL'
