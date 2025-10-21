@@ -45,6 +45,8 @@ const RoomDetailServices = () => {
     () => isLoadingServices || isLoadingUnitServices,
     [isLoadingServices, isLoadingUnitServices],
   )
+
+  const isButtonDisable: boolean = useMemo(() => !selectedServiceId, [selectedServiceId])
   const addService = useCallback(async () => {
     try {
       await createUnitService({
@@ -61,8 +63,9 @@ const RoomDetailServices = () => {
   if (!services || services.length === 0)
     return (
       <PageTableEmpty
+        className="h-full"
         message="No services found in this apartment"
-        description="Please add a service to this apartment."
+        description="Please add a service to this apartment"
       />
     )
 
@@ -91,8 +94,13 @@ const RoomDetailServices = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Button size="icon" onClick={addService} className="flex items-center justify-center gap-2">
-              <Plus className="h-4 w-4" />
+            <Button
+              size="icon"
+              disabled={isButtonDisable}
+              onClick={addService}
+              className="flex items-center justify-center gap-2"
+            >
+              <Plus className="size-4" />
             </Button>
           </div>
         </div>

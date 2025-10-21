@@ -20,9 +20,29 @@ const RoomDetailServiceTableBody = ({ unitServices, isLoading }: IRoomDetailServ
 
   //handle loading and no data
   if (isLoading)
-    return <PageTableEmpty message="Loading..." icon={<Spinner />} description="Please wait while we load your data." />
+    return (
+      <TableBody>
+        <TableRow aria-colspan={3}>
+          <TableCell colSpan={3}>
+            <PageTableEmpty
+              message="Loading..."
+              icon={<Spinner />}
+              description="Please wait while we load your data."
+            />
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    )
   if (!unitServices || unitServices.length === 0)
-    return <PageTableEmpty message="No services found" description="Please add a service to this apartment." />
+    return (
+      <TableBody>
+        <TableRow>
+          <TableCell colSpan={3}>
+            <PageTableEmpty message="No services found" description="Please add a service to this units." />
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    )
 
   return (
     <TableBody>

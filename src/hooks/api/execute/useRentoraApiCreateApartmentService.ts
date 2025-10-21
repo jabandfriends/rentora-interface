@@ -1,8 +1,8 @@
-import { useMutation } from '@tanstack/react-query'
+import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 
 import { RENTORA_API_BASE_URL } from '@/config'
-import { RentoraApiExecuteClient } from '@/hooks'
+import { RentoraApiExecuteClient, RentoraApiQueryClient } from '@/hooks'
 import type {
   ICreateUnitServiceRequestPayload,
   ICreateUnitServiceResponseParams,
@@ -13,6 +13,8 @@ export const useRentoraApiCreateApartmentService = (
   params: ICreateUnitServiceResponseParams,
 ): IUseRentoraApiCreateUnitService => {
   const rentoraApiExecuteClient: RentoraApiExecuteClient = new RentoraApiExecuteClient(RENTORA_API_BASE_URL)
+  const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
+  const queryClient: QueryClient = useQueryClient()
 
   return useMutation<void, AxiosError, ICreateUnitServiceRequestPayload>({
     mutationKey: [rentoraApiExecuteClient.key.createUnitService],
@@ -22,6 +24,9 @@ export const useRentoraApiCreateApartmentService = (
         params.unitId!,
         payload,
       )
+      queryClient.invalidateQueries({
+        queryKey: [rentoraApiQueryClient.key.unitServicesList, params.apartmentId, params.unitId],
+      })
       return response
     },
   })
