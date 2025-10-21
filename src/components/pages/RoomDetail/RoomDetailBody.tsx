@@ -15,7 +15,6 @@ import RoomDetailServices from './RoomDetailServices'
 const RoomDetailBody = () => {
   //unit services
 
-  const [selectedService, setSelectedService] = useState('')
   const [isOpenDeleteModal, setOpenDeleteModal]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
 
   const handleOpenModal = useCallback(() => {
@@ -33,18 +32,6 @@ const RoomDetailBody = () => {
     apartmentId: apartmentId!,
     unitId: unitId!,
   })
-
-  //api
-  const addService = () => {
-    if (selectedService) {
-      setSelectedService('')
-    }
-  }
-
-  //api
-  const removeService = (id: string) => {
-    alert(id)
-  }
 
   const handleSubmit = useCallback(
     (data: TerminationFormValues) => {
@@ -72,12 +59,7 @@ const RoomDetailBody = () => {
         <ContractDetail handleOpenDeleteModal={handleOpenModal} data={currentContract} isLoading={isLoading} />
 
         {/* Right Column - Service Addition */}
-        <RoomDetailServices
-          selectedService={selectedService}
-          setSelectedService={setSelectedService}
-          addService={addService}
-          removeService={removeService}
-        />
+        <RoomDetailServices />
       </div>
 
       <RoomDetailOutStandingContract />

@@ -2,7 +2,7 @@ import { PackageOpen } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 type IPageTableEmptyProps = {
-  message: string
+  message?: string
   description?: string
   icon?: ReactNode
 }
