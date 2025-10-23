@@ -28,6 +28,7 @@ import MeterReadingCreatePage from '@/pages/MeterReading/MeterReadingCreatePage'
 import MeterReadingListPage from '@/pages/MeterReading/MeterReadingListPage'
 import OverviewPage from '@/pages/Overview'
 import PageNotFound from '@/pages/PageNotFound'
+import PaymentPage from '@/pages/Payment'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import RoomDetail from '@/pages/RoomDetail'
 import TenantPage from '@/pages/Tenant/Tenant'
@@ -248,6 +249,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.allRoom.path,
         element: <AllRoomsPage />,
+      },
+      {
+        path: ROUTES.payment.path,
+        element: <PaymentPage />,
       },
       {
         path: ROUTES.roomDetail.path,

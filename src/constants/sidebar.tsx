@@ -1,4 +1,4 @@
-import { BookUser, FileSpreadsheet, FileText, Home, Settings, Table, Wrench, Zap } from 'lucide-react'
+import { BookUser, DollarSign, FileSpreadsheet, FileText, Home, Settings, Table, Wrench, Zap } from 'lucide-react'
 
 import { ROUTES } from '@/constants'
 import type { Maybe, SidebarMenu, SidebarNavMenu } from '@/types'
@@ -15,6 +15,10 @@ export const getSidebarItems = (
   // sidebar all rooms
   const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
     { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.getPath(apartmentId) },
+  ]
+  //sidebar payments
+  const SIDEBAR_PAYMENT: Array<SidebarMenu> = [
+    { icon: <DollarSign size={16} />, label: 'Payments', to: ROUTES.payment.getPath(apartmentId) },
   ]
 
   // sidebar meter reading
@@ -71,6 +75,12 @@ export const getSidebarItems = (
         title: 'Invoices',
         icon: <FileSpreadsheet size={16} />,
         menu: SIDEBAR_COLLAPSE_ITEMS,
+      },
+      {
+        type: 'item',
+        title: 'Payments',
+        icon: <FileSpreadsheet size={16} />,
+        menu: SIDEBAR_PAYMENT,
       },
       {
         type: 'item',
