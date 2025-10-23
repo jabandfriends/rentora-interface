@@ -63,7 +63,6 @@ const RoomDetailServiceTableBody = ({ unitServices, isLoading }: IRoomDetailServ
       ))}
       <TableRow className="border-border border-t p-4">
         <TableCell className="font-semibold">Total</TableCell>
-        <TableCell />
         <TableCell className="text-theme-primary font-bold">{totalCostUnitServiceText}</TableCell>
       </TableRow>
     </TableBody>

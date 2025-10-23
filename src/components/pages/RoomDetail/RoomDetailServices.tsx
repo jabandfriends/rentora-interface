@@ -15,7 +15,7 @@ import {
   Spinner,
 } from '@/components/common'
 import { PageTableEmpty, Table, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { useRentoraApiApartmentServiceList, useRentoraApiCreateApartmentService } from '@/hooks'
+import { useRentoraApiApartmentServiceList, useRentoraApiCreateUnitService } from '@/hooks'
 import { useRentoraApiUnitServiceList } from '@/hooks/api/queries/useRentoraApiUnitServiceList'
 import type { IApartmentService } from '@/types'
 import { getErrorMessage } from '@/utilities'
@@ -27,23 +27,19 @@ const RoomDetailServices = () => {
   const [selectedServiceId, setSelectedServiceId]: [string, Dispatch<SetStateAction<string>>] = useState('')
 
   //apartment service
-  const { data: services, isLoading: isLoadingServices } = useRentoraApiApartmentServiceList({
+  const { data: apartmentServices, isLoading: isLoadingApartmentServices } = useRentoraApiApartmentServiceList({
     apartmentId: apartmentId!,
-    unitId: id!,
   })
 
-  //unit service
-  const { data: unitServices, isLoading: isLoadingUnitServices } = useRentoraApiUnitServiceList({
-    apartmentId: apartmentId!,
-    unitId: id!,
-  })
+  //unit services
+  const { data: unitServices, isLoading: isLoadingUnitServices } = useRentoraApiUnitServiceList({ unitId: id! })
 
   //create unit service
-  const { mutateAsync: createUnitService } = useRentoraApiCreateApartmentService({ apartmentId, unitId: id })
+  const { mutateAsync: createUnitService } = useRentoraApiCreateUnitService({ unitId: id! })
 
   const isLoading: boolean = useMemo(
-    () => isLoadingServices || isLoadingUnitServices,
-    [isLoadingServices, isLoadingUnitServices],
+    () => isLoadingApartmentServices || isLoadingUnitServices,
+    [isLoadingApartmentServices, isLoadingUnitServices],
   )
 
   const isButtonDisable: boolean = useMemo(() => !selectedServiceId, [selectedServiceId])
@@ -59,8 +55,15 @@ const RoomDetailServices = () => {
   }, [createUnitService, selectedServiceId])
 
   if (isLoading)
-    return <PageTableEmpty message="Loading..." icon={<Spinner />} description="Please wait while we load your data." />
-  if (!services || services.length === 0)
+    return (
+      <PageTableEmpty
+        className="h-full"
+        message="Loading..."
+        icon={<Spinner />}
+        description="Please wait while we load your data."
+      />
+    )
+  if (!apartmentServices || apartmentServices.length === 0)
     return (
       <PageTableEmpty
         className="h-full"
@@ -87,7 +90,7 @@ const RoomDetailServices = () => {
                 <SelectValue placeholder="Select service to add" />
               </SelectTrigger>
               <SelectContent>
-                {services.map((service: IApartmentService) => (
+                {apartmentServices.map((service: IApartmentService) => (
                   <SelectItem key={service.id} value={service.id}>
                     {service.serviceName}
                   </SelectItem>
