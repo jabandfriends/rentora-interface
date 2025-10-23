@@ -13,8 +13,6 @@ import RoomDetailOutStandingContract from './RoomDetailOutStandingContract'
 import RoomDetailServices from './RoomDetailServices'
 
 const RoomDetailBody = () => {
-  //unit services
-
   const [isOpenDeleteModal, setOpenDeleteModal]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
 
   const handleOpenModal = useCallback(() => {

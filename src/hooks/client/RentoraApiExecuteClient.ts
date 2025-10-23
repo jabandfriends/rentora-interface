@@ -218,8 +218,8 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   }
 
   //delete unit service
-  async deleteUnitService(unitId: string, params: IDeleteUnitServiceParams): Promise<void> {
-    const response = await this.axiosWithAuthInstance.delete<void>(`/api/apartments/unit/service/${unitId}`, {
+  async deleteUnitService(params: IDeleteUnitServiceParams): Promise<void> {
+    const response = await this.axiosWithAuthInstance.delete<void>(`/api/apartments/unit/service`, {
       params,
     })
     return response.data

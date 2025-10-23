@@ -1,22 +1,38 @@
 import { Trash2 } from 'lucide-react'
-import { useCallback, useMemo } from 'react'
+import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import { Button, Spinner } from '@/components/common'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/feature'
 import { PageTableEmpty, TableBody, TableCell, TableRow } from '@/components/ui'
+import { useRentoraApiDeleteUnitService } from '@/hooks'
 import type { IUnitService, Maybe } from '@/types'
-import { formatCurrency } from '@/utilities'
+import { formatCurrency, getErrorMessage } from '@/utilities'
 
 type IRoomDetailServiceTableBodyProps = {
   unitServices: Maybe<Array<IUnitService>>
   isLoading: boolean
 }
 const RoomDetailServiceTableBody = ({ unitServices, isLoading }: IRoomDetailServiceTableBodyProps) => {
+  //delete hook
+
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
+  const handleDeleteDialogOpen = useCallback(() => setIsOpenDeleteDialog(true), [])
+
   const totalCostUnitService: number = useMemo(
     () => (unitServices ? unitServices.reduce((sum, s) => sum + s.price, 0) : 0),
     [unitServices],
   )
   const totalCostUnitServiceText: string = useMemo(() => formatCurrency(totalCostUnitService), [totalCostUnitService])
-  const unitServicePrice = useCallback((price: Maybe<number>): string => (price ? formatCurrency(price) : '0'), [])
 
   //handle loading and no data
   if (isLoading)
@@ -46,26 +62,82 @@ const RoomDetailServiceTableBody = ({ unitServices, isLoading }: IRoomDetailServ
 
   return (
     <TableBody>
-      {unitServices.map((unitServices: IUnitService) => (
-        <TableRow key={unitServices.id}>
-          <TableCell>{unitServices.serviceName}</TableCell>
-          <TableCell className="font-semibold">{unitServicePrice(unitServices.price)}</TableCell>
-          <TableCell className="flex w-12 justify-center">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-theme-error-800 hover:bg-theme-error/10 hover:text-theme-error flex items-center"
-            >
-              <Trash2 className="size-4" />
-            </Button>
-          </TableCell>
-        </TableRow>
+      {unitServices.map((unitService: IUnitService) => (
+        <UnitServiceRow
+          key={unitService.id}
+          unitService={unitService}
+          isOpenDeleteDialog={isOpenDeleteDialog}
+          setIsOpenDeleteDialog={setIsOpenDeleteDialog}
+          handleDeleteDialogOpen={handleDeleteDialogOpen}
+        />
       ))}
+
       <TableRow className="border-border border-t p-4">
         <TableCell className="font-semibold">Total</TableCell>
         <TableCell className="text-theme-primary font-bold">{totalCostUnitServiceText}</TableCell>
       </TableRow>
     </TableBody>
+  )
+}
+
+type IUnitServiceRowProps = {
+  unitService: IUnitService
+  handleDeleteDialogOpen: () => void
+  isOpenDeleteDialog: boolean
+  setIsOpenDeleteDialog: (isOpen: boolean) => void
+}
+const UnitServiceRow = ({
+  unitService,
+  handleDeleteDialogOpen,
+  isOpenDeleteDialog,
+  setIsOpenDeleteDialog,
+}: IUnitServiceRowProps) => {
+  const { mutateAsync: deleteUnitService } = useRentoraApiDeleteUnitService()
+
+  const handleDeleteUnitService = useCallback(async () => {
+    try {
+      await deleteUnitService({ unitServiceId: unitService.id })
+      toast.success('Unit service deleted successfully')
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
+  }, [deleteUnitService, unitService])
+
+  return (
+    <>
+      <AlertDialog open={isOpenDeleteDialog} onOpenChange={setIsOpenDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Unit Service</AlertDialogTitle>
+            <AlertDialogDescription>Are you sure you want to delete this unit service?</AlertDialogDescription>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel asChild>
+                <Button variant="outline">Cancel</Button>
+              </AlertDialogCancel>
+              <AlertDialogAction asChild>
+                <Button onClick={handleDeleteUnitService}>Delete</Button>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <TableRow key={unitService.id}>
+        <TableCell>{unitService.serviceName}</TableCell>
+        <TableCell className="font-semibold">{formatCurrency(unitService.price)}</TableCell>
+        <TableCell className="flex w-12 justify-center">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-theme-error-800 hover:bg-theme-error/10 hover:text-theme-error flex items-center"
+            onClick={handleDeleteDialogOpen}
+          >
+            <Trash2 className="size-4" />
+          </Button>
+        </TableCell>
+      </TableRow>
+    </>
   )
 }
 
