@@ -10,7 +10,7 @@ export const useRentoraUpdateFloor = (props: { buildingId: string; floorId: stri
   const queryClient = useQueryClient()
   return useMutation<void, Error, IUpdateFloorPayload>({
     mutationKey: [rentoraApiExecuteClient.key.updateFloor],
-    mutationFn: (payload: IUpdateFloorPayload) => rentoraApiExecuteClient.updateFloor(props.buildingId, payload),
+    mutationFn: (payload: IUpdateFloorPayload) => rentoraApiExecuteClient.updateFloor(props.floorId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [rentoraApiQueryClient.key.floorList, props.buildingId],

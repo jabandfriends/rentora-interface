@@ -315,12 +315,9 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
   }
 
   //apartment services list
-  async apartmentServicesList(
-    apartmentId: Maybe<string>,
-    unitId: Maybe<string>,
-  ): Promise<IRentoraApiClientApartmentServiceResponse['data']> {
+  async apartmentServicesList(apartmentId: Maybe<string>): Promise<IRentoraApiClientApartmentServiceResponse['data']> {
     const response = await this.axiosWithAuthInstance.get<IRentoraApiClientApartmentServiceResponse>(
-      `/api/apartments/${apartmentId}/all-room/detail/${unitId}/apartment-services`,
+      `/api/apartments/${apartmentId}/apartment-services`,
     )
     return response.data.data
   }
@@ -336,12 +333,9 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
   }
 
   //get unit services list
-  async unitServicesList(
-    apartmentId: Maybe<string>,
-    unitId: Maybe<string>,
-  ): Promise<IRentoraApiClientUnitServiceResponse['data']> {
+  async unitServicesList(unitId: Maybe<string>): Promise<IRentoraApiClientUnitServiceResponse['data']> {
     const response = await this.axiosWithAuthInstance.get<IRentoraApiClientUnitServiceResponse>(
-      `/api/apartments/${apartmentId}/all-room/detail/${unitId}`,
+      `/api/apartments/unit/service/${unitId}`,
     )
     return response.data.data
   }
