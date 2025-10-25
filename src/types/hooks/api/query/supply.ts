@@ -1,5 +1,5 @@
 import type { SupplyCategory, SupplyStockStatus } from '@/enum'
-import type { IBasePaginateQueryResult, IRentoraApiClientBasePaginateWithMetadataResponse } from '@/types'
+import type { IBasePaginateQueryResult, IRentoraApiClientBasePaginateWithMetadataResponse, Maybe } from '@/types'
 
 export type ISupply = {
   supplyId: string
@@ -7,6 +7,7 @@ export type ISupply = {
   supplyQuantity: number
   supplyMinStock: number
   supplyUnitPrice: number
+  supplyUnit: string
   supplyCategory: SupplyCategory
   supplyStockStatus: SupplyStockStatus
   supplyTotalCost: number
@@ -24,7 +25,7 @@ export type IRentoraApiSupplyListParams = {
   page: number
   size: number
   search?: string //supply name
-  category?: SupplyCategory
+  category?: Maybe<SupplyCategory>
   sortBy?: string
   sortDir?: 'asc' | 'desc'
 }

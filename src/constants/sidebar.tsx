@@ -1,4 +1,4 @@
-import { BookUser, FileSpreadsheet, FileText, Home, Settings, Table, Wrench, Zap } from 'lucide-react'
+import { BookUser, FileSpreadsheet, FileText, Home, Package, Settings, Table, Wrench, Zap } from 'lucide-react'
 
 import { ROUTES } from '@/constants'
 import type { Maybe, SidebarMenu, SidebarNavMenu } from '@/types'
@@ -15,6 +15,9 @@ export const getSidebarItems = (
   // sidebar all rooms
   const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
     { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.getPath(apartmentId) },
+  ]
+  const SIDEBAR_SUPPLY_LIST: Array<SidebarMenu> = [
+    { icon: <Package size={16} />, label: 'Supplies', to: ROUTES.supplyList.getPath(apartmentId) },
   ]
 
   // sidebar meter reading
@@ -77,6 +80,12 @@ export const getSidebarItems = (
         title: 'All Room',
         icon: <Table size={16} />,
         menu: SIDEBAR_ALL_ROOMS,
+      },
+      {
+        type: 'item',
+        title: 'Supply List',
+        icon: <Zap size={16} />,
+        menu: SIDEBAR_SUPPLY_LIST,
       },
       {
         type: 'item',
