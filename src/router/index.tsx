@@ -12,6 +12,7 @@ import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication/Authentication'
 import FirstTimePasswordResetPage from '@/pages/Authentication/FirstTimePasswordReset'
 import ContractCreate from '@/pages/ContractCreate'
+import ContractDetail from '@/pages/ContractDetail'
 import InvoiceCreatePage from '@/pages/Invoice/InvoiceCreate'
 import InvoiceDetailPage from '@/pages/Invoice/InvoiceDetail'
 import MonthlyInvoicePage from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoice'
@@ -297,6 +298,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.contractCreate.path,
         element: <ContractCreate />,
+      },
+      {
+        path: ROUTES.contractDetail.path,
+        element: <ContractDetail />,
       },
       {
         path: ROUTES.meterReadingList.path,
