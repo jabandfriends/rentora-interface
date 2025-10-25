@@ -47,6 +47,7 @@ import type {
   Maybe,
   RentoraApiQueryClientKey,
 } from '@/types'
+import type { IRentoraApiClietMonthlyUtilityUnitResponse } from '@/types/hooks/api/query/monthlyUitlityUnit'
 
 import { RentoraApiBaseClient as RentoraApiBaseClient } from './RentoraApiBaseClient'
 
@@ -81,6 +82,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     unitDetail: 'UNIT_DETAIL',
     contractList: 'CONTRACT_LIST',
     monthlyInvoiceList: 'MONTHLY_INVOICE_LIST',
+    monthlyUtilityUnit: 'MONTHLY_UTILITY_UNIT',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -393,6 +395,16 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
       {
         params,
       },
+    )
+    return response.data.data
+  }
+
+  async monthlyUtilityUnit(
+    apartmentId: Maybe<string>,
+    unitId: Maybe<string>,
+  ): Promise<IRentoraApiClietMonthlyUtilityUnitResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClietMonthlyUtilityUnitResponse>(
+      `/api/apartment/${apartmentId}/monthly-utility/${unitId}`,
     )
     return response.data.data
   }

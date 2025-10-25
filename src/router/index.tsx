@@ -26,6 +26,7 @@ import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
 import MaintenanceUpdate from '@/pages/Maintenance/MaintenanceUpdate'
 import MeterReadingCreatePage from '@/pages/MeterReading/MeterReadingCreatePage'
 import MeterReadingListPage from '@/pages/MeterReading/MeterReadingListPage'
+import MonthlyUtilityRoomDetail from '@/pages/MonthlyUtility/MonthlyUtilityRoomDetail'
 import OverviewPage from '@/pages/Overview'
 import PageNotFound from '@/pages/PageNotFound'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
@@ -309,6 +310,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: '*',
         element: <PageNotFound />,
+      },
+      {
+        path: ROUTES.monthlyUtilityRoomDetail.path,
+        element: <MonthlyUtilityRoomDetail />,
       },
     ],
   },

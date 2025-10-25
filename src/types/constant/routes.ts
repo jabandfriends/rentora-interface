@@ -42,4 +42,5 @@ export type IRoutes = {
   contractCreate: IRoute
   meterReadingList: IRoute
   meterReadingCreate: IRoute
+  monthlyUtilityRoomDetail: IRoute
 }

@@ -42,4 +42,5 @@ export const ROUTES: IRoutes = {
   contractCreate: apartmentRoute('/:id/contract/create'),
   meterReadingList: apartmentRoute('/meter-reading'),
   meterReadingCreate: apartmentRoute('/meter-reading/create'),
+  monthlyUtilityRoomDetail: apartmentRoute('/monthly-utility/:id'),
 }
