@@ -13,7 +13,7 @@ type IPageTableHeaderProps = {
 
 const PageTableHeader = ({ title, description, stats, actionButton, isLoading }: IPageTableHeaderProps) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8">
       <div className="desktop:px-0 desktop:flex-row desktop:items-center flex flex-col justify-between gap-1">
         <div>
           <div className="desktop:flex-row flex flex-col justify-between gap-y-2">

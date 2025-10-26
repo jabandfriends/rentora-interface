@@ -6,7 +6,7 @@ import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { NormalInvoiceTable } from '@/components/pages/Invoice'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableBody, PageTableHeader, PageTableSearch } from '@/components/ui'
 import { DEFAULT_INVOICE_LIST_DATA, INVOICE_STATUS, ROUTES } from '@/constants'
 import { useRentoraApiInvoiceList } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps } from '@/types'
@@ -99,10 +99,7 @@ const NormalInvoice = () => {
     [setCurrentPage],
   )
 
-  const isSearched: boolean = useMemo(
-    () => !!debouncedSearch || !!debouncedSortBy || !!debouncedSortDir || !!debouncedStatus,
-    [debouncedSearch, debouncedSortBy, debouncedSortDir, debouncedStatus],
-  )
+  const isSearched: boolean = useMemo(() => !!debouncedSearch || !!debouncedStatus, [debouncedSearch, debouncedStatus])
 
   const invoiceStats: Array<IStatsCardProps> = useMemo(
     () => [
@@ -139,7 +136,7 @@ const NormalInvoice = () => {
   }
 
   return (
-    <>
+    <PageTableBody className="space-y-8">
       <PageTableHeader
         title="Invoices Management"
         description="Manage and track all custom invoices and payments"
@@ -167,7 +164,7 @@ const NormalInvoice = () => {
         totalElements={totalElements}
         onPageChange={handlePageChange}
       />
-    </>
+    </PageTableBody>
   )
 }
 

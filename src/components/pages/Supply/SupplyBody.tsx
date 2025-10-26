@@ -112,10 +112,10 @@ const SupplyBody = () => {
       <SupplyCreateModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
 
       <PageTableBody className="space-y-4">
-        <div className="flex flex-col gap-y-4">
+        <div className="flex flex-col gap-y-8">
           <PageTableHeader
-            title="Supplies Management"
-            description="Easily manage and track all your supplies here!"
+            title="Supplies Inventory"
+            description="This is your inventory. You can view, update, delete, and create supplies here."
             stats={supplyStats}
             isLoading={isSuppliesLoading}
             actionButton={
