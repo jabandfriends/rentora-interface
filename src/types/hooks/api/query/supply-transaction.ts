@@ -20,6 +20,7 @@ export type ISupplyTransaction = {
   supplyTransactionType: SupplyTransactionType
   quantity: string
   note: string
+  changeByUser: string
 }
 
 //hook
