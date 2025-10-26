@@ -1,4 +1,5 @@
-export * from './supply'
+export * from './Supply'
+export * from './SupplyTransaction'
 export * from './useRentoraApiApartmentDetail'
 export * from './useRentoraApiApartmentList'
 export * from './useRentoraApiApartmentServiceList.ts'

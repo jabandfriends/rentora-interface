@@ -44,4 +44,5 @@ export type IRoutes = {
   meterReadingList: IRoute
   meterReadingCreate: IRoute
   supplyList: IRoute
+  supplyTransactions: IRoute
 }

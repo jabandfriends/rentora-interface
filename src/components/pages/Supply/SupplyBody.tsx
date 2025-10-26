@@ -1,12 +1,12 @@
 import { useDebounce } from '@uidotdev/usehooks'
-import { Plus } from 'lucide-react'
+import { Eye, Plus } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useParams } from 'react-router-dom'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { PageTableBody, PageTableHeader, PageTableSearch } from '@/components/ui'
-import { DEFAULT_SUPPLY_LIST_DATA } from '@/constants'
+import { DEFAULT_SUPPLY_LIST_DATA, ROUTES } from '@/constants'
 import { SupplyCategory } from '@/enum'
 import { useRentoraApiSupplyList } from '@/hooks'
 import type { IPaginationBarProps, ISearchBarProps, Maybe } from '@/types'
@@ -15,6 +15,7 @@ import SupplyCreateModal from './SupplyCreateModal'
 import SupplyTable from './SupplyTable'
 
 const SupplyBody = () => {
+  const navigate: NavigateFunction = useNavigate()
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState<number>(
     DEFAULT_SUPPLY_LIST_DATA.page,
   )
@@ -66,6 +67,10 @@ const SupplyBody = () => {
     [setCurrentPage],
   )
 
+  const navigateToSupplyTransactions = useCallback(() => {
+    navigate(ROUTES.supplyTransactions.getPath(apartmentId))
+  }, [navigate, apartmentId])
+
   const handleCategoryChange = useCallback(
     (value: SupplyCategory) => {
       setValue('category', value)
@@ -85,9 +90,14 @@ const SupplyBody = () => {
         title="Supplies Management"
         description="Easily manage and track all your supplies here!"
         actionButton={
-          <Button className="flex items-center gap-2" onClick={openCreateModal}>
-            <Plus size={18} /> Add Supply
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button className="flex items-center gap-2" onClick={openCreateModal}>
+              <Plus size={18} /> Create Supply
+            </Button>
+            <Button variant="secondary" className="flex items-center gap-2" onClick={navigateToSupplyTransactions}>
+              <Eye size={18} /> View Transactions
+            </Button>
+          </div>
         }
       />
 
