@@ -106,9 +106,6 @@ const SupplyCreateModal = ({ open, onOpenChange }: ISupplyCreateModalProps) => {
                 <h4 className="flex items-center gap-x-2">
                   <PackageOpen size={18} /> Supply Information
                 </h4>
-                <p className="text-body-2 text-theme-secondary">
-                  Fill in the form below to create a new supply information.
-                </p>
               </div>
               <FormField
                 control={form.control}
@@ -203,9 +200,6 @@ const SupplyCreateModal = ({ open, onOpenChange }: ISupplyCreateModalProps) => {
                 <h4 className="flex items-center gap-x-2">
                   <PackageOpen size={18} /> Stock Information
                 </h4>
-                <p className="text-body-2 text-theme-secondary">
-                  Fill in the form below to create a new stock information.
-                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -265,11 +259,11 @@ const SupplyCreateModal = ({ open, onOpenChange }: ISupplyCreateModalProps) => {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button className="desktop:w-auto w-full" type="button" variant="outline">
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={isButtonDisabled}>
+              <Button className="desktop:w-auto w-full" type="submit" disabled={isButtonDisabled}>
                 {isCreateSupplyPending ? <Spinner /> : 'Create Supply'}
               </Button>
             </DialogFooter>

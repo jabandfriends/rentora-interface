@@ -206,9 +206,6 @@ const SupplyUpdateModal = ({ open, onOpenChange, supply }: ISupplyUpdateModalPro
                 <h4 className="flex items-center gap-x-2">
                   <PackageOpen size={18} /> Stock Information
                 </h4>
-                <p className="text-body-2 text-theme-secondary">
-                  Fill in the form below to update the stock information.
-                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -266,7 +263,7 @@ const SupplyUpdateModal = ({ open, onOpenChange, supply }: ISupplyUpdateModalPro
               />
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="desktop:flex grid grid-cols-2 gap-2">
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   Cancel

@@ -1,5 +1,5 @@
 import { useDebounce } from '@uidotdev/usehooks'
-import { Eye, Plus } from 'lucide-react'
+import { Box, DollarSign, Eye, PackageOpen, Plus } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
@@ -9,7 +9,8 @@ import { PageTableBody, PageTableHeader, PageTableSearch } from '@/components/ui
 import { DEFAULT_SUPPLY_LIST_DATA, ROUTES } from '@/constants'
 import { SupplyCategory } from '@/enum'
 import { useRentoraApiSupplyList } from '@/hooks'
-import type { IPaginationBarProps, ISearchBarProps, Maybe } from '@/types'
+import type { IPaginationBarProps, ISearchBarProps, IStatsCardProps, Maybe } from '@/types'
+import { formatCurrency, formatNumber } from '@/utilities'
 
 import SupplyCreateModal from './SupplyCreateModal'
 import SupplyTable from './SupplyTable'
@@ -35,6 +36,7 @@ const SupplyBody = () => {
   const {
     data: supplies,
     pagination: { totalPages, totalElements },
+    metadata: { totalSupplies, totalLowStockSupplies, totalCostSupplies },
     isLoading: isSuppliesLoading,
     isError: isSuppliesError,
   } = useRentoraApiSupplyList({
@@ -83,32 +85,54 @@ const SupplyBody = () => {
     return !!debouncedSearch || !!category
   }, [debouncedSearch, category])
 
+  const supplyStats: Array<IStatsCardProps> = useMemo(() => {
+    return [
+      {
+        title: 'Total Supplies',
+        count: formatNumber(totalSupplies),
+        icon: <Box size={18} />,
+        type: 'primary',
+      },
+      {
+        title: 'Total Low Stock Supplies',
+        count: formatNumber(totalLowStockSupplies),
+        icon: <PackageOpen size={18} />,
+        type: 'warning',
+      },
+      {
+        title: 'Total Cost of Supplies',
+        count: formatCurrency(totalCostSupplies),
+        icon: <DollarSign size={18} />,
+        type: 'success',
+      },
+    ]
+  }, [totalSupplies, totalLowStockSupplies, totalCostSupplies])
   return (
     <>
       <SupplyCreateModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
-      <PageTableHeader
-        title="Supplies Management"
-        description="Easily manage and track all your supplies here!"
-        actionButton={
-          <div className="flex items-center gap-2">
-            <Button className="flex items-center gap-2" onClick={openCreateModal}>
-              <Plus size={18} /> Create Supply
-            </Button>
-            <Button variant="secondary" className="flex items-center gap-2" onClick={navigateToSupplyTransactions}>
-              <Eye size={18} /> View Transactions
-            </Button>
-          </div>
-        }
-      />
 
       <PageTableBody className="space-y-4">
         <div className="flex flex-col gap-y-4">
-          <div>
-            <h3 className="font-medium">Supplies Inventory</h3>
-            <p className="text-theme-secondary text-body2">
-              This is your inventory. You can view, update, delete, and create supplies here.
-            </p>
-          </div>
+          <PageTableHeader
+            title="Supplies Management"
+            description="Easily manage and track all your supplies here!"
+            stats={supplyStats}
+            isLoading={isSuppliesLoading}
+            actionButton={
+              <div className="flex items-center gap-2">
+                <Button className="flex w-auto items-center gap-2" onClick={openCreateModal}>
+                  <Plus size={18} /> New Supply
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="flex w-auto items-center gap-2"
+                  onClick={navigateToSupplyTransactions}
+                >
+                  <Eye size={18} /> Transactions
+                </Button>
+              </div>
+            }
+          />
           <PageTableSearch
             placeholder="Search by supply name"
             statusEnum={SupplyCategory}
