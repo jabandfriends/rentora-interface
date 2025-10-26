@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
 
 import {
   Button,
@@ -17,6 +19,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Spinner,
   Textarea,
 } from '@/components/common'
 import {
@@ -31,7 +34,9 @@ import {
 import InfoTooltip from '@/components/feature/InfoTooltip'
 import { supplyCreateFormSchema } from '@/constants'
 import { SupplyCategory } from '@/enum'
-import type { ISupplyCreateFormSchema } from '@/types'
+import { useRentoraApiCreateSupply } from '@/hooks'
+import type { ISupplyCreateFormSchema, ISupplyCreatePayload } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
 type ISupplyCreateModalProps = {
   open: boolean
@@ -39,6 +44,10 @@ type ISupplyCreateModalProps = {
 }
 
 const SupplyCreateModal = ({ open, onOpenChange }: ISupplyCreateModalProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const { mutateAsync: createSupply, isPending: isCreateSupplyPending } = useRentoraApiCreateSupply({
+    apartmentId: apartmentId,
+  })
   const form = useForm<ISupplyCreateFormSchema>({
     resolver: zodResolver(supplyCreateFormSchema),
     mode: 'onChange',
@@ -53,9 +62,32 @@ const SupplyCreateModal = ({ open, onOpenChange }: ISupplyCreateModalProps) => {
     },
   })
 
-  const handleSubmit = useCallback(async (data: ISupplyCreateFormSchema) => {
-    console.log(data)
-  }, [])
+  const handleSubmit = useCallback(
+    async (data: ISupplyCreateFormSchema): Promise<void> => {
+      const payload: ISupplyCreatePayload = {
+        name: data.name,
+        category: data.category,
+        ...(data.description ? { description: data.description } : {}),
+        unit: data.unit,
+        stockQuantity: Number(data.stockQuantity),
+        minStock: Number(data.minStock),
+        costPerUnit: Number(data.costPerUnit),
+      }
+      try {
+        await createSupply(payload)
+        toast.success('Supply created successfully')
+        form.reset()
+        onOpenChange(false)
+      } catch (error) {
+        toast.error(getErrorMessage(error))
+      }
+    },
+    [createSupply, onOpenChange, form],
+  )
+
+  const isButtonDisabled: boolean = useMemo(() => {
+    return isCreateSupplyPending
+  }, [isCreateSupplyPending])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -131,22 +163,43 @@ const SupplyCreateModal = ({ open, onOpenChange }: ISupplyCreateModalProps) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="minStock"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Min Stock
-                    <InfoTooltip>Min stock is the minimum stock of the supply. e.g., 10</InfoTooltip>
-                  </FormLabel>
-                  <FormControl>
-                    <InputNumber maxLength={8} placeholder="Enter min stock" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <FormField
+                  control={form.control}
+                  name="stockQuantity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Stock Quantity</FormLabel>
+                      <FormControl>
+                        <InputNumber maxLength={8} placeholder="Enter stock quantity" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div>
+                <FormField
+                  control={form.control}
+                  name="minStock"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Min Stock
+                        <InfoTooltip>Min stock is the minimum stock of the supply. e.g., 10</InfoTooltip>
+                      </FormLabel>
+                      <FormControl>
+                        <InputNumber maxLength={8} placeholder="Enter min stock" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
             <FormField
               control={form.control}
               name="costPerUnit"
@@ -169,7 +222,9 @@ const SupplyCreateModal = ({ open, onOpenChange }: ISupplyCreateModalProps) => {
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit">Create Supply</Button>
+              <Button type="submit" disabled={isButtonDisabled}>
+                {isCreateSupplyPending ? <Spinner /> : 'Create Supply'}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

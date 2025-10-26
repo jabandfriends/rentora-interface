@@ -24,6 +24,7 @@ import type {
   IRentoraApiClientDeleteMaintenanceResponse,
   IRentoraApiClientUpdateMaintenanceResponse,
   ISetupApartmentRequestPayload,
+  ISupplyCreatePayload,
   ITerminateContractRequestPayload,
   IUpdateApartmentRequestPayload,
   IUpdateBuildingRequestPayload,
@@ -66,6 +67,9 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createBuilding: 'CREATE_BUILDING',
     updateBuilding: 'UPDATE_BUILDING',
     deleteBuilding: 'DELETE_BUILDING',
+
+    //supply
+    createSupply: 'CREATE_SUPPLY',
 
     //unit
     createUnit: 'CREATE_UNIT',
@@ -303,6 +307,12 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   //delete unit
   async deleteUnit(apartmentId: string, unitId: string): Promise<void> {
     const response = await this.axiosWithAuthInstance.delete<void>(`/api/apartments/${apartmentId}/units/${unitId}`)
+    return response.data
+  }
+
+  //create supply
+  async createSupply(apartmentId: string, payload: ISupplyCreatePayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/supply/${apartmentId}`, payload)
     return response.data
   }
 }

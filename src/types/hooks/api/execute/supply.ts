@@ -1,4 +1,5 @@
 import type { SupplyCategory } from '@/enum'
+import type { IBaseUseMutation } from '@/types'
 
 export type ISupplyCreatePayload = {
   name: string
@@ -9,3 +10,6 @@ export type ISupplyCreatePayload = {
   minStock: number
   costPerUnit: number
 }
+
+//hook type
+export type IUseRentoraApiCreateSupply = IBaseUseMutation<void, ISupplyCreatePayload>
