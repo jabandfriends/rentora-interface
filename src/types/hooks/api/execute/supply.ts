@@ -11,5 +11,10 @@ export type ISupplyCreatePayload = {
   costPerUnit: number
 }
 
+export type ISupplyUpdatePayload = ISupplyCreatePayload & {
+  supplyId: string
+}
+
 //hook type
 export type IUseRentoraApiCreateSupply = IBaseUseMutation<void, ISupplyCreatePayload>
+export type IUseRentoraApiUpdateSupply = IBaseUseMutation<void, ISupplyUpdatePayload>

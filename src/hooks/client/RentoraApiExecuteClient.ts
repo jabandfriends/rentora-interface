@@ -25,6 +25,7 @@ import type {
   IRentoraApiClientUpdateMaintenanceResponse,
   ISetupApartmentRequestPayload,
   ISupplyCreatePayload,
+  ISupplyUpdatePayload,
   ITerminateContractRequestPayload,
   IUpdateApartmentRequestPayload,
   IUpdateBuildingRequestPayload,
@@ -70,6 +71,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
 
     //supply
     createSupply: 'CREATE_SUPPLY',
+    updateSupply: 'UPDATE_SUPPLY',
 
     //unit
     createUnit: 'CREATE_UNIT',
@@ -313,6 +315,12 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   //create supply
   async createSupply(apartmentId: string, payload: ISupplyCreatePayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/supply/${apartmentId}`, payload)
+    return response.data
+  }
+
+  //update supply
+  async updateSupply(supplyId: string, payload: ISupplyUpdatePayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.put<void>(`/api/apartments/supply/edit/${supplyId}`, payload)
     return response.data
   }
 }

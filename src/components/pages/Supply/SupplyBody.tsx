@@ -46,7 +46,7 @@ const SupplyBody = () => {
     },
   })
 
-  const handleCreateModalOpen = useCallback(() => {
+  const openCreateModal = useCallback(() => {
     setIsCreateModalOpen(true)
   }, [])
 
@@ -85,7 +85,7 @@ const SupplyBody = () => {
         title="Supplies Management"
         description="Easily manage and track all your supplies here!"
         actionButton={
-          <Button className="flex items-center gap-2" onClick={handleCreateModalOpen}>
+          <Button className="flex items-center gap-2" onClick={openCreateModal}>
             <Plus size={18} /> Add Supply
           </Button>
         }

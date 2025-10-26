@@ -63,3 +63,4 @@ export type RentoraApiExecuteClientKey =
   | 'deleteUnit'
   | 'terminateContract'
   | 'createSupply'
+  | 'updateSupply'

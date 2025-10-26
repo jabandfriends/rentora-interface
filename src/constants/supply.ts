@@ -11,3 +11,5 @@ export const supplyCreateFormSchema = z.object({
   minStock: z.string({ error: 'Min stock is required' }).min(1, 'Min stock is required'),
   costPerUnit: z.string({ error: 'Cost per unit is required' }).min(1, 'Cost per unit is required'),
 })
+
+export const supplyUpdateFormSchema = supplyCreateFormSchema

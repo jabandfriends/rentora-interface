@@ -11,6 +11,7 @@ export type ISupply = {
   supplyCategory: SupplyCategory
   supplyStockStatus: SupplyStockStatus
   supplyTotalCost: number
+  supplyDescription: string
 }
 
 //metadata

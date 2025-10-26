@@ -1,8 +1,7 @@
-import { AlertCircle, Ellipsis } from 'lucide-react'
-import { useCallback } from 'react'
+import { AlertCircle } from 'lucide-react'
+import { useCallback, useState } from 'react'
 import type { VariantProps } from 'tailwind-variants'
 
-import { Button } from '@/components/common'
 import { PaginationBar } from '@/components/feature'
 import {
   Badge,
@@ -17,8 +16,12 @@ import {
   TableRow,
 } from '@/components/ui'
 import { SupplyStockStatus } from '@/enum'
-import type { IPaginate, ISupply } from '@/types'
+import type { IPaginate, ISupply, Maybe } from '@/types'
 import { formatCurrency, formatNumber } from '@/utilities'
+
+import SupplyAction from './SupplyAction'
+import SupplyDeleteAlert from './SupplyDeleteAlert'
+import SupplyUpdateModal from './SupplyUpdateModal'
 
 type ISupplyTableProps = {
   data: Array<ISupply>
@@ -39,6 +42,27 @@ const SupplyTable = ({
   isError,
   onPageChange,
 }: ISupplyTableProps) => {
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false)
+
+  const [selectedSupply, setSelectedSupply] = useState<Maybe<ISupply>>(null)
+
+  const openUpdateModal = useCallback(
+    (supply: ISupply) => {
+      setSelectedSupply(supply)
+      setIsUpdateModalOpen(true)
+    },
+    [setSelectedSupply, setIsUpdateModalOpen],
+  )
+
+  const openDeleteAlert = useCallback(() => {
+    setIsDeleteAlertOpen(true)
+  }, [setIsDeleteAlertOpen])
+
+  const handleConfirmDelete = useCallback(() => {
+    if (!selectedSupply) return
+  }, [selectedSupply])
+
   const stockStatusBadgeVariant = useCallback(
     (stockStatus: SupplyStockStatus): VariantProps<typeof Badge>['variant'] => {
       switch (stockStatus) {
@@ -93,6 +117,12 @@ const SupplyTable = ({
 
   return (
     <>
+      <SupplyUpdateModal open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen} supply={selectedSupply} />
+      <SupplyDeleteAlert
+        open={isDeleteAlertOpen}
+        onOpenChange={setIsDeleteAlertOpen}
+        handleConfirmDelete={handleConfirmDelete}
+      />
       <Table>
         <TableHeader>
           <TableRow>
@@ -106,7 +136,7 @@ const SupplyTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item) => (
+          {data.map((item: ISupply) => (
             <TableRow key={item.supplyId}>
               <TableCell className="capitalize">{item.supplyName}</TableCell>
               <TableCell className="capitalize">{item.supplyCategory}</TableCell>
@@ -121,9 +151,7 @@ const SupplyTable = ({
                 </Badge>
               </TableCell>
               <TableCell>
-                <Button variant="vanilla">
-                  <Ellipsis />
-                </Button>
+                <SupplyAction onUpdate={() => openUpdateModal(item)} onDelete={openDeleteAlert} />
               </TableCell>
             </TableRow>
           ))}
