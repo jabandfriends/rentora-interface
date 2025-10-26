@@ -75,7 +75,7 @@ function AlertDialogFooter({ className, ...props }: ComponentProps<'div'>) {
 }
 
 function AlertDialogTitle({ className, ...props }: ComponentProps<typeof Title>) {
-  return <Title data-slot="alert-dialog-title" className={cn('font-semibold', className)} {...props} />
+  return <Title data-slot="alert-dialog-title" className={cn('text-heading-3 font-semibold', className)} {...props} />
 }
 
 function AlertDialogDescription({ className, ...props }: ComponentProps<typeof Description>) {

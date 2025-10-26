@@ -15,6 +15,11 @@ export type ISupplyUpdatePayload = ISupplyCreatePayload & {
   supplyId: string
 }
 
+export type ISupplyDeletePayload = {
+  supplyId: string
+}
+
 //hook type
 export type IUseRentoraApiCreateSupply = IBaseUseMutation<void, ISupplyCreatePayload>
 export type IUseRentoraApiUpdateSupply = IBaseUseMutation<void, ISupplyUpdatePayload>
+export type IUseRentoraApiDeleteSupply = IBaseUseMutation<void, ISupplyDeletePayload>

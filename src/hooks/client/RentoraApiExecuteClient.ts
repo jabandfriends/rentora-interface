@@ -72,6 +72,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     //supply
     createSupply: 'CREATE_SUPPLY',
     updateSupply: 'UPDATE_SUPPLY',
+    deleteSupply: 'DELETE_SUPPLY',
 
     //unit
     createUnit: 'CREATE_UNIT',
@@ -321,6 +322,12 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   //update supply
   async updateSupply(supplyId: string, payload: ISupplyUpdatePayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.put<void>(`/api/apartments/supply/edit/${supplyId}`, payload)
+    return response.data
+  }
+
+  //delete supply
+  async deleteSupply(supplyId: string): Promise<void> {
+    const response = await this.axiosWithAuthInstance.delete<void>(`/api/apartments/supply/delete/${supplyId}`)
     return response.data
   }
 }

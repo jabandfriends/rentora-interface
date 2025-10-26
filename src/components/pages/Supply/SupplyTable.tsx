@@ -55,13 +55,13 @@ const SupplyTable = ({
     [setSelectedSupply, setIsUpdateModalOpen],
   )
 
-  const openDeleteAlert = useCallback(() => {
-    setIsDeleteAlertOpen(true)
-  }, [setIsDeleteAlertOpen])
-
-  const handleConfirmDelete = useCallback(() => {
-    if (!selectedSupply) return
-  }, [selectedSupply])
+  const openDeleteAlert = useCallback(
+    (supply: ISupply) => {
+      setSelectedSupply(supply)
+      setIsDeleteAlertOpen(true)
+    },
+    [setSelectedSupply, setIsDeleteAlertOpen],
+  )
 
   const stockStatusBadgeVariant = useCallback(
     (stockStatus: SupplyStockStatus): VariantProps<typeof Badge>['variant'] => {
@@ -118,11 +118,7 @@ const SupplyTable = ({
   return (
     <>
       <SupplyUpdateModal open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen} supply={selectedSupply} />
-      <SupplyDeleteAlert
-        open={isDeleteAlertOpen}
-        onOpenChange={setIsDeleteAlertOpen}
-        handleConfirmDelete={handleConfirmDelete}
-      />
+      <SupplyDeleteAlert open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen} supply={selectedSupply} />
       <Table>
         <TableHeader>
           <TableRow>
@@ -151,7 +147,7 @@ const SupplyTable = ({
                 </Badge>
               </TableCell>
               <TableCell>
-                <SupplyAction onUpdate={() => openUpdateModal(item)} onDelete={openDeleteAlert} />
+                <SupplyAction onUpdate={() => openUpdateModal(item)} onDelete={() => openDeleteAlert(item)} />
               </TableCell>
             </TableRow>
           ))}
