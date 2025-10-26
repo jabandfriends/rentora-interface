@@ -93,6 +93,9 @@ const OverviewBody = () => {
         maintenanceRequests={totalMaintenance}
       />
 
+      {/* Vacant Units */}
+      <OverviewVacantUnits totalUnits={totalUnits} allRooms={allRooms} />
+
       {/* Urgent Maintenance Alert */}
       <OverviewMaintenanceAlert urgentCount={urgentCount} />
 
@@ -107,9 +110,6 @@ const OverviewBody = () => {
 
       {/* Payment Status
       <OverviewPaymentStatus paymentStatus={paymentStatus} /> */}
-
-      {/* Vacant Units */}
-      <OverviewVacantUnits totalUnits={totalUnits} allRooms={allRooms} />
     </div>
   )
 }
