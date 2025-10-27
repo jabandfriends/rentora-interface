@@ -1,10 +1,11 @@
+import { useDebounce } from '@uidotdev/usehooks'
 import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
 import { DEFAULT_CONTRACT_LIST_DATA } from '@/constants'
-import { CONTRACT_STATUS } from '@/enum/contract'
+import { CONTRACT_STATUS } from '@/enum'
 import { useRentoraApiContractList } from '@/hooks'
 
 import RoomDetailContractTable from './RoomDetailContractTable'
@@ -25,13 +26,15 @@ const RoomDetailOutStandingContract = () => {
 
   const [contractStatus]: [CONTRACT_STATUS] = watch(['contractStatus'])
 
+  const debouncedContractStatus = useDebounce(contractStatus ? contractStatus : undefined, 300)
+
   const {
     data: allContracts,
     isLoading: isLoadingContracts,
     pagination: { totalPages, totalElements },
   } = useRentoraApiContractList(apartmentId, {
     unitId: unitId,
-    contractStatus: contractStatus || undefined,
+    contractStatus: debouncedContractStatus,
     page: currentPage,
     size: DEFAULT_CONTRACT_LIST_DATA.size,
   })
@@ -58,17 +61,20 @@ const RoomDetailOutStandingContract = () => {
             <p className="text-body-2 text-theme-secondary-600">Track pending contract transitions</p>
           </div>
         </div>
-        <Select value={contractStatus} onValueChange={handleStatusChange}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select contract status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={CONTRACT_STATUS.TERMINATED}>Terminated</SelectItem>
-            <SelectItem value={CONTRACT_STATUS.ACTIVE}>Active</SelectItem>
-            <SelectItem value={CONTRACT_STATUS.EXPIRED}>Expired</SelectItem>
-            <SelectItem value={CONTRACT_STATUS.RENEWED}>Renewed</SelectItem>
-          </SelectContent>
-        </Select>
+        {CONTRACT_STATUS && (
+          <Select onValueChange={handleStatusChange}>
+            <SelectTrigger className="capitalize">
+              <SelectValue placeholder="Select contract status" />
+            </SelectTrigger>
+            <SelectContent align="start" sideOffset={10}>
+              {Object.entries(CONTRACT_STATUS).map(([key, value]) => (
+                <SelectItem className="capitalize" key={key} value={value}>
+                  {value}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
       <RoomDetailContractTable
         isLoading={isLoadingContracts}
