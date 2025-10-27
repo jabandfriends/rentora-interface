@@ -10,7 +10,7 @@ import { useRentoraApiContractList } from '@/hooks'
 
 import RoomDetailContractTable from './RoomDetailContractTable'
 
-const RoomDetailOutStandingContract = () => {
+const RoomDetailContractList = () => {
   const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
     DEFAULT_CONTRACT_LIST_DATA.page,
@@ -88,4 +88,4 @@ const RoomDetailOutStandingContract = () => {
   )
 }
 
-export default RoomDetailOutStandingContract
+export default RoomDetailContractList

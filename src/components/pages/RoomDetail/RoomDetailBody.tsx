@@ -7,8 +7,8 @@ import { useRentoraApiContractDetail, useRentoraApiContractTerminate } from '@/h
 import type { TerminationFormValues } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
+import RoomDetailContractList from './RoomDetailContractList'
 import RoomDetailMaintenanceList from './RoomDetailMaintenanceList'
-import RoomDetailOutStandingContract from './RoomDetailOutStandingContract'
 import RoomDetailServices from './RoomDetailServices'
 
 const RoomDetailBody = () => {
@@ -59,8 +59,7 @@ const RoomDetailBody = () => {
         <RoomDetailServices />
       </div>
 
-      <RoomDetailOutStandingContract />
-      {/* <RoomDetailExpiredContract /> */}
+      <RoomDetailContractList />
       <RoomDetailMaintenanceList />
     </>
   )
