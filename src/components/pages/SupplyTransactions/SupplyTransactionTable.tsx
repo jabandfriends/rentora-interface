@@ -54,9 +54,10 @@ const SupplyTransactionTable = ({
   )
   const handleNavigateMaintenanceDetail = useCallback(
     (id: string) => {
+      if (!apartmentId || !id) return
       navigate(ROUTES.maintenanceDetail.getPath(apartmentId, id))
     },
-    [navigate, apartmentId],
+    [apartmentId, navigate],
   )
   if (isLoading) {
     return <PageTableLoading />
