@@ -11,9 +11,10 @@ import {
   TableRow,
 } from '@/components/ui'
 import { PAYMENT_TABLE_HEADER } from '@/constants/payment'
+import type { IPayment } from '@/types'
 
 type PaymentTableProps = {
-  data: Array<any>
+  data: Array<IPayment>
   isLoading: boolean
   //isSearched: boolean
   //currentPage: number
@@ -42,44 +43,44 @@ const PaymentTable = ({ data, isLoading }: PaymentTableProps) => {
         <TableBody>
           {data.map((item, index) => (
             <TableRow key={index}>
-              <TableCell className="text-theme-primary">{item.payment_number || <FieldEmpty />}</TableCell>
+              <TableCell className="text-theme-primary">{item.paymentId || <FieldEmpty />}</TableCell>
               <TableCell>{item.amount ? `$${item.amount.toFixed(2)}` : <FieldEmpty />}</TableCell>
-              <TableCell>{item.paid_at || <FieldEmpty />}</TableCell>
+              <TableCell>{item.unitName || <FieldEmpty />}</TableCell>
 
               <TableCell>
                 <Badge
                   variant={
-                    item.payment_status === 'completed'
+                    item.paymentStatus === 'completed'
                       ? 'success'
-                      : item.payment_status === 'pending'
+                      : item.paymentStatus === 'pending'
                         ? 'warning'
                         : 'error'
                   }
                   className="capitalize"
                 >
-                  {item.payment_status || <FieldEmpty />}
+                  {item.paymentStatus || <FieldEmpty />}
                 </Badge>
               </TableCell>
 
               <TableCell>
                 <Badge
                   variant={
-                    item.verified_status === 'verified'
+                    item.verificationStatus === 'verified'
                       ? 'success'
-                      : item.verified_status === 'rejected'
+                      : item.verificationStatus === 'rejected'
                         ? 'error'
                         : 'secondary'
                   }
                   className="capitalize"
                 >
-                  {item.verified_status || <FieldEmpty />}
+                  {item.verificationStatus || <FieldEmpty />}
                 </Badge>
               </TableCell>
 
               <TableCell>
-                {item.receipt_url ? (
+                {item.buildingName ? (
                   <a
-                    href={item.receipt_url}
+                    href={item.buildingName}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-theme-primary underline"
