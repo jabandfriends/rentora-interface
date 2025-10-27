@@ -37,6 +37,11 @@ export type ICreateMaintenanceRequestPayload = {
   isEmergency: boolean
   isRecurring: boolean
   recurringSchedule?: string
+  suppliesUsage?: Array<ISuppliesUsage>
+}
+export type ISuppliesUsage = {
+  supplyId: string
+  supplyUsedQuantity: number
 }
 //update payload type
 export type IUpdateMaintenanceRequestPayload = Partial<

@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type ReactNode, useEffect, useMemo } from 'react'
+import { Box } from 'lucide-react'
+import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -27,7 +28,9 @@ import { Switch } from '@/components/feature'
 import { SelectRoomModal } from '@/components/ui'
 import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
 import { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
-import type { IMaintenanceDetail, MAINTENANCE_FORM_SCHEMA_TYPE, Maybe } from '@/types'
+import type { IMaintenanceDetail, ISuppliesUsage, MAINTENANCE_FORM_SCHEMA_TYPE, Maybe } from '@/types'
+
+import SupplySelectModal from './SupplySelectModal'
 
 type IMaintenanceFormProps = {
   buttonLabel: string
@@ -38,6 +41,9 @@ type IMaintenanceFormProps = {
 }
 
 const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defaultValues }: IMaintenanceFormProps) => {
+  const [openSupplySelectModal, setOpenSupplySelectModal] = useState(false)
+
+  //form hook
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
     resolver: zodResolver(MAINTENANCE_FORM_SCHEMA),
     defaultValues: {
@@ -48,15 +54,21 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
       priority: MAINTENANCE_PRIORITY.NORMAL,
       appointmentDate: '',
       dueDate: '',
-      estimatedHours: undefined,
-      estimatedCost: undefined,
+      estimatedHours: '',
+      estimatedCost: '',
       category: MAINTENANCE_CATEGORY.GENERAL,
       isEmergency: false,
       isRecurring: false,
       recurringSchedule: '',
+      suppliesUsage: [],
     },
     mode: 'onChange',
   })
+
+  const handleConfirm = (selectedSupplies: Array<ISuppliesUsage>) => {
+    form.setValue('suppliesUsage', selectedSupplies, { shouldValidate: true })
+    setOpenSupplySelectModal(false)
+  }
 
   useEffect(() => {
     if (defaultValues) {
@@ -77,6 +89,8 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
       })
     }
   }, [defaultValues, form])
+
+  const [suppliesUsage] = form.watch(['suppliesUsage'])
 
   const isButtonDisabled: boolean = useMemo(
     () => isSubmitting || !form.formState.isDirty || !form.formState.isValid,
@@ -184,7 +198,7 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
                               {item.label} {item.isRequired && <span className="text-theme-error">*</span>}
                             </p>
                             <Select onValueChange={field.onChange} value={(field.value as string) ?? ''}>
-                              <SelectTrigger className="capitalize">
+                              <SelectTrigger className="w-full capitalize">
                                 <SelectValue placeholder={item.placeholder} />
                               </SelectTrigger>
                               <SelectContent>
@@ -302,6 +316,30 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
               )}
             />
           )}
+        </Card>
+
+        {/* Supplies Usage */}
+        <Card className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
+          <SupplySelectModal
+            open={openSupplySelectModal}
+            onOpenChange={setOpenSupplySelectModal}
+            onConfirm={handleConfirm}
+            initialSelectedSupplies={suppliesUsage}
+          />
+          <div>
+            <h3>Supplies Usage</h3>
+            <p className="text-theme-secondary">Select the supplies used for this task</p>
+          </div>
+          <Button
+            block
+            className="flex items-center justify-start"
+            type="button"
+            variant="outline"
+            onClick={() => setOpenSupplySelectModal(true)}
+          >
+            <Box className="size-4" />
+            Select Supplies
+          </Button>
         </Card>
 
         {/* Location */}
