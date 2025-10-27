@@ -1,9 +1,10 @@
-import { PageSection } from '@/components/layout'
+import { PageHeader, PageSection } from '@/components/layout'
 import { Tenant } from '@/components/pages/Tenant'
 
 function TenantPage() {
   return (
     <PageSection>
+      <PageHeader title="Tenants Management" description="Easily manage and track all your tenants here!" />
       <Tenant />
     </PageSection>
   )
