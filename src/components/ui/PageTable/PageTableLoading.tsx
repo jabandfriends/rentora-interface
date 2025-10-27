@@ -5,9 +5,9 @@ type IPageTableLoadingProps = {
   headerRows?: number
   bodyRows?: number
 }
-const PageTableLoading = ({ headerRows = 8, bodyRows = 16 }: IPageTableLoadingProps) => {
+const PageTableLoading = ({ headerRows = 6, bodyRows = 16 }: IPageTableLoadingProps) => {
   return (
-    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+    <div className="flex flex-col gap-y-3">
       <Table>
         <TableHeader>
           <TableRow>

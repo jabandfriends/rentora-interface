@@ -21,6 +21,8 @@ export type ISupplyTransaction = {
   quantity: string
   note: string
   changeByUser: string
+  maintenanceId: string
+  maintenanceNumber: string
 }
 
 //hook

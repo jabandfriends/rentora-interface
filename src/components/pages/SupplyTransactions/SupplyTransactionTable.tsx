@@ -1,5 +1,6 @@
-import { AlertCircle, Calendar, CircleArrowDown, CircleArrowUp, Settings } from 'lucide-react'
+import { AlertCircle, CircleArrowDown, CircleArrowUp, Settings } from 'lucide-react'
 import { type ReactNode, useCallback } from 'react'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
 
 import { PaginationBar } from '@/components/feature'
@@ -15,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui'
-import { SUPPLY_TRANSACTION_TABLE_HEADERS } from '@/constants'
+import { ROUTES, SUPPLY_TRANSACTION_TABLE_HEADERS } from '@/constants'
 import { SupplyTransactionType } from '@/enum'
 import type { IPaginate, ISupplyTransaction } from '@/types'
 import { formatTimestamp } from '@/utilities'
@@ -36,6 +37,8 @@ const SupplyTransactionTable = ({
   currentPage,
   onPageChange,
 }: ISupplyTransactionTableProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const navigate: NavigateFunction = useNavigate()
   const supplyTransactionTypeBadgeVariantWithIcon = useCallback(
     (status: SupplyTransactionType): { icon: ReactNode; variant: VariantProps<typeof Badge>['variant'] } => {
       switch (status) {
@@ -48,6 +51,12 @@ const SupplyTransactionTable = ({
       }
     },
     [],
+  )
+  const handleNavigateMaintenanceDetail = useCallback(
+    (id: string) => {
+      navigate(ROUTES.maintenanceDetail.getPath(apartmentId, id))
+    },
+    [navigate, apartmentId],
   )
   if (isLoading) {
     return <PageTableLoading />
@@ -71,9 +80,6 @@ const SupplyTransactionTable = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="flex items-center gap-2">
-              <Calendar size={16} /> Date
-            </TableHead>
             {SUPPLY_TRANSACTION_TABLE_HEADERS.map((header) => (
               <TableHead key={header}>{header}</TableHead>
             ))}
@@ -84,6 +90,12 @@ const SupplyTransactionTable = ({
             const { icon, variant } = supplyTransactionTypeBadgeVariantWithIcon(transaction.supplyTransactionType)
             return (
               <TableRow key={transaction.transactionDate + transaction.supplyName}>
+                <TableCell
+                  className="text-theme-primary cursor-pointer hover:underline"
+                  onClick={() => handleNavigateMaintenanceDetail(transaction.maintenanceId)}
+                >
+                  {transaction.maintenanceNumber || <FieldEmpty />}
+                </TableCell>
                 <TableCell className="text-theme-secondary">
                   {formatTimestamp(transaction.transactionDate, 'MMM D, YYYY HH:mm:ss')}
                 </TableCell>

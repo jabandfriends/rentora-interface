@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PackageOpen } from 'lucide-react'
+import { ChartColumnIncreasing, PackageOpen } from 'lucide-react'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
@@ -103,7 +103,7 @@ const SupplyUpdateModal = ({ open, onOpenChange, supply }: ISupplyUpdateModalPro
           <DialogDescription>Fill in the form below to update the supply.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form className="space-y-6" onSubmit={form.handleSubmit(handleSubmit)}>
+          <form className="space-y-3" onSubmit={form.handleSubmit(handleSubmit)}>
             <div className="space-y-2">
               <div className="mb-4">
                 <h4 className="flex items-center gap-x-2">
@@ -204,7 +204,7 @@ const SupplyUpdateModal = ({ open, onOpenChange, supply }: ISupplyUpdateModalPro
             <div className="space-y-2">
               <div className="mb-4">
                 <h4 className="flex items-center gap-x-2">
-                  <PackageOpen size={18} /> Stock Information
+                  <ChartColumnIncreasing size={18} /> Stock Management
                 </h4>
               </div>
 
