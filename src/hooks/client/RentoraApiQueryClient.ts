@@ -32,6 +32,7 @@ import type {
   IRentoraApiClientUnitWithUtilityResponse,
   IRentoraApiClientUserResponse,
   IRentoraApiClientUtilityListResponse,
+  IRentoraApiClietMonthlyUtilityUnitResponse,
   IRentoraApiContractListParams,
   IRentoraApiInvoiceListParams,
   IRentoraApiMaintenanceApartmentIdParams,
@@ -47,7 +48,6 @@ import type {
   Maybe,
   RentoraApiQueryClientKey,
 } from '@/types'
-import type { IRentoraApiClietMonthlyUtilityUnitResponse } from '@/types/hooks/api/query/monthlyUitlityUnit'
 
 import { RentoraApiBaseClient as RentoraApiBaseClient } from './RentoraApiBaseClient'
 

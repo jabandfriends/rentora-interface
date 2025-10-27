@@ -14,16 +14,19 @@ import {
 import { useRentoraApiMonthlyUtilityUnit } from '@/hooks'
 
 const MonthlyUtilityUnitElect = () => {
-  const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
+  const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
 
-  const { data: monthlyUtilityUnit, isLoading } = useRentoraApiMonthlyUtilityUnit({ apartmentId, unitId: id })
+  const { data: monthlyUtilityUnit, isLoading: monthlyUtiltiyUnitLoading } = useRentoraApiMonthlyUtilityUnit({
+    apartmentId,
+    unitId,
+  })
 
-  if (isLoading) {
+  if (monthlyUtiltiyUnitLoading) {
     return <LoadingPage />
   }
 
   if (!monthlyUtilityUnit) {
-    return <EmptyPage title="Data Error" description="Cannot load utility data." />
+    return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
   }
 
   const electricUtility = monthlyUtilityUnit.utilityGroupName.electric.map((item) => ({

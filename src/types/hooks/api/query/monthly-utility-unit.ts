@@ -1,4 +1,4 @@
-import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '../base-api'
+import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '@/types'
 
 export type IMonthlyUtilityUnit = {
   id: string

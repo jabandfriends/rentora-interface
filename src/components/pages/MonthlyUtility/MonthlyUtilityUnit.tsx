@@ -4,16 +4,19 @@ import { EmptyPage, LoadingPage } from '@/components/ui'
 import { useRentoraApiMonthlyUtilityUnit } from '@/hooks'
 
 const MonthlyUtilityUnit = () => {
-  const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
+  const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
 
-  const { data: monthlyUtilityUnit, isLoading } = useRentoraApiMonthlyUtilityUnit({ apartmentId, unitId: id })
+  const { data: monthlyUtilityUnit, isLoading: monthlyUtiltiyUnitLoading } = useRentoraApiMonthlyUtilityUnit({
+    apartmentId,
+    unitId,
+  })
 
-  if (isLoading) {
+  if (monthlyUtiltiyUnitLoading) {
     return <LoadingPage />
   }
 
   if (!monthlyUtilityUnit) {
-    return <EmptyPage title="Data Error" description="Cannot load utility data." />
+    return <EmptyPage title="Monthly Utility not found" description="No Monthly Utility found for this unit." />
   }
   return (
     <div>
