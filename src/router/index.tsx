@@ -52,7 +52,6 @@ const authLoader = async (): Promise<{ valid: boolean; mustChangePassword: boole
 
   try {
     const { mustChangePassword }: { mustChangePassword: boolean } = await rentoraApiQueryClient.checkAuth(accessToken)
-
     return { valid: true, mustChangePassword }
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_: unknown) {
