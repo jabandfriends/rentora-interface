@@ -1,87 +1,124 @@
+import { useDebounce } from '@uidotdev/usehooks'
 import { AlertTriangle, CheckCircle, Clock, DollarSign } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
 
 import { PageTableHeader } from '@/components/ui'
-import type { IStatsCardProps } from '@/types'
+import { DEFAULT_PAYMENT_LIST_DATA } from '@/constants'
+import { PaymentStatus, VerifiedStatus } from '@/enum/payment'
+import { useRentoraApiPaymentList } from '@/hooks'
+import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
 import PaymentSearch from './PaymentSearch'
 import PaymentTable from './PaymentTable'
 
 const Payment = () => {
-  //const [currentPage, setCurrentPage] = useState(DEFAULT_UNIT_LIST_DATA.page)
-  //const [search, setSearch] = useState('')
-  //const [status, setStatus] = useState('')
-  //const [verifiedStatus, setVerifiedStatus] = useState('')
+  const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
+    DEFAULT_PAYMENT_LIST_DATA.page,
+  )
 
-  // metadata
-  const [metadata] = useState({
-    totalPayments: 25,
-    totalCompleted: 12,
-    totalPending: 8,
-    totalFailed: 3,
-    totalVerified: 20,
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+
+  const { watch, setValue } = useForm({
+    defaultValues: {
+      search: '',
+      status: PaymentStatus.available,
+      verifiedStatus: VerifiedStatus.Verified,
+    },
   })
 
+  const [search, status, verifiedStatus]: [string, PaymentStatus, string] = watch([
+    'search',
+    'status',
+    'verifiedStatus',
+  ])
+
   // debounce
-  // const debouncedSearch = useDebounce(search ? search : undefined, 500)
-  // const debouncedStatus = useDebounce(status ? status : undefined, 300)
-  // const debouncedVerified = useDebounce(verifiedStatus ? verifiedStatus : undefined, 300)
+  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedStatus = useDebounce(status ? status : undefined, 300)
+  const debouncedVerified = useDebounce(verifiedStatus ? verifiedStatus : undefined, 300)
+  // DATA
+  const {
+    data,
+    pagination: { totalPages, totalElements },
+    metadata: { totalPayments, totalPaymentsComplete, totalPaymentsPending, totalPaymentsFailed },
+    isLoading,
+  } = useRentoraApiPaymentList({
+    apartmentId: apartmentId!,
+    params: {
+      page: currentPage,
+      size: DEFAULT_PAYMENT_LIST_DATA.size,
+      search: debouncedSearch,
+      status: debouncedStatus,
+    },
+  })
 
-  // MOCK DATA
-  const [data] = useState<Array<any>>([])
-  const [totalPages] = useState(0)
-  const [totalElements] = useState(0)
-  const [isLoading] = useState(false)
+  const handleSearchChange: ISearchBarProps['onChange'] = useCallback(
+    ({ target: { value } }: Parameters<ISearchBarProps['onChange']>[0]) => {
+      setValue('search', value)
+      setCurrentPage(DEFAULT_PAYMENT_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
 
-  //   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-  //     setSearch(e.target.value)
-  //     setCurrentPage(DEFAULT_UNIT_LIST_DATA.page)
-  //   }, [])
+  const handleStatusChange = useCallback(
+    (value: PaymentStatus) => {
+      setValue('status', value)
+      setCurrentPage(DEFAULT_PAYMENT_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
 
-  //   const handleStatusChange = useCallback((value: string) => {
-  //     setStatus(value)
-  //     setCurrentPage(DEFAULT_UNIT_LIST_DATA.page)
-  //   }, [])
+  const handleVerifiedChange = useCallback(
+    (value: VerifiedStatus) => {
+      setValue('verifiedStatus', value)
+      setCurrentPage(DEFAULT_PAYMENT_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
 
-  //   const handleVerifiedChange = useCallback((value: string) => {
-  //     setVerifiedStatus(value)
-  //     setCurrentPage(DEFAULT_UNIT_LIST_DATA.page)
-  //   }, [])
+  const handlePageChange = useCallback(
+    (page: number) => {
+      if (page < 1) return
+      setCurrentPage(page)
+    },
+    [setCurrentPage],
+  )
 
-  //   const handlePageChange = useCallback((page: number) => {
-  //     if (page < 1) return
-  //     setCurrentPage(page)
-  //   }, [])
-
+  const isSearched: boolean = useMemo(
+    () => !!debouncedSearch || !!debouncedStatus || !!debouncedVerified,
+    [debouncedSearch, debouncedStatus, debouncedVerified],
+  )
   // Mock stats
   const PAYMENT_STATS: Array<IStatsCardProps> = useMemo(
     () => [
       {
         title: 'Total Payments',
-        count: metadata.totalPayments,
+        count: totalPayments,
         type: 'primary',
         icon: <DollarSign size={20} />,
       },
       {
         title: 'Completed',
-        count: metadata.totalCompleted,
+        count: totalPaymentsComplete,
         type: 'success',
         icon: <CheckCircle size={20} />,
       },
       {
         title: 'Pending',
-        count: metadata.totalPending,
+        count: totalPaymentsPending,
         type: 'warning',
         icon: <Clock size={20} />,
       },
       {
         title: 'Failed',
-        count: metadata.totalFailed,
+        count: totalPaymentsFailed,
         type: 'error',
         icon: <AlertTriangle size={20} />,
       },
     ],
-    [metadata],
+    [totalPayments, totalPaymentsComplete, totalPaymentsPending, totalPaymentsFailed],
   )
 
   return (
@@ -92,8 +129,20 @@ const Payment = () => {
         stats={PAYMENT_STATS}
         isLoading={isLoading}
       />
-      <PaymentSearch />
-      <PaymentTable data={data} isLoading={isLoading} totalPages={totalPages} totalElements={totalElements} />
+      <PaymentSearch
+        onSearchChange={handleSearchChange}
+        onPaymentStatusChange={handleStatusChange}
+        onVerifiedStatusChange={handleVerifiedChange}
+      />
+      <PaymentTable
+        data={data}
+        onPageChange={handlePageChange}
+        isLoading={isLoading}
+        isSearched={isSearched}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalElements={totalElements}
+      />
     </>
   )
 }

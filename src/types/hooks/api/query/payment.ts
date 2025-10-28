@@ -1,3 +1,4 @@
+import type { PaymentStatus, VerifiedStatus } from '@/enum'
 import type { IBasePaginateQueryResult, IRentoraApiClientBasePaginateWithMetadataResponse } from '@/types'
 
 export type IUseRentoraApiPaymentList = IBasePaginateQueryResult<IRentoraApiClientPaymentListResponse['data']>
@@ -32,8 +33,9 @@ export type IRentoraApiPaymentListParams = {
   search?: string
   sortBy?: string
   sortDir?: string
-  status?: string
+  status?: PaymentStatus
   buildingName?: string
+  verifiedStatus?: VerifiedStatus
 }
 //hook
 export type IUseRentoraApiPaymentListStatus = IBasePaginateQueryResult<IRentoraApiClientPaymentListResponse['data']>
