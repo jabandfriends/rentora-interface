@@ -16,7 +16,7 @@ const MonthlyUtilityUnit = () => {
   }
 
   if (!monthlyUtilityUnit) {
-    return <EmptyPage title="Monthly Utility not found" description="No " />
+    return <EmptyPage title="Monthly Utility not found" description="No Monthly Utility you looking for." />
   }
   return (
     <div>
