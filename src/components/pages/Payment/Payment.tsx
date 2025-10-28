@@ -23,8 +23,8 @@ const Payment = () => {
   const { watch, setValue } = useForm({
     defaultValues: {
       search: '',
-      status: PaymentStatus.available,
-      verifiedStatus: VerifiedStatus.Verified,
+      status: undefined as unknown as PaymentStatus,
+      verifiedStatus: '',
     },
   })
 
@@ -50,7 +50,7 @@ const Payment = () => {
       page: currentPage,
       size: DEFAULT_PAYMENT_LIST_DATA.size,
       search: debouncedSearch,
-      status: debouncedStatus,
+      ...(debouncedStatus ? { status: debouncedStatus } : {}),
     },
   })
 
@@ -90,7 +90,7 @@ const Payment = () => {
     () => !!debouncedSearch || !!debouncedStatus || !!debouncedVerified,
     [debouncedSearch, debouncedStatus, debouncedVerified],
   )
-  // Mock stats
+
   const PAYMENT_STATS: Array<IStatsCardProps> = useMemo(
     () => [
       {
