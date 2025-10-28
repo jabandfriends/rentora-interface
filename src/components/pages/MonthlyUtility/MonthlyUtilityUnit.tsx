@@ -7,8 +7,8 @@ const MonthlyUtilityUnit = () => {
   const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
 
   const { data: monthlyUtilityUnit, isLoading: monthlyUtiltiyUnitLoading } = useRentoraApiMonthlyUtilityUnit({
-    apartmentId,
-    unitId,
+    apartmentId: apartmentId!,
+    unitId: unitId!,
   })
 
   if (monthlyUtiltiyUnitLoading) {
@@ -16,7 +16,7 @@ const MonthlyUtilityUnit = () => {
   }
 
   if (!monthlyUtilityUnit) {
-    return <EmptyPage title="Monthly Utility not found" description="No Monthly Utility found for this unit." />
+    return <EmptyPage title="Monthly Utility not found" description="No " />
   }
   return (
     <div>

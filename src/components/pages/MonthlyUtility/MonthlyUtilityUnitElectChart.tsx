@@ -13,12 +13,12 @@ import {
 } from '@/components/ui'
 import { useRentoraApiMonthlyUtilityUnit } from '@/hooks'
 
-const MonthlyUtilityUnitWater = () => {
+const MonthlyUtilityUnitElectChart = () => {
   const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
 
   const { data: monthlyUtilityUnit, isLoading: monthlyUtiltiyUnitLoading } = useRentoraApiMonthlyUtilityUnit({
-    apartmentId,
-    unitId,
+    apartmentId: apartmentId!,
+    unitId: unitId!,
   })
 
   if (monthlyUtiltiyUnitLoading) {
@@ -26,10 +26,10 @@ const MonthlyUtilityUnitWater = () => {
   }
 
   if (!monthlyUtilityUnit) {
-    return <EmptyPage title="Water Utility not found" description="No Water Utility you looking for." />
+    return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
   }
 
-  const waterUtility = monthlyUtilityUnit.utilityGroupName.water.map((item) => ({
+  const electricUtility = monthlyUtilityUnit.utilityGroupName.electric.map((item) => ({
     month: item.month,
     usageAmount: parseFloat(item.usageAmount.toFixed(2)),
   }))
@@ -43,9 +43,9 @@ const MonthlyUtilityUnitWater = () => {
 
   return (
     <div>
-      <h4> Water Utility </h4>
+      <h4> Electric Utility </h4>
       <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-        <BarChart accessibilityLayer data={waterUtility}>
+        <BarChart accessibilityLayer data={electricUtility}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="month"
@@ -63,4 +63,4 @@ const MonthlyUtilityUnitWater = () => {
   )
 }
 
-export default MonthlyUtilityUnitWater
+export default MonthlyUtilityUnitElectChart

@@ -17,9 +17,9 @@ export type IUtilityUnitData = {
   usageAmount: number
 }
 
-export type ImonthlyUtilityUnitParams = {
-  apartmentId?: string
-  unitId?: string
+export type IMonthlyUtilityUnitParams = {
+  apartmentId: string
+  unitId: string
 }
 
 export type IRentoraApiClietMonthlyUtilityUnitResponse = IRentoraApiClientBaseResponse<IMonthlyUtilityUnit>
