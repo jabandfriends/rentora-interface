@@ -34,13 +34,13 @@ const MonthlyUtilityUnitElect = () => {
   const chartConfig = {
     usageAmoung: {
       label: 'Usage Amount',
-      color: '#60a5fa',
+      color: '48 96.6% 76.7%',
     },
   } satisfies ChartConfig
 
   return (
     <div>
-      <h4> Electric Utility </h4>
+      <h3> Electric Utility </h3>
       <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
         <BarChart accessibilityLayer data={electricUtility}>
           <CartesianGrid vertical={false} />
@@ -53,7 +53,7 @@ const MonthlyUtilityUnitElect = () => {
           />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="usageAmount" fill="var(--color-desktop)" radius={4} />
+          <Bar dataKey="usageAmount" fill="48 96.6% 76.7%" radius={10} />
         </BarChart>
       </ChartContainer>
     </div>
