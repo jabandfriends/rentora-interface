@@ -22,6 +22,7 @@ export type RentoraApiQueryClientKey =
   | 'unitWithUtility'
   | 'allUnitMonthlyInvoiceStatus'
   | 'monthlyInvoiceDetail'
+  | 'monthlyInvoicePresignedUrl'
   | 'apartmentServicesList'
   | 'unitServicesList'
   | 'utilityList'
@@ -61,3 +62,5 @@ export type RentoraApiExecuteClientKey =
   | 'updateUnit'
   | 'deleteUnit'
   | 'terminateContract'
+  | 'updateMonthlyInvoice'
+  | 'putPresignedUrlPDF'

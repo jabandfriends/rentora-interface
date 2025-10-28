@@ -1,3 +1,4 @@
+export * from './useRenoraApiUploadMonthlyInvoicePDF'
 export * from './useRentoraApiAuthenticate'
 export * from './useRentoraApiContractTerminate'
 export * from './useRentoraApiCreateAdhocInvoice'

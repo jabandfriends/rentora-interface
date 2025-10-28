@@ -29,6 +29,7 @@ import type {
   IUpdateBuildingRequestPayload,
   IUpdateFloorPayload,
   IUpdateMaintenanceRequestPayload,
+  IUpdateMonthlyInvoiceRequest,
   IUpdateTenantPasswordRequestPayload,
   IUpdateTenantRequestPayload,
   IUpdateUnitRequestPayload,
@@ -43,6 +44,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     authenticate: 'AUTHENTICATE',
     createApartment: 'CREATE_APARTMENT',
     putPresignedUrl: 'PUT_PRESIGNED_URL',
+    putPresignedUrlPDF: 'PUT_PRESIGNED_URL_PDF',
     setupApartment: 'SETUP_APARTMENT',
     firstTimePasswordReset: 'FIRST_TIME_PASSWORD_RESET',
     createMaintenance: 'CREATE_MAINTENANCE',
@@ -57,6 +59,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     updateMeterReading: 'UPDATE_METER_READING',
     generateMonthlyInvoice: 'GENERATE_MONTHLY_INVOICE',
     updateApartment: 'UPDATE_APARTMENT',
+    updateMonthlyInvoice: 'UPDATE_MONTHLY_INVOICE',
     createUnitService: 'CREATE_UNIT_SERVICE',
     deleteUnitService: 'DELETE_UNIT_SERVICE',
     updateUnitService: 'UPDATE_UNIT_SERVICE',
@@ -304,5 +307,11 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   async deleteUnit(apartmentId: string, unitId: string): Promise<void> {
     const response = await this.axiosWithAuthInstance.delete<void>(`/api/apartments/${apartmentId}/units/${unitId}`)
     return response.data
+  }
+
+  //update monthly invoice
+  async updateMonthlyInvoice(invoiceNumber: string): Promise<IUpdateMonthlyInvoiceRequest['data']> {
+    const response = await this.axiosWithAuthInstance.put(`/api/monthly/invoices/presigned-url/${invoiceNumber}`)
+    return response.data.data
   }
 }

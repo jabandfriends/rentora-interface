@@ -81,6 +81,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     unitDetail: 'UNIT_DETAIL',
     contractList: 'CONTRACT_LIST',
     monthlyInvoiceList: 'MONTHLY_INVOICE_LIST',
+    monthlyInvoicePresignedUrl: 'MONTHLY_INVOICE_PRESIGNED_URL',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -377,6 +378,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     )
     return response.data.data
   }
+
   //get all monthly invoice
   async monthlyInvoiceList(
     apartmentId: Maybe<string>,
