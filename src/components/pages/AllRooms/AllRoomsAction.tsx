@@ -1,4 +1,4 @@
-import { Ellipsis } from 'lucide-react'
+import { Ellipsis, Pencil } from 'lucide-react'
 import { useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -18,7 +18,7 @@ const AllRoomsAction = ({ unitId }: IAllRoomsActionProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="vanilla">
+        <Button className="flex items-center" size="icon" variant="ghost">
           <Ellipsis size={18} />
         </Button>
       </DropdownMenuTrigger>
@@ -29,7 +29,7 @@ const AllRoomsAction = ({ unitId }: IAllRoomsActionProps) => {
             navigateToUnitUpdate()
           }}
         >
-          Update Room
+          <Pencil className="text-theme-warning" size={18} /> Edit Room
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
