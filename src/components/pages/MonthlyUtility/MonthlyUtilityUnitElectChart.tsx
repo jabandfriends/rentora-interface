@@ -12,29 +12,30 @@ import {
   LoadingPage,
 } from '@/components/ui'
 import { useRentoraApiMonthlyUtilityUnit } from '@/hooks'
+import { type IUtilityUnitData } from '@/types'
 
-const MonthlyUtilityUnitElect = () => {
-  const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
+const MonthlyUtilityUnitElectChart = () => {
+  const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
 
-  const { data: monthlyUtilityUnit, isLoading } = useRentoraApiMonthlyUtilityUnit({ apartmentId, unitId: id })
+  const { data: monthlyUtilityUnit, isLoading: monthlyUtiltiyUnitLoading } = useRentoraApiMonthlyUtilityUnit({
+    apartmentId: apartmentId!,
+    unitId: unitId!,
+  })
 
-  if (isLoading) {
+  if (monthlyUtiltiyUnitLoading) {
     return <LoadingPage />
   }
 
   if (!monthlyUtilityUnit) {
-    return <EmptyPage title="Data Error" description="Cannot load utility data." />
+    return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
   }
 
-  const electricUtility = monthlyUtilityUnit.utilityGroupName.electric.map((item) => ({
-    month: item.month,
-    usageAmount: parseFloat(item.usageAmount.toFixed(2)),
-  }))
+  const electricUtility: Array<IUtilityUnitData> = monthlyUtilityUnit.utilityGroupName.electric.map((item) => item)
 
   const chartConfig = {
     usageAmoung: {
       label: 'Usage Amount',
-      color: '48 96.6% 76.7%',
+      color: '#60a5fa',
     },
   } satisfies ChartConfig
 
@@ -53,11 +54,11 @@ const MonthlyUtilityUnitElect = () => {
           />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="usageAmount" fill="48 96.6% 76.7%" radius={10} />
+          <Bar dataKey="usageAmount" fill="#60a5fa" radius={10} />
         </BarChart>
       </ChartContainer>
     </div>
   )
 }
 
-export default MonthlyUtilityUnitElect
+export default MonthlyUtilityUnitElectChart

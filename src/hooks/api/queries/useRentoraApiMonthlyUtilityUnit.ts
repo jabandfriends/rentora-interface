@@ -1,19 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { RENTORA_API_BASE_URL } from '@/config'
-import { RentoraApiQueryClient } from '@/hooks/client'
+import { RentoraApiQueryClient } from '@/hooks'
 import type {
-  ImonthlyUtilityUnitParams,
+  IMonthlyUtilityUnitParams,
   IRentoraApiClietMonthlyUtilityUnitResponse,
   IUseRentoraApiMonthlyUtilityUnit,
-} from '@/types/hooks/api/query/monthlyUitlityUnit'
+} from '@/types'
 
-export const useRentoraApiMonthlyUtilityUnit = (props: ImonthlyUtilityUnitParams): IUseRentoraApiMonthlyUtilityUnit => {
+export const useRentoraApiMonthlyUtilityUnit = (props: IMonthlyUtilityUnitParams): IUseRentoraApiMonthlyUtilityUnit => {
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
 
   return useQuery<IRentoraApiClietMonthlyUtilityUnitResponse['data']>({
     queryKey: [rentoraApiQueryClient.key.monthlyUtilityUnit, props.apartmentId, props.unitId],
-    queryFn: () => rentoraApiQueryClient.monthlyUtilityUnit(props.apartmentId, props.unitId),
+    queryFn: () => rentoraApiQueryClient.monthlyUtilityUnit({ apartmentId: props.apartmentId, unitId: props.unitId }),
     retry: 1,
     enabled: !!props.apartmentId && !!props.unitId,
   })

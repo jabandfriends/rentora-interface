@@ -12,36 +12,37 @@ import {
   LoadingPage,
 } from '@/components/ui'
 import { useRentoraApiMonthlyUtilityUnit } from '@/hooks'
+import { type IUtilityUnitData } from '@/types'
 
-const MonthlyUtilityUnitElect = () => {
-  const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
+const MonthlyUtilityUnitWaterChart = () => {
+  const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
 
-  const { data: monthlyUtilityUnit, isLoading } = useRentoraApiMonthlyUtilityUnit({ apartmentId, unitId: id })
+  const { data: monthlyUtilityUnit, isLoading: monthlyUtiltiyUnitLoading } = useRentoraApiMonthlyUtilityUnit({
+    apartmentId: apartmentId!,
+    unitId: unitId!,
+  })
 
-  if (isLoading) {
+  if (monthlyUtiltiyUnitLoading) {
     return <LoadingPage />
   }
 
   if (!monthlyUtilityUnit) {
-    return <EmptyPage title="Data Error" description="Cannot load utility data." />
+    return <EmptyPage title="Water Utility not found" description="No Water Utility you looking for." />
   }
 
-  const waterUtility = monthlyUtilityUnit.utilityGroupName.water.map((item) => ({
-    month: item.month,
-    usageAmount: parseFloat(item.usageAmount.toFixed(2)),
-  }))
+  const waterUtility: Array<IUtilityUnitData> = monthlyUtilityUnit.utilityGroupName.water
 
   const chartConfig = {
     usageAmoung: {
       label: 'Usage Amount',
-      color: '48 96.6% 76.7%',
+      color: '#60a5fa',
     },
   } satisfies ChartConfig
 
   return (
     <div>
-      <h3> Water Utility </h3>
-      <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+      <h4> Water Utility </h4>
+      <ChartContainer config={chartConfig} className="min-h-100px w-full">
         <BarChart accessibilityLayer data={waterUtility}>
           <CartesianGrid vertical={false} />
           <XAxis
@@ -53,11 +54,11 @@ const MonthlyUtilityUnitElect = () => {
           />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="usageAmount" fill="var(--color-desktop)" radius={4} />
+          <Bar dataKey="usageAmount" fill="#60a5fa" radius={10} />
         </BarChart>
       </ChartContainer>
     </div>
   )
 }
 
-export default MonthlyUtilityUnitElect
+export default MonthlyUtilityUnitWaterChart

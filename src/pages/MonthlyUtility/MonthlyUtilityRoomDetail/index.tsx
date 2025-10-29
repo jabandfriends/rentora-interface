@@ -1,13 +1,13 @@
 import { PageSection } from '@/components/layout'
-import { MonthUnilityUnitWater, MonthUtilityUnitElect } from '@/components/pages/MonthlyUtility'
+import { MonthlyUtilityUnitElectChart, MonthlyUtilityUnitWaterChart } from '@/components/pages/MonthlyUtility'
 import MonthlyUtilityUnit from '@/components/pages/MonthlyUtility/MonthlyUtilityUnit'
 
 const MonthlyUtilityRoomDetail = () => {
   return (
     <PageSection>
       <MonthlyUtilityUnit />
-      <MonthUtilityUnitElect />
-      <MonthUnilityUnitWater />
+      <MonthlyUtilityUnitElectChart />
+      <MonthlyUtilityUnitWaterChart />
     </PageSection>
   )
 }

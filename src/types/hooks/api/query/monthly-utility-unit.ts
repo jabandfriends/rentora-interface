@@ -1,4 +1,4 @@
-import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '../base-api'
+import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '@/types'
 
 export type IMonthlyUtilityUnit = {
   id: string
@@ -6,10 +6,12 @@ export type IMonthlyUtilityUnit = {
   floorNumber: number
   buildingName: string
 
-  utilityGroupName: {
-    water: Array<IUtilityUnitData>
-    electric: Array<IUtilityUnitData>
-  }
+  utilityGroupName: IUtilityGroup
+}
+
+export type IUtilityGroup = {
+  water: Array<IUtilityUnitData>
+  electric: Array<IUtilityUnitData>
 }
 
 export type IUtilityUnitData = {
@@ -17,9 +19,9 @@ export type IUtilityUnitData = {
   usageAmount: number
 }
 
-export type ImonthlyUtilityUnitParams = {
-  apartmentId?: string
-  unitId?: string
+export type IMonthlyUtilityUnitParams = {
+  apartmentId: string
+  unitId: string
 }
 
 export type IRentoraApiClietMonthlyUtilityUnitResponse = IRentoraApiClientBaseResponse<IMonthlyUtilityUnit>
