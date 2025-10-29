@@ -9,7 +9,7 @@ function Checkbox({ className, ...props }: ComponentProps<typeof Root>) {
     <Root
       data-slot="checkbox"
       className={cn(
-        'aria-invalid:ring-theme-error aria-invalid:border-theme-error size-4 shrink-0 rounded-sm border outline-none transition-shadow focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+        'aria-invalid:ring-theme-error aria-invalid:border-theme-error border-theme-secondary-400 size-4 shrink-0 rounded-sm border outline-none transition-shadow focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
       {...props}

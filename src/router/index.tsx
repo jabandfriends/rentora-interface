@@ -30,6 +30,8 @@ import OverviewPage from '@/pages/Overview'
 import PageNotFound from '@/pages/PageNotFound'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import RoomDetail from '@/pages/RoomDetail'
+import SupplyList from '@/pages/Supply'
+import SupplyTransactions from '@/pages/SupplyTransactions'
 import TenantPage from '@/pages/Tenant/Tenant'
 import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
@@ -305,6 +307,14 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.meterReadingCreate.path,
         element: <MeterReadingCreatePage />,
+      },
+      {
+        path: ROUTES.supplyList.path,
+        element: <SupplyList />,
+      },
+      {
+        path: ROUTES.supplyTransactions.path,
+        element: <SupplyTransactions />,
       },
       {
         path: '*',

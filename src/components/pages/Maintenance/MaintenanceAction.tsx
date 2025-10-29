@@ -1,11 +1,10 @@
-import { Ellipsis } from 'lucide-react'
+import { Ellipsis, Pencil } from 'lucide-react'
 
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/common'
 
 const MaintenanceAction = ({
   maintenanceId,
   onUpdate,
-  onDelete,
 }: {
   maintenanceId: string
   onUpdate: (maintenanceId: string) => void
@@ -13,17 +12,17 @@ const MaintenanceAction = ({
 }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
-      <Button variant="vanilla">
+      <Button className="flex items-center" size="icon" variant="ghost">
         <Ellipsis size={18} />
       </Button>
     </DropdownMenuTrigger>
-    <DropdownMenuContent align="start" sideOffset={10}>
+    <DropdownMenuContent sideOffset={10}>
       <DropdownMenuItem onClick={(e) => e.stopPropagation()} onSelect={() => onUpdate(maintenanceId)}>
-        Update Maintenance
+        <Pencil className="text-theme-warning" size={18} /> Update Maintenance
       </DropdownMenuItem>
-      <DropdownMenuItem onClick={(e) => e.stopPropagation()} onSelect={() => onDelete(maintenanceId)}>
+      {/* <DropdownMenuItem onClick={(e) => e.stopPropagation()} onSelect={() => onDelete(maintenanceId)}>
         Delete Maintenance
-      </DropdownMenuItem>
+      </DropdownMenuItem> */}
     </DropdownMenuContent>
   </DropdownMenu>
 )

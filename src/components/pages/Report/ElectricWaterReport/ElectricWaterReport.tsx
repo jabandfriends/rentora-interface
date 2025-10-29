@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { ElectricWaterReportTable } from '@/components/pages/Report/ElectricWaterReport'
-import { PageTableBar, PageTableHeader } from '@/components/ui'
+import { PageTableBar, PageTableBody, PageTableHeader } from '@/components/ui'
 import { DEFAULT_REPORT_UTILITY_LIST_DATA } from '@/constants'
 import { useRentoraApiReportReadingDateUtility, useRentoraApiReportUtility } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps, Maybe } from '@/types'
@@ -114,7 +114,7 @@ const ElectricWaterReport = () => {
   }, [electricUsagePrices, waterUsagePrices])
 
   return (
-    <>
+    <PageTableBody className="space-y-8">
       <PageTableHeader
         title="Electric & Water Usage"
         description="Manage and view electric & water usage and bills"
@@ -139,7 +139,7 @@ const ElectricWaterReport = () => {
         totalElements={totalElements}
         onPageChange={handlePageChange}
       />
-    </>
+    </PageTableBody>
   )
 }
 

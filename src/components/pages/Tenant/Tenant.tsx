@@ -7,7 +7,7 @@ import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 //components
 import { Button } from '@/components/common'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableBody, PageTableHeader, PageTableSearch } from '@/components/ui'
 import { DEFAULT_TENANT_LIST_DATA, ROUTES, TENANT_STATUS } from '@/constants'
 import { useRentoraApiTenantList } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps } from '@/types'
@@ -135,7 +135,7 @@ export const Tenant = () => {
   }
 
   return (
-    <>
+    <PageTableBody className="space-y-4">
       <PageTableHeader
         title="Tenants Management"
         description="Manage and view all tenants"
@@ -162,7 +162,7 @@ export const Tenant = () => {
         totalElements={totalElements}
         onPageChange={handlePageChange}
       />
-    </>
+    </PageTableBody>
   )
 }
 
