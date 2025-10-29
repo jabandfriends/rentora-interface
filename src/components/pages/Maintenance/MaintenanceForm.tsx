@@ -29,7 +29,6 @@ import {
 import { Switch } from '@/components/feature'
 import { Badge, SelectRoomModal } from '@/components/ui'
 import { DEFAULT_SUPPLY_LIST_DATA, MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
-import { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiSupplyList } from '@/hooks'
 import type {
   IMaintenanceDetail,
@@ -98,13 +97,10 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
       unitId: '',
       title: '',
       description: '',
-      status: MAINTENANCE_STATUS.PENDING,
-      priority: MAINTENANCE_PRIORITY.NORMAL,
       appointmentDate: '',
       dueDate: '',
       estimatedHours: '',
       estimatedCost: '',
-      category: MAINTENANCE_CATEGORY.GENERAL,
       isEmergency: false,
       isRecurring: false,
       recurringSchedule: '',
@@ -260,7 +256,11 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
                             <p>
                               {item.label} {item.isRequired && <span className="text-theme-error">*</span>}
                             </p>
-                            <Select onValueChange={field.onChange} value={(field.value as string) ?? ''}>
+                            <Select
+                              key={field.value as string}
+                              onValueChange={field.onChange}
+                              value={(field.value as string) ?? ''}
+                            >
                               <SelectTrigger className="w-full capitalize">
                                 <SelectValue placeholder={item.placeholder} />
                               </SelectTrigger>
