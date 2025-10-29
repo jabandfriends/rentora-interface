@@ -17,9 +17,9 @@ import {
   TableRow,
 } from '@/components/ui'
 import { ROUTES, SUPPLY_TRANSACTION_TABLE_HEADERS } from '@/constants'
-import { SupplyTransactionType } from '@/enum'
+import { SupplyTransactionNumberType, SupplyTransactionType } from '@/enum'
 import type { IPaginate, ISupplyTransaction } from '@/types'
-import { formatTimestamp } from '@/utilities'
+import { cn, formatNumber, formatTimestamp } from '@/utilities'
 
 type ISupplyTransactionTableProps = {
   data: Array<ISupplyTransaction>
@@ -89,6 +89,14 @@ const SupplyTransactionTable = ({
         <TableBody>
           {data.map((transaction: ISupplyTransaction) => {
             const { icon, variant } = supplyTransactionTypeBadgeVariantWithIcon(transaction.supplyTransactionType)
+            const transactionQuantity: number =
+              transaction.numberType === SupplyTransactionNumberType.POSITIVE
+                ? transaction.quantity
+                : -transaction.quantity
+            const transactionQuantityClass: string =
+              transaction.numberType === SupplyTransactionNumberType.POSITIVE
+                ? 'text-theme-success'
+                : 'text-theme-error'
             return (
               <TableRow key={transaction.transactionDate + transaction.supplyName}>
                 <TableCell
@@ -107,7 +115,11 @@ const SupplyTransactionTable = ({
                     <span className="font-semibold capitalize">{transaction.supplyTransactionType}</span>
                   </Badge>
                 </TableCell>
-                <TableCell>{transaction.quantity}</TableCell>
+                <TableCell>
+                  <span className={cn(transactionQuantityClass, 'font-semibold')}>
+                    {formatNumber(transactionQuantity)}
+                  </span>
+                </TableCell>
                 <TableCell className="text-theme-secondary">{transaction.note || <FieldEmpty />}</TableCell>
                 <TableCell className="text-theme-primary">{transaction.changeByUser}</TableCell>
               </TableRow>

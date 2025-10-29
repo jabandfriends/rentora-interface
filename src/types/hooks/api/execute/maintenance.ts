@@ -45,7 +45,9 @@ export type ISuppliesUsage = {
 }
 //update payload type
 export type IUpdateMaintenanceRequestPayload = Partial<
-  Omit<IMaintenanceExecuteBasePayload, 'startAt' | 'completedAt' | 'actualCost' | 'actualHours' | 'workSummary'>
+  Omit<IMaintenanceExecuteBasePayload, 'startAt' | 'completedAt' | 'actualCost' | 'actualHours' | 'workSummary'> & {
+    suppliesUsage?: Array<ISuppliesUsage & { maintenanceSupplyId?: string }>
+  }
 >
 
 //hooks type UseRentoraApiCreateMaintenance

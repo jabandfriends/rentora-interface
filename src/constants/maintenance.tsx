@@ -71,8 +71,9 @@ export const MAINTENANCE_FORM_SCHEMA = z
     suppliesUsage: z
       .array(
         z.object({
+          maintenanceSupplyId: z.string().optional(),
           supplyId: z.string(),
-          supplyUsedQuantity: z.number().min(1, 'Supply used quantity is required'),
+          supplyUsedQuantity: z.number(),
         }),
       )
       .optional(),

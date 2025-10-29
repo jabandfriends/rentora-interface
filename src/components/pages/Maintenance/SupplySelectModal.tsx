@@ -1,12 +1,7 @@
-import { useDebounce } from '@uidotdev/usehooks'
-import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useParams } from 'react-router-dom'
+import { type Dispatch, type SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Button } from '@/components/common'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/feature'
-import { DEFAULT_SUPPLY_LIST_DATA } from '@/constants'
-import { useRentoraApiSupplyList } from '@/hooks'
 import type { ISearchBarProps, ISuppliesUsage, ISupply, Maybe } from '@/types'
 
 import SupplyQualityAssignment from './SupplyQualityAssignment'
@@ -17,58 +12,38 @@ type ISupplySelectModalProps = {
   onOpenChange: (open: boolean) => void
   onConfirm: (suppliesUsage: Array<ISuppliesUsage>) => void
   initialSelectedSupplies: Maybe<Array<ISuppliesUsage>>
+  supplies: Array<ISupply>
+  onSearchChange: ISearchBarProps['onChange']
+  onPageChange: (page: number) => void
+  totalPages: number
+  currentPage: number
+  totalElements: number
 }
-const SupplySelectModal = ({ open, onOpenChange, onConfirm, initialSelectedSupplies }: ISupplySelectModalProps) => {
-  const { apartmentId } = useParams<{ apartmentId: string }>()
-
+const SupplySelectModal = ({
+  open,
+  onOpenChange,
+  onConfirm,
+  initialSelectedSupplies,
+  supplies,
+  onSearchChange,
+  onPageChange,
+  totalPages,
+  currentPage,
+  totalElements,
+}: ISupplySelectModalProps) => {
   //form state step
   const [step, setStep]: [string, Dispatch<SetStateAction<string>>] = useState<string>('select')
 
-  //pagination state for supply list
-  const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState<number>(
-    DEFAULT_SUPPLY_LIST_DATA.page,
-  )
-
   const [selectedSupplies, setSelectedSupplies]: [
-    Array<ISuppliesUsage>,
+    Array<ISuppliesUsage & Pick<ISuppliesUsage, 'supplyUsedQuantity'>>,
     Dispatch<SetStateAction<Array<ISuppliesUsage>>>,
   ] = useState<Array<ISuppliesUsage>>(initialSelectedSupplies || [])
 
-  const { watch, setValue } = useForm<{
-    search: string
-  }>({
-    defaultValues: {
-      search: '',
-    },
-  })
-  const [search]: [string] = watch(['search'])
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
-
-  const handleSearchChange: ISearchBarProps['onChange'] = useCallback(
-    ({ target: { value } }: Parameters<ISearchBarProps['onChange']>[0]) => {
-      setValue('search', value)
-      setCurrentPage(DEFAULT_SUPPLY_LIST_DATA.page)
-    },
-    [setValue, setCurrentPage],
-  )
-
-  //get all supplies
-  const {
-    data: supplies,
-    pagination: { totalPages, totalElements },
-  } = useRentoraApiSupplyList({
-    apartmentId: apartmentId,
-    params: {
-      page: currentPage,
-      size: 5,
-      search: debouncedSearch,
-    },
-  })
-
-  const handlePageChange = useCallback((page: number) => {
-    if (page < 1) return
-    setCurrentPage(page)
-  }, [])
+  useEffect(() => {
+    if (initialSelectedSupplies) {
+      setSelectedSupplies(initialSelectedSupplies)
+    }
+  }, [initialSelectedSupplies])
 
   const handleStepBack = useCallback(() => {
     setStep('select')
@@ -120,9 +95,9 @@ const SupplySelectModal = ({ open, onOpenChange, onConfirm, initialSelectedSuppl
           <SupplySelectStep
             supplies={supplies}
             selectedSupplies={selectedSupplies}
-            onSearchChange={handleSearchChange}
+            onSearchChange={onSearchChange}
             onSelectSupply={handleSelectSupply}
-            onPageChange={handlePageChange}
+            onPageChange={onPageChange}
             totalPages={totalPages}
             currentPage={currentPage}
             totalElements={totalElements}

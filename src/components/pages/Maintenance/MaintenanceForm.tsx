@@ -1,7 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useDebounce } from '@uidotdev/usehooks'
 import { Box } from 'lucide-react'
-import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import { type Dispatch, type ReactNode, type SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
 
 import {
   Button,
@@ -25,10 +27,19 @@ import {
   Textarea,
 } from '@/components/common'
 import { Switch } from '@/components/feature'
-import { SelectRoomModal } from '@/components/ui'
-import { MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
+import { Badge, SelectRoomModal } from '@/components/ui'
+import { DEFAULT_SUPPLY_LIST_DATA, MAINTENANCE_FORM_FIELDS, MAINTENANCE_FORM_SCHEMA } from '@/constants'
 import { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
-import type { IMaintenanceDetail, ISuppliesUsage, MAINTENANCE_FORM_SCHEMA_TYPE, Maybe } from '@/types'
+import { useRentoraApiSupplyList } from '@/hooks'
+import type {
+  IMaintenanceDetail,
+  ISearchBarProps,
+  ISuppliesUsage,
+  ISupply,
+  MAINTENANCE_FORM_SCHEMA_TYPE,
+  Maybe,
+} from '@/types'
+import { formatCurrency, formatNumber } from '@/utilities'
 
 import SupplySelectModal from './SupplySelectModal'
 
@@ -42,6 +53,43 @@ type IMaintenanceFormProps = {
 
 const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defaultValues }: IMaintenanceFormProps) => {
   const [openSupplySelectModal, setOpenSupplySelectModal] = useState(false)
+  //pagination state for supply list
+  const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState<number>(
+    DEFAULT_SUPPLY_LIST_DATA.page,
+  )
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const { watch, setValue } = useForm<{
+    search: string
+  }>({
+    defaultValues: {
+      search: '',
+    },
+  })
+  const [search]: [string] = watch(['search'])
+  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  //get all supplies
+  const {
+    data: supplies,
+    pagination: { totalPages, totalElements },
+  } = useRentoraApiSupplyList({
+    apartmentId: apartmentId,
+    params: {
+      page: currentPage,
+      size: 5,
+      search: debouncedSearch,
+    },
+  })
+  const handlePageChange = useCallback((page: number) => {
+    if (page < 1) return
+    setCurrentPage(page)
+  }, [])
+  const handleSearchChange: ISearchBarProps['onChange'] = useCallback(
+    ({ target: { value } }: Parameters<ISearchBarProps['onChange']>[0]) => {
+      setValue('search', value)
+      setCurrentPage(DEFAULT_SUPPLY_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
 
   //form hook
   const form = useForm<MAINTENANCE_FORM_SCHEMA_TYPE>({
@@ -86,16 +134,32 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
         isEmergency: defaultValues.isEmergency,
         isRecurring: defaultValues.isRecurring,
         recurringSchedule: defaultValues.recurringSchedule || '',
+        suppliesUsage: defaultValues.suppliesUsage?.map((supply) => ({
+          ...(supply.maintenanceSupplyId && { maintenanceSupplyId: supply.maintenanceSupplyId }),
+          supplyId: supply.supplyId,
+          supplyUsedQuantity: supply.supplyUsedQuantity,
+        })),
       })
     }
   }, [defaultValues, form])
 
   const [suppliesUsage] = form.watch(['suppliesUsage'])
 
-  const isButtonDisabled: boolean = useMemo(
-    () => isSubmitting || !form.formState.isDirty || !form.formState.isValid,
-    [isSubmitting, form.formState.isDirty, form.formState.isValid],
-  )
+  const suppliesUsageData: Array<ISupply & Pick<ISuppliesUsage, 'supplyUsedQuantity'>> =
+    useMemo(() => {
+      const suppliesUsageData: Array<ISupply> = supplies.filter((supply: ISupply) =>
+        suppliesUsage?.some((usage: ISuppliesUsage) => usage.supplyId === supply.supplyId),
+      )
+
+      const suppliesData: Array<ISupply & Pick<ISuppliesUsage, 'supplyUsedQuantity'>> = suppliesUsageData.map(
+        (supply: ISupply) => ({
+          ...supply,
+          supplyUsedQuantity:
+            suppliesUsage?.find((usage: ISuppliesUsage) => usage.supplyId === supply.supplyId)?.supplyUsedQuantity ?? 0,
+        }),
+      )
+      return suppliesData
+    }, [supplies, suppliesUsage]) ?? []
 
   return (
     <Form {...form}>
@@ -106,7 +170,6 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
               <h3>{title}</h3>
               <p className="text-theme-secondary">{description}</p>
             </div>
-
             <div className="space-y-2">
               {fields.map((item, index) => {
                 switch (item.fieldType) {
@@ -321,15 +384,22 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
         {/* Supplies Usage */}
         <Card className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
           <SupplySelectModal
+            supplies={supplies}
+            initialSelectedSupplies={suppliesUsage}
+            onSearchChange={handleSearchChange}
+            onPageChange={handlePageChange}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            totalElements={totalElements}
             open={openSupplySelectModal}
             onOpenChange={setOpenSupplySelectModal}
             onConfirm={handleConfirm}
-            initialSelectedSupplies={suppliesUsage}
           />
           <div>
             <h3>Supplies Usage</h3>
             <p className="text-theme-secondary">Select the supplies used for this task</p>
           </div>
+
           <Button
             block
             className="flex items-center justify-start"
@@ -340,6 +410,47 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
             <Box className="size-4" />
             Select Supplies
           </Button>
+
+          {suppliesUsageData && suppliesUsageData?.length > 0 && (
+            <div className="desktop:grid-cols-4 grid gap-4">
+              {suppliesUsageData.map((supply: ISupply & Pick<ISuppliesUsage, 'supplyUsedQuantity'>) => (
+                <Card key={supply.supplyId} className="border-theme-secondary-300 rounded-lg border p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-semibold">{supply.supplyName}</h4>
+                      <p className="text-theme-secondary text-body-2">{supply.supplyDescription}</p>
+                    </div>
+
+                    <Badge className="capitalize" variant="secondary">
+                      {supply.supplyCategory}
+                    </Badge>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-x-4">
+                    <div className="text-body-2 text-theme-primary-800 bg-theme-primary-200 mt-2 rounded-lg p-2">
+                      <div className="flex items-center gap-x-2">
+                        <Box className="size-4" /> Used Quantity
+                      </div>
+                      <div className="flex items-center gap-x-1">
+                        <span className="font-semibold"> {formatNumber(supply.supplyUsedQuantity)}</span>
+                        {supply.supplyUnit}
+                      </div>
+                    </div>
+                    <div className="text-body-2 text-theme-primary-800 bg-theme-primary-200 mt-2 rounded-lg p-2">
+                      <div className="flex items-center gap-x-2">
+                        <Box className="size-4" /> Total Cost
+                      </div>
+                      <div className="flex items-center gap-x-1">
+                        <span className="font-semibold">
+                          {formatCurrency(supply.supplyUsedQuantity * supply.supplyUnitPrice)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
         </Card>
 
         {/* Location */}
@@ -363,7 +474,7 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
         </Card>
 
         <div className="flex justify-end">
-          <Button className="flex items-center gap-2" type="submit" disabled={isButtonDisabled}>
+          <Button className="flex items-center gap-2" type="submit">
             {isSubmitting ? <Spinner /> : buttonLabel}
             {buttonIcon}
           </Button>
