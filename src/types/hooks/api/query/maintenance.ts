@@ -5,6 +5,7 @@ import type {
   IRentoraApiClientBasePaginateWithMetadataResponse,
   IRentoraApiClientBaseResponse,
   ISuppliesUsage,
+  ISupply,
   Maybe,
 } from '@/types'
 
@@ -77,8 +78,11 @@ export type IRentoraApiMaintenanceApartmentIdParams = string
 //Maintenance detail type
 export type IMaintenanceDetail = IMaintenance & {
   unitId: string
-  suppliesUsage?: Array<ISuppliesUsage & { maintenanceSupplyId?: string }>
+  suppliesUsage?: Array<IMaintenanceSupplyUsage>
 }
+export type IMaintenanceSupplyUsage = ISuppliesUsage & {
+  maintenanceSupplyId?: string
+} & Pick<ISupply, 'supplyName' | 'supplyDescription' | 'supplyCategory' | 'supplyUnitPrice' | 'supplyUnit'>
 
 //detail response type
 export type IRentoraApiClientMaintenanceDetailResponse = IRentoraApiClientBaseResponse<IMaintenanceDetail>

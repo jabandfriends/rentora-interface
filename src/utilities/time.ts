@@ -26,7 +26,7 @@ export function formatTimestamp(isoString: string, format = 'YYYY-MM-DD HH:mm:ss
   return dayjs(isoString).format(format)
 }
 //format date
-export function formatDate(date: Date, format = 'YYYY-MM-DD HH:mm:ss') {
+export function formatDate(date: Date, format = 'DD-MM-YYYY HH:mm:ss') {
   if (!date) {
     return ''
   }

@@ -40,7 +40,7 @@ import type {
 } from '@/types'
 import { formatCurrency, formatNumber } from '@/utilities'
 
-import SupplySelectModal from './SupplySelectModal'
+import { SupplySelectModal } from './SupplySelectModal'
 
 type IMaintenanceFormProps = {
   buttonLabel: string
@@ -52,6 +52,7 @@ type IMaintenanceFormProps = {
 
 const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defaultValues }: IMaintenanceFormProps) => {
   const [openSupplySelectModal, setOpenSupplySelectModal] = useState(false)
+
   //pagination state for supply list
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState<number>(
     DEFAULT_SUPPLY_LIST_DATA.page,
