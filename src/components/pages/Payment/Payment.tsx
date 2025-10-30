@@ -4,7 +4,8 @@ import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } fr
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
-import { PageTableHeader } from '@/components/ui'
+import { PageHeader } from '@/components/layout'
+import { PageTableBody, PageTableHeader } from '@/components/ui'
 import { DEFAULT_PAYMENT_LIST_DATA } from '@/constants'
 import { PaymentStatus, VerifiedStatus } from '@/enum/payment'
 import { useRentoraApiPaymentList } from '@/hooks'
@@ -23,7 +24,7 @@ const Payment = () => {
   const { watch, setValue } = useForm({
     defaultValues: {
       search: '',
-      status: undefined as unknown as PaymentStatus,
+      status: '' as PaymentStatus,
       verifiedStatus: '',
     },
   })
@@ -38,9 +39,10 @@ const Payment = () => {
   const debouncedSearch = useDebounce(search ? search : undefined, 500)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedVerified = useDebounce(verifiedStatus ? verifiedStatus : undefined, 300)
+
   // DATA
   const {
-    data,
+    data: paymentList,
     pagination: { totalPages, totalElements },
     metadata: { totalPayments, totalPaymentsComplete, totalPaymentsPending, totalPaymentsFailed },
     isLoading,
@@ -123,26 +125,29 @@ const Payment = () => {
 
   return (
     <>
-      <PageTableHeader
-        title="Payment"
-        description="Manage and view all payments"
-        stats={PAYMENT_STATS}
-        isLoading={isLoading}
-      />
-      <PaymentSearch
-        onSearchChange={handleSearchChange}
-        onPaymentStatusChange={handleStatusChange}
-        onVerifiedStatusChange={handleVerifiedChange}
-      />
-      <PaymentTable
-        data={data}
-        onPageChange={handlePageChange}
-        isLoading={isLoading}
-        isSearched={isSearched}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        totalElements={totalElements}
-      />
+      <PageHeader title="Payment" description="Manage and view all payments" />
+      <PageTableBody className="space-y-8">
+        <PageTableHeader
+          title="Payment Analytics"
+          description="View statistics and filter through all payment records"
+          stats={PAYMENT_STATS}
+          isLoading={isLoading}
+        />
+        <PaymentSearch
+          onSearchChange={handleSearchChange}
+          onPaymentStatusChange={handleStatusChange}
+          onVerifiedStatusChange={handleVerifiedChange}
+        />
+        <PaymentTable
+          data={paymentList}
+          onPageChange={handlePageChange}
+          isLoading={isLoading}
+          isSearched={isSearched}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalElements={totalElements}
+        />
+      </PageTableBody>
     </>
   )
 }

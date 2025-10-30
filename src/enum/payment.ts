@@ -1,11 +1,11 @@
 export enum PaymentStatus {
-  Completed = 'completed',
-  Pending = 'pending',
-  Failed = 'failed',
-  available = 'available',
+  COMPLETED = 'completed',
+  PENDING = 'pending',
+  FAILED = 'failed',
+  REFUNDED = 'refunded',
 }
 export enum VerifiedStatus {
-  Verified = 'verified',
-  Unverified = 'unverified',
-  Rejected = 'rejected',
+  PENDING = 'pending',
+  VERIFIED = 'verified',
+  REJECTED = 'rejected',
 }

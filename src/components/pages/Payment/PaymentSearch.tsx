@@ -22,7 +22,7 @@ const PaymentSearch = ({ onSearchChange, onPaymentStatusChange, onVerifiedStatus
     return <Spinner />
   }
   return (
-    <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
+    <div className="desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl">
       {/* Search */}
       <SearchBar onChange={onSearchChange} />
 

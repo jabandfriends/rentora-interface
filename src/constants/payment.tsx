@@ -1,10 +1,10 @@
 export const PAYMENT_TABLE_HEADER: Array<string> = [
   'Payment No.',
-  'Amount',
   'Unit Name',
+  'Building Name',
+  'Amount',
   'Payment Status',
   'Verification Status',
-  'Building Name',
 ]
 
 export enum PAYMENT_STATUS_ENUM {

@@ -15,8 +15,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui'
-import { PAYMENT_TABLE_HEADER } from '@/constants/payment'
+import { PAYMENT_TABLE_HEADER } from '@/constants'
+import { PaymentStatus, VerifiedStatus } from '@/enum'
 import type { IPayment } from '@/types'
+import { formatCurrency } from '@/utilities'
 
 type PaymentTableProps = {
   data: Array<IPayment>
@@ -39,11 +41,11 @@ const PaymentTable = ({
 }: PaymentTableProps) => {
   const paymentStatusVariant = useCallback((status: string): VariantProps<typeof Badge>['variant'] => {
     switch (status) {
-      case 'completed':
+      case PaymentStatus.COMPLETED:
         return 'success'
-      case 'pending':
+      case PaymentStatus.PENDING:
         return 'warning'
-      case 'failed':
+      case PaymentStatus.FAILED:
         return 'error'
       default:
         return 'default'
@@ -51,11 +53,11 @@ const PaymentTable = ({
   }, [])
   const verificationStatusVariant = useCallback((status: string): VariantProps<typeof Badge>['variant'] => {
     switch (status) {
-      case 'verified':
+      case VerifiedStatus.VERIFIED:
         return 'success'
-      case 'unverified':
-        return 'secondary'
-      case 'rejected':
+      case VerifiedStatus.PENDING:
+        return 'warning'
+      case VerifiedStatus.REJECTED:
         return 'error'
       default:
         return 'default'
@@ -70,7 +72,7 @@ const PaymentTable = ({
     return <PageTableEmpty message="No payments found" />
   }
   return (
-    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+    <div className="flex flex-col gap-y-3 rounded-lg">
       <Table>
         <TableHeader>
           <TableRow>
@@ -80,22 +82,12 @@ const PaymentTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item: IPayment, index) => (
-            <TableRow
-              key={
-                item.paymentId +
-                item.tenantName +
-                item.amount +
-                item.unitName +
-                item.paymentStatus +
-                item.verificationStatus +
-                item.buildingName +
-                index
-              }
-            >
-              <TableCell className="text-theme-primary">{item.paymentId || <FieldEmpty />}</TableCell>
-              <TableCell>{item.amount ? `$${item.amount.toFixed(2)}` : <FieldEmpty />}</TableCell>
+          {data.map((item: IPayment) => (
+            <TableRow key={item.paymentId}>
+              <TableCell className="text-theme-primary">{item.paymentNumber || <FieldEmpty />}</TableCell>
               <TableCell>{item.unitName || <FieldEmpty />}</TableCell>
+              <TableCell>{item.buildingName || <FieldEmpty />}</TableCell>
+              <TableCell>{item.amount ? formatCurrency(item.amount) : <FieldEmpty />}</TableCell>
               <TableCell>
                 <Badge variant={paymentStatusVariant(item.paymentStatus)} className="capitalize">
                   {item.paymentStatus || <FieldEmpty />}
@@ -105,20 +97,6 @@ const PaymentTable = ({
                 <Badge variant={verificationStatusVariant(item.verificationStatus)} className="capitalize">
                   {item.verificationStatus || <FieldEmpty />}
                 </Badge>
-              </TableCell>
-              <TableCell>
-                {item.buildingName ? (
-                  <a
-                    href={item.buildingName}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-theme-primary underline"
-                  >
-                    View
-                  </a>
-                ) : (
-                  <FieldEmpty />
-                )}
               </TableCell>
             </TableRow>
           ))}

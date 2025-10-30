@@ -16,9 +16,10 @@ export type IPaymentListMetadata = {
 
 export type IPayment = {
   paymentId: string
+  paymentNumber: string
   paymentMethod: string
-  paymentStatus: string //enum
-  verificationStatus: string //enum
+  paymentStatus: PaymentStatus
+  verificationStatus: VerifiedStatus
   amount: number
   tenantName: string
   unitName: string
@@ -37,5 +38,6 @@ export type IRentoraApiPaymentListParams = {
   buildingName?: string
   verifiedStatus?: VerifiedStatus
 }
+
 //hook
 export type IUseRentoraApiPaymentListStatus = IBasePaginateQueryResult<IRentoraApiClientPaymentListResponse['data']>
