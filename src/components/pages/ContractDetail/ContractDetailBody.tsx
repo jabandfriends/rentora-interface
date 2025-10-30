@@ -86,7 +86,7 @@ const ContractDetailBody = () => {
 
               <div className="flex items-center gap-3">
                 <div>
-                  <p className="text-body-2">Rentral Type</p>
+                  <p className="text-body-2">Rental Type</p>
                   <p className="text-body-2 text-theme-secondary capitalize">{contract.rentalType}</p>
                 </div>
               </div>
