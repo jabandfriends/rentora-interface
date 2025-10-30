@@ -15,7 +15,7 @@ const ContractAction = ({ handleOpenDeleteModal }: IContractAction) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={handleOpenDeleteModal}>
-          <Trash2 className="text-theme-error" /> Delete contract
+          <Trash2 className="text-theme-error" /> Terminate contract
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Pencil className="text-theme-warning" /> Update contract

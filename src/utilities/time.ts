@@ -53,8 +53,8 @@ export function getDateDiff(startDate: string | Date, endDate: string | Date): D
     return { days: 0, months: 0, years: 0 }
   }
 
-  const days = end.diff(start, 'day')
-  const months = end.diff(start, 'month')
+  const days = end.diff(start, 'day') + 1
+  const months = end.diff(start, 'month') + 1
   const years = end.diff(start, 'year')
 
   return { days, months, years }
