@@ -5,11 +5,11 @@ const BillSection = ({ invoice }: { invoice: IMonthlyInvoiceDetail }) => {
   return (
     <div className="desktop:grid-cols-2 grid gap-x-8 gap-y-4">
       {/* Tenant Info */}
-      <div>
-        <h4>BILL TO:</h4>
-        <div className="space-y-1">
-          <p className="font-medium">{invoice.tenantName}</p>
-          <div className="text-theme-secondary">
+      <div className="space-y-2">
+        <h4>BILL TO :</h4>
+        <div>
+          <p className="text-body-2 font-medium">{invoice.tenantName}</p>
+          <div className="text-theme-secondary text-body-2">
             <p>{invoice.tenantEmail}</p>
             <p>{invoice.tenantPhone ? invoice.tenantPhone : <FieldEmpty />}</p>
             <p>Unit: {invoice.unitName}</p>
@@ -21,9 +21,9 @@ const BillSection = ({ invoice }: { invoice: IMonthlyInvoiceDetail }) => {
       </div>
 
       {/* Billing Period */}
-      <div>
-        <h4>BILLING PERIOD:</h4>
-        <div className="text-theme-secondary space-y-1">
+      <div className="space-y-2">
+        <h4>BILLING PERIOD :</h4>
+        <div className="text-theme-secondary text-body-2">
           <p>
             {invoice.billStart} - {invoice.billEnd}
           </p>

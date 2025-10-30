@@ -61,12 +61,15 @@ const MonthlyInvoiceDetailTable = ({ invoice }: { invoice: IMonthlyInvoiceDetail
   }, [invoice])
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <div>
         <h4>Rent & Utility Details</h4>
-        <p className="text-theme-secondary text-body-2">{invoice.serviceList.length} items</p>
+        <p className="text-theme-secondary text-body-2">
+          Overview of rent, water, and electric charges for this billing period. All amounts and meter readings are
+          shown below.
+        </p>
       </div>
-      <Table className="w-full">
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Description</TableHead>
@@ -75,7 +78,7 @@ const MonthlyInvoiceDetailTable = ({ invoice }: { invoice: IMonthlyInvoiceDetail
             <TableHead>Amount</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="divide-y divide-gray-100">
+        <TableBody className="divide-theme-secondary-300 divide-y">
           <TableRow>
             <TableCell className="py-4">
               <div className="flex items-center gap-2">
