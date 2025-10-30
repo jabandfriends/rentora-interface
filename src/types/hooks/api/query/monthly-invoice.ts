@@ -56,8 +56,21 @@ export type IMonthlyInvoiceDetail = IMonthlyInvoice & {
   bankAccountNumber: string
   accountHolderName: string
   promptpayNumber: string
+
+  serviceList: Array<IMonthlyInvoiceService>
+  unitAdhocInvoices: Array<IMonthlyInvoiceUnitAdhocInvoice>
 }
 
+export type IMonthlyInvoiceUnitAdhocInvoice = {
+  adhocId: string
+  adhocNumber: string
+  adhocTitle: string
+  amount: number
+}
+export type IMonthlyInvoiceService = {
+  serviceName: string
+  servicePrice: number
+}
 //response
 export type IRentoraApiClientMonthlyInvoiceDetailResponse = IRentoraApiClientBaseResponse<IMonthlyInvoiceDetail>
 

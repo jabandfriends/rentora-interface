@@ -50,7 +50,7 @@ const ContractDeleteModal = ({
                 </Button>
               </DialogClose>
               <Button className="desktop:w-auto w-full" type="submit">
-                Delete
+                Terminate
               </Button>
             </div>
           </form>

@@ -7,7 +7,7 @@ import { PageHeader, PageSection } from '@/components/layout'
 import { MaintenanceForm } from '@/components/pages/Maintenance'
 import { ROUTES } from '@/constants'
 import { useRentoraApiCreateMaintenance } from '@/hooks'
-import type { ICreateMaintenanceRequestPayload, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
+import type { ICreateMaintenanceRequestPayload, ISuppliesUsage, MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
 const MaintenanceCreate = () => {
@@ -31,6 +31,10 @@ const MaintenanceCreate = () => {
         isEmergency: data.isEmergency,
         isRecurring: data.isRecurring,
         ...(data.isRecurring && data.recurringSchedule.trim() !== '' && { recurringSchedule: data.recurringSchedule }),
+        suppliesUsage: data.suppliesUsage?.map((supply: ISuppliesUsage) => ({
+          supplyId: supply.supplyId,
+          supplyUsedQuantity: supply.supplyUsedQuantity,
+        })),
       }
       try {
         await createMaintenance({ apartmentId: apartmentId ?? '', payload })

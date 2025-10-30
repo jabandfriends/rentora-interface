@@ -3,3 +3,8 @@ export enum SupplyTransactionType {
   USE = 'use',
   ADJUSTMENT = 'adjustment',
 }
+
+export enum SupplyTransactionNumberType {
+  POSITIVE = 'positive',
+  NEGATIVE = 'negative',
+}

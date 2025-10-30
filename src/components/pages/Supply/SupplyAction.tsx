@@ -10,8 +10,8 @@ const SupplyAction = ({ onUpdate, onDelete }: ISupplyActionProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="vanilla">
-          <Ellipsis />
+        <Button className="flex items-center" size="icon" variant="ghost">
+          <Ellipsis size={18} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" sideOffset={10}>
