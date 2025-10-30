@@ -7,13 +7,12 @@ export interface ICreateContractRequestPayload {
   startDate: string
   endDate: string
   rentalPrice: number
-  depositAmount: number
-  advancePaymentMonths: number
-  utilitiesIncluded: boolean
+  depositAmount?: number
+  advancePaymentMonths?: number
   termsAndConditions?: string
   specialConditions?: string
   autoRenewal: boolean
-  renewalNoticeDays: number
+  renewalNoticeDays?: number
   documentUrl?: string
   waterMeterStart: number
   electricMeterStart: number

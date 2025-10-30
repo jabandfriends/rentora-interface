@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf'
 
-import { ApartmentPaymentMethodType, CONTRACT_RENTAL_TYPE, UtilityPriceType } from '@/enum'
+import { ApartmentPaymentMethodType, CONTRACT_RENTAL_TYPE, CONTRACT_STATUS, UtilityPriceType } from '@/enum'
 import type { IContract, IMonthlyInvoiceDetail } from '@/types'
 
 import { formatCurrency, formatDate } from '.'
@@ -102,9 +102,9 @@ export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
       y = addSectionHeader('Financial Details', y)
       y = addFieldRow(
         'Rental Price',
-        `$${data.rentalPrice?.toLocaleString() || '0'}`,
+        `${data.rentalPrice?.toLocaleString() || '0'} THB`,
         'Deposit',
-        `$${data.depositAmount?.toLocaleString() || '0'}`,
+        `${data.depositAmount?.toLocaleString() || '0'} THB`,
         y,
       )
       y = addFieldRow(
@@ -114,38 +114,38 @@ export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
         `$${data.lateFeeAmount?.toLocaleString() || '0'}`,
         y,
       )
-      y = addFieldRow('Utilities Included', data.utilitiesIncluded ? 'Yes' : 'No', '', null, y)
+
       y += 10
 
       // Contract Period Section
       y = addSectionHeader('Contract Period', y)
-      y = addFieldRow('Start Date', data.startDate, 'End Date', data.endDate, y)
       y = addFieldRow(
-        'Duration',
-        `${safe(data.contractDurationDays)} days`,
+        'Contract Range',
+        `${formatDate(new Date(data.startDate), 'DD MMMM YYYY')} - ${formatDate(new Date(data.endDate), 'DD MMMM YYYY')}`,
         'Days Until Expiry',
         `${safe(data.daysUntilExpiry)} days`,
         y,
       )
-      y = addFieldRow(
-        'Auto Renewal',
-        data.autoRenewal ? 'Enabled' : 'Disabled',
-        'Notice Period',
-        `${safe(data.renewalNoticeDays)} days`,
-        y,
-      )
+
       y += 10
 
       // Utility Meters Section
       y = addSectionHeader('Utility Meters (Starting Values)', y)
-      y = addFieldRow('Water Meter', safe(data.waterMeterStart), 'Electric Meter', safe(data.electricMeterStart), y)
+      y = addFieldRow(
+        'Water Meter (unit)',
+        safe(data.waterMeterStart),
+        'Electric Meter (unit)',
+        safe(data.electricMeterStart),
+        y,
+      )
       y += 10
 
       // Status Section
       y = addSectionHeader('Contract Status', y)
       const getStatusEmoji = (status: string) => {
-        if (status === 'ACTIVE') return 'Active'
-        if (status === 'EXPIRED') return 'Expired'
+        if (status === CONTRACT_STATUS.ACTIVE) return 'Active'
+        if (status === CONTRACT_STATUS.EXPIRED) return 'Expired'
+        if (status === CONTRACT_STATUS.TERMINATED) return 'Terminated'
         return safe(status)
       }
       y = addFieldRow('Status', getStatusEmoji(data.status), 'Signed At', data.signedAt || 'Not signed', y)

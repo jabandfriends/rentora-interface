@@ -13,7 +13,6 @@ import type { ICreateContractRequestPayload, MonthlyContractFormData } from '@/t
 import { getErrorMessage } from '@/utilities'
 
 import ContractMainInformation from './ContractMainInformation'
-import ContractNavigation from './ContractNavigation'
 import { ContractReview } from './ContractReview'
 import ContractStartMeter from './ContractStartMeter'
 
@@ -64,7 +63,6 @@ const MonthlyContractBody = () => {
       rentalPrice: '',
       depositAmount: '',
       advancePaymentMonths: '',
-      utilitiesIncluded: true,
       termsAndConditions: '',
       specialConditions: '',
       autoRenewal: false,
@@ -74,9 +72,19 @@ const MonthlyContractBody = () => {
       electricMeterStart: '',
     },
   })
-
+  const handleSecondStepValidation = useCallback(
+    async (nextStep: number) => {
+      const isValid: boolean = await form.trigger(['waterMeterStart', 'electricMeterStart'])
+      if (!isValid) {
+        toast.error('Please fill or fix the following fields')
+        return
+      }
+      setCurrentStep(nextStep)
+    },
+    [form],
+  )
   //change step
-  const handleStepChange = useCallback(
+  const handleFirstStepValidation = useCallback(
     async (nextStep: number) => {
       // only validate if moving forward
       if (nextStep > currentStep) {
@@ -85,14 +93,13 @@ const MonthlyContractBody = () => {
           'tenantId',
           'rentalType',
           'rentalPrice',
-          'depositAmount',
-          'advancePaymentMonths',
-          'utilitiesIncluded',
           'termsAndConditions',
           'specialConditions',
           'autoRenewal',
           'renewalNoticeDays',
           'documentUrl',
+          'startDate',
+          'endDate',
         ])
         if (!isValid) {
           toast.error('Please fill or fix the following fields')
@@ -121,9 +128,9 @@ const MonthlyContractBody = () => {
         const payload: ICreateContractRequestPayload = {
           ...rest,
           rentalPrice: Number(data.rentalPrice),
-          depositAmount: Number(data.depositAmount),
-          advancePaymentMonths: Number(data.advancePaymentMonths),
-          renewalNoticeDays: Number(data.renewalNoticeDays),
+          depositAmount: data.depositAmount ? Number(data.depositAmount) : undefined,
+          advancePaymentMonths: data.advancePaymentMonths ? Number(data.advancePaymentMonths) : undefined,
+          renewalNoticeDays: data.renewalNoticeDays ? Number(data.renewalNoticeDays) : undefined,
           startDate: format(data.startDate, 'yyyy-MM-dd'),
           endDate: format(data.endDate, 'yyyy-MM-dd'),
           waterMeterStart: Number(data.waterMeterStart),
@@ -153,6 +160,9 @@ const MonthlyContractBody = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {currentStep === 1 && (
             <ContractMainInformation
+              currentStep={currentStep}
+              handleStepChange={handleFirstStepValidation}
+              onSubmit={onSubmit}
               form={form}
               tenantsData={tenantsData}
               handleSelectTenant={handleSelectTenant}
@@ -160,13 +170,15 @@ const MonthlyContractBody = () => {
             />
           )}
 
-          {currentStep === 2 && <ContractStartMeter form={form} />}
-          {currentStep === 3 && <ContractReview form={form} />}
-          <ContractNavigation
-            currentStep={currentStep}
-            setCurrentStep={handleStepChange}
-            onSubmit={form.handleSubmit(onSubmit)}
-          />
+          {currentStep === 2 && (
+            <ContractStartMeter
+              currentStep={currentStep}
+              handleStepChange={handleSecondStepValidation}
+              onSubmit={onSubmit}
+              form={form}
+            />
+          )}
+          {currentStep === 3 && <ContractReview currentStep={currentStep} onSubmit={onSubmit} form={form} />}
         </form>
       </Form>
     </Card>

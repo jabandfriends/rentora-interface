@@ -129,16 +129,28 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
                   <InfoRow label="End Date" value={formatDate(new Date(data.endDate))} />
                   <InfoRow label="Duration" value={`${data.contractDurationDays} days`} />
                   <InfoRow label="Auto Renewal" value={data.autoRenewal ? 'Yes' : 'No'} />
-                  <InfoRow label="Renewal Notice" value={`${data.renewalNoticeDays} days`} />
+                  <InfoRow
+                    label="Renewal Notice"
+                    value={`${data.renewalNoticeDays ? `${data.renewalNoticeDays} days` : 'Not specified'}`}
+                  />
                 </div>
               </Section>
 
               <Section title="Financial Details" icon={DollarSign}>
                 <div className="space-y-0 p-4">
                   <InfoRow label="Rental Price" value={formatCurrency(data.rentalPrice)} />
-                  <InfoRow label="Deposit Amount" value={formatCurrency(data.depositAmount)} />
-                  <InfoRow label="Advance Payment" value={`${data.advancePaymentMonths} months`} />
-                  <InfoRow label="Late Fee" value={formatCurrency(data.lateFeeAmount)} />
+                  <InfoRow
+                    label="Deposit Amount"
+                    value={data.depositAmount ? formatCurrency(data.depositAmount) : 'Not specified'}
+                  />
+                  <InfoRow
+                    label="Advance Payment"
+                    value={data.advancePaymentMonths ? `${data.advancePaymentMonths} months` : 'Not specified'}
+                  />
+                  <InfoRow
+                    label="Late Fee"
+                    value={data.lateFeeAmount ? formatCurrency(data.lateFeeAmount) : 'Not specified'}
+                  />
                   <InfoRow label="Utilities Included" value={data.utilitiesIncluded ? 'Yes' : 'No'} />
                 </div>
               </Section>

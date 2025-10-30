@@ -75,8 +75,9 @@ const MonthlyInvoiceDetailTable = ({ invoice }: { invoice: IMonthlyInvoiceDetail
           <TableCell className="py-4">
             <div className="flex items-center gap-2">
               <Building className="text-theme-primary size-4" />
-              <span className="capitalize">
-                {invoice.rentalType} Rent - {invoice.unitName}
+              <span className="flex flex-col capitalize">
+                {invoice.rentalType} Rent
+                <span className="text-theme-secondary text-body-3">{invoice.unitName}</span>
               </span>
             </div>
           </TableCell>
@@ -103,7 +104,7 @@ const MonthlyInvoiceDetailTable = ({ invoice }: { invoice: IMonthlyInvoiceDetail
           <TableCell className="py-4">
             {waterPrice} {waterUnit}
           </TableCell>
-          <TableCell className="py-4">{formatCurrency(invoice.waterTotalCost)}</TableCell>
+          <TableCell className="py-4">{formatCurrency(invoice.waterTotalCost)} </TableCell>
         </TableRow>
 
         <TableRow>
