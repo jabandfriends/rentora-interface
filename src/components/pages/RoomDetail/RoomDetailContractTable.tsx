@@ -44,7 +44,7 @@ const RoomDetailContractTable = ({
         return 'default'
     }
   }, [])
-  if (isLoading) return <PageTableLoading />
+  if (isLoading) return <PageTableLoading bodyRows={5} />
 
   if (!contracts || contracts.length === 0) return <PageTableEmpty message="No contracts found" />
 
@@ -61,7 +61,7 @@ const RoomDetailContractTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {contracts?.map((contract: IContractSummary) => (
+          {contracts.map((contract: IContractSummary) => (
             <TableRow key={contract.id}>
               <TableCell>{contract.startDate}</TableCell>
               <TableCell>{contract.endDate}</TableCell>
