@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Button, Spinner } from '@/components/common'
+import { Button, Card, Spinner } from '@/components/common'
 import { BillSection, MonthlyInvoiceDetailTable } from '@/components/pages/Invoice'
 import { EmptyPage } from '@/components/ui'
 import { useRentoraApiMonthlyInvoiceDetail } from '@/hooks'
@@ -54,18 +54,18 @@ const MonthlyInvoiceDetail = () => {
     )
   }
   return (
-    <div className="flex w-full flex-col gap-y-4">
+    <Card className="flex w-full flex-col gap-y-4 rounded-2xl">
       <div className="flex items-center gap-4">
         <Button className="flex items-center gap-x-2" onClick={() => navigate(-1)}>
           <ArrowLeft className="size-5" />
           Back
         </Button>
       </div>
-      <div className="bg-theme-light space-y-6 rounded-xl shadow-sm">
+      <div className="space-y-6 rounded-xl">
         {/* Invoice Detail */}
-        <div>
+        <div className="space-y-4">
           {/* Invoice Header */}
-          <div className="space-y-4 p-8">
+          <div className="space-y-4">
             <div className="flex items-start justify-between">
               <div>
                 <h2>RENT INVOICE</h2>
@@ -81,7 +81,7 @@ const MonthlyInvoiceDetail = () => {
           </div>
 
           {/* Invoice Items */}
-          <div className="space-y-4 p-8">
+          <div className="space-y-4">
             <MonthlyInvoiceDetailTable invoice={monthlyInvoice} />
             {/* serviceList section */}
             <MonthlyInvoiceDetailUnitService serviceList={monthlyInvoice.serviceList} />
@@ -117,7 +117,7 @@ const MonthlyInvoiceDetail = () => {
           Download PDF
         </Button>
       </div>
-    </div>
+    </Card>
   )
 }
 

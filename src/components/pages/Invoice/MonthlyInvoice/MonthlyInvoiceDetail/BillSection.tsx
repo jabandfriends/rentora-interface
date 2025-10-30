@@ -3,7 +3,7 @@ import type { IMonthlyInvoiceDetail } from '@/types'
 
 const BillSection = ({ invoice }: { invoice: IMonthlyInvoiceDetail }) => {
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="desktop:grid-cols-2 grid gap-x-8 gap-y-4">
       {/* Tenant Info */}
       <div>
         <h4>BILL TO:</h4>
