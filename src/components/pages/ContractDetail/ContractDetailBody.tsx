@@ -8,7 +8,7 @@ import { PageHeader } from '@/components/layout'
 import { Badge, EmptyPage, FieldEmpty, LoadingPage } from '@/components/ui'
 import { CONTRACT_STATUS } from '@/enum'
 import { useRentoraApiContractDetailByContractId } from '@/hooks'
-import { formatDate } from '@/utilities'
+import { formatCurrency, formatDate } from '@/utilities'
 
 const ContractDetailBody = () => {
   const navigate: NavigateFunction = useNavigate()
@@ -47,7 +47,7 @@ const ContractDetailBody = () => {
     <div className="space-y-4">
       <PageHeader
         title="Contract Detail"
-        description={`Contract ID: ${contract.contractId}`}
+        description={`Contract Number: #${contract.contractNumber}`}
         isAction
         actionLabel="Back"
         actionIcon={<ArrowLeft />}
@@ -79,22 +79,8 @@ const ContractDetailBody = () => {
 
               <div className="flex items-center gap-3">
                 <div>
-                  <p className="text-body-2">Guarantor Name</p>
-                  <p className="text-body-2 text-theme-secondary capitalize">{contract.guarantorName}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div>
-                  <p className="text-body-2">Guarantor Phone</p>
-                  <p className="text-body-2 text-theme-secondary capitalize">{contract.guarantorPhone}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div>
-                  <p className="text-body-2">Rentral Price</p>
-                  <p className="text-body-2 text-theme-secondary capitalize">{contract.rentalPrice}</p>
+                  <p className="text-body-2">Rental Price</p>
+                  <p className="text-body-2 text-theme-secondary capitalize">{formatCurrency(contract.rentalPrice)}</p>
                 </div>
               </div>
 
