@@ -76,6 +76,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     getUserData: 'GET_USER_DATA',
     buildingListNoPaginate: 'BUILDING_LIST_NO_PAGINATE',
     contractDetail: 'CONTRACT_DETAIL',
+    contractDetailByContractId: 'CONTRACT_DETAIL_BY_CONTRACT_ID',
     unitUtilityAvailableYear: 'UNIT_UTILITY_AVAILABLE_YEAR',
     unitUtilityAvailableMonth: 'UNIT_UTILITY_AVAILABLE_MONTH',
     unitWithUtility: 'UNIT_WITH_UTILITY',
@@ -255,6 +256,17 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     const response: AxiosResponse<IRentoraApiClientContractDetailResponse, unknown> =
       await this.axiosWithAuthInstance.get<IRentoraApiClientContractDetailResponse>(
         `/api/apartments/${apartmentId}/contracts/unit/${unitId}`,
+      )
+    return response.data.data
+  }
+
+  async contractDetailByContractId(
+    apartmentId: Maybe<string>,
+    contractId: Maybe<string>,
+  ): Promise<IRentoraApiClientContractDetailResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientContractDetailResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientContractDetailResponse>(
+        `/api/apartments/${apartmentId}/contracts/${contractId}`,
       )
     return response.data.data
   }

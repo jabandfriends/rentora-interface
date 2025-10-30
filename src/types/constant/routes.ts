@@ -42,6 +42,7 @@ export type IRoutes = {
   tenantUpdate: IRoute
   roomDetail: IRoute
   contractCreate: IRoute
+  contractDetail: IRoute
   meterReadingList: IRoute
   meterReadingCreate: IRoute
   supplyList: IRoute

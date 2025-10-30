@@ -95,3 +95,9 @@ export type IUseRentoraApiContractTerminateParams = {
   apartmentId?: string
   unitId?: string
 }
+
+//param
+export type IUseRentoraApiContractDetailParams = {
+  apartmentId?: string
+  contractId?: string
+}

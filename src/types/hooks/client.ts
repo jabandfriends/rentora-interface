@@ -17,6 +17,7 @@ export type RentoraApiQueryClientKey =
   | 'getUserData'
   | 'buildingListNoPaginate'
   | 'contractDetail'
+  | 'contractDetailByContractId'
   | 'unitUtilityAvailableYear'
   | 'unitUtilityAvailableMonth'
   | 'unitWithUtility'
