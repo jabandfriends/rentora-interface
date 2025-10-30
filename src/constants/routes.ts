@@ -22,6 +22,7 @@ export const ROUTES: IRoutes = {
   firstTimePasswordReset: { path: '/authentication/first-time-password-reset' },
   apartmentCreate: { path: '/create/apartment' },
   apartmentSetup: { path: '/setup/:apartmentId', getUrl: (apartmentId: Maybe<string>) => `/setup/${apartmentId}` },
+  accountSetting: { path: '/account/setting' },
   //dashbord
   apartmentSetting: apartmentRoute('/setting'),
   normalInvoice: apartmentRoute('/normal-invoice'),

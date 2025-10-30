@@ -1,5 +1,5 @@
 import type { SetStateAction } from 'jotai'
-import { ChevronDown, LogOut, Menu, User, X } from 'lucide-react'
+import { ChevronDown, LogOut, Menu, Settings, User, X } from 'lucide-react'
 import { type Dispatch, useCallback, useState } from 'react'
 import { Link, type NavigateFunction, useNavigate } from 'react-router-dom'
 
@@ -33,6 +33,9 @@ const NavBar = ({
   }, [])
   const handleLogout = useCallback(() => {
     navigate(ROUTES.auth.path)
+  }, [navigate])
+  const handleNavigateSetting = useCallback(() => {
+    navigate(ROUTES.accountSetting.path)
   }, [navigate])
 
   return (
@@ -82,6 +85,9 @@ const NavBar = ({
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <User className="text-theme-secondary-400" /> Account
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleNavigateSetting}>
+              <Settings className="text-theme-secondary-400" /> Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-theme-error" onClick={handleLogout}>
