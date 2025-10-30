@@ -87,9 +87,7 @@ const MonthlyInvoiceDetailTable = ({ invoice }: { invoice: IMonthlyInvoiceDetail
               </div>
             </TableCell>
             <TableCell>{getDateDiff(invoice.billStart, invoice.billEnd).days} days</TableCell>
-            <TableCell className="py-4">
-              {rentPrice} {rentUnit}
-            </TableCell>
+            <TableCell className="py-4">{rentPrice ? `${rentPrice} ${rentUnit}` : '-'}</TableCell>
             <TableCell className="py-4">{formatCurrency(invoice.rentAmount)}</TableCell>
           </TableRow>
 

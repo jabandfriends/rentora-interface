@@ -310,7 +310,7 @@ export const exportInvoiceToPDF = async (
       // Rent
       doc.setFont('normal')
       doc.text('Rent', 17, yPos)
-      doc.text(formatCurrency(invoice.contractRentAmount, 2, ''), pageWidth - 17, yPos, { align: 'right' })
+      doc.text(formatCurrency(invoice.rentAmount ?? 0, 2, ''), pageWidth - 17, yPos, { align: 'right' })
 
       yPos += 7
 
