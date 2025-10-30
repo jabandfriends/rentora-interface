@@ -73,10 +73,7 @@ const BuildingCard = ({ building }: BuildingCardProps) => {
     () => floors?.reduce((acc, floor: IFloor) => acc + floor.totalUnits, 0) ?? 0,
     [floors],
   )
-  const occupiedUnits: number = useMemo(
-    () => floors?.reduce((acc, floor: IFloor) => acc + floor.occupiedUnits, 0) ?? 0,
-    [floors],
-  )
+
   const availableUnits: number = useMemo(
     () => floors?.reduce((acc, floor: IFloor) => acc + floor.availableUnits, 0) ?? 0,
     [floors],
@@ -100,10 +97,11 @@ const BuildingCard = ({ building }: BuildingCardProps) => {
 
                 <div className="text-theme-secondary text-body-2 mt-2 flex flex-wrap gap-4">
                   <div className="flex items-center gap-1">
-                    <Building2 className="size-4" /> <span className="font-medium">{floors?.length}</span> floors
+                    <Building2 className="size-4" /> <span className="font-medium">{building.floorCount}</span> floors
                   </div>
                   <div className="flex items-center gap-1">
-                    <Grid2x2X className="size-4" /> <span className="font-medium">{occupiedUnits}</span> occupied
+                    <Grid2x2X className="size-4" /> <span className="font-medium">{building.occupiedUnitCount}</span>{' '}
+                    occupied
                   </div>
                   <div className="flex items-center gap-1">
                     <Grid2x2Check className="size-4" /> <span className="font-medium">{availableUnits}</span> available

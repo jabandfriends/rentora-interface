@@ -46,7 +46,7 @@ const OverviewBody = () => {
 
   const {
     data: allRooms,
-    metadata: { totalUnits, totalUnitsOccupied },
+    metadata: { totalUnits, totalUnitsOccupied, totalUnitsAvailable },
     isLoading: isLoadingAllRooms,
   } = useRentoraApiUnitList({
     apartmentId: apartmentId!,
@@ -93,6 +93,9 @@ const OverviewBody = () => {
         maintenanceRequests={totalMaintenance}
       />
 
+      {/* Vacant Units */}
+      <OverviewVacantUnits totalUnits={totalUnitsAvailable} allRooms={allRooms} />
+
       {/* Urgent Maintenance Alert */}
       <OverviewMaintenanceAlert urgentCount={urgentCount} />
 
@@ -107,9 +110,6 @@ const OverviewBody = () => {
 
       {/* Payment Status
       <OverviewPaymentStatus paymentStatus={paymentStatus} /> */}
-
-      {/* Vacant Units */}
-      <OverviewVacantUnits totalUnits={totalUnits} allRooms={allRooms} />
     </div>
   )
 }

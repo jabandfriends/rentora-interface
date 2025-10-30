@@ -8,7 +8,7 @@ type IPageTableSearchEmptyProps = {
 }
 const PageTableSearchEmpty = ({ message, subMessage, icon = <Search size={56} /> }: IPageTableSearchEmptyProps) => {
   return (
-    <div className="bg-theme-light h-110 flex flex-col items-center justify-center gap-y-4 rounded-2xl shadow">
+    <div className="bg-theme-light h-110 flex flex-col items-center justify-center gap-y-4 rounded-2xl">
       {icon}
       <div className="desktop:w-1/4 w-2/3 text-center">
         <h4>{message}</h4>

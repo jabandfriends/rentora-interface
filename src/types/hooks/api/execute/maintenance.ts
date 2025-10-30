@@ -37,10 +37,17 @@ export type ICreateMaintenanceRequestPayload = {
   isEmergency: boolean
   isRecurring: boolean
   recurringSchedule?: string
+  suppliesUsage?: Array<ISuppliesUsage>
+}
+export type ISuppliesUsage = {
+  supplyId: string
+  supplyUsedQuantity: number
 }
 //update payload type
 export type IUpdateMaintenanceRequestPayload = Partial<
-  Omit<IMaintenanceExecuteBasePayload, 'startAt' | 'completedAt' | 'actualCost' | 'actualHours' | 'workSummary'>
+  Omit<IMaintenanceExecuteBasePayload, 'startAt' | 'completedAt' | 'actualCost' | 'actualHours' | 'workSummary'> & {
+    suppliesUsage?: Array<ISuppliesUsage & { maintenanceSupplyId?: string }>
+  }
 >
 
 //hooks type UseRentoraApiCreateMaintenance

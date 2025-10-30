@@ -1,44 +1,56 @@
-import { type Dispatch, type SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
+import { useDebounce } from '@uidotdev/usehooks'
+import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
 import { DEFAULT_CONTRACT_LIST_DATA } from '@/constants'
-import { CONTRACT_STATUS } from '@/enum/contract'
+import { CONTRACT_STATUS } from '@/enum'
 import { useRentoraApiContractList } from '@/hooks'
 
 import RoomDetailContractTable from './RoomDetailContractTable'
 
-const RoomDetailOutStandingContract = () => {
+const RoomDetailContractList = () => {
   const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
     DEFAULT_CONTRACT_LIST_DATA.page,
   )
-  const [status, setStatus] = useState<CONTRACT_STATUS | undefined>(undefined)
-  const {
-    data: allContracts,
-    pagination: { totalPages, totalElements },
-    isLoading: isLoadingContracts,
-  } = useRentoraApiContractList(apartmentId, {
-    unitId,
-    page: currentPage,
-    size: DEFAULT_CONTRACT_LIST_DATA.size,
-    ...(status ? { status, contractStatus: status } : {}),
+
+  const { watch, setValue } = useForm<{
+    contractStatus: CONTRACT_STATUS
+  }>({
+    defaultValues: {
+      contractStatus: '' as CONTRACT_STATUS,
+    },
   })
 
-  useEffect(() => {
-    setCurrentPage(DEFAULT_CONTRACT_LIST_DATA.page)
-  }, [status])
+  const [contractStatus]: [CONTRACT_STATUS] = watch(['contractStatus'])
+
+  const debouncedContractStatus = useDebounce(contractStatus ? contractStatus : undefined, 300)
+
+  const {
+    data: allContracts,
+    isLoading: isLoadingContracts,
+    pagination: { totalPages, totalElements },
+  } = useRentoraApiContractList(apartmentId, {
+    unitId: unitId,
+    contractStatus: debouncedContractStatus,
+    page: currentPage,
+    size: DEFAULT_CONTRACT_LIST_DATA.size,
+  })
+
+  const handleStatusChange = useCallback(
+    (value: CONTRACT_STATUS) => {
+      setValue('contractStatus', value)
+      setCurrentPage(DEFAULT_CONTRACT_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
 
   const handlePageChange = useCallback((page: number) => {
     if (page < 1) return
     setCurrentPage(page)
   }, [])
-
-  const displayContracts = useMemo(() => {
-    if (!allContracts) return allContracts
-    if (!status) return allContracts
-    return allContracts.filter((c: { status?: string }) => c.status === status)
-  }, [allContracts, status])
 
   return (
     <Card className="rounded-2xl shadow-lg hover:shadow-xl">
@@ -49,21 +61,24 @@ const RoomDetailOutStandingContract = () => {
             <p className="text-body-2 text-theme-secondary-600">Track pending contract transitions</p>
           </div>
         </div>
-        <Select value={status} onValueChange={(val) => setStatus(val as CONTRACT_STATUS)}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select contract status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={CONTRACT_STATUS.TERMINATED}>Terminated</SelectItem>
-            <SelectItem value={CONTRACT_STATUS.ACTIVE}>Active</SelectItem>
-            <SelectItem value={CONTRACT_STATUS.EXPIRED}>Expired</SelectItem>
-            <SelectItem value={CONTRACT_STATUS.RENEWED}>Renewed</SelectItem>
-          </SelectContent>
-        </Select>
+        {CONTRACT_STATUS && (
+          <Select onValueChange={handleStatusChange}>
+            <SelectTrigger className="capitalize">
+              <SelectValue placeholder="Select contract status" />
+            </SelectTrigger>
+            <SelectContent align="start" sideOffset={10}>
+              {Object.entries(CONTRACT_STATUS).map(([key, value]) => (
+                <SelectItem className="capitalize" key={key} value={value}>
+                  {value}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
       <RoomDetailContractTable
         isLoading={isLoadingContracts}
-        contracts={displayContracts}
+        contracts={allContracts}
         totalElements={totalElements}
         currentPage={currentPage}
         totalPages={totalPages}
@@ -73,4 +88,4 @@ const RoomDetailOutStandingContract = () => {
   )
 }
 
-export default RoomDetailOutStandingContract
+export default RoomDetailContractList

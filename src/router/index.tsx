@@ -29,8 +29,11 @@ import MeterReadingCreatePage from '@/pages/MeterReading/MeterReadingCreatePage'
 import MeterReadingListPage from '@/pages/MeterReading/MeterReadingListPage'
 import OverviewPage from '@/pages/Overview'
 import PageNotFound from '@/pages/PageNotFound'
+import PaymentPage from '@/pages/Payment'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import RoomDetail from '@/pages/RoomDetail'
+import SupplyList from '@/pages/Supply'
+import SupplyTransactions from '@/pages/SupplyTransactions'
 import TenantPage from '@/pages/Tenant/Tenant'
 import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
@@ -51,7 +54,6 @@ const authLoader = async (): Promise<{ valid: boolean; mustChangePassword: boole
 
   try {
     const { mustChangePassword }: { mustChangePassword: boolean } = await rentoraApiQueryClient.checkAuth(accessToken)
-
     return { valid: true, mustChangePassword }
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_: unknown) {
@@ -251,6 +253,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <AllRoomsPage />,
       },
       {
+        path: ROUTES.payment.path,
+        element: <PaymentPage />,
+      },
+      {
         path: ROUTES.roomDetail.path,
         element: <RoomDetail />,
       },
@@ -310,6 +316,14 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
       {
         path: ROUTES.meterReadingCreate.path,
         element: <MeterReadingCreatePage />,
+      },
+      {
+        path: ROUTES.supplyList.path,
+        element: <SupplyList />,
+      },
+      {
+        path: ROUTES.supplyTransactions.path,
+        element: <SupplyTransactions />,
       },
       {
         path: '*',
