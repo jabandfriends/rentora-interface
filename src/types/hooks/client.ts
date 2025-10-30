@@ -30,6 +30,7 @@ export type RentoraApiQueryClientKey =
   | 'unitDetail'
   | 'contractList'
   | 'monthlyInvoiceList'
+  | 'paymentList'
   | 'supplyList'
   | 'supplyTransactionList'
 export type RentoraApiExecuteClientKey =

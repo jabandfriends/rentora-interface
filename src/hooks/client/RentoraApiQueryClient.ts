@@ -51,6 +51,10 @@ import type {
   Maybe,
   RentoraApiQueryClientKey,
 } from '@/types'
+import type {
+  IRentoraApiClientPaymentListResponse,
+  IRentoraApiPaymentListParams,
+} from '@/types/hooks/api/query/payment'
 
 import { RentoraApiBaseClient as RentoraApiBaseClient } from './RentoraApiBaseClient'
 
@@ -85,6 +89,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     unitDetail: 'UNIT_DETAIL',
     contractList: 'CONTRACT_LIST',
     monthlyInvoiceList: 'MONTHLY_INVOICE_LIST',
+    paymentList: 'PAYMENT_LIST',
     supplyList: 'SUPPLY_LIST',
     supplyTransactionList: 'SUPPLY_TRANSACTION_LIST',
   }
@@ -394,6 +399,18 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
         params,
       },
     )
+    return response.data.data
+  }
+
+  //get payment list
+  async paymentList(
+    apartmentId: Maybe<string>,
+    params: IRentoraApiPaymentListParams,
+  ): Promise<IRentoraApiClientPaymentListResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientPaymentListResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientPaymentListResponse>(`/api/payments/${apartmentId}`, {
+        params,
+      })
     return response.data.data
   }
 
