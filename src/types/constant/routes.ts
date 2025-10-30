@@ -3,6 +3,7 @@ import type { Maybe } from '@/types'
 export type IRoute = {
   path: string
   getPath: (apartmentId: Maybe<string>, id?: string) => string
+  getUrlWithQuery?: (apartmentId: Maybe<string>, query?: Record<string, string>) => string
 }
 
 export type IRouteWithUrl = IRoute & {
@@ -43,4 +44,6 @@ export type IRoutes = {
   contractCreate: IRoute
   meterReadingList: IRoute
   meterReadingCreate: IRoute
+  supplyList: IRoute
+  supplyTransactions: IRoute
 }

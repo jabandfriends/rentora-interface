@@ -26,7 +26,7 @@ export function formatTimestamp(isoString: string, format = 'YYYY-MM-DD HH:mm:ss
   return dayjs(isoString).format(format)
 }
 //format date
-export function formatDate(date: Date, format = 'YYYY-MM-DD HH:mm:ss') {
+export function formatDate(date: Date, format = 'DD-MM-YYYY HH:mm:ss') {
   if (!date) {
     return ''
   }
@@ -53,8 +53,8 @@ export function getDateDiff(startDate: string | Date, endDate: string | Date): D
     return { days: 0, months: 0, years: 0 }
   }
 
-  const days = end.diff(start, 'day')
-  const months = end.diff(start, 'month')
+  const days = end.diff(start, 'day') + 1
+  const months = end.diff(start, 'month') + 1
   const years = end.diff(start, 'year')
 
   return { days, months, years }

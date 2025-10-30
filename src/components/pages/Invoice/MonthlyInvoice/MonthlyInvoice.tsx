@@ -6,7 +6,7 @@ import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { MonthlyInvoiceBody } from '@/components/pages/Invoice'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableBody, PageTableHeader, PageTableSearch } from '@/components/ui'
 import { DEFAULT_MAINTENANCE_LIST_DATA, DEFAULT_UNIT_LIST_DATA, ROUTES } from '@/constants'
 import { MonthlyInvoicePaymentStatus } from '@/enum'
 import { useRentoraMonthlyInvoiceList } from '@/hooks'
@@ -97,10 +97,10 @@ const MonthlyInvoice = () => {
     },
   ]
   return (
-    <>
+    <PageTableBody className="space-y-8">
       <PageTableHeader
-        title="Monthly Invoices"
-        description="Manage monthly rent invoices"
+        title="Monthly Invoices Management"
+        description="Easily track, create and manage monthly rent invoices for this apartment"
         stats={monthlyInvoiceStats}
         isLoading={isLoading}
         actionButton={
@@ -121,7 +121,7 @@ const MonthlyInvoice = () => {
         totalPages={totalPages}
         handlePageChange={handlePageChange}
       />
-    </>
+    </PageTableBody>
   )
 }
 
