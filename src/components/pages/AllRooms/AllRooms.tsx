@@ -24,7 +24,7 @@ const AllRooms = () => {
   const { watch, setValue } = useForm({
     defaultValues: {
       search: '',
-      status: UnitStatus.available,
+      status: '' as UnitStatus,
       buildingName: '',
     },
   })

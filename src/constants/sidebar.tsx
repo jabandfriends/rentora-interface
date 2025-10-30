@@ -34,9 +34,9 @@ export const getSidebarItems = (
 
   // sidebar invoices
   const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
-    { label: 'Normal Invoices', to: ROUTES.normalInvoice.getPath(apartmentId) },
-    { label: 'Monthly Invoices', to: ROUTES.monthlyInvoice.getPath(apartmentId) },
-    { label: 'Overdue Invoices', to: ROUTES.overdueInvoice.getPath(apartmentId) },
+    { label: 'Adhoc Invoices', to: ROUTES.normalInvoice.getPath(apartmentId) },
+    { label: 'Monthly Rental Invoices', to: ROUTES.monthlyInvoice.getPath(apartmentId) },
+    { label: 'Overdue Adhoc Invoices', to: ROUTES.overdueInvoice.getPath(apartmentId) },
     // { label: 'Service Invoices', to: ROUTES.serviceInvoice.getPath(apartmentId) },
   ]
 

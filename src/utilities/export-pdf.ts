@@ -181,7 +181,7 @@ export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
 
 export const exportInvoiceToPDF = async (
   invoice: IMonthlyInvoiceDetail,
-  apartmentName: string = 'Apartment Monthly Invoice',
+  apartmentName: string = 'Apartment Monthly Rentral Invoice',
 ) => {
   return new Promise<void>((resolve, reject) => {
     try {
@@ -197,7 +197,7 @@ export const exportInvoiceToPDF = async (
       doc.setTextColor(255, 255, 255)
       doc.setFontSize(24)
       doc.setFont('bold')
-      doc.text('INVOICE', pageWidth / 2, 15, { align: 'center' })
+      doc.text('RENTAL INVOICE', pageWidth / 2, 15, { align: 'center' })
 
       doc.setFontSize(10)
       doc.setFont('normal')
@@ -223,14 +223,14 @@ export const exportInvoiceToPDF = async (
       doc.setFont('bold')
       doc.text('Issue Date:', 15, yPos)
       doc.setFont('normal')
-      doc.text(formatDate(new Date(invoice.createdAt)), 60, yPos)
+      doc.text(formatDate(new Date(invoice.createdAt), 'DD/MMM/YYYY'), 60, yPos)
 
       yPos += 7
       doc.setFont('bold')
       doc.text('Due Date:', 15, yPos)
       doc.setFont('normal')
       doc.setTextColor(220, 53, 69)
-      doc.text(formatDate(new Date(invoice.dueDate)), 60, yPos)
+      doc.text(formatDate(new Date(invoice.dueDate), 'DD/MMM/YYYY'), 60, yPos)
       doc.setTextColor(0, 0, 0)
 
       // Billing Period
@@ -238,7 +238,11 @@ export const exportInvoiceToPDF = async (
       doc.setFont('bold')
       doc.text('Billing Period:', 15, yPos)
       doc.setFont('normal')
-      doc.text(`${formatDate(new Date(invoice.billStart))} - ${formatDate(new Date(invoice.billEnd))}`, 60, yPos)
+      doc.text(
+        `${formatDate(new Date(invoice.billStart), 'DD/MMM/YYYY')} - ${formatDate(new Date(invoice.billEnd), 'DD/MMM/YYYY')}`,
+        60,
+        yPos,
+      )
 
       // Tenant Info Section
       yPos += 12
@@ -259,9 +263,17 @@ export const exportInvoiceToPDF = async (
       doc.setFont('bold')
       doc.text('Unit:', 15, yPos)
       doc.setFont('normal')
-      doc.text(invoice.floorName, 40, yPos)
+      doc.text(invoice.unitName, 40, yPos)
 
       yPos += 7
+      //building name
+      doc.setFont('bold')
+      doc.text('Building:', 15, yPos)
+      doc.setFont('normal')
+      doc.text(invoice.buildingName, 40, yPos)
+
+      yPos += 7
+
       doc.setFont('bold')
       doc.text('Rental Type:', 15, yPos)
       doc.setFont('normal')
@@ -348,6 +360,40 @@ export const exportInvoiceToPDF = async (
         yPos += 7
         doc.setFontSize(10)
         doc.setTextColor(0, 0, 0)
+      }
+
+      // Extra Services
+      if (invoice.serviceList && invoice.serviceList.length > 0) {
+        doc.setFont('bold')
+        doc.text('Extra Services', 17, yPos)
+        doc.setFont('normal')
+        doc.text(
+          formatCurrency(
+            invoice.serviceList.reduce((acc, service) => acc + service.servicePrice, 0),
+            2,
+            '',
+          ),
+          pageWidth - 17,
+          yPos,
+          { align: 'right' },
+        )
+      }
+
+      // Adhoc Invoices
+      if (invoice.unitAdhocInvoices && invoice.unitAdhocInvoices.length > 0) {
+        doc.setFont('bold')
+        doc.text('Adhoc Invoices', 17, yPos)
+        doc.setFont('normal')
+        doc.text(
+          formatCurrency(
+            invoice.unitAdhocInvoices.reduce((acc, adhoc) => acc + adhoc.amount, 0),
+            2,
+            '',
+          ),
+          pageWidth - 17,
+          yPos,
+          { align: 'right' },
+        )
       }
 
       // Total Section

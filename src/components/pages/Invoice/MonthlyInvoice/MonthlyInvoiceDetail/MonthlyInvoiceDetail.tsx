@@ -5,9 +5,12 @@ import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Spinner } from '@/components/common'
 import { BillSection, MonthlyInvoiceDetailTable } from '@/components/pages/Invoice'
-import { PageTableEmpty } from '@/components/ui'
+import { EmptyPage } from '@/components/ui'
 import { useRentoraApiMonthlyInvoiceDetail } from '@/hooks'
 import { exportInvoiceToPDF, formatCurrency, formatDate } from '@/utilities'
+
+import MonthlyInvoiceDetailUnitAdhocInvoice from './MonthlyInvoiceDetailUnitAdhocInvoice'
+import MonthlyInvoiceDetailUnitService from './MonthlyInvoiceDetailUnitService'
 
 const MonthlyInvoiceDetail = () => {
   const navigate: NavigateFunction = useNavigate()
@@ -35,15 +38,20 @@ const MonthlyInvoiceDetail = () => {
 
   if (isMonthlyInvoiceDetailLoading) {
     return (
-      <PageTableEmpty
+      <EmptyPage
         icon={<Spinner />}
-        message="Your monthly invoice is loading..."
+        title="Your monthly invoice is loading..."
         description="Hold on, we're loading your monthly invoice."
       />
     )
   }
   if (!monthlyInvoice) {
-    return <PageTableEmpty message="Your monthly invoice is not found..." />
+    return (
+      <EmptyPage
+        title="Your monthly invoice is not found..."
+        description="Your monthly invoice is not found... Please try again later."
+      />
+    )
   }
   return (
     <div className="flex w-full flex-col gap-y-4">
@@ -73,8 +81,13 @@ const MonthlyInvoiceDetail = () => {
           </div>
 
           {/* Invoice Items */}
-          <div className="p-8">
+          <div className="space-y-4 p-8">
             <MonthlyInvoiceDetailTable invoice={monthlyInvoice} />
+            {/* serviceList section */}
+            <MonthlyInvoiceDetailUnitService serviceList={monthlyInvoice.serviceList} />
+
+            {/* adhoc invoices section */}
+            <MonthlyInvoiceDetailUnitAdhocInvoice adhocInvoices={monthlyInvoice.unitAdhocInvoices} />
 
             {/* Total */}
             <div className="desktop:flex-row flex flex-col justify-between">
