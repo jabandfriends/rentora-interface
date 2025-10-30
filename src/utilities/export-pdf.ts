@@ -98,12 +98,6 @@ export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
       y = addFieldRow('Phone', data.tenantPhone, '', null, y)
       y += 10
 
-      // Guarantor Information Section
-      y = addSectionHeader('Guarantor Information', y)
-      y = addFieldRow('Full Name', data.guarantorName, 'Phone', data.guarantorPhone, y)
-      y = addFieldRow('ID Number', data.guarantorIdNumber, '', null, y)
-      y += 10
-
       // Financial Details Section
       y = addSectionHeader('Financial Details', y)
       y = addFieldRow(

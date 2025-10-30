@@ -36,60 +36,6 @@ const ContractDetail = ({ form }: IContractDetail) => {
       <div>
         <FormField
           control={form.control}
-          name="guarantorName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Guarantor Name <span className="text-theme-error">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input maxLength={50} placeholder="Enter guarantor name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
-      <div>
-        <FormField
-          control={form.control}
-          name="guarantorPhone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Guarantor Phone <span className="text-theme-error">*</span>
-              </FormLabel>
-              <FormControl>
-                <InputNumber maxLength={10} placeholder="0626063049" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
-      <div>
-        <FormField
-          control={form.control}
-          name="guarantorIdNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Guarantor ID Number <span className="text-theme-error">*</span>
-              </FormLabel>
-              <FormControl>
-                <InputNumber maxLength={13} placeholder="1103700123456" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
-      <div>
-        <FormField
-          control={form.control}
           name="startDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
@@ -222,24 +168,6 @@ const ContractDetail = ({ form }: IContractDetail) => {
       <div>
         <FormField
           control={form.control}
-          name="lateFeeAmount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Late Fee Amount <span className="text-theme-error">*</span>
-              </FormLabel>
-              <FormControl>
-                <InputNumber maxLength={8} decimal placeholder="500.00" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
-      <div>
-        <FormField
-          control={form.control}
           name="advancePaymentMonths"
           render={({ field }) => (
             <FormItem>
@@ -261,9 +189,7 @@ const ContractDetail = ({ form }: IContractDetail) => {
           name="renewalNoticeDays"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                Renewal Notice (Days) <span className="text-theme-error">*</span>
-              </FormLabel>
+              <FormLabel>Renewal Notice (Days)</FormLabel>
               <FormControl>
                 <InputNumber maxLength={2} placeholder="30" {...field} />
               </FormControl>

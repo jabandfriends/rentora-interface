@@ -1,4 +1,4 @@
-import { AlertCircle, Building, Calendar, DollarSign, FileText, Shield, User } from 'lucide-react'
+import { AlertCircle, Building, Calendar, DollarSign, FileText, User } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import type { VariantProps } from 'tailwind-variants'
@@ -119,14 +119,6 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
 
           {isCollapse && (
             <>
-              <Section title="Guarantor Information" icon={Shield}>
-                <div className="space-y-0 p-4">
-                  <InfoRow label="Name" value={data.guarantorName} />
-                  <InfoRow label="Phone" value={data.guarantorPhone} />
-                  <InfoRow label="ID Number" value={data.guarantorIdNumber} />
-                </div>
-              </Section>
-
               <Section title="Contract Terms" icon={Calendar}>
                 <div className="space-y-0 p-4">
                   <InfoRow
@@ -155,7 +147,7 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
                 <div className="space-y-0 p-4">
                   <InfoRow label="Document URL" value={data.documentUrl || 'Not uploaded'} />
                   <InfoRow label="Signed At" value={data.signedAt ? formatDate(data.signedAt) : 'Not signed'} />
-                  <InfoRow label="Last Updated" value={formatDate(new Date(data.updatedAt))} />
+                  <InfoRow label="Last Updated" value={formatDate(new Date(data.updatedAt), 'DD MMMM YYYY')} />
                 </div>
               </Section>
 
