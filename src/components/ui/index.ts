@@ -1,3 +1,4 @@
+export * from './Alert'
 export * from './Avartar'
 export * from './Badge'
 export * from './Breadcrumb'

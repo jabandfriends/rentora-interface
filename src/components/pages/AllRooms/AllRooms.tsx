@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import AllRoomsTable from '@/components/pages/AllRooms/AllRoomsTable'
-import { PageTableHeader } from '@/components/ui'
+import { PageTableBody, PageTableHeader } from '@/components/ui'
 import { DEFAULT_UNIT_LIST_DATA } from '@/constants'
 import { UnitStatus } from '@/enum'
 import { useRentoraApiUnitList } from '@/hooks'
@@ -24,7 +24,7 @@ const AllRooms = () => {
   const { watch, setValue } = useForm({
     defaultValues: {
       search: '',
-      status: UnitStatus.all,
+      status: '' as UnitStatus,
       buildingName: '',
     },
   })
@@ -119,7 +119,7 @@ const AllRooms = () => {
   )
 
   return (
-    <>
+    <PageTableBody className="space-y-8">
       <PageTableHeader
         title="All Rooms"
         description="All rooms with category dashboard"
@@ -140,7 +140,7 @@ const AllRooms = () => {
         totalPages={totalPages}
         totalElements={totalElements}
       />
-    </>
+    </PageTableBody>
   )
 }
 

@@ -3,21 +3,16 @@ import type { IBaseUseMutation } from '@/types'
 export interface ICreateContractRequestPayload {
   unitId: string
   tenantId: string
-  guarantorName: string
-  guarantorPhone: string
-  guarantorIdNumber: string
   rentalType: string
   startDate: string
   endDate: string
   rentalPrice: number
-  depositAmount: number
-  advancePaymentMonths: number
-  lateFeeAmount: number
-  utilitiesIncluded: boolean
+  depositAmount?: number
+  advancePaymentMonths?: number
   termsAndConditions?: string
   specialConditions?: string
   autoRenewal: boolean
-  renewalNoticeDays: number
+  renewalNoticeDays?: number
   documentUrl?: string
   waterMeterStart: number
   electricMeterStart: number

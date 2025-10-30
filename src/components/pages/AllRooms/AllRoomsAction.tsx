@@ -1,27 +1,37 @@
-import { Ellipsis } from 'lucide-react'
+import { Ellipsis, Pencil } from 'lucide-react'
 import { useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/common'
+import { ROUTES } from '@/constants'
 
 type IAllRoomsActionProps = {
   unitId: string
 }
 const AllRoomsAction = ({ unitId }: IAllRoomsActionProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
+  const navigate: NavigateFunction = useNavigate()
   const navigateToUnitUpdate = useCallback(() => {
     if (!apartmentId || !unitId) return
-    // navigate(ROUTES.roomUpdate)
-  }, [apartmentId, unitId])
+    navigate(ROUTES.apartmentSetting.getPath(apartmentId, unitId))
+  }, [apartmentId, unitId, navigate])
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="vanilla">
+        <Button className="flex items-center" size="icon" variant="ghost">
           <Ellipsis size={18} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" sideOffset={10}>
-        <DropdownMenuItem onClick={navigateToUnitUpdate}>Update Room</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation()
+            navigateToUnitUpdate()
+          }}
+        >
+          <Pencil className="text-theme-warning" size={18} /> Edit Room
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

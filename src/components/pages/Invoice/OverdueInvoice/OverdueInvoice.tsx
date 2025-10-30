@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { OverdueInvoiceTable } from '@/components/pages/Invoice'
-import { PageTableHeader } from '@/components/ui'
+import { PageTableBody, PageTableHeader } from '@/components/ui'
 import PageTableSearchWithoutStatus from '@/components/ui/PageTable/PageTableSearchWithoutStatus'
 import { DEFAULT_INVOICE_LIST_DATA } from '@/constants'
 import { useRentoraApiOverdueInvoiceList } from '@/hooks'
@@ -101,10 +101,10 @@ const OverdueInvoice = () => {
     UpdatedAt = 'updatedAt',
   }
   return (
-    <>
+    <PageTableBody className="space-y-8">
       <PageTableHeader
-        title="Overdue Invoices"
-        description="Manage unpaid bills and outstanding invoices. Track due dates and make quick payments in one place."
+        title="Overdue Invoices Management"
+        description="Manage unpaid bills and outstanding invoices for this apartment"
         stats={overdueInvoiceStats}
       />
       <PageTableSearchWithoutStatus
@@ -122,7 +122,7 @@ const OverdueInvoice = () => {
         totalElements={totalElements}
         onPageChange={handlePageChange}
       />
-    </>
+    </PageTableBody>
   )
 }
 

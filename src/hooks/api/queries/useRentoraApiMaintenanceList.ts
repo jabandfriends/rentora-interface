@@ -27,10 +27,23 @@ export const useRentoraApiMaintenanceList = (props: {
       props?.params?.sortBy,
       props?.params?.sortDir,
       props?.params?.status,
+      props?.params?.isRecurring,
+      props?.params?.unitId,
+      props?.params?.priority,
     ],
 
     queryFn: async () => {
-      const { page, size, search, sortBy, sortDir, status }: IRentoraApiMaintenanceListParams = props?.params ?? {}
+      const {
+        page,
+        size,
+        search,
+        sortBy,
+        sortDir,
+        status,
+        isRecurring,
+        unitId,
+        priority,
+      }: IRentoraApiMaintenanceListParams = props?.params ?? {}
 
       return await rentoraApiQueryClient.maintenanceList(
         {
@@ -39,6 +52,9 @@ export const useRentoraApiMaintenanceList = (props: {
           ...(sortBy ? { sortBy } : {}),
           ...(sortDir ? { sortDir } : {}),
           ...(status ? { status } : {}),
+          ...(isRecurring ? { isRecurring } : {}),
+          ...(unitId ? { unitId } : {}),
+          ...(priority ? { priority } : {}),
           page,
           size,
         },

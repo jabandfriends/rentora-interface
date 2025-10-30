@@ -1,11 +1,16 @@
-import { ArrowLeft, Download, Send } from 'lucide-react'
+import { ArrowLeft, Download } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Button, Spinner } from '@/components/common'
+import { Button, Card, Spinner } from '@/components/common'
 import { BillSection, MonthlyInvoiceDetailTable } from '@/components/pages/Invoice'
-import { PageTableEmpty } from '@/components/ui'
+import { EmptyPage } from '@/components/ui'
 import { useRentoraApiMonthlyInvoiceDetail } from '@/hooks'
-import { formatCurrency, formatDate } from '@/utilities'
+import { exportInvoiceToPDF, formatCurrency, formatDate } from '@/utilities'
+
+import MonthlyInvoiceDetailUnitAdhocInvoice from './MonthlyInvoiceDetailUnitAdhocInvoice'
+import MonthlyInvoiceDetailUnitService from './MonthlyInvoiceDetailUnitService'
 
 const MonthlyInvoiceDetail = () => {
   const navigate: NavigateFunction = useNavigate()
@@ -15,31 +20,52 @@ const MonthlyInvoiceDetail = () => {
     invoiceNumber: id,
   })
 
+  const [isExportingInvoicePDF, setIsExportingInvoicePDF] = useState<boolean>(false)
+
+  const handleExportInvoicePDF = useCallback(async () => {
+    if (!monthlyInvoice) return
+    try {
+      setIsExportingInvoicePDF(true)
+      await exportInvoiceToPDF(monthlyInvoice)
+      toast.success('Invoice PDF exported successfully')
+      //eslint-disable-next-line
+    } catch (_) {
+      toast.error('Failed to export invoice PDF')
+    } finally {
+      setIsExportingInvoicePDF(false)
+    }
+  }, [monthlyInvoice])
+
   if (isMonthlyInvoiceDetailLoading) {
     return (
-      <PageTableEmpty
+      <EmptyPage
         icon={<Spinner />}
-        message="Your monthly invoice is loading..."
+        title="Your monthly invoice is loading..."
         description="Hold on, we're loading your monthly invoice."
       />
     )
   }
   if (!monthlyInvoice) {
-    return <PageTableEmpty message="Your monthly invoice is not found..." />
+    return (
+      <EmptyPage
+        title="Your monthly invoice is not found..."
+        description="Your monthly invoice is not found... Please try again later."
+      />
+    )
   }
   return (
-    <div className="flex w-full flex-col gap-y-4">
+    <Card className="flex w-full flex-col gap-y-4 rounded-2xl">
       <div className="flex items-center gap-4">
         <Button className="flex items-center gap-x-2" onClick={() => navigate(-1)}>
           <ArrowLeft className="size-5" />
           Back
         </Button>
       </div>
-      <div className="bg-theme-light space-y-6 rounded-xl shadow-sm">
+      <div className="space-y-6 rounded-xl">
         {/* Invoice Detail */}
-        <div>
+        <div className="space-y-4">
           {/* Invoice Header */}
-          <div className="space-y-4 p-8">
+          <div className="space-y-4">
             <div className="flex items-start justify-between">
               <div>
                 <h2>RENT INVOICE</h2>
@@ -55,36 +81,43 @@ const MonthlyInvoiceDetail = () => {
           </div>
 
           {/* Invoice Items */}
-          <div className="p-8">
+          <div className="space-y-4">
             <MonthlyInvoiceDetailTable invoice={monthlyInvoice} />
+            {/* serviceList section */}
+            <MonthlyInvoiceDetailUnitService serviceList={monthlyInvoice.serviceList} />
+
+            {/* adhoc invoices section */}
+            <MonthlyInvoiceDetailUnitAdhocInvoice adhocInvoices={monthlyInvoice.unitAdhocInvoices} />
 
             {/* Total */}
-            <div>
-              <div className="flex justify-end">
-                <div className="w-64">
-                  <div className="flex justify-between py-2">
-                    <h4 className="text-theme-primary">TOTAL AMOUNT (THB):</h4>
-                    <h4>{formatCurrency(monthlyInvoice.totalAmount)}</h4>
-                  </div>
-                </div>
+            <div className="desktop:flex-row flex flex-col justify-between">
+              {/* payment method */}
+              <div className="flex justify-between py-2">
+                <h4 className="text-theme-primary">PAYMENT METHOD:</h4>
+                <h4>
+                  {monthlyInvoice.bankAccountNumber} - {monthlyInvoice.bankName} - {monthlyInvoice.accountHolderName}
+                </h4>
               </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex flex-wrap gap-4">
-              <Button className="flex items-center gap-x-2">
-                <Download className="h-4 w-4" />
-                Download PDF
-              </Button>
-              <Button className="flex items-center gap-x-2">
-                <Send className="h-4 w-4" />
-                Send to Tenant
-              </Button>
+              <div className="flex justify-between py-2">
+                <h4 className="text-theme-primary">TOTAL AMOUNT (THB):</h4>
+                <h4>{formatCurrency(monthlyInvoice.totalAmount)}</h4>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <div className="flex flex-wrap gap-4">
+        <Button
+          disabled={isExportingInvoicePDF}
+          className="desktop:w-auto flex w-full items-center gap-x-2"
+          onClick={handleExportInvoicePDF}
+        >
+          {isExportingInvoicePDF && <Spinner />}
+          <Download className="h-4 w-4" />
+          Download PDF
+        </Button>
+      </div>
+    </Card>
   )
 }
 

@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Spinner } from '@/components/common'
-import { PageSection } from '@/components/layout'
+import { PageHeader, PageSection } from '@/components/layout'
 import { MeterReadingEmpty, MeterReadingFilterBar, MeterReadingTable } from '@/components/pages/MeterReading'
-import { PageTableEmpty, PageTableHeader } from '@/components/ui'
+import { PageTableBody, PageTableEmpty, PageTableHeader } from '@/components/ui'
 import { DEFAULT_REPORT_UTILITY_LIST_DATA, ROUTES } from '@/constants'
 import { useRentoraApiReportReadingDateUtility, useRentoraApiReportUtility } from '@/hooks'
 import type { ISearchBarProps, Maybe } from '@/types'
@@ -112,59 +112,79 @@ const MeterReadingListPage = () => {
   if (isLoadingFilterDates) {
     return (
       <PageSection>
-        <PageTableEmpty
-          icon={<Spinner />}
-          message="Loading your meter readings..."
-          description="Hang tight! This will only take a moment 😊"
-        />
+        <PageHeader title="Meter Readings Management" description="Manage meter readings by date" />
+        <PageTableBody className="space-y-8">
+          <PageTableHeader
+            title="Meter Readings"
+            description="View and manage meter readings by date"
+            actionButton={<Button onClick={handleNavigateToCreate}>Create New Reading</Button>}
+          />
+          <PageTableEmpty
+            icon={<Spinner />}
+            message="Loading your meter readings..."
+            description="Hang tight! This will only take a moment 😊"
+          />
+        </PageTableBody>
       </PageSection>
     )
   }
   if (!filterDates || filterDates.length === 0) {
     return (
       <PageSection>
-        <PageTableEmpty
-          message="No meter readings found"
-          description="It looks like there aren’t any meter readings for this apartment yet."
-        />
+        <PageHeader title="Meter Readings Management" description="Manage meter readings by date" />
+        <PageTableBody className="space-y-8">
+          <PageTableHeader
+            title="Meter Readings"
+            description="View and manage meter readings by date"
+            actionButton={<Button onClick={handleNavigateToCreate}>Create New Reading</Button>}
+          />
+          <PageTableEmpty
+            message="No meter readings found"
+            description="It looks like there aren’t any meter readings for this apartment yet."
+          />
+        </PageTableBody>
       </PageSection>
     )
   }
 
   return (
     <PageSection>
-      <PageTableHeader
-        title="Meter Readings"
-        description="View and manage meter readings by date"
-        actionButton={<Button onClick={handleNavigateToCreate}>Create New Reading</Button>}
-      />
+      <PageHeader title="Meter Readings" description="View and manage meter readings by date" />
 
-      {/* Search bar */}
-      <MeterReadingFilterBar
-        handleReadingDateChange={handleReadingDateChange}
-        handleBuildingChange={handleBuildingChange}
-        handleNodata={handleNodata}
-        filterDates={filterDates}
-        isLoadingFilterDates={isLoadingFilterDates}
-        onSearchChange={handleSearchChange}
-      />
-
-      {/* No date yet */}
-      {!isReadingDateSelected && !isNodata && (
-        <MeterReadingEmpty filterDate={debouncedReadingDate} filteredReadings={reportUtilityList} />
-      )}
-      {isReadingDateSelected && !isNodata && (
-        <MeterReadingTable
-          readingDate={debouncedReadingDate}
-          filteredReadings={reportUtilityList}
-          isLoading={isLoadingReportUtility}
-          isSearch={isSearched}
-          handlePageChange={handlePageChange}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalElements={totalElements}
+      <PageTableBody className="space-y-8">
+        <PageTableHeader
+          title="Meter Readings"
+          description="View and manage meter readings by date"
+          actionButton={<Button onClick={handleNavigateToCreate}>Create New Reading</Button>}
         />
-      )}
+
+        {/* Search bar */}
+        <MeterReadingFilterBar
+          handleReadingDateChange={handleReadingDateChange}
+          handleBuildingChange={handleBuildingChange}
+          handleNodata={handleNodata}
+          filterDates={filterDates}
+          isLoadingFilterDates={isLoadingFilterDates}
+          onSearchChange={handleSearchChange}
+        />
+
+        {/* No date yet */}
+        {!isReadingDateSelected && !isNodata && (
+          <MeterReadingEmpty filterDate={debouncedReadingDate} filteredReadings={reportUtilityList} />
+        )}
+        {isReadingDateSelected && !isNodata && (
+          <MeterReadingTable
+            readingDate={debouncedReadingDate}
+            filteredReadings={reportUtilityList}
+            isLoading={isLoadingReportUtility}
+            isSearch={isSearched}
+            handlePageChange={handlePageChange}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalElements={totalElements}
+          />
+        )}
+      </PageTableBody>
     </PageSection>
   )
 }

@@ -34,6 +34,13 @@ const MaintenanceUpdate = () => {
         category: data.category,
         estimatedCost: data.estimatedCost ? Number(data.estimatedCost) : undefined,
         isEmergency: data.isEmergency,
+        isRecurring: data.isRecurring,
+        ...(data.isRecurring && data.recurringSchedule.trim() !== '' && { recurringSchedule: data.recurringSchedule }),
+        suppliesUsage: data.suppliesUsage?.map((supply) => ({
+          maintenanceSupplyId: supply.maintenanceSupplyId ?? '',
+          supplyId: supply.supplyId,
+          supplyUsedQuantity: supply.supplyUsedQuantity,
+        })),
       }
       try {
         await updateMaintenance({ apartmentId: apartmentId ?? '', maintenanceId: id ?? '', payload })

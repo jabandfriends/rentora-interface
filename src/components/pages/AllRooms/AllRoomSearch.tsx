@@ -22,7 +22,7 @@ const AllRoomSearch = ({ onSearchChange, onStatusChange, onBuildingChange }: IAl
     return <Spinner />
   }
   return (
-    <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
+    <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl">
       {/* Search */}
       <SearchBar onChange={onSearchChange} />
 
@@ -35,13 +35,11 @@ const AllRoomSearch = ({ onSearchChange, onStatusChange, onBuildingChange }: IAl
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                {Object.values(UnitStatus)
-                  .filter((status) => status !== UnitStatus.all)
-                  .map((status) => (
-                    <SelectItem className="capitalize" key={status} value={status}>
-                      {status}
-                    </SelectItem>
-                  ))}
+                {Object.values(UnitStatus).map((status) => (
+                  <SelectItem className="capitalize" key={status} value={status}>
+                    {status}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           )}

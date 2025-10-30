@@ -1,5 +1,15 @@
-import type { CONTRACT_RENTAL_TYPE, MonthlyInvoicePaymentStatus, UtilityPriceType } from '@/enum'
-import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '@/types'
+import type {
+  ApartmentPaymentMethodType,
+  CONTRACT_RENTAL_TYPE,
+  MonthlyInvoicePaymentStatus,
+  UtilityPriceType,
+} from '@/enum'
+import type {
+  IBasePaginateQueryResult,
+  IBaseUseQuery,
+  IRentoraApiClientBasePaginateWithMetadataResponse,
+  IRentoraApiClientBaseResponse,
+} from '@/types'
 
 export type IMonthlyInvoice = {
   invoiceNumber: string
@@ -9,7 +19,7 @@ export type IMonthlyInvoice = {
   tenantName: string
   tenantPhone: string
   totalAmount: number
-  payment: MonthlyInvoicePaymentStatus
+  paymentStatus: MonthlyInvoicePaymentStatus
   rentAmount: number
   waterAmount: number
   electricAmount: number
@@ -39,10 +49,58 @@ export type IMonthlyInvoiceDetail = IMonthlyInvoice & {
   electricPriceRateType: UtilityPriceType
   electricTotalCost: number
   createdAt: string
+
+  //payment
+  apartmentPaymentMethodType: ApartmentPaymentMethodType
+  bankName: string
+  bankAccountNumber: string
+  accountHolderName: string
+  promptpayNumber: string
+
+  serviceList: Array<IMonthlyInvoiceService>
+  unitAdhocInvoices: Array<IMonthlyInvoiceUnitAdhocInvoice>
 }
 
+export type IMonthlyInvoiceUnitAdhocInvoice = {
+  adhocId: string
+  adhocNumber: string
+  adhocTitle: string
+  amount: number
+}
+export type IMonthlyInvoiceService = {
+  serviceName: string
+  servicePrice: number
+}
 //response
 export type IRentoraApiClientMonthlyInvoiceDetailResponse = IRentoraApiClientBaseResponse<IMonthlyInvoiceDetail>
 
 //hook
 export type IUseMonthlyInvoiceDetail = IBaseUseQuery<IRentoraApiClientMonthlyInvoiceDetailResponse['data']>
+
+//monthly invoice-------
+
+export type IRentoraApiMonthlyInvoiceListParams = {
+  page?: number
+  size?: number
+  sortBy?: string
+  sortDir?: string
+  unitName?: string
+  buildingName?: string
+  paymentStatus?: MonthlyInvoicePaymentStatus
+}
+//meta data
+export type IMonthlyInvoiceMetaData = {
+  totalMonthlyInvoices: number
+  totalUnpaidMonthlyInvoices: number
+  totalPaidMonthlyInvoices: number
+  totalOverdueMonthlyInvoice: number
+}
+
+//response
+export type IRentoraApiClientMonthlyInvoiceListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
+  IMonthlyInvoice,
+  IMonthlyInvoiceMetaData
+>
+
+//hook
+export type IUseMonthlyInvoiceList = IBasePaginateQueryResult<IRentoraApiClientMonthlyInvoiceListResponse['data']>

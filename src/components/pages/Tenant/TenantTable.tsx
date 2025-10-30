@@ -1,10 +1,19 @@
-import { PackageOpen } from 'lucide-react'
 import { useCallback } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { PaginationBar } from '@/components/feature'
-import { TenantAction, TenantTableLoading } from '@/components/pages/Tenant'
-import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { TenantAction } from '@/components/pages/Tenant'
+import {
+  Badge,
+  PageTableEmpty,
+  PageTableLoading,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui'
 import { ROUTES } from '@/constants'
 import { TENANTS_TABLE_HEADER } from '@/constants/tenantsmanage'
 import type { IPaginate, ITenant } from '@/types'
@@ -35,20 +44,15 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
     [apartmentId, navigate],
   )
   if (isLoading) {
-    return <TenantTableLoading />
+    return <PageTableLoading />
   }
 
   if (!data || data.length === 0) {
-    return (
-      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
-        <PackageOpen size={50} />
-        <p className="text-theme-secondary text-body-1">No tenants found</p>
-      </div>
-    )
+    return <PageTableEmpty message="No tenants found" />
   }
 
   return (
-    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+    <div className="flex flex-col gap-y-3">
       <Table>
         <TableHeader>
           <TableRow>

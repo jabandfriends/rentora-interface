@@ -10,6 +10,7 @@ type IPageTableSearchProps<StatusEnum extends string, SortEnum extends string> =
   onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
   onStatusChange?: (value: StatusEnum) => void
   onSortChange?: (value: SortEnum) => void
+  placeholder?: string
 }
 
 const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
@@ -18,11 +19,12 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
   onSearchChange,
   onStatusChange,
   onSortChange,
+  placeholder = 'Search by name',
 }: IPageTableSearchProps<StatusEnum, SortEnum>) => {
   return (
-    <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
+    <div className="desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl">
       {/* Search */}
-      <SearchBar onChange={onSearchChange} />
+      <SearchBar onChange={onSearchChange} placeholder={placeholder} />
 
       <div className="desktop:flex-row flex flex-col gap-2">
         <div className="flex gap-2">

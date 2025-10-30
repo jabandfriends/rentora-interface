@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { MaintenanceTable } from '@/components/pages/Maintenance'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableBody, PageTableHeader, PageTableSearch } from '@/components/ui'
 import { DEFAULT_MAINTENANCE_LIST_DATA, ROUTES } from '@/constants'
 import { MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiMaintenanceList } from '@/hooks'
@@ -131,10 +131,10 @@ const Maintenance = () => {
   )
 
   return (
-    <>
+    <PageTableBody className="space-y-8">
       <PageTableHeader
         title="Maintenance"
-        description="Manage maintenance reports"
+        description="Manage maintenance tasks for this apartment"
         stats={maintenanceStats}
         isLoading={isLoading}
         actionButton={<Button onClick={handleCreate}>New Maintenance</Button>}
@@ -155,7 +155,7 @@ const Maintenance = () => {
         totalElements={totalElements}
         onPageChange={handlePageChange}
       />
-    </>
+    </PageTableBody>
   )
 }
 

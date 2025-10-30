@@ -59,7 +59,7 @@ const OverdueInvoiceTable = ({
     return <PageTableEmpty message="No Invoices found for this apartment" />
   }
   return (
-    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg">
       <Table>
         <TableHeader>
           <TableRow>

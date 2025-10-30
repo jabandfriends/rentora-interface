@@ -1,9 +1,11 @@
 import type { CONTRACT_RENTAL_TYPE, CONTRACT_STATUS } from '@/enum'
 import type {
   IBasePaginateQueryResult,
+  IBaseUseMutation,
   IBaseUseQuery,
   IRentoraApiClientBasePaginateResponse,
   IRentoraApiClientBaseResponse,
+  Maybe,
 } from '@/types'
 
 export type IContract = {
@@ -15,9 +17,6 @@ export type IContract = {
   tenantName: string
   tenantEmail: string
   tenantPhone: string
-  guarantorName: string
-  guarantorPhone: string
-  guarantorIdNumber: string
   rentalType: CONTRACT_RENTAL_TYPE
   startDate: string
   endDate: string
@@ -30,7 +29,7 @@ export type IContract = {
   specialConditions: string
   status: CONTRACT_STATUS
   autoRenewal: boolean
-  renewalNoticeDays: 5
+  renewalNoticeDays: number
   terminationDate: null
   terminationReason: null
   terminatedByUserName: null
@@ -48,7 +47,7 @@ export type IContract = {
 //hook
 export type IUseRentoraApiContractDetail = IBaseUseQuery<IRentoraApiClientContractDetailResponse['data']>
 //reponse
-export type IRentoraApiClientContractDetailResponse = IRentoraApiClientBaseResponse<IContract>
+export type IRentoraApiClientContractDetailResponse = IRentoraApiClientBaseResponse<Maybe<IContract>>
 
 export type IContractSummary = {
   id: string
@@ -74,6 +73,8 @@ export type IContractSummary = {
 export type IRentoraApiContractListParams = {
   page?: number
   size?: number
+  sortBy?: string
+  sortDir?: string
   contractStatus?: CONTRACT_STATUS
   unitId?: string
 }
@@ -82,3 +83,21 @@ export type IRentoraApiClientContractListResponse = IRentoraApiClientBasePaginat
 
 //hook
 export type IUseRentoraApiContractList = IBasePaginateQueryResult<IRentoraApiClientContractListResponse['data']>
+
+export type ITerminateContractRequestPayload = {
+  terminationReason: string
+}
+
+export type IUseRentoraApiContractTerminate = IBaseUseMutation<void, ITerminateContractRequestPayload>
+
+//param
+export type IUseRentoraApiContractTerminateParams = {
+  apartmentId?: string
+  unitId?: string
+}
+
+//param
+export type IUseRentoraApiContractDetailParams = {
+  apartmentId?: string
+  contractId?: string
+}

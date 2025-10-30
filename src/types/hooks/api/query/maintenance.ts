@@ -4,6 +4,8 @@ import type {
   IBaseUseQuery,
   IRentoraApiClientBasePaginateWithMetadataResponse,
   IRentoraApiClientBaseResponse,
+  ISuppliesUsage,
+  ISupply,
   Maybe,
 } from '@/types'
 
@@ -50,6 +52,7 @@ export type IMaintenanceListMetadata = {
   pendingCount: number
   inProgressCount: number
   completedCount: number
+  urgentCount: number
 }
 
 // response
@@ -65,6 +68,9 @@ export type IRentoraApiMaintenanceListParams = {
   sortBy?: string
   sortDir?: string
   status?: string
+  isRecurring?: boolean
+  unitId?: string
+  priority?: string
 }
 
 export type IRentoraApiMaintenanceApartmentIdParams = string
@@ -72,7 +78,11 @@ export type IRentoraApiMaintenanceApartmentIdParams = string
 //Maintenance detail type
 export type IMaintenanceDetail = IMaintenance & {
   unitId: string
+  suppliesUsage?: Array<IMaintenanceSupplyUsage>
 }
+export type IMaintenanceSupplyUsage = ISuppliesUsage & {
+  maintenanceSupplyId?: string
+} & Pick<ISupply, 'supplyName' | 'supplyDescription' | 'supplyCategory' | 'supplyUnitPrice' | 'supplyUnit'>
 
 //detail response type
 export type IRentoraApiClientMaintenanceDetailResponse = IRentoraApiClientBaseResponse<IMaintenanceDetail>

@@ -121,7 +121,7 @@ const MaintenanceTable = ({
   }
 
   return (
-    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+    <div className="flex flex-col gap-y-4">
       <MaintenanceDeleteAlert
         isAlertOpen={isAlertOpen}
         setIsAlertOpen={setIsAlertOpen}
@@ -142,7 +142,7 @@ const MaintenanceTable = ({
               onClick={() => handleRowClick(item.id)}
               key={item.id + item.ticketNumber}
             >
-              <TableCell>{item.ticketNumber}</TableCell>
+              <TableCell className="text-theme-primary">{item.ticketNumber}</TableCell>
               <TableCell>{item.title}</TableCell>
               <TableCell>{item.unitName}</TableCell>
               <TableCell>{item.buildingsName}</TableCell>
@@ -156,6 +156,10 @@ const MaintenanceTable = ({
               <TableCell className="capitalize">
                 <Badge variant={statusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
+              <TableCell className="capitalize">
+                <Badge variant={item.isRecurring ? 'success' : 'default'}>{item.isRecurring ? 'Yes' : 'No'}</Badge>
+              </TableCell>
+              <TableCell className="capitalize">{item.recurringSchedule ?? <FieldEmpty />}</TableCell>
               <TableCell>
                 <MaintenanceAction
                   maintenanceId={item.id}

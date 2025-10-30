@@ -7,6 +7,11 @@ const apartmentRoute = (subPath: string): IRoute => ({
     if (id) path = path.replace(':id', id)
     return path
   },
+  getUrlWithQuery: (apartmentId: Maybe<string>, query?: Record<string, string>) => {
+    let url: string = `/dashboard/${apartmentId}${subPath}`
+    if (query) url += `?${new URLSearchParams(query).toString()}`
+    return url
+  },
 })
 
 export const ROUTES: IRoutes = {
@@ -19,6 +24,7 @@ export const ROUTES: IRoutes = {
   apartmentSetup: { path: '/setup/:apartmentId', getUrl: (apartmentId: Maybe<string>) => `/setup/${apartmentId}` },
   accountSetting: { path: '/account/setting' },
   //dashbord
+  apartmentSetting: apartmentRoute('/setting'),
   normalInvoice: apartmentRoute('/normal-invoice'),
   monthlyInvoice: apartmentRoute('/monthly-invoice'),
   maintenance: apartmentRoute('/maintenance'),
@@ -28,8 +34,6 @@ export const ROUTES: IRoutes = {
   overdueInvoice: apartmentRoute('/overdue-invoice'),
   overview: apartmentRoute('/overview'),
   allRoom: apartmentRoute('/all-room'),
-  roomReport: apartmentRoute('/report/room'),
-  receiptReport: apartmentRoute('/report/receipt'),
   electricWaterReport: apartmentRoute('/report/electric-water'),
   serviceInvoice: apartmentRoute('/service-invoice'),
   monthlyInvoiceCreate: apartmentRoute('/monthly-invoice/create'),
@@ -42,6 +46,10 @@ export const ROUTES: IRoutes = {
   tenantUpdate: apartmentRoute('/tenant/update/:id'),
   roomDetail: apartmentRoute('/all-room/detail/:id'),
   contractCreate: apartmentRoute('/:id/contract/create'),
+  contractDetail: apartmentRoute('/:id/contract/detail'),
   meterReadingList: apartmentRoute('/meter-reading'),
   meterReadingCreate: apartmentRoute('/meter-reading/create'),
+  payment: apartmentRoute('/payment'),
+  supplyList: apartmentRoute('/supply'),
+  supplyTransactions: apartmentRoute('/supply/transactions'),
 }

@@ -1,8 +1,10 @@
 import type { UnitStatus } from '@/enum'
 import type {
   IBasePaginateQueryResult,
+  IBaseUseQuery,
   IRentoraApiClientBasePaginateResponse,
   IRentoraApiClientBasePaginateWithMetadataResponse,
+  IRentoraApiClientBaseResponse,
 } from '@/types'
 
 //hook
@@ -25,7 +27,7 @@ export type IUnit = {
   bedrooms: number
   bathrooms: number
   squareMeters: number
-  unitStatus: string
+  unitStatus: UnitStatus
   furnishingStatus: string
   floorName: string
   buildingName: string
@@ -37,6 +39,8 @@ export type IUnit = {
   contractStatus: string
   contractStartDate: string
   contractEndDate: string
+  balconyCount: number
+  parkingSpaces: number
 }
 
 export type IRentoraApiUnitListParams = {
@@ -47,6 +51,7 @@ export type IRentoraApiUnitListParams = {
   sortDir?: string
   status?: UnitStatus
   buildingName?: string
+  floorId?: string
 }
 
 // room type
@@ -64,6 +69,7 @@ export type IRentoraApiAllUnitMonthlyInvoiceStatusParams = {
   roomNumber?: string
   buildingName?: string
   readingDate?: string
+  isExceptDailyContract?: boolean
 }
 //response
 export type IRentoraApiClientAllUnitMonthlyInvoiceStatusResponse =
@@ -72,3 +78,8 @@ export type IRentoraApiClientAllUnitMonthlyInvoiceStatusResponse =
 export type IUseRentoraApiAllUnitMonthlyInvoiceStatus = IBasePaginateQueryResult<
   IRentoraApiClientAllUnitMonthlyInvoiceStatusResponse['data']
 >
+
+//response unit detail
+export type IRentoraApiClientUnitDetailResponse = IRentoraApiClientBaseResponse<IUnit>
+//hook
+export type IUseRentoraApiUnitDetail = IBaseUseQuery<IRentoraApiClientUnitDetailResponse['data']>
