@@ -55,60 +55,58 @@ const MeterReadingTable = ({
       </Card>
     )
   return (
-    <Card className="rounded-2xl p-6">
-      <div className="space-y-6">
-        <div>
-          <p className="text-theme-secondary text-body-2 mb-4">Reading Date: {readingDate}</p>
+    <div className="space-y-4">
+      <div>
+        <p className="text-theme-secondary text-body-2 mb-4">Reading Date: {readingDate}</p>
 
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Room</TableHead>
-                  <TableHead className="text-center">Building</TableHead>
-                  <TableHead className="text-center">Water Start</TableHead>
-                  <TableHead className="text-center">Water End</TableHead>
-                  <TableHead className="bg-theme-primary/5 text-center">Water Total</TableHead>
-                  <TableHead className="text-center">Electricity Start</TableHead>
-                  <TableHead className="text-center">Electricity End</TableHead>
-                  <TableHead className="bg-theme-secondary/5 text-center">Electricity Total</TableHead>
-                  <TableHead className="text-center">Actions</TableHead>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Room</TableHead>
+                <TableHead className="text-center">Building</TableHead>
+                <TableHead className="text-center">Water Start</TableHead>
+                <TableHead className="text-center">Water End</TableHead>
+                <TableHead className="bg-theme-primary/5 text-center">Water Total</TableHead>
+                <TableHead className="text-center">Electricity Start</TableHead>
+                <TableHead className="text-center">Electricity End</TableHead>
+                <TableHead className="bg-theme-secondary/5 text-center">Electricity Total</TableHead>
+                <TableHead className="text-center">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredReadings?.map((reading: IReportUtility, readingIdx) => (
+                <TableRow key={readingIdx}>
+                  <TableCell className="font-medium">{reading.roomName}</TableCell>
+                  <TableCell className="text-center">{reading.buildingName}</TableCell>
+                  <TableCell className="text-center">{formatNumber(reading.waterMeterStart)}</TableCell>
+                  <TableCell className="text-center">{formatNumber(reading.waterMeterEnd)}</TableCell>
+                  <TableCell className="bg-theme-primary/5 text-theme-primary text-center font-semibold">
+                    {formatNumber(reading.waterUsage)}
+                  </TableCell>
+                  <TableCell className="text-center">{formatNumber(reading.electricMeterStart)}</TableCell>
+                  <TableCell className="text-center">{formatNumber(reading.electricMeterEnd)}</TableCell>
+                  <TableCell className="bg-theme-secondary/5 text-theme-secondary text-center font-semibold">
+                    {formatNumber(reading.electricUsage)}
+                  </TableCell>
+
+                  <TableCell className="text-center">
+                    <MeterReadingModal room={reading} />
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredReadings?.map((reading: IReportUtility, readingIdx) => (
-                  <TableRow key={readingIdx}>
-                    <TableCell className="font-medium">{reading.roomName}</TableCell>
-                    <TableCell className="text-center">{reading.buildingName}</TableCell>
-                    <TableCell className="text-center">{formatNumber(reading.waterMeterStart)}</TableCell>
-                    <TableCell className="text-center">{formatNumber(reading.waterMeterEnd)}</TableCell>
-                    <TableCell className="bg-theme-primary/5 text-theme-primary text-center font-semibold">
-                      {formatNumber(reading.waterUsage)}
-                    </TableCell>
-                    <TableCell className="text-center">{formatNumber(reading.electricMeterStart)}</TableCell>
-                    <TableCell className="text-center">{formatNumber(reading.electricMeterEnd)}</TableCell>
-                    <TableCell className="bg-theme-secondary/5 text-theme-secondary text-center font-semibold">
-                      {formatNumber(reading.electricUsage)}
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      <MeterReadingModal room={reading} />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+              ))}
+            </TableBody>
+          </Table>
         </div>
-
-        <PaginationBar
-          totalElements={totalElements}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          page={currentPage}
-        />
       </div>
-    </Card>
+
+      <PaginationBar
+        totalElements={totalElements}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        page={currentPage}
+      />
+    </div>
   )
 }
 

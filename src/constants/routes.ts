@@ -7,6 +7,11 @@ const apartmentRoute = (subPath: string): IRoute => ({
     if (id) path = path.replace(':id', id)
     return path
   },
+  getUrlWithQuery: (apartmentId: Maybe<string>, query?: Record<string, string>) => {
+    let url: string = `/dashboard/${apartmentId}${subPath}`
+    if (query) url += `?${new URLSearchParams(query).toString()}`
+    return url
+  },
 })
 
 export const ROUTES: IRoutes = {
@@ -42,4 +47,7 @@ export const ROUTES: IRoutes = {
   contractCreate: apartmentRoute('/:id/contract/create'),
   meterReadingList: apartmentRoute('/meter-reading'),
   meterReadingCreate: apartmentRoute('/meter-reading/create'),
+  payment: apartmentRoute('/payment'),
+  supplyList: apartmentRoute('/supply'),
+  supplyTransactions: apartmentRoute('/supply/transactions'),
 }

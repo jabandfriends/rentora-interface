@@ -1,4 +1,15 @@
-import { BookUser, FileSpreadsheet, FileText, Home, Settings, Table, Wrench, Zap } from 'lucide-react'
+import {
+  BookUser,
+  DollarSign,
+  FileSpreadsheet,
+  FileText,
+  Home,
+  Package,
+  Settings,
+  Table,
+  Wrench,
+  Zap,
+} from 'lucide-react'
 
 import { ROUTES } from '@/constants'
 import type { Maybe, SidebarMenu, SidebarNavMenu } from '@/types'
@@ -16,6 +27,14 @@ export const getSidebarItems = (
   const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
     { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.getPath(apartmentId) },
   ]
+  //sidebar payments
+  const SIDEBAR_PAYMENT: Array<SidebarMenu> = [
+    { icon: <DollarSign size={16} />, label: 'Payments', to: ROUTES.payment.getPath(apartmentId) },
+  ]
+
+  const SIDEBAR_SUPPLY_LIST: Array<SidebarMenu> = [
+    { icon: <Package size={16} />, label: 'Supplies', to: ROUTES.supplyList.getPath(apartmentId) },
+  ]
 
   // sidebar meter reading
   const SIDEBAR_METER_READING: Array<SidebarMenu> = [
@@ -31,9 +50,9 @@ export const getSidebarItems = (
 
   // sidebar invoices
   const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
-    { label: 'Normal Invoices', to: ROUTES.normalInvoice.getPath(apartmentId) },
-    { label: 'Monthly Invoices', to: ROUTES.monthlyInvoice.getPath(apartmentId) },
-    { label: 'Overdue Invoices', to: ROUTES.overdueInvoice.getPath(apartmentId) },
+    { label: 'Adhoc Invoices', to: ROUTES.normalInvoice.getPath(apartmentId) },
+    { label: 'Monthly Rental Invoices', to: ROUTES.monthlyInvoice.getPath(apartmentId) },
+    { label: 'Overdue Adhoc Invoices', to: ROUTES.overdueInvoice.getPath(apartmentId) },
     // { label: 'Service Invoices', to: ROUTES.serviceInvoice.getPath(apartmentId) },
   ]
 
@@ -74,9 +93,21 @@ export const getSidebarItems = (
       },
       {
         type: 'item',
+        title: 'Payments',
+        icon: <FileSpreadsheet size={16} />,
+        menu: SIDEBAR_PAYMENT,
+      },
+      {
+        type: 'item',
         title: 'All Room',
         icon: <Table size={16} />,
         menu: SIDEBAR_ALL_ROOMS,
+      },
+      {
+        type: 'item',
+        title: 'Supply List',
+        icon: <Zap size={16} />,
+        menu: SIDEBAR_SUPPLY_LIST,
       },
       {
         type: 'item',

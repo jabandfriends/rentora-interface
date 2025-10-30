@@ -101,7 +101,7 @@ const AllRoomsTable = ({
   }
 
   return (
-    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+    <div className="flex flex-col gap-y-3 rounded-lg">
       <Table>
         <TableHeader>
           <TableRow>

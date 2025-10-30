@@ -33,6 +33,7 @@ const ElectricWaterSearchBar = ({
   if (!readingDateUtility || readingDateUtility.length === 0) {
     return (
       <PageTableEmpty
+        className="border-theme-secondary-300 border"
         message="No meter readings found"
         description="It looks like there aren’t any meter readings for this apartment yet."
       />
