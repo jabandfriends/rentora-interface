@@ -1,4 +1,4 @@
-import { AlertCircle, Building, Calendar, DollarSign, FileText, Shield, User } from 'lucide-react'
+import { AlertCircle, Building, Calendar, DollarSign, FileText, User } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import type { VariantProps } from 'tailwind-variants'
@@ -119,14 +119,6 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
 
           {isCollapse && (
             <>
-              <Section title="Guarantor Information" icon={Shield}>
-                <div className="space-y-0 p-4">
-                  <InfoRow label="Name" value={data.guarantorName} />
-                  <InfoRow label="Phone" value={data.guarantorPhone} />
-                  <InfoRow label="ID Number" value={data.guarantorIdNumber} />
-                </div>
-              </Section>
-
               <Section title="Contract Terms" icon={Calendar}>
                 <div className="space-y-0 p-4">
                   <InfoRow
@@ -137,16 +129,28 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
                   <InfoRow label="End Date" value={formatDate(new Date(data.endDate))} />
                   <InfoRow label="Duration" value={`${data.contractDurationDays} days`} />
                   <InfoRow label="Auto Renewal" value={data.autoRenewal ? 'Yes' : 'No'} />
-                  <InfoRow label="Renewal Notice" value={`${data.renewalNoticeDays} days`} />
+                  <InfoRow
+                    label="Renewal Notice"
+                    value={`${data.renewalNoticeDays ? `${data.renewalNoticeDays} days` : 'Not specified'}`}
+                  />
                 </div>
               </Section>
 
               <Section title="Financial Details" icon={DollarSign}>
                 <div className="space-y-0 p-4">
                   <InfoRow label="Rental Price" value={formatCurrency(data.rentalPrice)} />
-                  <InfoRow label="Deposit Amount" value={formatCurrency(data.depositAmount)} />
-                  <InfoRow label="Advance Payment" value={`${data.advancePaymentMonths} months`} />
-                  <InfoRow label="Late Fee" value={formatCurrency(data.lateFeeAmount)} />
+                  <InfoRow
+                    label="Deposit Amount"
+                    value={data.depositAmount ? formatCurrency(data.depositAmount) : 'Not specified'}
+                  />
+                  <InfoRow
+                    label="Advance Payment"
+                    value={data.advancePaymentMonths ? `${data.advancePaymentMonths} months` : 'Not specified'}
+                  />
+                  <InfoRow
+                    label="Late Fee"
+                    value={data.lateFeeAmount ? formatCurrency(data.lateFeeAmount) : 'Not specified'}
+                  />
                   <InfoRow label="Utilities Included" value={data.utilitiesIncluded ? 'Yes' : 'No'} />
                 </div>
               </Section>
@@ -155,7 +159,7 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
                 <div className="space-y-0 p-4">
                   <InfoRow label="Document URL" value={data.documentUrl || 'Not uploaded'} />
                   <InfoRow label="Signed At" value={data.signedAt ? formatDate(data.signedAt) : 'Not signed'} />
-                  <InfoRow label="Last Updated" value={formatDate(new Date(data.updatedAt))} />
+                  <InfoRow label="Last Updated" value={formatDate(new Date(data.updatedAt), 'DD MMMM YYYY')} />
                 </div>
               </Section>
 

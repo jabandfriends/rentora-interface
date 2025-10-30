@@ -20,8 +20,8 @@ const buttonVariants: ICompVariantConfig<IButtonVariants> = tv({
       false: 'inline-block w-fit',
     },
     variant: {
-      primary: 'bg-theme-primary hover:bg-theme-primary-400 text-theme-white',
-      secondary: 'bg-theme-secondary text-theme-white hover:bg-theme-secondary-400 hover:text-theme-white',
+      primary: 'bg-theme-primary hover:bg-theme-primary-400 text-theme-white shadow-sm duration-200 hover:shadow',
+      secondary: 'bg-theme-secondary-400/40 hover:bg-theme-secondary-400/60 duration-200',
       warning: 'bg-theme-warning-600 text-theme-white hover:bg-theme-warning-500 hover:text-theme-white',
       outlineSecondary:
         'border-theme-secondary-400 hover:bg-theme-secondary-400 hover:text-theme-white border bg-transparent',

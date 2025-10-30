@@ -19,10 +19,10 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
   onSearchChange,
   onStatusChange,
   onSortChange,
-  placeholder,
+  placeholder = 'Search by name',
 }: IPageTableSearchProps<StatusEnum, SortEnum>) => {
   return (
-    <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
+    <div className="desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl">
       {/* Search */}
       <SearchBar onChange={onSearchChange} placeholder={placeholder} />
 

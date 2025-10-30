@@ -12,6 +12,7 @@ import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication/Authentication'
 import FirstTimePasswordResetPage from '@/pages/Authentication/FirstTimePasswordReset'
 import ContractCreate from '@/pages/ContractCreate'
+import ContractDetail from '@/pages/ContractDetail'
 import InvoiceCreatePage from '@/pages/Invoice/InvoiceCreate'
 import InvoiceDetailPage from '@/pages/Invoice/InvoiceDetail'
 import MonthlyInvoicePage from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoice'
@@ -29,8 +30,11 @@ import MeterReadingListPage from '@/pages/MeterReading/MeterReadingListPage'
 import MonthlyUtilityRoomDetail from '@/pages/MonthlyUtility/MonthlyUtilityRoomDetail'
 import OverviewPage from '@/pages/Overview'
 import PageNotFound from '@/pages/PageNotFound'
+import PaymentPage from '@/pages/Payment'
 import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
 import RoomDetail from '@/pages/RoomDetail'
+import SupplyList from '@/pages/Supply'
+import SupplyTransactions from '@/pages/SupplyTransactions'
 import TenantPage from '@/pages/Tenant/Tenant'
 import TenantCreatePage from '@/pages/Tenant/TenantCreate'
 import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
@@ -51,7 +55,6 @@ const authLoader = async (): Promise<{ valid: boolean; mustChangePassword: boole
 
   try {
     const { mustChangePassword }: { mustChangePassword: boolean } = await rentoraApiQueryClient.checkAuth(accessToken)
-
     return { valid: true, mustChangePassword }
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_: unknown) {
@@ -251,6 +254,10 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <AllRoomsPage />,
       },
       {
+        path: ROUTES.payment.path,
+        element: <PaymentPage />,
+      },
+      {
         path: ROUTES.roomDetail.path,
         element: <RoomDetail />,
       },
@@ -300,12 +307,24 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
         element: <ContractCreate />,
       },
       {
+        path: ROUTES.contractDetail.path,
+        element: <ContractDetail />,
+      },
+      {
         path: ROUTES.meterReadingList.path,
         element: <MeterReadingListPage />,
       },
       {
         path: ROUTES.meterReadingCreate.path,
         element: <MeterReadingCreatePage />,
+      },
+      {
+        path: ROUTES.supplyList.path,
+        element: <SupplyList />,
+      },
+      {
+        path: ROUTES.supplyTransactions.path,
+        element: <SupplyTransactions />,
       },
       {
         path: '*',

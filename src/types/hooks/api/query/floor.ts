@@ -7,6 +7,9 @@ export type IFloor = {
   totalUnits: number
   buildingId: string
   buildingName: string
+  occupiedUnits: number
+  availableUnits: number
+  maintenanceUnits: number
 }
 
 export type IRentoraApiClientFloorListResponse = IRentoraApiClientBaseResponse<Array<IFloor>>

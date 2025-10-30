@@ -7,7 +7,7 @@ const alertVariants = tv({
   base: 'text-body-2 relative grid w-full grid-cols-[0_1fr] items-start gap-y-0.5 rounded-lg border px-4 py-3 has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current',
   variants: {
     variant: {
-      default: 'bg-card',
+      default: 'bg-theme-primary-100 border-theme-primary text-theme-primary',
       destructive: 'text-theme-error bg-card *:data-[slot=alert-description]:text-theme-error/90 [&>svg]:text-current',
     },
   },

@@ -69,6 +69,7 @@ export type IRentoraApiAllUnitMonthlyInvoiceStatusParams = {
   roomNumber?: string
   buildingName?: string
   readingDate?: string
+  isExceptDailyContract?: boolean
 }
 //response
 export type IRentoraApiClientAllUnitMonthlyInvoiceStatusResponse =

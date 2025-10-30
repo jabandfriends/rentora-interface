@@ -12,9 +12,9 @@ export const useRentoraApiUnitServiceList = (props: IRentoraApiUnitServiceParams
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
 
   return useQuery<IRentoraApiClientUnitServiceResponse['data']>({
-    queryKey: [rentoraApiQueryClient.key.unitServicesList, props.apartmentId, props.unitId],
-    queryFn: () => rentoraApiQueryClient.unitServicesList(props.apartmentId, props.unitId),
+    queryKey: [rentoraApiQueryClient.key.unitServicesList, props.unitId],
+    queryFn: () => rentoraApiQueryClient.unitServicesList(props.unitId),
     retry: 1,
-    enabled: !!props.apartmentId && !!props.unitId,
+    enabled: !!props.unitId,
   })
 }

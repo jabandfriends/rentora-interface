@@ -68,6 +68,15 @@ export const MAINTENANCE_FORM_SCHEMA = z
     isRecurring: z.boolean(),
     estimatedHours: z.string().optional(),
     estimatedCost: z.string().optional(),
+    suppliesUsage: z
+      .array(
+        z.object({
+          maintenanceSupplyId: z.string().optional(),
+          supplyId: z.string(),
+          supplyUsedQuantity: z.number(),
+        }),
+      )
+      .optional(),
   })
   .refine(
     (data) => {

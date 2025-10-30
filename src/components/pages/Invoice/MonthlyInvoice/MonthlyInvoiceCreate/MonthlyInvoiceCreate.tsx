@@ -7,7 +7,7 @@ import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Card } from '@/components/common'
 import { PageTableEmpty } from '@/components/ui'
-import { filterFormSchema } from '@/constants'
+import { filterFormSchema, ROOMSTATUSENUM } from '@/constants'
 import { useRentoraApiUnitWithMonthlyInvoiceStatus } from '@/hooks'
 import type { FilterFormType } from '@/types'
 
@@ -44,7 +44,8 @@ const MonthlyInvoiceCreate = () => {
     params: {
       readingDate: debouncedReadingDate!,
       buildingName: debouncedBuildingName!,
-      status: 'occupied',
+      status: ROOMSTATUSENUM.Occupied,
+      isExceptDailyContract: true,
     },
     enabled: isFilterSelected,
   })

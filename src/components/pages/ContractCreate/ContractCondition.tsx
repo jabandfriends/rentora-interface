@@ -1,6 +1,7 @@
 import type { UseFormReturn } from 'react-hook-form'
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, Textarea } from '@/components/common'
+import { Separator } from '@/components/ui'
 import type { MonthlyContractFormData } from '@/types'
 
 type IContractCondition = {
@@ -8,7 +9,12 @@ type IContractCondition = {
 }
 const ContractCondition = ({ form }: IContractCondition) => {
   return (
-    <>
+    <div className="space-y-4">
+      <div>
+        <h4 className="font-semibold">Contract Conditions</h4>
+        <p className="text-body-2 text-theme-secondary">Fill in the form below to create a new contract</p>
+      </div>
+      <Separator />
       <FormField
         control={form.control}
         name="termsAndConditions"
@@ -46,7 +52,7 @@ const ContractCondition = ({ form }: IContractCondition) => {
           </FormItem>
         )}
       />
-    </>
+    </div>
   )
 }
 
