@@ -14,7 +14,7 @@ import {
 import { useRentoraApiMonthlyUtilityUnit } from '@/hooks'
 import { type IUtilityUnitData } from '@/types'
 
-const MonthlyUtilityUnitElectChart = () => {
+const MonthlyUtilityUnitWaterChart = () => {
   const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
 
   const { data: monthlyUtilityUnit, isLoading: monthlyUtiltiyUnitLoading } = useRentoraApiMonthlyUtilityUnit({
@@ -27,23 +27,23 @@ const MonthlyUtilityUnitElectChart = () => {
   }
 
   if (!monthlyUtilityUnit) {
-    return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
+    return <EmptyPage title="Water Utility not found" description="No Water Utility you looking for." />
   }
 
-  const electricUtility: Array<IUtilityUnitData> = monthlyUtilityUnit.utilityGroupName.electric.map((item) => item)
+  const waterUtility: Array<IUtilityUnitData> = monthlyUtilityUnit.utilityGroupName.water
 
   const chartConfig = {
     usageAmoung: {
       label: 'Usage Amount',
-      color: '#60a5fa',
+      color: '#3b82f6',
     },
   } satisfies ChartConfig
 
   return (
     <div>
-      <h3> Electric Utility </h3>
-      <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-        <BarChart accessibilityLayer data={electricUtility}>
+      <h4> Water Utility </h4>
+      <ChartContainer config={chartConfig} className="h-64 w-64">
+        <BarChart accessibilityLayer data={waterUtility}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="month"
@@ -54,11 +54,11 @@ const MonthlyUtilityUnitElectChart = () => {
           />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="usageAmount" fill="#60a5fa" radius={10} />
+          <Bar dataKey="usageAmount" fill="#3b82f6" radius={10} />
         </BarChart>
       </ChartContainer>
     </div>
   )
 }
 
-export default MonthlyUtilityUnitElectChart
+export default MonthlyUtilityUnitWaterChart

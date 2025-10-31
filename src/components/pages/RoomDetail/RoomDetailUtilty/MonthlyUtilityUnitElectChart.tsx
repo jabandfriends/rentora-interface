@@ -14,7 +14,7 @@ import {
 import { useRentoraApiMonthlyUtilityUnit } from '@/hooks'
 import { type IUtilityUnitData } from '@/types'
 
-const MonthlyUtilityUnitWaterChart = () => {
+const MonthlyUtilityUnitElectChart = () => {
   const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
 
   const { data: monthlyUtilityUnit, isLoading: monthlyUtiltiyUnitLoading } = useRentoraApiMonthlyUtilityUnit({
@@ -27,23 +27,23 @@ const MonthlyUtilityUnitWaterChart = () => {
   }
 
   if (!monthlyUtilityUnit) {
-    return <EmptyPage title="Water Utility not found" description="No Water Utility you looking for." />
+    return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
   }
 
-  const waterUtility: Array<IUtilityUnitData> = monthlyUtilityUnit.utilityGroupName.water
+  const electricUtility: Array<IUtilityUnitData> = monthlyUtilityUnit.utilityGroupName.electric.map((item) => item)
 
   const chartConfig = {
     usageAmoung: {
       label: 'Usage Amount',
-      color: '#60a5fa',
+      color: '#3b82f6',
     },
   } satisfies ChartConfig
 
   return (
     <div>
-      <h4> Water Utility </h4>
-      <ChartContainer config={chartConfig} className="min-h-100px w-full">
-        <BarChart accessibilityLayer data={waterUtility}>
+      <h3> Electric Utility </h3>
+      <ChartContainer config={chartConfig} className="h-64 w-64">
+        <BarChart accessibilityLayer data={electricUtility}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="month"
@@ -54,11 +54,11 @@ const MonthlyUtilityUnitWaterChart = () => {
           />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="usageAmount" fill="#60a5fa" radius={10} />
+          <Bar dataKey="usageAmount" fill="#3b82f6" radius={10} />
         </BarChart>
       </ChartContainer>
     </div>
   )
 }
 
-export default MonthlyUtilityUnitWaterChart
+export default MonthlyUtilityUnitElectChart
