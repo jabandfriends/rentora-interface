@@ -16,6 +16,7 @@ export type IRoutes = {
   apartmentCreate: Omit<IRoute, 'getPath'>
   apartmentSetup: Omit<IRouteWithUrl, 'getPath'>
   allApartment: Omit<IRoute, 'getPath'>
+  accountSetting: Omit<IRoute, 'getPath'>
   // maintenanceCreate: Omit<IRouteWithUrl, 'getPath'>
 
   // dashboard "/dashboard/:apartmentId/${subpath}"
