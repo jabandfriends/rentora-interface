@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
 
 import { PaginationBar } from '@/components/feature'
@@ -13,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui'
+import { ROUTES } from '@/constants'
 import { CONTRACT_STATUS } from '@/enum'
 import type { IContractSummary } from '@/types'
 
@@ -32,6 +34,8 @@ const RoomDetailContractTable = ({
   totalPages,
   handlePageChange,
 }: IRoomDetailContractTableProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const navigate: NavigateFunction = useNavigate()
   const contractStatusBadgeVariant = useCallback((status: CONTRACT_STATUS): VariantProps<typeof Badge>['variant'] => {
     switch (status) {
       case CONTRACT_STATUS.ACTIVE:
@@ -44,7 +48,15 @@ const RoomDetailContractTable = ({
         return 'default'
     }
   }, [])
-  if (isLoading) return <PageTableLoading />
+
+  const handleNavigateContractDetail = useCallback(
+    (id: string) => {
+      navigate(ROUTES.contractDetail.getPath(apartmentId, id))
+    },
+    [navigate, apartmentId],
+  )
+
+  if (isLoading) return <PageTableLoading bodyRows={5} />
 
   if (!contracts || contracts.length === 0) return <PageTableEmpty message="No contracts found" />
 
@@ -61,8 +73,12 @@ const RoomDetailContractTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {contracts?.map((contract: IContractSummary) => (
-            <TableRow key={contract.id}>
+          {contracts.map((contract: IContractSummary) => (
+            <TableRow
+              key={contract.id}
+              onClick={() => handleNavigateContractDetail(contract.id)}
+              className="cursor-pointer"
+            >
               <TableCell>{contract.startDate}</TableCell>
               <TableCell>{contract.endDate}</TableCell>
               <TableCell className="capitalize">{contract.rentalType}</TableCell>

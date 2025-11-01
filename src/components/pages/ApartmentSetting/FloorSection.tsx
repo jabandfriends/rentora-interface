@@ -1,9 +1,9 @@
 import { Edit, Layers, PackageOpen, Plus, Trash2 } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
-import { Button } from '@/components/common'
+import { Button, Spinner } from '@/components/common'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,19 +32,24 @@ type IFloorSectionProps = {
 
 const FloorSection = ({ floor, buildingId }: IFloorSectionProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [floorDialogOpen, setFloorDialogOpen] = useState(false)
-  const [unitDialogOpen, setUnitDialogOpen] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
+  const [floorDialogOpen, setFloorDialogOpen]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
+  const [unitDialogOpen, setUnitDialogOpen]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
 
-  const [currentPage, setCurrentPage] = useState(DEFAULT_UNIT_LIST_DATA.page)
+  const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
+    DEFAULT_UNIT_LIST_DATA.page,
+  )
 
   //unit list
   const {
     data: units,
+    isLoading: unitListLoading,
     pagination: { totalElements, totalPages },
   } = useRentoraApiUnitList({
     apartmentId: apartmentId!,
     params: {
+      page: currentPage,
+      size: DEFAULT_UNIT_LIST_DATA.size,
       buildingName: floor.buildingName,
       floorId: floor.floorId,
     },
@@ -71,6 +76,16 @@ const FloorSection = ({ floor, buildingId }: IFloorSectionProps) => {
       toast.error(getErrorMessage(error))
     }
   }, [deleteFloor, floor.floorId])
+
+  if (unitListLoading) {
+    return (
+      <PageTableEmpty
+        icon={<Spinner />}
+        message="Loading units..."
+        description="Please wait while we load the units."
+      />
+    )
+  }
 
   return (
     <>

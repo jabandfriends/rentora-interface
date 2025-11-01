@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf'
 
-import { ApartmentPaymentMethodType, CONTRACT_RENTAL_TYPE, UtilityPriceType } from '@/enum'
+import { ApartmentPaymentMethodType, CONTRACT_RENTAL_TYPE, CONTRACT_STATUS, UtilityPriceType } from '@/enum'
 import type { IContract, IMonthlyInvoiceDetail } from '@/types'
 
 import { formatCurrency, formatDate } from '.'
@@ -98,19 +98,13 @@ export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
       y = addFieldRow('Phone', data.tenantPhone, '', null, y)
       y += 10
 
-      // Guarantor Information Section
-      y = addSectionHeader('Guarantor Information', y)
-      y = addFieldRow('Full Name', data.guarantorName, 'Phone', data.guarantorPhone, y)
-      y = addFieldRow('ID Number', data.guarantorIdNumber, '', null, y)
-      y += 10
-
       // Financial Details Section
       y = addSectionHeader('Financial Details', y)
       y = addFieldRow(
         'Rental Price',
-        `$${data.rentalPrice?.toLocaleString() || '0'}`,
+        `${data.rentalPrice?.toLocaleString() || '0'} THB`,
         'Deposit',
-        `$${data.depositAmount?.toLocaleString() || '0'}`,
+        `${data.depositAmount?.toLocaleString() || '0'} THB`,
         y,
       )
       y = addFieldRow(
@@ -120,38 +114,38 @@ export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
         `$${data.lateFeeAmount?.toLocaleString() || '0'}`,
         y,
       )
-      y = addFieldRow('Utilities Included', data.utilitiesIncluded ? 'Yes' : 'No', '', null, y)
+
       y += 10
 
       // Contract Period Section
       y = addSectionHeader('Contract Period', y)
-      y = addFieldRow('Start Date', data.startDate, 'End Date', data.endDate, y)
       y = addFieldRow(
-        'Duration',
-        `${safe(data.contractDurationDays)} days`,
+        'Contract Range',
+        `${formatDate(new Date(data.startDate), 'DD MMMM YYYY')} - ${formatDate(new Date(data.endDate), 'DD MMMM YYYY')}`,
         'Days Until Expiry',
         `${safe(data.daysUntilExpiry)} days`,
         y,
       )
-      y = addFieldRow(
-        'Auto Renewal',
-        data.autoRenewal ? 'Enabled' : 'Disabled',
-        'Notice Period',
-        `${safe(data.renewalNoticeDays)} days`,
-        y,
-      )
+
       y += 10
 
       // Utility Meters Section
       y = addSectionHeader('Utility Meters (Starting Values)', y)
-      y = addFieldRow('Water Meter', safe(data.waterMeterStart), 'Electric Meter', safe(data.electricMeterStart), y)
+      y = addFieldRow(
+        'Water Meter (unit)',
+        safe(data.waterMeterStart),
+        'Electric Meter (unit)',
+        safe(data.electricMeterStart),
+        y,
+      )
       y += 10
 
       // Status Section
       y = addSectionHeader('Contract Status', y)
       const getStatusEmoji = (status: string) => {
-        if (status === 'ACTIVE') return 'Active'
-        if (status === 'EXPIRED') return 'Expired'
+        if (status === CONTRACT_STATUS.ACTIVE) return 'Active'
+        if (status === CONTRACT_STATUS.EXPIRED) return 'Expired'
+        if (status === CONTRACT_STATUS.TERMINATED) return 'Terminated'
         return safe(status)
       }
       y = addFieldRow('Status', getStatusEmoji(data.status), 'Signed At', data.signedAt || 'Not signed', y)
@@ -187,7 +181,7 @@ export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
 
 export const exportInvoiceToPDF = async (
   invoice: IMonthlyInvoiceDetail,
-  apartmentName: string = 'Apartment Monthly Invoice',
+  apartmentName: string = 'Apartment Monthly Rentral Invoice',
 ) => {
   return new Promise<void>((resolve, reject) => {
     try {
@@ -203,7 +197,7 @@ export const exportInvoiceToPDF = async (
       doc.setTextColor(255, 255, 255)
       doc.setFontSize(24)
       doc.setFont('bold')
-      doc.text('INVOICE', pageWidth / 2, 15, { align: 'center' })
+      doc.text('RENTAL INVOICE', pageWidth / 2, 15, { align: 'center' })
 
       doc.setFontSize(10)
       doc.setFont('normal')
@@ -229,14 +223,14 @@ export const exportInvoiceToPDF = async (
       doc.setFont('bold')
       doc.text('Issue Date:', 15, yPos)
       doc.setFont('normal')
-      doc.text(formatDate(new Date(invoice.createdAt)), 60, yPos)
+      doc.text(formatDate(new Date(invoice.createdAt), 'DD/MMM/YYYY'), 60, yPos)
 
       yPos += 7
       doc.setFont('bold')
       doc.text('Due Date:', 15, yPos)
       doc.setFont('normal')
       doc.setTextColor(220, 53, 69)
-      doc.text(formatDate(new Date(invoice.dueDate)), 60, yPos)
+      doc.text(formatDate(new Date(invoice.dueDate), 'DD/MMM/YYYY'), 60, yPos)
       doc.setTextColor(0, 0, 0)
 
       // Billing Period
@@ -244,7 +238,11 @@ export const exportInvoiceToPDF = async (
       doc.setFont('bold')
       doc.text('Billing Period:', 15, yPos)
       doc.setFont('normal')
-      doc.text(`${formatDate(new Date(invoice.billStart))} - ${formatDate(new Date(invoice.billEnd))}`, 60, yPos)
+      doc.text(
+        `${formatDate(new Date(invoice.billStart), 'DD/MMM/YYYY')} - ${formatDate(new Date(invoice.billEnd), 'DD/MMM/YYYY')}`,
+        60,
+        yPos,
+      )
 
       // Tenant Info Section
       yPos += 12
@@ -265,9 +263,17 @@ export const exportInvoiceToPDF = async (
       doc.setFont('bold')
       doc.text('Unit:', 15, yPos)
       doc.setFont('normal')
-      doc.text(invoice.floorName, 40, yPos)
+      doc.text(invoice.unitName, 40, yPos)
 
       yPos += 7
+      //building name
+      doc.setFont('bold')
+      doc.text('Building:', 15, yPos)
+      doc.setFont('normal')
+      doc.text(invoice.buildingName, 40, yPos)
+
+      yPos += 7
+
       doc.setFont('bold')
       doc.text('Rental Type:', 15, yPos)
       doc.setFont('normal')
@@ -304,7 +310,7 @@ export const exportInvoiceToPDF = async (
       // Rent
       doc.setFont('normal')
       doc.text('Rent', 17, yPos)
-      doc.text(formatCurrency(invoice.contractRentAmount, 2, ''), pageWidth - 17, yPos, { align: 'right' })
+      doc.text(formatCurrency(invoice.rentAmount ?? 0, 2, ''), pageWidth - 17, yPos, { align: 'right' })
 
       yPos += 7
 
@@ -354,6 +360,40 @@ export const exportInvoiceToPDF = async (
         yPos += 7
         doc.setFontSize(10)
         doc.setTextColor(0, 0, 0)
+      }
+
+      // Extra Services
+      if (invoice.serviceList && invoice.serviceList.length > 0) {
+        doc.setFont('bold')
+        doc.text('Extra Services', 17, yPos)
+        doc.setFont('normal')
+        doc.text(
+          formatCurrency(
+            invoice.serviceList.reduce((acc, service) => acc + service.servicePrice, 0),
+            2,
+            '',
+          ),
+          pageWidth - 17,
+          yPos,
+          { align: 'right' },
+        )
+      }
+
+      // Adhoc Invoices
+      if (invoice.unitAdhocInvoices && invoice.unitAdhocInvoices.length > 0) {
+        doc.setFont('bold')
+        doc.text('Adhoc Invoices', 17, yPos)
+        doc.setFont('normal')
+        doc.text(
+          formatCurrency(
+            invoice.unitAdhocInvoices.reduce((acc, adhoc) => acc + adhoc.amount, 0),
+            2,
+            '',
+          ),
+          pageWidth - 17,
+          yPos,
+          { align: 'right' },
+        )
       }
 
       // Total Section

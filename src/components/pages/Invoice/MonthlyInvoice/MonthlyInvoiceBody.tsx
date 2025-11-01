@@ -1,7 +1,7 @@
 import { Spinner } from '@/components/common'
 import { PaginationBar } from '@/components/feature'
 import { RoomCard } from '@/components/pages/Invoice'
-import { PageTableBody, PageTableEmpty } from '@/components/ui/PageTable'
+import { PageTableEmpty } from '@/components/ui'
 import type { IMonthlyInvoice } from '@/types'
 
 type IMonthlyInvoiceBodyProps = {
@@ -29,7 +29,7 @@ const MonthlyInvoiceBody = ({
     return <PageTableEmpty message="No invoices found" />
   }
   return (
-    <PageTableBody className="flex flex-col gap-y-4 py-10">
+    <div className="flex flex-col gap-y-4">
       <div className="desktop:grid-cols-4 grid gap-5">
         {data.map((invoice: IMonthlyInvoice) => (
           <RoomCard key={invoice.invoiceId} invoice={invoice} />
@@ -41,7 +41,7 @@ const MonthlyInvoiceBody = ({
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-    </PageTableBody>
+    </div>
   )
 }
 

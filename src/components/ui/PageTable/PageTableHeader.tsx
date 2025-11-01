@@ -14,12 +14,12 @@ type IPageTableHeaderProps = {
 const PageTableHeader = ({ title, description, stats, actionButton, isLoading }: IPageTableHeaderProps) => {
   return (
     <div className="flex flex-col gap-8">
-      <div className="desktop:px-0 desktop:flex-row desktop:items-center flex flex-col justify-between gap-1 px-4">
+      <div className="desktop:px-0 desktop:flex-row desktop:items-center flex flex-col justify-between gap-1">
         <div>
           <div className="desktop:flex-row flex flex-col justify-between gap-y-2">
-            <h2>{title}</h2>
+            <h3 className="font-semibold">{title}</h3>
           </div>
-          <p className="text-theme-secondary">{description}</p>
+          <p className="text-body-2 text-theme-secondary">{description}</p>
         </div>
 
         {actionButton}

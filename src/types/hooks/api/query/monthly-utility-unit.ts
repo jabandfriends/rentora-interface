@@ -6,10 +6,12 @@ export type IMonthlyUtilityUnit = {
   floorNumber: number
   buildingName: string
 
-  utilityGroupName: {
-    water: Array<IUtilityUnitData>
-    electric: Array<IUtilityUnitData>
-  }
+  utilityGroupName: IUtilityGroup
+}
+
+export type IUtilityGroup = {
+  water: Array<IUtilityUnitData>
+  electric: Array<IUtilityUnitData>
 }
 
 export type IUtilityUnitData = {

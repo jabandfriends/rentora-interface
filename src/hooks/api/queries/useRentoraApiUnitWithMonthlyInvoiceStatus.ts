@@ -24,6 +24,7 @@ export const useRentoraApiUnitWithMonthlyInvoiceStatus = (props: {
       props.params.buildingName,
       props.params.roomNumber,
       props.params.readingDate,
+      props.params.isExceptDailyContract,
     ],
     queryFn: () => rentoraApiQueryClient.allUnitMonthlyInvoiceStatus(props.apartmentId, props.params),
     enabled: props.enabled ?? true,

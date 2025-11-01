@@ -61,72 +61,80 @@ const MonthlyInvoiceDetailTable = ({ invoice }: { invoice: IMonthlyInvoiceDetail
   }, [invoice])
 
   return (
-    <Table className="w-full">
-      <TableHeader>
-        <TableRow>
-          <TableHead>Description</TableHead>
-          <TableHead>Quantity</TableHead>
-          <TableHead>Rate</TableHead>
-          <TableHead>Amount</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody className="divide-y divide-gray-100">
-        <TableRow>
-          <TableCell className="py-4">
-            <div className="flex items-center gap-2">
-              <Building className="text-theme-primary size-4" />
-              <span className="capitalize">
-                {invoice.rentalType} Rent - {invoice.unitName}
-              </span>
-            </div>
-          </TableCell>
-          <TableCell>{getDateDiff(invoice.billStart, invoice.billEnd).days} days</TableCell>
-          <TableCell className="py-4">
-            {rentPrice} {rentUnit}
-          </TableCell>
-          <TableCell className="py-4">{formatCurrency(invoice.rentAmount)}</TableCell>
-        </TableRow>
+    <div className="space-y-4">
+      <div>
+        <h4>Rent & Utility Details</h4>
+        <p className="text-theme-secondary text-body-2">
+          Overview of rent, water, and electric charges for this billing period. All amounts and meter readings are
+          shown below.
+        </p>
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Description</TableHead>
+            <TableHead>Quantity</TableHead>
+            <TableHead>Rate</TableHead>
+            <TableHead>Amount</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="divide-theme-secondary-300 divide-y">
+          <TableRow>
+            <TableCell className="py-4">
+              <div className="flex items-center gap-2">
+                <Building className="text-theme-primary size-4" />
+                <span className="flex flex-col capitalize">
+                  {invoice.rentalType} Rent
+                  <span className="text-theme-secondary text-body-3">{invoice.unitName}</span>
+                </span>
+              </div>
+            </TableCell>
+            <TableCell>{getDateDiff(invoice.billStart, invoice.billEnd).days} days</TableCell>
+            <TableCell className="py-4">{rentPrice ? `${rentPrice} ${rentUnit}` : '-'}</TableCell>
+            <TableCell className="py-4">{formatCurrency(invoice.rentAmount)}</TableCell>
+          </TableRow>
 
-        <TableRow>
-          <TableCell className="py-4">
-            <div className="flex items-center gap-2">
-              <Droplets className="text-theme-primary size-4" />
-              <div>
-                <span>Water Usage</span>
-                <div className="text-theme-secondary text-body-3">
-                  Previous: {formatNumber(invoice.waterMeterStart)} | Current: {formatNumber(invoice.waterMeterEnd)}
+          <TableRow>
+            <TableCell className="py-4">
+              <div className="flex items-center gap-2">
+                <Droplets className="text-theme-primary size-4" />
+                <div>
+                  <span>Water Usage</span>
+                  <div className="text-theme-secondary text-body-3">
+                    Previous: {formatNumber(invoice.waterMeterStart)} | Current: {formatNumber(invoice.waterMeterEnd)}
+                  </div>
                 </div>
               </div>
-            </div>
-          </TableCell>
-          <TableCell className="py-4">{formatNumber(invoice.totalWaterUsageUnit)} units</TableCell>
-          <TableCell className="py-4">
-            {waterPrice} {waterUnit}
-          </TableCell>
-          <TableCell className="py-4">{formatCurrency(invoice.waterTotalCost)}</TableCell>
-        </TableRow>
+            </TableCell>
+            <TableCell className="py-4">{formatNumber(invoice.totalWaterUsageUnit)} units</TableCell>
+            <TableCell className="py-4">
+              {waterPrice} {waterUnit}
+            </TableCell>
+            <TableCell className="py-4">{formatCurrency(invoice.waterTotalCost)} </TableCell>
+          </TableRow>
 
-        <TableRow>
-          <TableCell className="py-4">
-            <div className="flex items-center gap-2">
-              <Zap className="text-theme-warning size-4" />
-              <div>
-                <span>Electricity Usage</span>
-                <div className="text-theme-secondary text-body-3">
-                  Previous: {formatNumber(invoice.electricMeterStart)} | Current:{' '}
-                  {formatNumber(invoice.electricMeterEnd)}
+          <TableRow>
+            <TableCell className="py-4">
+              <div className="flex items-center gap-2">
+                <Zap className="text-theme-warning size-4" />
+                <div>
+                  <span>Electricity Usage</span>
+                  <div className="text-theme-secondary text-body-3">
+                    Previous: {formatNumber(invoice.electricMeterStart)} | Current:{' '}
+                    {formatNumber(invoice.electricMeterEnd)}
+                  </div>
                 </div>
               </div>
-            </div>
-          </TableCell>
-          <TableCell className="py-4">{formatNumber(invoice.totalElectricUsageUnit)} units</TableCell>
-          <TableCell className="py-4">
-            {electricPrice} {electricUnit}
-          </TableCell>
-          <TableCell className="py-4">{formatCurrency(invoice.electricTotalCost)}</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+            </TableCell>
+            <TableCell className="py-4">{formatNumber(invoice.totalElectricUsageUnit)} units</TableCell>
+            <TableCell className="py-4">
+              {electricPrice} {electricUnit}
+            </TableCell>
+            <TableCell className="py-4">{formatCurrency(invoice.electricTotalCost)}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
   )
 }
 

@@ -84,7 +84,7 @@ function FormLabel({ className, ...props }: ComponentProps<typeof Label>) {
     <Label
       data-slot="form-label"
       data-error={!!error}
-      className={cn('data-[error=true]:text-theme-error text-body-2 font-semibold', className)}
+      className={cn('data-[error=true]:text-theme-error text-body-2 font-medium', className)}
       htmlFor={formItemId}
       {...props}
     />

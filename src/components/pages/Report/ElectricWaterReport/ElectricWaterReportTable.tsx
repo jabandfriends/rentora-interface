@@ -60,7 +60,7 @@ const ElectricWaterReportTable = ({
   }
 
   return (
-    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+    <div className="flex flex-col gap-y-4">
       <Table>
         <TableHeader>
           <TableRow>

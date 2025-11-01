@@ -3,11 +3,14 @@ import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Button, Spinner } from '@/components/common'
+import { Button, Card, Spinner } from '@/components/common'
 import { BillSection, MonthlyInvoiceDetailTable } from '@/components/pages/Invoice'
-import { PageTableEmpty } from '@/components/ui'
+import { EmptyPage } from '@/components/ui'
 import { useRentoraApiMonthlyInvoiceDetail } from '@/hooks'
 import { exportInvoiceToPDF, formatCurrency, formatDate } from '@/utilities'
+
+import MonthlyInvoiceDetailUnitAdhocInvoice from './MonthlyInvoiceDetailUnitAdhocInvoice'
+import MonthlyInvoiceDetailUnitService from './MonthlyInvoiceDetailUnitService'
 
 const MonthlyInvoiceDetail = () => {
   const navigate: NavigateFunction = useNavigate()
@@ -35,29 +38,34 @@ const MonthlyInvoiceDetail = () => {
 
   if (isMonthlyInvoiceDetailLoading) {
     return (
-      <PageTableEmpty
+      <EmptyPage
         icon={<Spinner />}
-        message="Your monthly invoice is loading..."
+        title="Your monthly invoice is loading..."
         description="Hold on, we're loading your monthly invoice."
       />
     )
   }
   if (!monthlyInvoice) {
-    return <PageTableEmpty message="Your monthly invoice is not found..." />
+    return (
+      <EmptyPage
+        title="Your monthly invoice is not found..."
+        description="Your monthly invoice is not found... Please try again later."
+      />
+    )
   }
   return (
-    <div className="flex w-full flex-col gap-y-4">
+    <Card className="flex w-full flex-col gap-y-4 rounded-2xl">
       <div className="flex items-center gap-4">
         <Button className="flex items-center gap-x-2" onClick={() => navigate(-1)}>
           <ArrowLeft className="size-5" />
           Back
         </Button>
       </div>
-      <div className="bg-theme-light space-y-6 rounded-xl shadow-sm">
+      <div className="space-y-6 rounded-xl">
         {/* Invoice Detail */}
-        <div>
+        <div className="space-y-4">
           {/* Invoice Header */}
-          <div className="space-y-4 p-8">
+          <div className="space-y-4">
             <div className="flex items-start justify-between">
               <div>
                 <h2>RENT INVOICE</h2>
@@ -73,8 +81,13 @@ const MonthlyInvoiceDetail = () => {
           </div>
 
           {/* Invoice Items */}
-          <div className="p-8">
+          <div className="space-y-4">
             <MonthlyInvoiceDetailTable invoice={monthlyInvoice} />
+            {/* serviceList section */}
+            <MonthlyInvoiceDetailUnitService serviceList={monthlyInvoice.serviceList} />
+
+            {/* adhoc invoices section */}
+            <MonthlyInvoiceDetailUnitAdhocInvoice adhocInvoices={monthlyInvoice.unitAdhocInvoices} />
 
             {/* Total */}
             <div className="desktop:flex-row flex flex-col justify-between">
@@ -104,7 +117,7 @@ const MonthlyInvoiceDetail = () => {
           Download PDF
         </Button>
       </div>
-    </div>
+    </Card>
   )
 }
 

@@ -3,6 +3,7 @@ import type { Maybe } from '@/types'
 export type IRoute = {
   path: string
   getPath: (apartmentId: Maybe<string>, id?: string) => string
+  getUrlWithQuery?: (apartmentId: Maybe<string>, query?: Record<string, string>) => string
 }
 
 export type IRouteWithUrl = IRoute & {
@@ -15,6 +16,7 @@ export type IRoutes = {
   apartmentCreate: Omit<IRoute, 'getPath'>
   apartmentSetup: Omit<IRouteWithUrl, 'getPath'>
   allApartment: Omit<IRoute, 'getPath'>
+  accountSetting: Omit<IRoute, 'getPath'>
   // maintenanceCreate: Omit<IRouteWithUrl, 'getPath'>
 
   // dashboard "/dashboard/:apartmentId/${subpath}"
@@ -25,6 +27,7 @@ export type IRoutes = {
   apartmentSetting: IRoute
   overview: IRoute
   allRoom: IRoute
+  payment: IRoute
   electricWaterReport: IRoute
   serviceInvoice: IRoute
   maintenanceCreate: IRoute
@@ -40,7 +43,9 @@ export type IRoutes = {
   tenantUpdate: IRoute
   roomDetail: IRoute
   contractCreate: IRoute
+  contractDetail: IRoute
   meterReadingList: IRoute
   meterReadingCreate: IRoute
-  monthlyUtilityRoomDetail: IRoute
+  supplyList: IRoute
+  supplyTransactions: IRoute
 }

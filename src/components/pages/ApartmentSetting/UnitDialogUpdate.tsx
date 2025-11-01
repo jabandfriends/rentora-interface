@@ -54,11 +54,11 @@ const UnitDialogUpdate = ({ open, onOpenChange, unit }: UnitDialogProps) => {
     if (unit) {
       form.reset({
         unitName: unit.unitName,
-        bedrooms: unit.bedrooms,
-        bathrooms: unit.bathrooms,
-        squareMeters: unit.squareMeters,
-        balconyCount: unit.balconyCount,
-        parkingCount: unit.parkingSpaces,
+        bedrooms: unit.bedrooms ?? 0,
+        bathrooms: unit.bathrooms ?? 0,
+        squareMeters: unit.squareMeters ?? 0,
+        balconyCount: unit.balconyCount ?? 0,
+        parkingCount: unit.parkingSpaces ?? 0,
         status: unit.unitStatus,
       })
     }

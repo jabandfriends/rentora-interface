@@ -1,5 +1,17 @@
-import { Building2, ChevronDown, ChevronUp, Edit, PackageOpen, Plus, Trash2 } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import {
+  Box,
+  Building2,
+  ChevronDown,
+  ChevronUp,
+  Edit,
+  Grid2x2Check,
+  Grid2x2X,
+  PackageOpen,
+  Plus,
+  Trash2,
+  Wrench,
+} from 'lucide-react'
+import { useCallback, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
@@ -56,6 +68,21 @@ const BuildingCard = ({ building }: BuildingCardProps) => {
 
   //handle expand
   const handleExpand = useCallback(() => setExpanded(!expanded), [expanded])
+
+  const totalUnits: number = useMemo(
+    () => floors?.reduce((acc, floor: IFloor) => acc + floor.totalUnits, 0) ?? 0,
+    [floors],
+  )
+
+  const availableUnits: number = useMemo(
+    () => floors?.reduce((acc, floor: IFloor) => acc + floor.availableUnits, 0) ?? 0,
+    [floors],
+  )
+  const maintenanceUnits: number = useMemo(
+    () => floors?.reduce((acc, floor: IFloor) => acc + floor.maintenanceUnits, 0) ?? 0,
+    [floors],
+  )
+
   return (
     <>
       <Card className="border-theme-secondary-300 overflow-hidden rounded-2xl border duration-200">
@@ -68,10 +95,23 @@ const BuildingCard = ({ building }: BuildingCardProps) => {
               <div className="flex-1">
                 <h4 className="mb-1 font-semibold">{building.name}</h4>
 
-                <div className="text-theme-secondary text-body-2 mt-2">
-                  {floors?.length} floor{floors?.length !== 1 ? 's' : ''} •{' '}
-                  {floors?.reduce((acc, floor) => acc + floor.totalUnits, 0)} unit
-                  {floors?.reduce((acc, floor) => acc + floor.totalUnits, 0) !== 1 ? 's' : ''}
+                <div className="text-theme-secondary text-body-2 mt-2 flex flex-wrap gap-4">
+                  <div className="flex items-center gap-1">
+                    <Building2 className="size-4" /> <span className="font-medium">{building.floorCount}</span> floors
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Grid2x2X className="size-4" /> <span className="font-medium">{building.occupiedUnitCount}</span>{' '}
+                    occupied
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Grid2x2Check className="size-4" /> <span className="font-medium">{availableUnits}</span> available
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Wrench className="size-4" /> <span className="font-medium">{maintenanceUnits}</span> maintenance
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Box className="size-4" /> <span className="font-medium">{totalUnits}</span> total units
+                  </div>
                 </div>
               </div>
             </div>

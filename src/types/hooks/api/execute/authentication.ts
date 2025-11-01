@@ -36,3 +36,18 @@ export type IRentoraApiClientAuthenticateResponse = IRentoraApiClientBaseRespons
 export type IFirsttimePasswordResetRequestPayload = {
   newPassword: string
 }
+
+//payload
+export type IUpdateUserRequestPayload = Partial<{
+  firstName: string
+  lastName: string
+  email: string
+  phoneNumber: string
+  birthDate: string
+  nationalId: string
+  emergencyContactName: string
+  emergencyContactPhone: string
+}>
+
+//hooks type useRentoraApiUpdateUser
+export type IUseRentoraApiUpdateUser = IBaseUseMutation<void, IUpdateUserRequestPayload>

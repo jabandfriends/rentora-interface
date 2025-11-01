@@ -11,6 +11,7 @@ import type {
   ICreateTenantRequestPayload,
   ICreateUnitRequestPayload,
   ICreateUnitServiceRequestPayload,
+  IDeleteUnitServiceParams,
   IFirsttimePasswordResetRequestPayload,
   IGenerateMonthlyInvoiceRequestPayload,
   IMeterReadingRequestPayload,
@@ -23,6 +24,8 @@ import type {
   IRentoraApiClientDeleteMaintenanceResponse,
   IRentoraApiClientUpdateMaintenanceResponse,
   ISetupApartmentRequestPayload,
+  ISupplyCreatePayload,
+  ISupplyUpdatePayload,
   ITerminateContractRequestPayload,
   IUpdateApartmentRequestPayload,
   IUpdateBuildingRequestPayload,
@@ -32,6 +35,7 @@ import type {
   IUpdateTenantRequestPayload,
   IUpdateUnitRequestPayload,
   IUpdateUnitServiceRequestPayload,
+  IUpdateUserRequestPayload,
   RentoraApiExecuteClientKey,
 } from '@/types'
 
@@ -55,8 +59,10 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createMeterReading: 'CREATE_METER_READING',
     updateMeterReading: 'UPDATE_METER_READING',
     generateMonthlyInvoice: 'GENERATE_MONTHLY_INVOICE',
+    updateUser: 'UPDATE_USER',
     updateApartment: 'UPDATE_APARTMENT',
     createUnitService: 'CREATE_UNIT_SERVICE',
+    deleteUnitService: 'DELETE_UNIT_SERVICE',
     updateUnitService: 'UPDATE_UNIT_SERVICE',
     createFloor: 'CREATE_FLOOR',
     updateFloor: 'UPDATE_FLOOR',
@@ -64,6 +70,11 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createBuilding: 'CREATE_BUILDING',
     updateBuilding: 'UPDATE_BUILDING',
     deleteBuilding: 'DELETE_BUILDING',
+
+    //supply
+    createSupply: 'CREATE_SUPPLY',
+    updateSupply: 'UPDATE_SUPPLY',
+    deleteSupply: 'DELETE_SUPPLY',
 
     //unit
     createUnit: 'CREATE_UNIT',
@@ -204,23 +215,31 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     return response.data
   }
 
+  //update user account
+  async updateUser(payload: IUpdateUserRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.put<void>(`/api/auth/me/update`, payload)
+    return response.data
+  }
+
   //update apartment
   async updateApartment(apartmentId: string, payload: IUpdateApartmentRequestPayload): Promise<void> {
     const response = await this.axiosWithAuthInstance.put<void>(`/api/apartments/${apartmentId}`, payload)
     return response.data
   }
   //create unit service
-  async createUnitService(
-    apartmentId: string,
-    unitId: string,
-    payload: ICreateUnitServiceRequestPayload,
-  ): Promise<void> {
-    const response = await this.axiosWithAuthInstance.post<void>(
-      `/api/apartments/${apartmentId}/all-room/detail/${unitId}`,
-      payload,
-    )
+  async createUnitService(unitId: string, payload: ICreateUnitServiceRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/unit/service/${unitId}`, payload)
     return response.data
   }
+
+  //delete unit service
+  async deleteUnitService(params: IDeleteUnitServiceParams): Promise<void> {
+    const response = await this.axiosWithAuthInstance.delete<void>(`/api/apartments/unit/service`, {
+      params,
+    })
+    return response.data
+  }
+
   //terminate contract
   async terminateContract(
     apartmentId: string,
@@ -299,6 +318,24 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   //delete unit
   async deleteUnit(apartmentId: string, unitId: string): Promise<void> {
     const response = await this.axiosWithAuthInstance.delete<void>(`/api/apartments/${apartmentId}/units/${unitId}`)
+    return response.data
+  }
+
+  //create supply
+  async createSupply(apartmentId: string, payload: ISupplyCreatePayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(`/api/apartments/supply/${apartmentId}`, payload)
+    return response.data
+  }
+
+  //update supply
+  async updateSupply(supplyId: string, payload: ISupplyUpdatePayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.put<void>(`/api/apartments/supply/edit/${supplyId}`, payload)
+    return response.data
+  }
+
+  //delete supply
+  async deleteSupply(supplyId: string): Promise<void> {
+    const response = await this.axiosWithAuthInstance.delete<void>(`/api/apartments/supply/delete/${supplyId}`)
     return response.data
   }
 }
