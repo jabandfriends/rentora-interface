@@ -136,6 +136,7 @@ export const getSidebarItems = (
     bottomNav: [
       {
         type: 'item',
+        topic: 'Setting',
         title: 'Settings',
         icon: <Settings size={16} />,
         menu: SIDEBAR_BOTTOM_ITEMS,
