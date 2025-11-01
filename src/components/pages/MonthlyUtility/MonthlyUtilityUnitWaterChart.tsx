@@ -12,6 +12,7 @@ import {
   LoadingPage,
 } from '@/components/ui'
 import { useRentoraApiMonthlyUtilityUnit } from '@/hooks'
+import type { IUtilityUnitData } from '@/types'
 
 const MonthlyUtilityUnitWaterChart = () => {
   const { apartmentId, id: unitId } = useParams<{ apartmentId: string; id: string }>()
@@ -29,10 +30,7 @@ const MonthlyUtilityUnitWaterChart = () => {
     return <EmptyPage title="Water Utility not found" description="No Water Utility you looking for." />
   }
 
-  const waterUtility = monthlyUtilityUnit.utilityGroupName.water.map((item) => ({
-    month: item.month,
-    usageAmount: parseFloat(item.usageAmount.toFixed(2)),
-  }))
+  const waterUtility: Array<IUtilityUnitData> = monthlyUtilityUnit.utilityGroupName.water
 
   const chartConfig = {
     usageAmoung: {
