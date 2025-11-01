@@ -36,7 +36,7 @@ const SidebarBottom = ({ onClose, className, userData, ...props }: ISidebarBotto
             )
           }
         })}
-        <SidebarUserProfile userData={userData} />
+        <SidebarUserProfile userData={userData} className="desktop:hidden" />
       </nav>
     </div>
   )

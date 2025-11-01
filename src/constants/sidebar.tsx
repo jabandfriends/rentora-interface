@@ -132,8 +132,6 @@ export const getSidebarItems = (
         icon: <Wrench size={16} />,
         menu: SIDEBAR_TENANTS_MANAGEMENT,
       },
-    ],
-    bottomNav: [
       {
         type: 'item',
         title: 'Settings',
@@ -141,5 +139,6 @@ export const getSidebarItems = (
         menu: SIDEBAR_BOTTOM_ITEMS,
       },
     ],
+    bottomNav: [],
   }
 }

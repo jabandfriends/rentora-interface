@@ -1,9 +1,9 @@
 import { useCallback, useRef, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
-import { Spinner } from '@/components/common'
 import { useDeviceWatcher, useRentoraApiUser } from '@/hooks'
 
+import { LoadingPage } from '../ui'
 import NavBar from './Navbar'
 import { OutletWrapper } from './OutletWrapper'
 import Sidebar from './Sidebar'
@@ -28,23 +28,20 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
 
   useDeviceWatcher()
   if (isLoading) {
-    return (
-      <div className="bg-page flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    )
+    return <LoadingPage />
   }
 
   return (
     <div className="relative min-h-screen">
-      <>
+      {isSidebar && <Sidebar userData={userData} isOpen={sidebarOpen} onClose={setSidebar} />}
+
+      <OutletWrapper isSidebar={isSidebar}>
         {isNavbar && (
           <NavBar userData={userData} sidebarOpen={sidebarOpen} onSidebarToggle={setSidebar} isSidebar={isSidebar} />
         )}
-      </>
-      <OutletWrapper>
-        {isSidebar && <Sidebar userData={userData} className="h-full" isOpen={sidebarOpen} onClose={setSidebar} />}
-        <Outlet />
+        <div className="mt-16">
+          <Outlet />
+        </div>
       </OutletWrapper>
     </div>
   )
