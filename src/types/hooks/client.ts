@@ -35,6 +35,7 @@ export type RentoraApiQueryClientKey =
   | 'paymentList'
   | 'supplyList'
   | 'supplyTransactionList'
+  | 'monthlyUtilityBuilding'
 export type RentoraApiExecuteClientKey =
   | 'authenticate'
   | 'createApartment'

@@ -1,6 +1,7 @@
 import type { AxiosResponse } from 'axios'
 
 import type {
+  IMonthlyUtilityBuldingParams,
   IMonthlyUtilityUnitParams,
   IRentoraApiAllUnitMonthlyInvoiceStatusParams,
   IRentoraApiApartmentDetailParams,
@@ -35,6 +36,7 @@ import type {
   IRentoraApiClientUnitWithUtilityResponse,
   IRentoraApiClientUserResponse,
   IRentoraApiClientUtilityListResponse,
+  IRentoraApiClietMonthlyUtilityBuildingResponse,
   IRentoraApiClietMonthlyUtilityUnitResponse,
   IRentoraApiContractListParams,
   IRentoraApiInvoiceListParams,
@@ -96,6 +98,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     paymentList: 'PAYMENT_LIST',
     supplyList: 'SUPPLY_LIST',
     supplyTransactionList: 'SUPPLY_TRANSACTION_LIST',
+    monthlyUtilityBuilding: 'MONTHLY_UTILITY_BUILDING',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -422,6 +425,15 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
   ): Promise<IRentoraApiClietMonthlyUtilityUnitResponse['data']> {
     const response = await this.axiosWithAuthInstance.get<IRentoraApiClietMonthlyUtilityUnitResponse>(
       `/api/apartment/${params.apartmentId}/monthly-utility/${params.unitId}`,
+    )
+    return response.data.data
+  }
+
+  async monthlyUtilityBuilding(
+    params: IMonthlyUtilityBuldingParams,
+  ): Promise<IRentoraApiClietMonthlyUtilityBuildingResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClietMonthlyUtilityBuildingResponse>(
+      `/api/apartment/${params.apartmentId}/buildingUtility`,
     )
     return response.data.data
   }
