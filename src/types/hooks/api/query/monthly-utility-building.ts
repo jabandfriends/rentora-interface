@@ -1,7 +1,7 @@
 import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '@/types'
 
 export type IMonthlyUtilityBuilding = {
-  id: string
+  buildingID: string
   buildingName: string
   utilityGroupName: IUtilityTotalGroup
 }
@@ -13,7 +13,7 @@ export type IUtilityTotalGroup = {
 
 export type IUtilityBuildingData = {
   month: string
-  usageAmount: number
+  totalUsageAmount: number
 }
 
 export type IMonthlyUtilityBuldingParams = {
