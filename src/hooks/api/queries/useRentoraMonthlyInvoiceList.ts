@@ -28,6 +28,7 @@ export const useRentoraMonthlyInvoiceList = (
       params.unitName,
       params.buildingName,
       params.paymentStatus,
+      params.genMonth,
     ],
     queryFn: () =>
       rentoraApiQueryClient.monthlyInvoiceList(apartmentId, {
@@ -36,11 +37,12 @@ export const useRentoraMonthlyInvoiceList = (
         ...(params?.paymentStatus ? { paymentStatus: params.paymentStatus } : {}),
         ...(params?.sortBy ? { sortBy: params.sortBy } : {}),
         ...(params?.sortDir ? { sortDir: params.sortDir } : {}),
+        genMonth: params.genMonth,
         page: params.page,
         size: params.size,
       }),
     retry: 1,
-    enabled: !!apartmentId,
+    enabled: !!apartmentId && !!params.genMonth,
   })
 
   const result: IRentoraApiClientMonthlyInvoiceListResponse['data'] = useMemo(() => {
