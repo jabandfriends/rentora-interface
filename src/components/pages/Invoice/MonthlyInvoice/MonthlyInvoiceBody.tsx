@@ -1,4 +1,4 @@
-import { FileCheck } from 'lucide-react'
+import { FileCheck, Search } from 'lucide-react'
 
 import { Spinner } from '@/components/common'
 import { PaginationBar } from '@/components/feature'
@@ -7,6 +7,7 @@ import { PageTableEmpty } from '@/components/ui'
 import type { IMonthlyInvoice } from '@/types'
 
 type IMonthlyInvoiceBodyProps = {
+  isSearching: boolean
   data: Array<IMonthlyInvoice>
   isLoading: boolean
   currentPage: number
@@ -16,6 +17,7 @@ type IMonthlyInvoiceBodyProps = {
   handlePageChange: (page: number) => void
 }
 const MonthlyInvoiceBody = ({
+  isSearching,
   data,
   isLoading,
   currentPage,
@@ -37,6 +39,9 @@ const MonthlyInvoiceBody = ({
       />
     )
   }
+  if (isSearching && (!data || data.length === 0)) {
+    return <PageTableEmpty icon={<Search size={36} />} message="No invoices found for this search" />
+  }
   if ((!data || data.length === 0) && selectedGenMonth) {
     return (
       <PageTableEmpty
@@ -46,6 +51,7 @@ const MonthlyInvoiceBody = ({
       />
     )
   }
+
   if (!data || data.length === 0) {
     return <PageTableEmpty message="No invoices found" />
   }

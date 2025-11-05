@@ -92,6 +92,8 @@ const MonthlyInvoice = () => {
     [isLoadingMonthlyInvoiceList, isLoadingReadingDateUtility],
   )
 
+  const isSearching: boolean = useMemo(() => debouncedSearch !== undefined, [debouncedSearch])
+
   const monthlyInvoiceStats: Array<IStatsCardProps> = [
     {
       title: 'Total Invoices',
@@ -143,6 +145,7 @@ const MonthlyInvoice = () => {
       />
 
       <MonthlyInvoiceBody
+        isSearching={isSearching}
         selectedGenMonth={debouncedGenMonth!}
         isLoading={isLoading}
         data={invoices}
