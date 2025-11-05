@@ -1,5 +1,5 @@
 import type { ServiceCategory } from '@/enum'
-import type { IBaseUseMutation } from '@/types'
+import type { IBaseUseMutation, IRentoraApiClientBaseResponse } from '@/types'
 
 export type IBaseApartmentServiceRequestPayload = {
   serviceName: string
@@ -18,3 +18,25 @@ export type IUpdateApartmentServiceRequestPayload = IBaseApartmentServiceRequest
 export type IUseRentoraApiCreateApartmentService = IBaseUseMutation<void, ICreateApartmentServiceRequestPayload>
 
 export type IUseRentoraApiUpdateApartmentService = IBaseUseMutation<void, IUpdateApartmentServiceRequestPayload>
+
+//-----payment service-----
+export type IUpdateApartmentPaymentServiceRequestPayload = {
+  paymentId: string
+  promptPayImageFile?: File
+  promptPayFilename?: string
+  bankName: string
+  bankAccountNumber: string
+  accountHolderName: string
+  promptpayNumber: string
+  instructions: string
+}
+//response
+export type IUpdateApartmentPaymentServiceResponse = IRentoraApiClientBaseResponse<{
+  apartmentPaymentId: string
+  presignedUrl: string
+}>
+
+export type IUseRentoraApiUpdateApartmentPaymentService = IBaseUseMutation<
+  void,
+  IUpdateApartmentPaymentServiceRequestPayload
+>
