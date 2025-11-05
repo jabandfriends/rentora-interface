@@ -1,3 +1,4 @@
+export * from './MonthlyInvoice'
 export * from './Payment'
 export * from './Supplies'
 export * from './SupplyTransaction'

@@ -1,16 +1,18 @@
 import { useDebounce } from '@uidotdev/usehooks'
 import { FileBadge, FileSpreadsheet, FileWarning, FileX, Plus } from 'lucide-react'
-import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
+import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { MonthlyInvoiceBody } from '@/components/pages/Invoice'
-import { PageTableBody, PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableBody, PageTableHeader } from '@/components/ui'
 import { DEFAULT_MAINTENANCE_LIST_DATA, DEFAULT_UNIT_LIST_DATA, ROUTES } from '@/constants'
 import { MonthlyInvoicePaymentStatus } from '@/enum'
-import { useRentoraMonthlyInvoiceList } from '@/hooks'
-import type { ISearchBarProps, IStatsCardProps, Maybe } from '@/types'
+import { useRentoraApiReportReadingDateUtility, useRentoraMonthlyInvoiceList } from '@/hooks'
+import type { IReadingUnitUtility, ISearchBarProps, IStatsCardProps, Maybe } from '@/types'
+
+import { MonthlyInvoiceSearch } from './MonthlyInvoiceSearch'
 
 const MonthlyInvoice = () => {
   const navigate: NavigateFunction = useNavigate()
@@ -19,6 +21,10 @@ const MonthlyInvoice = () => {
     DEFAULT_MAINTENANCE_LIST_DATA.page,
   )
 
+  //reading date
+  const { data: readingDateUtility, isLoading: isLoadingReadingDateUtility } = useRentoraApiReportReadingDateUtility({
+    apartmentId,
+  })
   const { watch, setValue } = useForm({
     defaultValues: {
       sortBy: '',
@@ -26,17 +32,20 @@ const MonthlyInvoice = () => {
       unitName: '',
       buildingName: '',
       paymentStatus: undefined,
+      genMonth: '',
     },
   })
 
-  const [unitName, buildingName, paymentStatus]: [string, string, Maybe<MonthlyInvoicePaymentStatus>] = watch([
-    'unitName',
-    'buildingName',
-    'paymentStatus',
-  ])
+  const [unitName, buildingName, paymentStatus, genMonth]: [
+    string,
+    string,
+    Maybe<MonthlyInvoicePaymentStatus>,
+    string,
+  ] = watch(['unitName', 'buildingName', 'paymentStatus', 'genMonth'])
 
   const debouncedSearch = useDebounce(unitName || undefined, 500)
   const debouncedBuildingName = useDebounce(buildingName || undefined, 500)
+  const debouncedGenMonth = useDebounce(genMonth || undefined, 500)
 
   const {
     data: invoices,
@@ -47,13 +56,14 @@ const MonthlyInvoice = () => {
       totalPaidMonthlyInvoices,
       totalOverdueMonthlyInvoice,
     },
-    isLoading,
+    isLoading: isLoadingMonthlyInvoiceList,
   } = useRentoraMonthlyInvoiceList(apartmentId, {
     page: currentPage,
     size: DEFAULT_MAINTENANCE_LIST_DATA.size,
     unitName: debouncedSearch,
     buildingName: debouncedBuildingName,
     paymentStatus: paymentStatus,
+    genMonth: debouncedGenMonth!,
   })
 
   const handlePageChange = useCallback((page: number) => {
@@ -67,6 +77,19 @@ const MonthlyInvoice = () => {
       setCurrentPage(DEFAULT_UNIT_LIST_DATA.page)
     },
     [setValue, setCurrentPage],
+  )
+
+  const handleGenMonthChange = useCallback(
+    (value: string) => {
+      setValue('genMonth', value)
+      setCurrentPage(DEFAULT_MAINTENANCE_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
+
+  const isLoading: boolean = useMemo(
+    () => isLoadingMonthlyInvoiceList || isLoadingReadingDateUtility,
+    [isLoadingMonthlyInvoiceList, isLoadingReadingDateUtility],
   )
 
   const monthlyInvoiceStats: Array<IStatsCardProps> = [
@@ -112,8 +135,15 @@ const MonthlyInvoice = () => {
           </Button>
         }
       />
-      <PageTableSearch placeholder="Search invoice by unit name" onSearchChange={handleSearchChange} />
+      <MonthlyInvoiceSearch
+        onSearchChange={handleSearchChange}
+        handleGenMonthChange={handleGenMonthChange}
+        readingDateUtility={readingDateUtility ?? ([] as Array<IReadingUnitUtility>)}
+        selectedGenMonth={debouncedGenMonth!}
+      />
+
       <MonthlyInvoiceBody
+        selectedGenMonth={debouncedGenMonth!}
         isLoading={isLoading}
         data={invoices}
         currentPage={currentPage}
