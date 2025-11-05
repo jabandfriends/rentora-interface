@@ -28,11 +28,10 @@ export const MONTHLY_CONTRACT_SCHEMA = z
     electricMeterStart: z.string().min(1, 'Electricity meter is required'),
   })
   .superRefine((data, ctx) => {
-    const start = data.startDate
-    const end = data.endDate
+    const start: Date = data.startDate
+    const end: Date = data.endDate
 
     if (data.autoRenewal) {
-      console.log(data.renewalNoticeDays)
       if (Number(data.renewalNoticeDays) < 1) {
         ctx.addIssue({
           path: ['renewalNoticeDays'],
