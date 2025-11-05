@@ -69,3 +69,5 @@ export type RentoraApiExecuteClientKey =
   | 'createSupply'
   | 'updateSupply'
   | 'deleteSupply'
+  | 'createApartmentService'
+  | 'updateApartmentService'

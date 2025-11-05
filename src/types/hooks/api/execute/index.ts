@@ -1,5 +1,6 @@
 export * from './adhocInvoice'
 export * from './apartment'
+export * from './apartment-setting'
 export * from './authentication'
 export * from './building'
 export * from './contract'

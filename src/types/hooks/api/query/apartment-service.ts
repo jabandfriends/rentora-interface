@@ -1,3 +1,4 @@
+import type { ServiceCategory } from '@/enum'
 import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '@/types'
 
 export type IUseRentoraApiApartmentServices = IBaseUseQuery<IRentoraApiClientApartmentServiceResponse['data']>
@@ -10,5 +11,7 @@ export type IRentoraApiClientApartmentServiceResponse = IRentoraApiClientBaseRes
 export type IApartmentService = {
   id: string
   serviceName: string
+  isActive: boolean
+  category: ServiceCategory
   price: number
 }

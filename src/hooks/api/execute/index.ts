@@ -1,3 +1,4 @@
+export * from './apartment-service'
 export * from './supply'
 export * from './useRentoraApiAuthenticate'
 export * from './useRentoraApiContractTerminate'

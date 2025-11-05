@@ -5,7 +5,7 @@ import type { TTabApartmentSetting } from '@/types'
 import ApartmentBuildingSetting from './ApartmentBuildingSetting'
 import ApartmentFinancialSetting from './ApartmentFinancialSetting'
 import ApartmentInformationSetting from './ApartmentInformationSetting'
-// import ApartmentMainServiceSetting from './ApartmentMainServiceSetting'
+import { ApartmentMainServiceSetting } from './ApartmentServiceSetting'
 // import ApartmentPaymentSetting from './ApartmentPaymentSetting'
 import ApartmentUtilitySetting from './ApartmentUtilitySetting'
 
@@ -13,7 +13,7 @@ const ApartmentSettingBody = () => {
   return (
     <div className="w-full">
       <Tabs defaultValue="information" className="w-full">
-        <TabsList className="border-theme-secondary-300 bg-theme-light desktop:grid-cols-4 grid h-auto w-full grid-cols-2 gap-1 border p-2 shadow-sm">
+        <TabsList className="border-theme-secondary-300 bg-theme-light desktop:grid-cols-5 grid h-auto w-full grid-cols-2 gap-1 border p-2 shadow-sm">
           {TAB_APARTMNET_SETTING_LIST.map((tab: TTabApartmentSetting) => (
             <TabsTrigger
               key={tab.value}
@@ -34,9 +34,9 @@ const ApartmentSettingBody = () => {
           <ApartmentFinancialSetting />
         </TabsContent>
 
-        {/* <TabsContent value="services" className="mt-6">
+        <TabsContent value="services" className="mt-6">
           <ApartmentMainServiceSetting />
-        </TabsContent> */}
+        </TabsContent>
 
         <TabsContent value="utilities" className="mt-6">
           <ApartmentUtilitySetting />
