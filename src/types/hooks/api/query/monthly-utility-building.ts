@@ -1,5 +1,6 @@
 import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '@/types'
 
+//data
 export type IMonthlyUtilityBuilding = {
   buildingID: string
   buildingName: string
@@ -16,9 +17,12 @@ export type IUtilityBuildingData = {
   totalUsageAmount: number
 }
 
+//params
 export type IMonthlyUtilityBuldingParams = {
   apartmentId: string
 }
 
-export type IRentoraApiClietMonthlyUtilityBuildingResponse = IRentoraApiClientBaseResponse<IMonthlyUtilityBuilding>
+export type IRentoraApiClietMonthlyUtilityBuildingResponse = IRentoraApiClientBaseResponse<
+  Array<IMonthlyUtilityBuilding>
+>
 export type IUseRentoraApiMonthlyUtilityBuilding = IBaseUseQuery<IRentoraApiClietMonthlyUtilityBuildingResponse['data']>

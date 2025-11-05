@@ -12,9 +12,9 @@ import {
   LoadingPage,
 } from '@/components/ui'
 import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks/api/queries/useRentoraApiMonthlyUtilityBuilding'
-import { type IUtilityBuildingData } from '@/types'
+import { type IMonthlyUtilityBuilding, type IUtilityBuildingData } from '@/types'
 
-const MonthlyUtilityBuildingElectChart = () => {
+const MonthlyUtilityBuildingElectChart = ({ utilityGroupName }: IMonthlyUtilityBuilding) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
 
   const { data: monthlyUtilityBuilding, isLoading: monthlyUtiltiyBuildingLoading } =
@@ -30,9 +30,7 @@ const MonthlyUtilityBuildingElectChart = () => {
     return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
   }
 
-  const electricUtility: Array<IUtilityBuildingData> = monthlyUtilityBuilding.utilityGroupName?.electric?.map(
-    (item) => item || [],
-  )
+  const electricUtility: Array<IUtilityBuildingData> = utilityGroupName.electric
 
   const chartConfig = {
     totalUsageAmount: {

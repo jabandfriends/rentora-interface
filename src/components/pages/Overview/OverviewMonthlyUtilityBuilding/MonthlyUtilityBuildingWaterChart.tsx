@@ -12,7 +12,7 @@ import {
   LoadingPage,
 } from '@/components/ui'
 import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks/api/queries/useRentoraApiMonthlyUtilityBuilding'
-import { type IUtilityBuildingData } from '@/types'
+import { type IMonthlyUtilityBuilding } from '@/types'
 
 const MonthlyUtilityBuildingWaterChart = () => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
@@ -30,20 +30,20 @@ const MonthlyUtilityBuildingWaterChart = () => {
     return <EmptyPage title="Water Utility not found" description="No Water Utility you looking for." />
   }
 
-  const WaterUtility: Array<IUtilityBuildingData> =
-    monthlyUtilityBuilding.utilityGroupName?.water?.map((item) => item) || []
-
-  const chartConfig = {
-    totalUsageAmount: {
-      label: 'Total Usage Amount',
-      color: '#3b82f6',
-    },
-  } satisfies ChartConfig
+  // const chartConfig = {
+  //   totalUsageAmount: {
+  //     label: 'Total Usage Amount',
+  //     color: '#3b82f6',
+  //   },
+  // } satisfies ChartConfig
 
   return (
     <div>
       <h3> Water Utility </h3>
-      <ChartContainer config={chartConfig} className="h-64 w-64">
+      {monthlyUtilityBuilding.map((building: IMonthlyUtilityBuilding) => (
+        <h1>test</h1>
+      ))}
+      {/* <ChartContainer config={chartConfig} className="h-64 w-64">
         <BarChart accessibilityLayer data={WaterUtility}>
           <CartesianGrid vertical={false} />
           <XAxis
@@ -57,7 +57,7 @@ const MonthlyUtilityBuildingWaterChart = () => {
           <ChartLegend content={<ChartLegendContent />} />
           <Bar dataKey="totalUsageAmount" fill="#3b82f6" radius={10} />
         </BarChart>
-      </ChartContainer>
+      </ChartContainer> */}
     </div>
   )
 }
