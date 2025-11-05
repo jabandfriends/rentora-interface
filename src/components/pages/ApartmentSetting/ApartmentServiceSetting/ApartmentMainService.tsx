@@ -45,7 +45,7 @@ const ApartmentMainService = ({ isLoading, apartmentServiceList }: IApartmentMai
         <p className="text-body-2">Current Service</p>
         <Badge variant="secondary">{apartmentServiceList.length} services</Badge>
       </div>
-      <div className="desktop:grid-cols-2 grid gap-2">
+      <div className="desktop:grid-cols-4 grid gap-2">
         {apartmentServiceList.map((service: IApartmentService, index) => (
           <ApartmentMainServiceCard key={`apartment-main-service-${index}-${service.id}`} service={service} />
         ))}

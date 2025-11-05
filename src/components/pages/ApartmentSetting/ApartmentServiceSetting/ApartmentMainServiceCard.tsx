@@ -1,4 +1,4 @@
-import { Pencil, X } from 'lucide-react'
+import { Pencil } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 import toast from 'react-hot-toast'
 import type { VariantProps } from 'tailwind-variants'
@@ -48,9 +48,11 @@ const ApartmentMainServiceCard = ({ service }: IApartmentMainService) => {
     <div className="border-theme-secondary-300 hover:border-theme-primary-300 hover:bg-theme-primary-100 group flex items-center justify-between gap-1 rounded-xl border px-4 py-4 duration-200">
       <div>
         <div className="desktop:flex-row flex flex-col items-start gap-2">
-          <h4>{service.serviceName}</h4>
+          <div>
+            <h4>{service.serviceName}</h4>
+            <p className="text-body-2 text-theme-secondary capitalize">{service.category}</p>
+          </div>
           <div className="space-x-2">
-            <Badge className="capitalize">{service.category}</Badge>
             <Badge variant={isActiveBadgeVariant} className="capitalize">
               {service.isActive ? 'Active' : 'Inactive'}
             </Badge>
@@ -73,14 +75,6 @@ const ApartmentMainServiceCard = ({ service }: IApartmentMainService) => {
             <Pencil className="size-4" />
           </Button>
         </ApartmentMainServiceExecuteModal>
-
-        <Button
-          className="hover:bg-theme-error/20 hover:text-theme-error flex items-center"
-          variant="ghost"
-          size="icon"
-        >
-          <X className="size-4" />
-        </Button>
       </div>
     </div>
   )
