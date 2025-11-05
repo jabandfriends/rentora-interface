@@ -338,9 +338,17 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
   }
 
   //apartment services list
-  async apartmentServicesList(apartmentId: Maybe<string>): Promise<IRentoraApiClientApartmentServiceResponse['data']> {
+  async apartmentServicesList(
+    apartmentId: Maybe<string>,
+    activeService?: boolean,
+  ): Promise<IRentoraApiClientApartmentServiceResponse['data']> {
     const response = await this.axiosWithAuthInstance.get<IRentoraApiClientApartmentServiceResponse>(
       `/api/apartments/apartment-services/${apartmentId}`,
+      {
+        params: {
+          activeService,
+        },
+      },
     )
     return response.data.data
   }

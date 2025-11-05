@@ -5,6 +5,7 @@ export type IUseRentoraApiApartmentServices = IBaseUseQuery<IRentoraApiClientApa
 
 export type IRentoraApiApartmentServiceParams = {
   apartmentId?: string
+  activeService?: boolean
 }
 
 export type IRentoraApiClientApartmentServiceResponse = IRentoraApiClientBaseResponse<Array<IApartmentService>>
