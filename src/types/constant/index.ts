@@ -1,5 +1,6 @@
 export * from './apartment'
 export * from './apartment-form'
+export * from './apartment-setting'
 export * from './authentication-form'
 export * from './building'
 export * from './card'

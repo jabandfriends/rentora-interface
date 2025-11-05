@@ -1,6 +1,7 @@
 export * from './adhocInvoice'
 export * from './apartment'
 export * from './apartment-form'
+export * from './apartment-setting'
 export * from './contract'
 export * from './maintenance'
 export * from './monthly-invoice'
