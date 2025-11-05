@@ -1,3 +1,5 @@
+import { FileCheck } from 'lucide-react'
+
 import { Spinner } from '@/components/common'
 import { PaginationBar } from '@/components/feature'
 import { RoomCard } from '@/components/pages/Invoice'
@@ -10,6 +12,7 @@ type IMonthlyInvoiceBodyProps = {
   currentPage: number
   totalElements: number
   totalPages: number
+  selectedGenMonth: string
   handlePageChange: (page: number) => void
 }
 const MonthlyInvoiceBody = ({
@@ -19,10 +22,28 @@ const MonthlyInvoiceBody = ({
   totalElements,
   totalPages,
   handlePageChange,
+  selectedGenMonth,
 }: IMonthlyInvoiceBodyProps) => {
   if (isLoading) {
     return (
       <PageTableEmpty icon={<Spinner />} message="Loading..." description="Please wait while we load the invoices." />
+    )
+  }
+  if (!selectedGenMonth) {
+    return (
+      <PageTableEmpty
+        message="No month selected to show the invoices"
+        description="Please select a month to show the invoices"
+      />
+    )
+  }
+  if ((!data || data.length === 0) && selectedGenMonth) {
+    return (
+      <PageTableEmpty
+        icon={<FileCheck size={50} />}
+        message="Meter readings for this month are ready!"
+        description="You're almost done. Please click 'New Invoice' to create invoices for this month."
+      />
     )
   }
   if (!data || data.length === 0) {
