@@ -1,7 +1,8 @@
-import { Plus, X } from 'lucide-react'
+import { Plus } from 'lucide-react'
 
 import { Button, Card, Input, InputNumber, Label } from '@/components/common'
-import { Badge } from '@/components/ui'
+
+import ApartmentPaymentCard from './ApartmentPaymentCard'
 
 const ApartmentPaymentSetting = () => {
   return (
@@ -13,15 +14,7 @@ const ApartmentPaymentSetting = () => {
       <div className="space-y-4">
         {/* List of Current Payments */}
         <div className="flex flex-col gap-2">
-          {/* Example payment items */}
-          <Badge variant="secondary" className="flex items-center gap-1">
-            Bangkok Bank - 123456789 - John Doe
-            <X className="hover:text-destructive h-3 w-3 cursor-pointer" />
-          </Badge>
-          <Badge variant="secondary" className="flex items-center gap-1">
-            Kasikorn Bank - 987654321 - Jane Smith
-            <X className="hover:text-destructive h-3 w-3 cursor-pointer" />
-          </Badge>
+          <ApartmentPaymentCard />
         </div>
 
         {/* Add New Payment */}
