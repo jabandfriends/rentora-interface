@@ -4,8 +4,6 @@ import type { ITenant, MonthlyContractFormData } from '@/types'
 
 import ContractCondition from './ContractCondition'
 import ContractDetail from './ContractDetail'
-import ContractNavigation from './ContractNavigation'
-// import ContractIncluded from './ContractIncluded'
 import ContractTenantAndType from './ContractTenantAndType'
 
 type IContractMainInformation = {
@@ -13,15 +11,9 @@ type IContractMainInformation = {
   tenantsData: Array<ITenant>
   handleSelectTenant: (userId: string, name: string) => void
   handleSearchTenant: (value: string) => void
-  currentStep: number
-  handleStepChange: (nextStep: number) => void
-  onSubmit: (data: MonthlyContractFormData) => void
 }
 const ContractMainInformation = ({
   form,
-  currentStep,
-  handleStepChange,
-  onSubmit,
   tenantsData,
   handleSelectTenant,
   handleSearchTenant,
@@ -36,12 +28,6 @@ const ContractMainInformation = ({
       />
       <ContractDetail form={form} />
       <ContractCondition form={form} />
-      <ContractNavigation
-        currentStep={currentStep}
-        setCurrentStep={handleStepChange}
-        onSubmit={form.handleSubmit(onSubmit)}
-      />
-      {/* <ContractIncluded form={form} /> */}
     </div>
   )
 }
