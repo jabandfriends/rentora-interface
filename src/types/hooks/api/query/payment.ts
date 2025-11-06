@@ -25,6 +25,7 @@ export type IPayment = {
   unitName: string
   buildingName: string
   floorName: string
+  receiptUrl: string
 }
 
 //param
