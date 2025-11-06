@@ -46,7 +46,7 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
     setIsCollapse((prev) => !prev)
   }, [])
 
-  const handleDownload = useCallback(async () => {
+  const handleDownloadSignContractPDF = useCallback(async () => {
     if (!data) {
       return
     }
@@ -72,7 +72,7 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
 
   return (
     <Card className="justify-start rounded-2xl shadow">
-      <div className="space-y-2">
+      <div className="space-y-4">
         {/* Header */}
         <div className="border-theme-secondary-300 space-y-6 rounded-lg border p-6 shadow-sm">
           <div className="desktop:flex-row flex flex-col items-start justify-between gap-4">
@@ -84,7 +84,10 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
             </div>
             <div className="desktop:flex-col desktop:w-auto desktop:items-end flex w-full items-center justify-between gap-y-2">
               <Badge variant={contractStatusBadge}>{data.status.toUpperCase()}</Badge>
-              <ContractAction handleOpenDeleteModal={handleOpenDeleteModal} />
+              <ContractAction
+                handleDownloadContract={handleDownloadSignContractPDF}
+                handleOpenDeleteModal={handleOpenDeleteModal}
+              />
             </div>
           </div>
 
@@ -179,12 +182,21 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
 
       <div className="desktop:flex-row flex flex-col justify-between gap-y-2">
         <div className="flex items-center justify-end">
-          <Button onClick={handleCollapse}>{buttonText}</Button>
+          <Button className="desktop:w-auto w-full" onClick={handleCollapse}>
+            {buttonText}
+          </Button>
         </div>
+
+        {/* TODO : Check if have signed contract from aws if not show export sign and upload button */}
         {isCollapse && (
           <div className="flex items-center justify-end">
-            <Button variant="outline" disabled={isExporting} onClick={handleDownload}>
-              {isExporting ? <Spinner /> : 'Export Contract PDF '}
+            <Button
+              className="desktop:w-auto w-full"
+              variant="outline"
+              disabled={isExporting}
+              onClick={handleDownloadSignContractPDF}
+            >
+              {isExporting ? <Spinner /> : 'Export Contract PDF (for signature)'}
             </Button>
           </div>
         )}
