@@ -186,6 +186,8 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
             {buttonText}
           </Button>
         </div>
+
+        {/* TODO : Check if have signed contract from aws if not show export sign and upload button */}
         {isCollapse && (
           <div className="flex items-center justify-end">
             <Button
