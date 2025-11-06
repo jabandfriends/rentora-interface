@@ -1,11 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CloudUpload, X } from 'lucide-react'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
 
-import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Spinner } from '@/components/common'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  Spinner,
+} from '@/components/common'
 import {
   Dialog,
   DialogClose,
@@ -29,6 +39,10 @@ import type { IApartmentPayment, IUpdateApartmentPaymentServiceRequestPayload } 
 import { getErrorMessage } from '@/utilities'
 
 const promptPayQRCodeSchema = z.object({
+  bankName: z.string().optional(),
+  bankAccountNumber: z.string().optional(),
+  accountHolderName: z.string().optional(),
+  promptpayNumber: z.string().optional(),
   qrCode: z.array(z.instanceof(File)).max(1, {
     message: 'Only 1 file is allowed',
   }),
@@ -52,14 +66,31 @@ const ApartmentPaymentUploadQRModal = ({
     },
     mode: 'onChange',
   })
+
   const { mutateAsync: updateApartmentPayment, isPending: isUpdateApartmentPaymentPending } =
     useRentoraApiUpdateApartmentPayment()
+
+  useEffect(() => {
+    if (apartmentPayment) {
+      form.reset({
+        bankName: apartmentPayment.bankName,
+        bankAccountNumber: apartmentPayment.bankAccountNumber,
+        accountHolderName: apartmentPayment.accountHolderName,
+        promptpayNumber: apartmentPayment.promptpayNumber ?? '',
+        qrCode: [],
+      })
+    }
+  }, [apartmentPayment, form])
 
   const handleSubmit = useCallback(
     async (values: PromptPayQRCodeValues) => {
       const payload: IUpdateApartmentPaymentServiceRequestPayload = {
         paymentId: apartmentPayment.apartmentPaymentId,
         promptPayImageFile: values.qrCode[0],
+        bankName: values.bankName,
+        bankAccountNumber: values.bankAccountNumber,
+        accountHolderName: values.accountHolderName,
+        promptpayNumber: values.promptpayNumber,
       }
       try {
         await updateApartmentPayment(payload)
@@ -74,17 +105,71 @@ const ApartmentPaymentUploadQRModal = ({
   )
 
   const isButtonDisabled = useMemo(() => {
-    return isUpdateApartmentPaymentPending || !form.formState.isValid || !form.formState.isDirty
-  }, [isUpdateApartmentPaymentPending, form.formState.isValid, form.formState.isDirty])
+    return isUpdateApartmentPaymentPending
+  }, [isUpdateApartmentPaymentPending])
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Upload PromptPay QR Code</DialogTitle>
-          <DialogDescription>Upload your PromptPay QR code to your apartment payment setting.</DialogDescription>
+          <DialogTitle>Edit Apartment Payment</DialogTitle>
+          <DialogDescription>Edit your apartment payment setting.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form className="space-y-4 py-4" onSubmit={form.handleSubmit(handleSubmit)}>
+            <FormField
+              control={form.control}
+              name="bankName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bank Name</FormLabel>
+                  <FormControl>
+                    <Input maxLength={50} placeholder="Enter bank name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="bankAccountNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bank Account Number</FormLabel>
+                  <FormControl>
+                    <Input maxLength={12} placeholder="Enter bank account number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="accountHolderName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Holder Name</FormLabel>
+                  <FormControl>
+                    <Input maxLength={50} placeholder="Enter account holder name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="promptpayNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>PromptPay Number</FormLabel>
+                  <FormControl>
+                    <Input maxLength={10} placeholder="Enter promptpay number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="qrCode"
@@ -143,7 +228,7 @@ const ApartmentPaymentUploadQRModal = ({
               </DialogClose>
 
               <Button className="desktop:w-auto w-full" type="submit" disabled={isButtonDisabled}>
-                {isUpdateApartmentPaymentPending ? <Spinner /> : 'Upload PromptPay QR Code'}
+                {isUpdateApartmentPaymentPending ? <Spinner /> : 'Save Changes'}
               </Button>
             </DialogFooter>
           </form>
