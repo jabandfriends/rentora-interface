@@ -1,4 +1,8 @@
+import { Search } from 'lucide-react'
+
+import { Spinner } from '@/components/common'
 import { PaginationBar } from '@/components/feature'
+import { EmptyPage, PageTableEmpty } from '@/components/ui'
 import type { IPaginate, ITenant } from '@/types'
 
 import TenantCard from './TenantCard'
@@ -10,6 +14,7 @@ type ITenantSelectModalData = {
   isLoadingTenants: boolean
   currentPage: number
   handlePageChange: (page: number) => void
+  isSearched: boolean
 } & Pick<IPaginate, 'totalPages' | 'totalElements'>
 const TenantSelectModalData = ({
   tenantsData,
@@ -20,7 +25,25 @@ const TenantSelectModalData = ({
   handlePageChange,
   totalPages,
   totalElements,
+  isSearched,
 }: ITenantSelectModalData) => {
+  if (isLoadingTenants) {
+    return (
+      <PageTableEmpty icon={<Spinner />} message="Loading..." description="Please wait while we load the tenants." />
+    )
+  }
+  if (isSearched && !isLoadingTenants && tenantsData.length === 0) {
+    return (
+      <EmptyPage
+        icon={<Search />}
+        title="No tenants found"
+        description="Please try again later or check your filters."
+      />
+    )
+  }
+  if (!tenantsData || tenantsData.length === 0) {
+    return <EmptyPage title="No tenants found" description="Please try again later or check your filters." />
+  }
   return (
     <div>
       <div className="grid grid-cols-2 gap-2">

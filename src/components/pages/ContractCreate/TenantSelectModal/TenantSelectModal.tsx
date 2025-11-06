@@ -5,6 +5,7 @@ import {
   type PropsWithChildren,
   type SetStateAction,
   useCallback,
+  useMemo,
   useState,
 } from 'react'
 import { useForm } from 'react-hook-form'
@@ -70,6 +71,10 @@ const TenantSelectModal = ({ selectedTenantId, onSelectTenant, onOpenChange, isO
   const handleNewTenant = useCallback(() => {
     navigate(ROUTES.tenantCreate.getPath(apartmentId))
   }, [navigate, apartmentId])
+
+  const isSearched = useMemo(() => {
+    return !!debouncedSearch
+  }, [debouncedSearch])
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -93,6 +98,7 @@ const TenantSelectModal = ({ selectedTenantId, onSelectTenant, onOpenChange, isO
           handlePageChange={handlePageChange}
           totalPages={totalPages}
           totalElements={totalElements}
+          isSearched={isSearched}
         />
       </DialogContent>
     </Dialog>

@@ -22,7 +22,7 @@ const TenantCard = ({ tenant, onSelectTenant, selectedTenantId }: ITenantCard) =
         'border-theme-secondary-300 hover:bg-theme-primary-100 hover:border-theme-primary-300 space-y-2 rounded-lg border px-4 py-3 duration-200',
         [
           selectedTenantId === tenant.userId &&
-          'bg-theme-primary-100/80 text-theme-primary-600 border-theme-primary-300',
+            'bg-theme-primary-100/80 text-theme-primary-600 border-theme-primary-300',
         ],
       )}
     >
