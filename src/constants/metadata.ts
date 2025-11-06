@@ -3,6 +3,7 @@ import type {
   IInvoiceListMetadata,
   IMaintenanceListMetadata,
   IMonthlyInvoiceMetaData,
+  IMonthlyUtilityBuildingMetadata,
   IOverdueInvoiceListMetadata,
   IPaymentListMetadata,
   IReportUtilityListMetadata,
@@ -78,4 +79,8 @@ export const DEFAULT_PAYMENT_LIST_METADATA: IPaymentListMetadata = {
   totalPaymentsComplete: 0,
   totalPaymentsPending: 0,
   totalPaymentsFailed: 0,
+}
+
+export const DEFAULT_MONTHLY_UTILITY_BUILDING_METADATA: IMonthlyUtilityBuildingMetadata = {
+  totalBuildings: 0,
 }

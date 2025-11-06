@@ -1,7 +1,7 @@
 import type {
+  IBasePaginateQueryResult,
   IBaseUseQuery,
   IRentoraApiClientBasePaginateWithMetadataResponse,
-  IRentoraApiClientBaseResponse,
 } from '@/types'
 
 //data
@@ -42,12 +42,13 @@ export type IuseRentoraApiMonthlyUtilityBuildingList = IBaseUseQuery<
   IRentoraApiMonthlyUtilityBuildingListResponse['data']
 >
 
+//response
 export type IRentoraApiMonthlyUtilityBuildingListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
   IMonthlyUtilityBuilding,
   IMonthlyUtilityBuildingMetadata
 >
 
-export type IRentoraApiClietMonthlyUtilityBuildingResponse = IRentoraApiClientBaseResponse<
-  Array<IMonthlyUtilityBuilding>
+//hook
+export type IUseRentoraApiMonthlyUtilityBuilding = IBasePaginateQueryResult<
+  IRentoraApiMonthlyUtilityBuildingListResponse['data']
 >
-export type IUseRentoraApiMonthlyUtilityBuilding = IBaseUseQuery<IRentoraApiClietMonthlyUtilityBuildingResponse['data']>

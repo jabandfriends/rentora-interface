@@ -2,10 +2,9 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { RENTORA_API_BASE_URL } from '@/config'
-import { DEFAULT_APARTMENT_LIST_DATA, DEFAULT_UNIT_LIST_METADATA } from '@/constants'
+import { DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA, DEFAULT_MONTHLY_UTILITY_BUILDING_METADATA } from '@/constants'
 import { RentoraApiQueryClient } from '@/hooks'
 import type {
-  IRentoraApiClietMonthlyUtilityBuildingResponse,
   IRentoraApiMonthlyUtilityBuildingListResponse,
   IRentoraApiMonthlyUtilityDetailParams,
   IUseRentoraApiMonthlyUtilityBuilding,
@@ -17,7 +16,7 @@ export const useRentoraApiMonthlyUtilityBuildings = (props: {
 }): IUseRentoraApiMonthlyUtilityBuilding => {
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
 
-  const { data: rawData, ...rest }: UseQueryResult<IRentoraApiClietMonthlyUtilityBuildingResponse['data']> = useQuery({
+  const { data: rawData, ...rest }: UseQueryResult<IRentoraApiMonthlyUtilityBuildingListResponse['data']> = useQuery({
     queryKey: [
       rentoraApiQueryClient.key.monthlyUtilityBuilding,
       props.apartmentId,
@@ -44,8 +43,8 @@ export const useRentoraApiMonthlyUtilityBuildings = (props: {
   const result: IRentoraApiMonthlyUtilityBuildingListResponse['data'] = useMemo(() => {
     return {
       data: rawData?.data ?? ([] as IRentoraApiMonthlyUtilityBuildingListResponse['data']['data']),
-      pagination: rawData?.pagination ?? DEFAULT_APARTMENT_LIST_DATA,
-      metadata: rawData?.metadata ?? DEFAULT_UNIT_LIST_METADATA,
+      pagination: rawData?.pagination ?? DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA,
+      metadata: rawData?.metadata ?? DEFAULT_MONTHLY_UTILITY_BUILDING_METADATA,
     }
   }, [rawData])
 
