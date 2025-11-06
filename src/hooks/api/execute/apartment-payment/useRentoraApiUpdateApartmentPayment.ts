@@ -15,7 +15,7 @@ export const useRentoraApiUpdateApartmentPayment = (): IUseRentoraApiUpdateApart
     mutationFn: async (payload: IUpdateApartmentPaymentServiceRequestPayload) => {
       const { promptPayImageFile, ...rest } = payload
       const result: IUpdateApartmentPaymentServiceResponse['data'] =
-        await rentoraApiExecuteClient.updateApartmentPaymentService(payload.paymentId, {
+        await rentoraApiExecuteClient.updateApartmentPaymentService(payload.paymentId!, {
           ...rest,
           ...(promptPayImageFile && { promptPayFilename: promptPayImageFile.name }),
         })

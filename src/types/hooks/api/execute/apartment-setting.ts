@@ -20,7 +20,7 @@ export type IUseRentoraApiCreateApartmentService = IBaseUseMutation<void, ICreat
 export type IUseRentoraApiUpdateApartmentService = IBaseUseMutation<void, IUpdateApartmentServiceRequestPayload>
 
 //-----payment service-----
-export type IUpdateApartmentPaymentServiceRequestPayload = {
+export type IUpdateApartmentPaymentServiceRequestPayload = Partial<{
   paymentId: string
   promptPayImageFile?: File
   promptPayFilename?: string
@@ -29,7 +29,7 @@ export type IUpdateApartmentPaymentServiceRequestPayload = {
   accountHolderName: string
   promptpayNumber: string
   instructions: string
-}
+}>
 //response
 export type IUpdateApartmentPaymentServiceResponse = IRentoraApiClientBaseResponse<{
   apartmentPaymentId: string
