@@ -1,11 +1,12 @@
-import { Ellipsis, Pencil, Trash2 } from 'lucide-react'
+import { Ellipsis, FileText, Pencil, Trash2 } from 'lucide-react'
 
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/common'
 
 type IContractAction = {
   handleOpenDeleteModal: () => void
+  handleDownloadContract: () => void
 }
-const ContractAction = ({ handleOpenDeleteModal }: IContractAction) => {
+const ContractAction = ({ handleOpenDeleteModal, handleDownloadContract }: IContractAction) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -14,6 +15,9 @@ const ContractAction = ({ handleOpenDeleteModal }: IContractAction) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={handleDownloadContract}>
+          <FileText className="text-theme-primary" /> Download Contract (For Signature)
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={handleOpenDeleteModal}>
           <Trash2 className="text-theme-error" /> Terminate contract
         </DropdownMenuItem>
