@@ -16,8 +16,8 @@ import {
   TableRow,
 } from '@/components/ui'
 import { PAYMENT_TABLE_HEADER } from '@/constants'
-import { PaymentStatus } from '@/enum'
-import type { IPayment } from '@/types'
+import { PaymentStatus, VerifiedStatus } from '@/enum'
+import type { IPayment, Maybe } from '@/types'
 import { formatCurrency } from '@/utilities'
 
 import PaymentAction from './PaymentAction'
@@ -45,9 +45,17 @@ const PaymentTable = ({
   const [isPaymentUpdateModalOpen, setIsPaymentUpdateModalOpen]: [boolean, Dispatch<SetStateAction<boolean>>] =
     useState(false)
 
-  const handleOpenPaymentUpdateModal = useCallback(() => {
-    setIsPaymentUpdateModalOpen(true)
-  }, [])
+  const [selectedPayment, setSelectedPayment]: [Maybe<IPayment>, Dispatch<SetStateAction<Maybe<IPayment>>>] =
+    useState<Maybe<IPayment>>(null)
+
+  const handleOpenPaymentUpdateModal = useCallback(
+    (payment: IPayment) => {
+      if (!payment) return
+      setSelectedPayment(payment)
+      setIsPaymentUpdateModalOpen(true)
+    },
+    [setSelectedPayment, setIsPaymentUpdateModalOpen],
+  )
 
   const paymentStatusVariant = useCallback((status: string): VariantProps<typeof Badge>['variant'] => {
     switch (status) {
@@ -61,18 +69,19 @@ const PaymentTable = ({
         return 'default'
     }
   }, [])
-  // const verificationStatusVariant = useCallback((status: string): VariantProps<typeof Badge>['variant'] => {
-  //   switch (status) {
-  //     case VerifiedStatus.VERIFIED:
-  //       return 'success'
-  //     case VerifiedStatus.PENDING:
-  //       return 'warning'
-  //     case VerifiedStatus.REJECTED:
-  //       return 'error'
-  //     default:
-  //       return 'default'
-  //   }
-  // }, [])
+
+  const verificationStatusVariant = useCallback((status: string): VariantProps<typeof Badge>['variant'] => {
+    switch (status) {
+      case VerifiedStatus.VERIFIED:
+        return 'success'
+      case VerifiedStatus.PENDING:
+        return 'warning'
+      case VerifiedStatus.REJECTED:
+        return 'error'
+      default:
+        return 'default'
+    }
+  }, [])
 
   if (isLoading) return <PageTableLoading />
   if (isSearched && data.length === 0) {
@@ -83,7 +92,11 @@ const PaymentTable = ({
   }
   return (
     <div className="flex flex-col gap-y-3 rounded-lg">
-      <PaymentUpdateModal open={isPaymentUpdateModalOpen} onOpenChange={setIsPaymentUpdateModalOpen} />
+      <PaymentUpdateModal
+        selectedPayment={selectedPayment}
+        open={isPaymentUpdateModalOpen}
+        onOpenChange={setIsPaymentUpdateModalOpen}
+      />
       <Table>
         <TableHeader>
           <TableRow>
@@ -104,13 +117,13 @@ const PaymentTable = ({
                   {item.paymentStatus || <FieldEmpty />}
                 </Badge>
               </TableCell>
-              {/* <TableCell>
+              <TableCell>
                 <Badge variant={verificationStatusVariant(item.verificationStatus)} className="capitalize">
                   {item.verificationStatus || <FieldEmpty />}
                 </Badge>
-              </TableCell> */}
+              </TableCell>
               <TableCell>
-                <PaymentAction onOpenPaymentUpdateModal={handleOpenPaymentUpdateModal} />
+                <PaymentAction onOpenPaymentUpdateModal={() => handleOpenPaymentUpdateModal(item)} />
               </TableCell>
             </TableRow>
           ))}

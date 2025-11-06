@@ -1,9 +1,23 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CloudUpload, X } from 'lucide-react'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
-import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/common'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/common'
 import {
   Dialog,
   DialogClose,
@@ -22,24 +36,62 @@ import {
   FileUploadTrigger,
 } from '@/components/feature'
 import { paymentUpdateFormSchema } from '@/constants'
-import type { PaymentUpdateFormValues } from '@/types'
+import { PaymentStatus, VerifiedStatus } from '@/enum'
+import { useRentoraApiUpdatePayment } from '@/hooks'
+import type { IPayment, IUpdatePaymentRequestPayload, Maybe, PaymentUpdateFormValues } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
 type IPaymentUpdateModalProps = {
+  selectedPayment: Maybe<IPayment>
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-const PaymentUpdateModal = ({ open, onOpenChange }: IPaymentUpdateModalProps) => {
+const PaymentUpdateModal = ({ selectedPayment, open, onOpenChange }: IPaymentUpdateModalProps) => {
   const form = useForm<PaymentUpdateFormValues>({
     resolver: zodResolver(paymentUpdateFormSchema),
     defaultValues: {
       receiptImageFile: [],
+      verificationStatus: VerifiedStatus.PENDING,
+      paymentStatus: PaymentStatus.PENDING,
     },
   })
 
-  const handleSubmit = useCallback(async (values: PaymentUpdateFormValues) => {
-    console.log(values)
-  }, [])
+  useEffect(() => {
+    if (selectedPayment) {
+      form.reset({
+        receiptImageFile: [],
+        verificationStatus: selectedPayment.verificationStatus,
+        paymentStatus: selectedPayment.paymentStatus,
+      })
+    }
+  }, [selectedPayment, form])
+
+  const { mutateAsync: updatePayment, isPending: isUpdatePaymentPending } = useRentoraApiUpdatePayment()
+
+  const handleSubmit = useCallback(
+    async (values: PaymentUpdateFormValues) => {
+      const payload: IUpdatePaymentRequestPayload = {
+        paymentId: selectedPayment?.paymentId,
+        receiptFile: values.receiptImageFile[0],
+        verificationStatus: values.verificationStatus,
+        paymentStatus: values.paymentStatus,
+      }
+      try {
+        await updatePayment(payload)
+        toast.success('Payment updated successfully')
+        onOpenChange(false)
+        form.reset()
+      } catch (error) {
+        toast.error(getErrorMessage(error))
+      }
+    },
+    [selectedPayment, onOpenChange, form, updatePayment],
+  )
+
+  const isButtonDisabled = useMemo(() => {
+    return isUpdatePaymentPending || !form.formState.isValid || !form.formState.isDirty
+  }, [isUpdatePaymentPending, form.formState.isValid, form.formState.isDirty])
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -89,7 +141,7 @@ const PaymentUpdateModal = ({ open, onOpenChange }: IPaymentUpdateModalProps) =>
                                   </Button>
                                 </FileUploadItemDelete>
                               </div>
-                              <FileUploadItemPreview className="w-68 h-fit" />
+                              <FileUploadItemPreview className="desktop:w-68 h-fit w-48" />
                             </div>
                           </FileUploadItem>
                         ))}
@@ -100,13 +152,66 @@ const PaymentUpdateModal = ({ open, onOpenChange }: IPaymentUpdateModalProps) =>
                 </FormItem>
               )}
             />
+            <div className="grid grid-cols-2 gap-x-2">
+              <FormField
+                control={form.control}
+                name="paymentStatus"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Payment Status</FormLabel>
+                    <FormControl>
+                      <Select key={field.value} onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger className="w-full capitalize">
+                          <SelectValue placeholder="Select Payment Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.values(PaymentStatus).map((status) => (
+                            <SelectItem className="capitalize" key={status} value={status}>
+                              {status}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="verificationStatus"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Verification Status</FormLabel>
+                    <FormControl>
+                      <Select key={field.value} onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger className="w-full capitalize">
+                          <SelectValue placeholder="Select Verification Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.values(VerifiedStatus).map((status) => (
+                            <SelectItem className="capitalize" key={status} value={status}>
+                              {status}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button className="desktop:w-auto w-full" type="button" variant="outline">
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit">Upload</Button>
+              <Button className="desktop:w-auto w-full" type="submit" disabled={isButtonDisabled}>
+                Upload
+              </Button>
             </DialogFooter>
           </form>
         </Form>
