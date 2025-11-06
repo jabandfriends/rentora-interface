@@ -1,3 +1,4 @@
+export * from './ApartmentSetting'
 export * from './MonthlyInvoice'
 export * from './Payment'
 export * from './Supplies'

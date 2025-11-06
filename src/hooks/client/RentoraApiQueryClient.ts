@@ -7,6 +7,7 @@ import type {
   IRentoraApiClientAllUnitMonthlyInvoiceStatusResponse,
   IRentoraApiClientApartmentDetailResponse,
   IRentoraApiClientApartmentListResponse,
+  IRentoraApiClientApartmentPaymentResponse,
   IRentoraApiClientApartmentServiceResponse,
   IRentoraApiClientBuildingDetailResponse,
   IRentoraApiClientBuildingListResponse,
@@ -98,6 +99,9 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
 
     //monthly invoices with full details
     monthlyInvoiceListWithFullDetails: 'MONTHLY_INVOICE_LIST_WITH_FULL_DETAILS',
+
+    //get apartment payment
+    apartmentPayment: 'APARTMENT_PAYMENT',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -477,6 +481,14 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
       {
         params,
       },
+    )
+    return response.data.data
+  }
+
+  //get apartment payment
+  async apartmentPayment(apartmentId: Maybe<string>): Promise<IRentoraApiClientApartmentPaymentResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientApartmentPaymentResponse>(
+      `/api/apartments/${apartmentId}/payment`,
     )
     return response.data.data
   }
