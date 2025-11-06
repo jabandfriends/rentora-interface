@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useDebounce } from '@uidotdev/usehooks'
 import { format } from 'date-fns'
 import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
 import { useForm, type UseFormReturn } from 'react-hook-form'
@@ -7,8 +6,8 @@ import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Card, Form } from '@/components/common'
-import { DEFAULT_TENANT_LIST_DATA, MONTHLY_CONTRACT_SCHEMA, ROUTES } from '@/constants'
-import { useRentoraApiCreateContract, useRentoraApiTenantList } from '@/hooks'
+import { MONTHLY_CONTRACT_SCHEMA, ROUTES } from '@/constants'
+import { useRentoraApiCreateContract } from '@/hooks'
 import type { ICreateContractRequestPayload, MonthlyContractFormData } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
@@ -18,9 +17,6 @@ import { ContractReview } from './ContractReview'
 import ContractStartMeter from './ContractStartMeter'
 
 const MonthlyContractBody = () => {
-  const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
-    DEFAULT_TENANT_LIST_DATA.page,
-  )
   const [currentStep, setCurrentStep]: [number, Dispatch<SetStateAction<number>>] = useState(1)
   const navigate: NavigateFunction = useNavigate()
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
@@ -31,32 +27,6 @@ const MonthlyContractBody = () => {
     isPending: isCreatingContract,
     isSuccess: isContractCreated,
   } = useRentoraApiCreateContract({ apartmentId })
-
-  const { watch, setValue } = useForm({
-    defaultValues: {
-      search: '',
-    },
-  })
-
-  const [search]: [string] = watch(['search'])
-
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
-  const { data: tenantsData } = useRentoraApiTenantList({
-    apartmentId: apartmentId,
-    params: {
-      page: currentPage,
-      size: DEFAULT_TENANT_LIST_DATA.size,
-      name: debouncedSearch,
-    },
-  })
-
-  const handleSearchTenant = useCallback(
-    (value: string) => {
-      setCurrentPage(DEFAULT_TENANT_LIST_DATA.page)
-      setValue('search', value)
-    },
-    [setValue],
-  )
 
   const form: UseFormReturn<MonthlyContractFormData> = useForm<MonthlyContractFormData>({
     resolver: zodResolver(MONTHLY_CONTRACT_SCHEMA),
@@ -160,14 +130,7 @@ const MonthlyContractBody = () => {
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {currentStep === 1 && (
-            <ContractMainInformation
-              form={form}
-              tenantsData={tenantsData}
-              handleSelectTenant={handleSelectTenant}
-              handleSearchTenant={handleSearchTenant}
-            />
-          )}
+          {currentStep === 1 && <ContractMainInformation form={form} handleSelectTenant={handleSelectTenant} />}
 
           {currentStep === 2 && <ContractStartMeter form={form} />}
           {currentStep === 3 && <ContractReview form={form} />}
