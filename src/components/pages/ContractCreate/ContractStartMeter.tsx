@@ -3,15 +3,10 @@ import type { UseFormReturn } from 'react-hook-form'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, InputNumber } from '@/components/common'
 import type { MonthlyContractFormData } from '@/types'
 
-import ContractNavigation from './ContractNavigation'
-
 type IContractStartMeter = {
   form: UseFormReturn<MonthlyContractFormData>
-  currentStep: number
-  handleStepChange: (nextStep: number) => void
-  onSubmit: (data: MonthlyContractFormData) => void
 }
-const ContractStartMeter = ({ form, currentStep, handleStepChange, onSubmit }: IContractStartMeter) => {
+const ContractStartMeter = ({ form }: IContractStartMeter) => {
   return (
     <div className="space-y-4">
       {/* Step 2: Meter Start Readings */}
@@ -52,11 +47,6 @@ const ContractStartMeter = ({ form, currentStep, handleStepChange, onSubmit }: I
           />
         </div>
       </div>
-      <ContractNavigation
-        currentStep={currentStep}
-        setCurrentStep={handleStepChange}
-        onSubmit={form.handleSubmit(onSubmit)}
-      />
     </div>
   )
 }

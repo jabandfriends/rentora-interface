@@ -13,6 +13,7 @@ import type { ICreateContractRequestPayload, MonthlyContractFormData } from '@/t
 import { getErrorMessage } from '@/utilities'
 
 import ContractMainInformation from './ContractMainInformation'
+import ContractNavigation from './ContractNavigation'
 import { ContractReview } from './ContractReview'
 import ContractStartMeter from './ContractStartMeter'
 
@@ -25,7 +26,11 @@ const MonthlyContractBody = () => {
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
 
   //api to create contract
-  const { mutateAsync: createContract } = useRentoraApiCreateContract({ apartmentId })
+  const {
+    mutateAsync: createContract,
+    isPending: isCreatingContract,
+    isSuccess: isContractCreated,
+  } = useRentoraApiCreateContract({ apartmentId })
 
   const { watch, setValue } = useForm({
     defaultValues: {
@@ -72,46 +77,43 @@ const MonthlyContractBody = () => {
       electricMeterStart: '',
     },
   })
-  const handleSecondStepValidation = useCallback(
-    async (nextStep: number) => {
-      const isValid: boolean = await form.trigger(['waterMeterStart', 'electricMeterStart'])
-      if (!isValid) {
-        toast.error('Please fill or fix the following fields')
-        return
-      }
-      setCurrentStep(nextStep)
-    },
-    [form],
-  )
-  //change step
-  const handleFirstStepValidation = useCallback(
-    async (nextStep: number) => {
-      // only validate if moving forward
-      if (nextStep > currentStep) {
-        const isValid: boolean = await form.trigger([
-          'unitId',
-          'tenantId',
-          'rentalType',
-          'rentalPrice',
-          'termsAndConditions',
-          'specialConditions',
-          'autoRenewal',
-          'renewalNoticeDays',
-          'documentUrl',
-          'startDate',
-          'endDate',
-        ])
-        if (!isValid) {
-          toast.error('Please fill or fix the following fields')
-          return
-        }
-      }
 
-      // if valid or going backward, allow step change
-      setCurrentStep(nextStep)
-    },
-    [form, currentStep],
-  )
+  //go back step
+  const handlePreviousStep = useCallback(() => {
+    setCurrentStep(currentStep - 1)
+  }, [currentStep])
+
+  //change step
+  const handleFirstStepValidation = useCallback(async () => {
+    // only validate if moving forward
+    const isValid: boolean = await form.trigger([
+      'unitId',
+      'tenantId',
+      'rentalType',
+      'rentalPrice',
+      'termsAndConditions',
+      'specialConditions',
+      'autoRenewal',
+      'renewalNoticeDays',
+      'documentUrl',
+      'startDate',
+      'endDate',
+    ])
+    if (!isValid) {
+      toast.error('Please fill or fix the following fields')
+      return
+    }
+    setCurrentStep(2)
+  }, [form])
+
+  const handleSecondStepValidation = useCallback(async (): Promise<void> => {
+    const isValid: boolean = await form.trigger(['waterMeterStart', 'electricMeterStart'])
+    if (!isValid) {
+      toast.error('Please fill or fix the following fields')
+      return
+    }
+    setCurrentStep(3)
+  }, [form])
 
   const handleSelectTenant = useCallback(
     (userId: string, name: string) => {
@@ -160,9 +162,6 @@ const MonthlyContractBody = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {currentStep === 1 && (
             <ContractMainInformation
-              currentStep={currentStep}
-              handleStepChange={handleFirstStepValidation}
-              onSubmit={onSubmit}
               form={form}
               tenantsData={tenantsData}
               handleSelectTenant={handleSelectTenant}
@@ -170,15 +169,16 @@ const MonthlyContractBody = () => {
             />
           )}
 
-          {currentStep === 2 && (
-            <ContractStartMeter
-              currentStep={currentStep}
-              handleStepChange={handleSecondStepValidation}
-              onSubmit={onSubmit}
-              form={form}
-            />
-          )}
-          {currentStep === 3 && <ContractReview currentStep={currentStep} onSubmit={onSubmit} form={form} />}
+          {currentStep === 2 && <ContractStartMeter form={form} />}
+          {currentStep === 3 && <ContractReview form={form} />}
+          <ContractNavigation
+            currentStep={currentStep}
+            handleFirstStepValidation={handleFirstStepValidation}
+            handleSecondStepValidation={handleSecondStepValidation}
+            handlePreviousStep={handlePreviousStep}
+            isCreatingContract={isCreatingContract}
+            isContractCreated={isContractCreated}
+          />
         </form>
       </Form>
     </Card>
