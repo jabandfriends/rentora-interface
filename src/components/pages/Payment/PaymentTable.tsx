@@ -21,6 +21,7 @@ import type { IPayment, Maybe } from '@/types'
 import { formatCurrency } from '@/utilities'
 
 import PaymentAction from './PaymentAction'
+import PaymentReceiptModal from './PaymentReceiptModal'
 import PaymentUpdateModal from './PaymentUpdateModal'
 
 type PaymentTableProps = {
@@ -42,12 +43,17 @@ const PaymentTable = ({
   totalPages,
   totalElements,
 }: PaymentTableProps) => {
+  //modals
   const [isPaymentUpdateModalOpen, setIsPaymentUpdateModalOpen]: [boolean, Dispatch<SetStateAction<boolean>>] =
     useState(false)
+  const [isPaymentReceiptModalOpen, setIsPaymentReceiptModalOpen]: [boolean, Dispatch<SetStateAction<boolean>>] =
+    useState(false)
 
+  //selected payment
   const [selectedPayment, setSelectedPayment]: [Maybe<IPayment>, Dispatch<SetStateAction<Maybe<IPayment>>>] =
     useState<Maybe<IPayment>>(null)
 
+  //handle open payment update modal
   const handleOpenPaymentUpdateModal = useCallback(
     (payment: IPayment) => {
       if (!payment) return
@@ -55,6 +61,16 @@ const PaymentTable = ({
       setIsPaymentUpdateModalOpen(true)
     },
     [setSelectedPayment, setIsPaymentUpdateModalOpen],
+  )
+
+  //handle open payment receipt modal
+  const handleOpenPaymentReceiptModal = useCallback(
+    (payment: IPayment) => {
+      if (!payment) return
+      setSelectedPayment(payment)
+      setIsPaymentReceiptModalOpen(true)
+    },
+    [setSelectedPayment, setIsPaymentReceiptModalOpen],
   )
 
   const paymentStatusVariant = useCallback((status: string): VariantProps<typeof Badge>['variant'] => {
@@ -97,6 +113,11 @@ const PaymentTable = ({
         open={isPaymentUpdateModalOpen}
         onOpenChange={setIsPaymentUpdateModalOpen}
       />
+      <PaymentReceiptModal
+        open={isPaymentReceiptModalOpen}
+        onOpenChange={setIsPaymentReceiptModalOpen}
+        receiptUrl={selectedPayment?.receiptUrl || ''}
+      />
       <Table>
         <TableHeader>
           <TableRow>
@@ -123,7 +144,11 @@ const PaymentTable = ({
                 </Badge>
               </TableCell>
               <TableCell>
-                <PaymentAction onOpenPaymentUpdateModal={() => handleOpenPaymentUpdateModal(item)} />
+                <PaymentAction
+                  payment={item}
+                  onOpenPaymentReceiptModal={() => handleOpenPaymentReceiptModal(item)}
+                  onOpenPaymentUpdateModal={() => handleOpenPaymentUpdateModal(item)}
+                />
               </TableCell>
             </TableRow>
           ))}

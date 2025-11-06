@@ -17,6 +17,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Spinner,
 } from '@/components/common'
 import {
   Dialog,
@@ -210,7 +211,7 @@ const PaymentUpdateModal = ({ selectedPayment, open, onOpenChange }: IPaymentUpd
                 </Button>
               </DialogClose>
               <Button className="desktop:w-auto w-full" type="submit" disabled={isButtonDisabled}>
-                Upload
+                {isUpdatePaymentPending ? <Spinner /> : 'Upload'}
               </Button>
             </DialogFooter>
           </form>
