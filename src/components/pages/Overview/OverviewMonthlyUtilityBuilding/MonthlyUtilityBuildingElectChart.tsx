@@ -1,5 +1,4 @@
-import { useParams } from 'react-router-dom'
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import {
   type ChartConfig,
@@ -11,26 +10,20 @@ import {
   EmptyPage,
   LoadingPage,
 } from '@/components/ui'
-import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks/api/queries/useRentoraApiMonthlyUtilityBuilding'
-import { type IMonthlyUtilityBuilding, type IUtilityBuildingData } from '@/types'
+import { type IMonthlyUtilityBuilding } from '@/types'
 
-const MonthlyUtilityBuildingElectChart = ({ utilityGroupName }: IMonthlyUtilityBuilding) => {
-  const { apartmentId } = useParams<{ apartmentId: string }>()
-
-  const { data: monthlyUtilityBuilding, isLoading: monthlyUtiltiyBuildingLoading } =
-    useRentoraApiMonthlyUtilityBuildings({
-      apartmentId: apartmentId!,
-    })
-
-  if (monthlyUtiltiyBuildingLoading) {
+type IMonthlyUtilityBuildElect = {
+  item: IMonthlyUtilityBuilding
+  isLoading: boolean
+}
+const MonthlyUtilityBuildingElectChart = ({ item, isLoading }: IMonthlyUtilityBuildElect) => {
+  if (isLoading) {
     return <LoadingPage />
   }
 
-  if (!monthlyUtilityBuilding) {
+  if (!item) {
     return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
   }
-
-  const electricUtility: Array<IUtilityBuildingData> = utilityGroupName.electric
 
   const chartConfig = {
     totalUsageAmount: {
@@ -41,9 +34,9 @@ const MonthlyUtilityBuildingElectChart = ({ utilityGroupName }: IMonthlyUtilityB
 
   return (
     <div>
-      <h3> Electric Utility </h3>
+      <h3 className="text-center text-lg font-semibold"> Electric Utility </h3>
       <ChartContainer config={chartConfig} className="h-64 w-64">
-        <BarChart accessibilityLayer data={electricUtility}>
+        <BarChart accessibilityLayer data={item.utilityGroupName.electric}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="month"
@@ -52,6 +45,7 @@ const MonthlyUtilityBuildingElectChart = ({ utilityGroupName }: IMonthlyUtilityB
             axisLine={false}
             tickFormatter={(value) => value.slice(0, 3)}
           />
+          <YAxis dataKey="totalUsageAmount" tickLine={false} tickMargin={10} axisLine={false} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
           <Bar dataKey="totalUsageAmount" fill="#3b82f6" radius={10} />

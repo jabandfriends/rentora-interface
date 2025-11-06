@@ -1,5 +1,4 @@
-import { useParams } from 'react-router-dom'
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import {
   type ChartConfig,
@@ -11,40 +10,33 @@ import {
   EmptyPage,
   LoadingPage,
 } from '@/components/ui'
-import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks/api/queries/useRentoraApiMonthlyUtilityBuilding'
 import { type IMonthlyUtilityBuilding } from '@/types'
 
-const MonthlyUtilityBuildingWaterChart = () => {
-  const { apartmentId } = useParams<{ apartmentId: string }>()
-
-  const { data: monthlyUtilityBuilding, isLoading: monthlyUtiltiyBuildingLoading } =
-    useRentoraApiMonthlyUtilityBuildings({
-      apartmentId: apartmentId!,
-    })
-
-  if (monthlyUtiltiyBuildingLoading) {
+type IMonthlyUtilityBuildWater = {
+  item: IMonthlyUtilityBuilding
+  isLoading: boolean
+}
+const MonthlyUtilityBuildingWaterChart = ({ item, isLoading }: IMonthlyUtilityBuildWater) => {
+  if (isLoading) {
     return <LoadingPage />
   }
 
-  if (!monthlyUtilityBuilding) {
+  if (!item) {
     return <EmptyPage title="Water Utility not found" description="No Water Utility you looking for." />
   }
 
-  // const chartConfig = {
-  //   totalUsageAmount: {
-  //     label: 'Total Usage Amount',
-  //     color: '#3b82f6',
-  //   },
-  // } satisfies ChartConfig
+  const chartConfig = {
+    totalUsageAmount: {
+      label: 'Total Usage Amount',
+      color: '#3b82f6',
+    },
+  } satisfies ChartConfig
 
   return (
     <div>
-      <h3> Water Utility </h3>
-      {monthlyUtilityBuilding.map((building: IMonthlyUtilityBuilding) => (
-        <h1>test</h1>
-      ))}
-      {/* <ChartContainer config={chartConfig} className="h-64 w-64">
-        <BarChart accessibilityLayer data={WaterUtility}>
+      <h3 className="text-center text-lg font-semibold"> Water Utility </h3>
+      <ChartContainer config={chartConfig} className="h-64 w-64">
+        <BarChart accessibilityLayer data={item.utilityGroupName.water}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="month"
@@ -53,11 +45,12 @@ const MonthlyUtilityBuildingWaterChart = () => {
             axisLine={false}
             tickFormatter={(value) => value.slice(0, 3)}
           />
+          <YAxis dataKey="totalUsageAmount" tickLine={false} tickMargin={10} axisLine={false} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
           <Bar dataKey="totalUsageAmount" fill="#3b82f6" radius={10} />
         </BarChart>
-      </ChartContainer> */}
+      </ChartContainer>
     </div>
   )
 }
