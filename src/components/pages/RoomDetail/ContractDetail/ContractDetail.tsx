@@ -162,7 +162,6 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
 
               <Section title="Document Information" icon={FileText}>
                 <div className="space-y-0 p-4">
-                  <InfoRow label="Document URL" value={data.documentUrl || 'Not uploaded'} />
                   <InfoRow label="Signed At" value={data.signedAt ? formatDate(data.signedAt) : 'Not signed'} />
                   <InfoRow label="Last Updated" value={formatDate(new Date(data.updatedAt), 'DD MMMM YYYY')} />
                 </div>
@@ -180,7 +179,7 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
             </>
           )}
         </div>
-        <ContractSignedUpload documentUrl={data.documentUrl} />
+        <ContractSignedUpload documentUrl={data.documentUrl} contractId={data.contractId} />
       </div>
 
       <ContractButtonGroup

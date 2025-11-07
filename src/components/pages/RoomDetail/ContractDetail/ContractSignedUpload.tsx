@@ -1,5 +1,10 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CloudUpload, Upload, X } from 'lucide-react'
+import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
+import z from 'zod'
 
 import { Button, Form, FormField, FormItem, FormLabel } from '@/components/common'
 import {
@@ -11,15 +16,50 @@ import {
   FileUploadList,
   FileUploadTrigger,
 } from '@/components/feature'
-import type { IContract } from '@/types'
+import { useRentoraApiUpdateContract } from '@/hooks'
+import type { IContract, IUpdateContractRequestPayload } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
-type IContractSignedUploadProps = Pick<IContract, 'documentUrl'>
-const ContractSignedUpload = ({ documentUrl }: IContractSignedUploadProps) => {
-  const form = useForm<{ signedContract: Array<File> }>({
+const contractSignedUploadFormSchema = z.object({
+  signedContract: z.array(z.instanceof(File)),
+})
+
+type ContractSignedUploadFormValues = z.infer<typeof contractSignedUploadFormSchema>
+
+type IContractSignedUploadProps = Pick<IContract, 'documentUrl' | 'contractId'>
+const ContractSignedUpload = ({ documentUrl, contractId }: IContractSignedUploadProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const { mutateAsync: updateContract, isPending: isUpdatingContract } = useRentoraApiUpdateContract({
+    apartmentId: apartmentId!,
+  })
+
+  const form = useForm<ContractSignedUploadFormValues>({
+    resolver: zodResolver(contractSignedUploadFormSchema),
+    mode: 'onChange',
     defaultValues: {
       signedContract: [],
     },
   })
+
+  const handleSubmit = useCallback(
+    async (data: ContractSignedUploadFormValues) => {
+      const payload: IUpdateContractRequestPayload = {
+        contractId: contractId,
+        documentFile: data.signedContract[0],
+      }
+      try {
+        await updateContract(payload)
+        toast.success('Contract signed successfully')
+      } catch (error) {
+        toast.error(getErrorMessage(error))
+      }
+    },
+    [updateContract, contractId],
+  )
+
+  const isButtonDisabled: boolean = useMemo(() => {
+    return isUpdatingContract || !form.formState.isValid || !form.formState.isDirty
+  }, [isUpdatingContract, form.formState.isValid, form.formState.isDirty])
 
   if (documentUrl) {
     return null
@@ -27,7 +67,7 @@ const ContractSignedUpload = ({ documentUrl }: IContractSignedUploadProps) => {
 
   return (
     <Form {...form}>
-      <form className="space-y-2">
+      <form className="space-y-2" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="signedContract"
@@ -75,7 +115,7 @@ const ContractSignedUpload = ({ documentUrl }: IContractSignedUploadProps) => {
           )}
         />
         <div className="flex items-center justify-end">
-          <Button type="submit" className="flex items-center gap-x-2">
+          <Button type="submit" className="flex items-center gap-x-2" disabled={isButtonDisabled}>
             <CloudUpload className="size-4" /> Upload
           </Button>
         </div>
