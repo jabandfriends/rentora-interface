@@ -1,10 +1,10 @@
 import { useDebounce } from '@uidotdev/usehooks'
-import { Wrench } from 'lucide-react'
+import { ChartColumnBig } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
-import { Card, CardHeader, CardTitle } from '@/components/common'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/common'
 import { PaginationBar, SearchBar } from '@/components/feature'
 import { PageTableEmpty, PageTableSearchEmpty } from '@/components/ui'
 import { DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA } from '@/constants'
@@ -33,7 +33,7 @@ const OverviewMonthlyUtilityBuilding = () => {
   const {
     data: monthlyUtiltyBuilding,
     isLoading,
-    metadata: { totalBuildings },
+    metadata: { totalUtilityBuildings },
   } = useRentoraApiMonthlyUtilityBuildings({
     apartmentId: apartmentId!,
     params: {
@@ -73,22 +73,25 @@ const OverviewMonthlyUtilityBuilding = () => {
     <Card className="justify-start rounded-2xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Wrench className="h-5 w-5" />
+          <ChartColumnBig className="h-5 w-5" />
           Building Utility
         </CardTitle>
       </CardHeader>
-      <SearchBar onChange={handleSearchChange} />
-      <div className="desktop:grid-cols-1 grid gap-4">
-        {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
-          <MonthlyUtilityBuildingCard key={index} item={item} isloading={isLoading} />
-        ))}
-      </div>
+      <CardContent className="space-y-4">
+        <SearchBar onChange={handleSearchChange} />
+        <div className="desktop:grid-cols-1 grid gap-4">
+          {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
+            <MonthlyUtilityBuildingCard key={index} item={item} isloading={isLoading} />
+          ))}
+        </div>
+      </CardContent>
+
       <PaginationBar
         onPageChange={handlePageChange}
         isLoading={isLoading}
         page={currentPage}
-        totalPages={totalBuildings}
-        totalElements={totalBuildings}
+        totalPages={totalUtilityBuildings}
+        totalElements={totalUtilityBuildings}
       />
     </Card>
   )

@@ -22,7 +22,7 @@ export type IUtilityBuildingData = {
 }
 
 export type IMonthlyUtilityBuildingMetadata = {
-  totalBuildings: number
+  totalUtilityBuildings: number
 }
 
 //params
