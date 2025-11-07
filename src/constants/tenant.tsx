@@ -1,6 +1,7 @@
 import { CircleAlert, CircleCheckBig, DollarSign } from 'lucide-react'
 import z from 'zod'
 
+import { TENANT_ROLE } from '@/enum'
 import type {
   CREATE_TENANT_FORM_FIELDS_TYPE,
   CREATE_TENANT_FORM_SCHEMA_TYPE,
@@ -53,6 +54,9 @@ export const CREATE_TENANT_FORM_SCHEMA = z
       .max(10, 'Emergency contact phone must be at most 10 characters long.')
       .optional()
       .nullable(),
+    role: z.enum(TENANT_ROLE, {
+      error: 'Role is required.',
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Please enter the same password.',
@@ -69,6 +73,7 @@ export const CREATE_TENANT_DEFAULT_VALUES: CREATE_TENANT_FORM_SCHEMA_TYPE = {
   dateOfBirth: '',
   emergencyContactName: '',
   emergencyContactPhone: '',
+  role: TENANT_ROLE.TENANT,
 }
 export const UPDATE_TENANT_FORM_SCHEMA = z.object({
   firstName: z.string().max(50, 'First name must be at most 50 characters long.').optional().nullable(),
@@ -244,6 +249,29 @@ export const CREATE_TENANT_FORM_FIELDS: Array<FORM_SECTION<CREATE_TENANT_FORM_FI
         placeholder: 'Enter email',
         fieldType: 'input',
         maxLength: 100,
+      },
+      {
+        key: 'role',
+        label: 'Role',
+        fieldType: 'select',
+        options: [
+          {
+            label: 'Tenant',
+            value: TENANT_ROLE.TENANT,
+          },
+          {
+            label: 'Admin',
+            value: TENANT_ROLE.ADMIN,
+          },
+          {
+            label: 'Maintenance',
+            value: TENANT_ROLE.MAINTENANCE,
+          },
+          {
+            label: 'Accountant',
+            value: TENANT_ROLE.ACCOUNTING,
+          },
+        ],
       },
       {
         key: 'phoneNumber',
