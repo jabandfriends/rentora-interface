@@ -10,19 +10,20 @@ import {
   EmptyPage,
   LoadingPage,
 } from '@/components/ui'
-import { type IMonthlyUtilityBuilding } from '@/types'
+import type { IMonthtlyUtilityFloor } from '@/types'
 
-type IMonthlyUtilityBuildElect = {
-  item: IMonthlyUtilityBuilding
+type IMonthlyUtilityFloorElectChart = {
+  item: IMonthtlyUtilityFloor
   isLoading: boolean
 }
-const MonthlyUtilityBuildingElectChart = ({ item, isLoading }: IMonthlyUtilityBuildElect) => {
+
+const MonthlyUitlityFloorWaterChart = ({ item, isLoading }: IMonthlyUtilityFloorElectChart) => {
   if (isLoading) {
     return <LoadingPage />
   }
 
   if (!item) {
-    return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
+    return <EmptyPage title="Water Utility not found" description="No Water Utility you looking for." />
   }
 
   const chartConfig = {
@@ -34,9 +35,9 @@ const MonthlyUtilityBuildingElectChart = ({ item, isLoading }: IMonthlyUtilityBu
 
   return (
     <div className="flex flex-col gap-2">
-      <h4 className="text-start text-lg font-semibold"> Electric Utility </h4>
+      <h4 className="text-lg font-semibold"> Water Utility </h4>
       <ChartContainer config={chartConfig} className="h-80 w-80">
-        <BarChart accessibilityLayer data={item.utilityGroupName.electric}>
+        <BarChart accessibilityLayer data={item.utilityGroupName.water}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="month"
@@ -45,14 +46,14 @@ const MonthlyUtilityBuildingElectChart = ({ item, isLoading }: IMonthlyUtilityBu
             axisLine={false}
             tickFormatter={(value) => value.slice(0, 3)}
           />
-          <YAxis dataKey="totalUsageAmount" tickLine={false} tickMargin={10} axisLine={false} />
+          <YAxis dataKey="totalFloorUsage" tickLine={false} tickMargin={10} axisLine={false} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="totalUsageAmount" fill="#3b82f6" radius={10} />
+          <Bar dataKey="totalFloorUsage" fill="#3b82f6" radius={10} />
         </BarChart>
       </ChartContainer>
     </div>
   )
 }
 
-export default MonthlyUtilityBuildingElectChart
+export default MonthlyUitlityFloorWaterChart
