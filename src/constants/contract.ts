@@ -5,6 +5,14 @@ export enum ContractType {
   DAILY = 'daily',
   YEARLY = 'yearly',
 }
+export const contractUpdateFormSchema = z.object({
+  endDate: z.date().optional(),
+  rentalPrice: z.string().optional(),
+  depositAmount: z.string().optional(),
+  advancePaymentMonths: z.string().optional(),
+  termsAndConditions: z.string().optional(),
+  specialConditions: z.string().optional(),
+})
 
 export const MONTHLY_CONTRACT_SCHEMA = z
   .object({

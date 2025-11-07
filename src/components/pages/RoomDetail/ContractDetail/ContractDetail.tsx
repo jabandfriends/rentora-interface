@@ -14,6 +14,7 @@ import ContractAction from './ContractAction'
 import ContractButtonGroup from './ContractButtonGroup'
 import ContractDetailLoading from './ContractDetailLoading'
 import ContractSignedUpload from './ContractSignedUpload'
+import ContractUpdateModal from './ContractUpdateModal'
 import InfoRow from './InfoRow'
 import Section from './Section'
 
@@ -26,6 +27,12 @@ type IContractDetailProps = {
 const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDetailProps) => {
   const [isCollapse, setIsCollapse]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
   const [isExporting, setIsExporting]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
+  const [isContractUpdateModalOpen, setIsContractUpdateModalOpen]: [boolean, Dispatch<SetStateAction<boolean>>] =
+    useState(false)
+
+  const handleOpenContractUpdateModal: () => void = useCallback(() => {
+    setIsContractUpdateModalOpen(true)
+  }, [])
 
   const contractStatusBadge: VariantProps<typeof Badge>['variant'] = useMemo(() => {
     switch (data?.status) {
@@ -74,6 +81,11 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
 
   return (
     <Card className="justify-start rounded-2xl shadow">
+      <ContractUpdateModal
+        contract={data}
+        open={isContractUpdateModalOpen}
+        onOpenChange={setIsContractUpdateModalOpen}
+      />
       <div className="space-y-6">
         {/* Header */}
         <div className="border-theme-secondary-300 space-y-6 rounded-lg border p-6 shadow-sm">
@@ -87,6 +99,7 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
             <div className="desktop:flex-col desktop:w-auto desktop:items-end flex w-full items-center justify-between gap-y-2">
               <Badge variant={contractStatusBadge}>{data.status.toUpperCase()}</Badge>
               <ContractAction
+                handleOpenContractUpdateModal={handleOpenContractUpdateModal}
                 handleDownloadContract={handleDownloadSignContractPDF}
                 handleOpenDeleteModal={handleOpenDeleteModal}
               />
