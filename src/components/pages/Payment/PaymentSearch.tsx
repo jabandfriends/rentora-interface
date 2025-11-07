@@ -100,7 +100,7 @@ const PaymentSearch = ({
                 <div className="space-y-1">
                   <Label>Building</Label>
                   <Select onValueChange={onBuildingNameChange}>
-                    <SelectTrigger className="capitalize">
+                    <SelectTrigger className="w-full capitalize">
                       <SelectValue placeholder="Building" />
                     </SelectTrigger>
                     <SelectContent>
@@ -116,7 +116,7 @@ const PaymentSearch = ({
                 <div className="space-y-1">
                   <Label>Payment Status</Label>
                   <Select onValueChange={onPaymentStatusChange}>
-                    <SelectTrigger className="capitalize">
+                    <SelectTrigger className="w-full capitalize">
                       <SelectValue placeholder="Payment Status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -132,7 +132,7 @@ const PaymentSearch = ({
                 <div className="space-y-1">
                   <Label>Verified Status</Label>
                   <Select onValueChange={onVerifiedStatusChange}>
-                    <SelectTrigger className="capitalize">
+                    <SelectTrigger className="w-full capitalize">
                       <SelectValue placeholder="Verified Status" />
                     </SelectTrigger>
                     <SelectContent>
