@@ -128,7 +128,7 @@ export const getSidebarItems = (
       },
       {
         type: 'item',
-        title: 'Tenants Management',
+        title: 'Users Management',
         icon: <Wrench size={16} />,
         menu: SIDEBAR_TENANTS_MANAGEMENT,
       },
