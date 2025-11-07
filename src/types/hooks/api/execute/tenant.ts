@@ -25,7 +25,9 @@ export type IUseRentoraApiTenantUpdatePassword = IBaseUseMutation<void, IUpdateT
 //create
 export type ICreateTenantRequestPayload = ITenantExecuteBasePayload
 //update
-export type IUpdateTenantRequestPayload = Partial<Omit<ITenantExecuteBasePayload, 'password'>>
+export type IUpdateTenantRequestPayload = Partial<
+  Omit<ITenantExecuteBasePayload, 'password'> & { isActive?: boolean }
+> & { apartmentUserId: string }
 //update password
 export type IUpdateTenantPasswordRequestPayload = {
   newPassword: string

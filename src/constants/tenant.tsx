@@ -92,6 +92,8 @@ export const UPDATE_TENANT_FORM_SCHEMA = z.object({
     .max(10, 'Emergency contact phone must be at most 10 characters long.')
     .optional()
     .nullable(),
+  role: z.enum(TENANT_ROLE).optional().nullable(),
+  isActive: z.string().optional().nullable(),
 })
 
 export const TENANT_PASSWORD_UPDATE_SCHEMA = z
@@ -138,6 +140,24 @@ export const UPDATE_TENANT_FORM_FIELDS: Array<FORM_SECTION<UPDATE_TENANT_FORM_FI
         placeholder: 'Enter email',
         fieldType: 'input',
         maxLength: 100,
+      },
+      {
+        key: 'role',
+        label: 'Role',
+        fieldType: 'select',
+        options: Object.values(TENANT_ROLE).map((role) => ({
+          label: role,
+          value: role,
+        })),
+      },
+      {
+        key: 'isActive',
+        label: 'Status',
+        fieldType: 'select',
+        options: [
+          { label: 'Active', value: 'active' },
+          { label: 'Inactive', value: 'inactive' },
+        ],
       },
       {
         key: 'phoneNumber',
