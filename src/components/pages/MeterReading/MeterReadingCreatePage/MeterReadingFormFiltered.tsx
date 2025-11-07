@@ -1,4 +1,4 @@
-import { Building2, Calendar, Clock } from 'lucide-react'
+import { Building2, Calendar, Clock, Info } from 'lucide-react'
 import { useEffect } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 
@@ -182,24 +182,30 @@ const HelperText = ({
 }) => {
   if (!debouncedYear) {
     return (
-      <p className="mt-4 flex items-center gap-2 text-sm text-gray-600">
-        <span className="text-theme-primary flex h-5 w-5 items-center justify-center rounded-full bg-blue-100">ℹ</span>
+      <p className="text-body-2 text-theme-secondary mt-4 flex items-center gap-2">
+        <span className="text-theme-primary bg-theme-primary-100 flex size-5 items-center justify-center rounded-full">
+          <Info className="size-4" />
+        </span>
         Start by selecting the year to view available buildings
       </p>
     )
   }
   if (debouncedYear && !buildingName) {
     return (
-      <p className="mt-4 flex items-center gap-2 text-sm text-gray-600">
-        <span className="text-theme-primary flex h-5 w-5 items-center justify-center rounded-full bg-blue-100">ℹ</span>
+      <p className="text-body-2 text-theme-secondary mt-4 flex items-center gap-2">
+        <span className="text-theme-primary bg-theme-primary-100 flex size-5 items-center justify-center rounded-full">
+          <Info className="size-4" />
+        </span>
         Select a building to view available months
       </p>
     )
   }
   if (buildingName && !filterForm.watch('month')) {
     return (
-      <p className="mt-4 flex items-center gap-2 text-sm text-gray-600">
-        <span className="text-theme-primary flex h-5 w-5 items-center justify-center rounded-full bg-blue-100">ℹ</span>
+      <p className="text-body-2 text-theme-secondary mt-4 flex items-center gap-2">
+        <span className="text-theme-primary bg-theme-primary-100 flex size-5 items-center justify-center rounded-full">
+          <Info className="size-4" />
+        </span>
         Select a month to view meter readings
       </p>
     )
