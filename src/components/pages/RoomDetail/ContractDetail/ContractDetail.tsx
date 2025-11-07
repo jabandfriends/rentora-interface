@@ -3,7 +3,7 @@ import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } fr
 import toast from 'react-hot-toast'
 import type { VariantProps } from 'tailwind-variants'
 
-import { Button, Card, Spinner } from '@/components/common'
+import { Card } from '@/components/common'
 import { Badge } from '@/components/ui'
 import { CONTRACT_STATUS } from '@/enum'
 import { type IContract, type Maybe } from '@/types'
@@ -11,7 +11,9 @@ import { contractHandlePDFDownload, formatCurrency, formatDate } from '@/utiliti
 
 import RoomDetailContract from '../RoomDetailContract'
 import ContractAction from './ContractAction'
+import ContractButtonGroup from './ContractButtonGroup'
 import ContractDetailLoading from './ContractDetailLoading'
+import ContractSignedUpload from './ContractSignedUpload'
 import InfoRow from './InfoRow'
 import Section from './Section'
 
@@ -72,7 +74,7 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
 
   return (
     <Card className="justify-start rounded-2xl shadow">
-      <div className="space-y-4">
+      <div className="space-y-6">
         {/* Header */}
         <div className="border-theme-secondary-300 space-y-6 rounded-lg border p-6 shadow-sm">
           <div className="desktop:flex-row flex flex-col items-start justify-between gap-4">
@@ -178,29 +180,16 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
             </>
           )}
         </div>
+        <ContractSignedUpload documentUrl={data.documentUrl} />
       </div>
 
-      <div className="desktop:flex-row flex flex-col justify-between gap-y-2">
-        <div className="flex items-center justify-end">
-          <Button className="desktop:w-auto w-full" onClick={handleCollapse}>
-            {buttonText}
-          </Button>
-        </div>
-
-        {/* TODO : Check if have signed contract from aws if not show export sign and upload button */}
-        {isCollapse && (
-          <div className="flex items-center justify-end">
-            <Button
-              className="desktop:w-auto w-full"
-              variant="outline"
-              disabled={isExporting}
-              onClick={handleDownloadSignContractPDF}
-            >
-              {isExporting ? <Spinner /> : 'Export Contract PDF (for signature)'}
-            </Button>
-          </div>
-        )}
-      </div>
+      <ContractButtonGroup
+        documentUrl={data.documentUrl}
+        handleCollapse={handleCollapse}
+        buttonText={buttonText}
+        isExporting={isExporting}
+        handleDownloadSignContractPDF={handleDownloadSignContractPDF}
+      />
     </Card>
   )
 }
