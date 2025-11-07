@@ -23,6 +23,7 @@ import type {
   IRentoraApiClientCreateApartmentResponse,
   IRentoraApiClientCreateMaintenanceResponse,
   IRentoraApiClientDeleteMaintenanceResponse,
+  IRentoraApiClientUpdateContractResponse,
   IRentoraApiClientUpdateMaintenanceResponse,
   IRentoraApiClientUpdatePaymentResponse,
   ISetupApartmentRequestPayload,
@@ -34,6 +35,7 @@ import type {
   IUpdateApartmentRequestPayload,
   IUpdateApartmentServiceRequestPayload,
   IUpdateBuildingRequestPayload,
+  IUpdateContractRequestPayload,
   IUpdateFloorPayload,
   IUpdateMaintenanceRequestPayload,
   IUpdatePaymentRequestPayload,
@@ -60,7 +62,11 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createTenant: 'CREATE_TENANT',
     updateTenant: 'UPDATE_TENANT',
     updateTenantPassword: 'UPDATE_TENANT_PASSWORD',
+
+    //contract
     createContract: 'CREATE_CONTRACT',
+    updateContract: 'UPDATE_CONTRACT',
+
     createAdhocInvoice: 'CREATE_ADHOC_INVOICE',
     createMeterReading: 'CREATE_METER_READING',
     updateMeterReading: 'UPDATE_METER_READING',
@@ -389,6 +395,18 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   ): Promise<IRentoraApiClientUpdatePaymentResponse['data']> {
     const response = await this.axiosWithAuthInstance.put<IRentoraApiClientUpdatePaymentResponse>(
       `/api/payments/${paymentId}`,
+      payload,
+    )
+    return response.data.data
+  }
+
+  //update contract
+  async updateContract(
+    apartmentId: string,
+    payload: IUpdateContractRequestPayload,
+  ): Promise<IRentoraApiClientUpdateContractResponse['data']> {
+    const response = await this.axiosWithAuthInstance.put<IRentoraApiClientUpdateContractResponse>(
+      `/api/apartments/${apartmentId}/contracts/${payload.contractId}`,
       payload,
     )
     return response.data.data
