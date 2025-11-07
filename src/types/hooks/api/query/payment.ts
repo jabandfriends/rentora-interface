@@ -38,6 +38,7 @@ export type IRentoraApiPaymentListParams = {
   status?: PaymentStatus
   buildingName?: string
   verifiedStatus?: VerifiedStatus
+  genMonth?: string
 }
 
 //hook

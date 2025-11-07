@@ -1,9 +1,11 @@
+import { Calendar } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
 import type { VariantProps } from 'tailwind-variants'
 
 import { PaginationBar } from '@/components/feature'
 import {
   Badge,
+  EmptyPage,
   FieldEmpty,
   PageTableEmpty,
   PageTableLoading,
@@ -32,6 +34,7 @@ type PaymentTableProps = {
   currentPage: number
   totalPages: number
   totalElements: number
+  isGenMonthSelected: Maybe<string>
 }
 
 const PaymentTable = ({
@@ -42,6 +45,7 @@ const PaymentTable = ({
   currentPage,
   totalPages,
   totalElements,
+  isGenMonthSelected,
 }: PaymentTableProps) => {
   //modals
   const [isPaymentUpdateModalOpen, setIsPaymentUpdateModalOpen]: [boolean, Dispatch<SetStateAction<boolean>>] =
@@ -99,6 +103,15 @@ const PaymentTable = ({
     }
   }, [])
 
+  if (!isGenMonthSelected) {
+    return (
+      <EmptyPage
+        icon={<Calendar size={36} />}
+        title="No meter reading month selected"
+        description="Please select a meter reading month to continue"
+      />
+    )
+  }
   if (isLoading) return <PageTableLoading />
   if (isSearched && data.length === 0) {
     return <PageTableSearchEmpty message="No payments found" subMessage="No payments found for this search" />

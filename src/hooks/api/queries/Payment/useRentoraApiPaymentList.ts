@@ -27,9 +27,10 @@ export const useRentoraApiPaymentList = (props: {
       props?.params?.sortDir,
       props?.params?.status,
       props?.params?.buildingName,
+      props?.params?.genMonth,
     ],
     queryFn: async () => {
-      const { page, size, search, sortBy, sortDir, status, buildingName }: IRentoraApiPaymentListParams =
+      const { page, size, search, sortBy, sortDir, status, buildingName, genMonth }: IRentoraApiPaymentListParams =
         props?.params ?? {}
       return await rentoraApiQueryClient.paymentList(props?.apartmentId, {
         page,
@@ -39,9 +40,11 @@ export const useRentoraApiPaymentList = (props: {
         ...(sortDir ? { sortDir } : {}),
         ...(status ? { status } : {}),
         ...(buildingName ? { buildingName } : {}),
+        ...(genMonth ? { genMonth } : {}),
       })
     },
     retry: 1,
+    enabled: !!props?.apartmentId && !!props?.params?.genMonth,
   })
 
   const result: IRentoraApiClientPaymentListResponse['data'] = useMemo(() => {
