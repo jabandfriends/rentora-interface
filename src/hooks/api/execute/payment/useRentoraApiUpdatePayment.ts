@@ -23,8 +23,8 @@ export const useRentoraApiUpdatePayment = (): IUseRentoraApiUpdatePayment => {
           ...(receiptFile && { receiptFilename: receiptFile.name }),
         },
       )
-      if (!result.presignedURL) return console.error('Presigned URL not found')
-      if (!receiptFile) return console.error('Receipt file not found')
+      if (!result.presignedURL) return
+      if (!receiptFile) return
       await rentoraApiExecuteClient.putPresignedUrl({
         imgFile: receiptFile,
         presignedUrl: result.presignedURL,
