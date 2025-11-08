@@ -85,9 +85,7 @@ const AdhocAdditional = ({ form }: IAdhocAdditional) => {
                     name="notes"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>
-                                Notes<span className="text-theme-error">*</span>
-                            </FormLabel>
+                            <FormLabel>Notes</FormLabel>
                             <FormControl>
                                 <Textarea placeholder="Any additional notes regarding the invoice" {...field} />
                             </FormControl>
