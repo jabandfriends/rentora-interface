@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -235,7 +234,7 @@ const ApartmentFinancialSetting = () => {
                 disabled={isButtonDisabled}
                 type="submit"
               >
-                <Save /> Save
+                {isUpdateApartmentPending ? <Spinner className="size-4" /> : 'Save Changes'}
               </Button>
             </div>
           </div>
