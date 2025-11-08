@@ -21,6 +21,7 @@ import {
   Spinner,
 } from '@/components/common'
 import { PageTableEmpty } from '@/components/ui'
+import { APARTMENT_LATE_FEE_TYPE } from '@/enum'
 import { useRentoraApiApartmentDetail, useRentoraApiUpdateApartment } from '@/hooks'
 import type { IUpdateApartmentRequestPayload } from '@/types'
 import { getErrorMessage } from '@/utilities'
@@ -28,6 +29,7 @@ import { getErrorMessage } from '@/utilities'
 const apartmentFinancialFormSchema = z.object({
   paymentDueDay: z.string().optional(),
   lateFee: z.string().optional(),
+  lateFeeType: z.enum(APARTMENT_LATE_FEE_TYPE).optional(),
   gracePeriodDays: z.string().optional(),
   taxId: z.string().optional(),
 })
@@ -43,6 +45,7 @@ const ApartmentFinancialSetting = () => {
     defaultValues: {
       paymentDueDay: '',
       lateFee: '',
+      lateFeeType: APARTMENT_LATE_FEE_TYPE.FIXED,
       gracePeriodDays: '',
       taxId: '',
     },
@@ -53,6 +56,7 @@ const ApartmentFinancialSetting = () => {
       const values = {
         paymentDueDay: String(apartment.paymentDueDay ?? 10),
         lateFee: String(apartment.lateFee ?? 0),
+        lateFeeType: apartment.lateFeeType ?? APARTMENT_LATE_FEE_TYPE.FIXED,
         gracePeriodDays: String(apartment.gracePeriodDays ?? 10),
         taxId: apartment.taxId ?? '',
       }
@@ -67,6 +71,7 @@ const ApartmentFinancialSetting = () => {
         lateFee: data.lateFee ? Number(data.lateFee) : undefined,
         gracePeriodDays: data.gracePeriodDays ? Number(data.gracePeriodDays) : undefined,
         taxId: data.taxId ? data.taxId : undefined,
+        lateFeeType: data.lateFeeType ?? APARTMENT_LATE_FEE_TYPE.FIXED,
       }
       try {
         updateApartment(updatePayload)
@@ -132,6 +137,27 @@ const ApartmentFinancialSetting = () => {
                 <div className="space-y-2">
                   <Label htmlFor="lateFee">Late Fee</Label>
                   <InputNumber decimal placeholder="Enter late fee" {...field} />
+                </div>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lateFeeType"
+              render={({ field }) => (
+                <div className="space-y-2">
+                  <Label htmlFor="lateFeeType">Late Fee Type</Label>
+                  <Select onValueChange={field.onChange} value={field.value} key={`lateFeeType-${field.value}`}>
+                    <SelectTrigger className="capitalize">
+                      <SelectValue placeholder="Select late fee type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(APARTMENT_LATE_FEE_TYPE).map((type) => (
+                        <SelectItem className="capitalize" key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               )}
             />
