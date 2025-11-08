@@ -4,11 +4,13 @@ import { PaymentStatus, VerifiedStatus } from '@/enum'
 
 export const PAYMENT_TABLE_HEADER: Array<string> = [
   'Payment No.',
+  'Invoice No.',
   'Unit Name',
   'Building Name',
   'Amount',
   'Payment Status',
   'Verified Status',
+  'Invoice Status',
   'Action',
 ]
 
