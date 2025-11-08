@@ -11,9 +11,8 @@ import { getErrorMessage } from '@/utilities'
 type IMonthlyInvoiceCreateTableProps = {
   room: IUnitWithMonthlyInvoiceStatus
   debouncedReadingDate: string
-  paymentDueDate: number
 }
-const MonthlyInvoiceCreateTable = ({ room, debouncedReadingDate, paymentDueDate }: IMonthlyInvoiceCreateTableProps) => {
+const MonthlyInvoiceCreateTable = ({ room, debouncedReadingDate }: IMonthlyInvoiceCreateTableProps) => {
   const { mutateAsync: generateMonthlyInvoice, isPending } = useRentoraApiMonthlyInvoiceGenerate()
   const statusBadge: VariantProps<typeof Badge>['variant'] = useMemo(() => {
     switch (room.unitStatus) {
@@ -32,7 +31,6 @@ const MonthlyInvoiceCreateTable = ({ room, debouncedReadingDate, paymentDueDate 
     const payload: IGenerateMonthlyInvoiceRequestPayload = {
       unitId: room.unitId,
       readingDate: debouncedReadingDate,
-      paymentDueDay: paymentDueDate ?? 1,
     }
     try {
       await generateMonthlyInvoice(payload)
@@ -41,7 +39,7 @@ const MonthlyInvoiceCreateTable = ({ room, debouncedReadingDate, paymentDueDate 
     } catch (error) {
       toast.error(getErrorMessage(error))
     }
-  }, [generateMonthlyInvoice, debouncedReadingDate, paymentDueDate, room])
+  }, [generateMonthlyInvoice, debouncedReadingDate, room])
   return (
     <Card className="border-theme-secondary-300 rounded-lg border">
       {/* card header */}

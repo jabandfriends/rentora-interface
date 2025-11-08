@@ -1,3 +1,4 @@
+import type { APARTMENT_LATE_FEE_TYPE } from '@/enum'
 import type {
   IBasePaginateQueryResult,
   IBaseUseQuery,
@@ -31,7 +32,7 @@ export type IApartmentDetail = IApartment & {
   taxId: string
   paymentDueDay: number
   lateFee: number
-  lateFeeType: string
+  lateFeeType: APARTMENT_LATE_FEE_TYPE
   gracePeriodDays: number
   postalCode: string
   country: string

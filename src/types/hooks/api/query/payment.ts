@@ -1,4 +1,4 @@
-import type { PaymentStatus, VerifiedStatus } from '@/enum'
+import type { MonthlyInvoicePaymentStatus, PaymentStatus, VerifiedStatus } from '@/enum'
 import type { IBasePaginateQueryResult, IRentoraApiClientBasePaginateWithMetadataResponse } from '@/types'
 
 export type IUseRentoraApiPaymentList = IBasePaginateQueryResult<IRentoraApiClientPaymentListResponse['data']>
@@ -18,6 +18,8 @@ export type IPayment = {
   paymentId: string
   paymentNumber: string
   paymentMethod: string
+  invoiceStatus: MonthlyInvoicePaymentStatus
+  invoiceNumber: string
   paymentStatus: PaymentStatus
   verificationStatus: VerifiedStatus
   amount: number

@@ -1,5 +1,6 @@
 import { Calendar } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
+import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
 
 import { PaginationBar } from '@/components/feature'
@@ -17,8 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui'
-import { PAYMENT_TABLE_HEADER } from '@/constants'
-import { PaymentStatus, VerifiedStatus } from '@/enum'
+import { PAYMENT_TABLE_HEADER, ROUTES } from '@/constants'
+import { MonthlyInvoicePaymentStatus, PaymentStatus, VerifiedStatus } from '@/enum'
 import type { IPayment, Maybe } from '@/types'
 import { formatCurrency } from '@/utilities'
 
@@ -57,6 +58,8 @@ const PaymentTable = ({
   const [selectedPayment, setSelectedPayment]: [Maybe<IPayment>, Dispatch<SetStateAction<Maybe<IPayment>>>] =
     useState<Maybe<IPayment>>(null)
 
+  const { apartmentId } = useParams<{ apartmentId: string }>()
+  const navigate: NavigateFunction = useNavigate()
   //handle open payment update modal
   const handleOpenPaymentUpdateModal = useCallback(
     (payment: IPayment) => {
@@ -103,6 +106,29 @@ const PaymentTable = ({
     }
   }, [])
 
+  const invoiceStatusVariant = useCallback((status: string): VariantProps<typeof Badge>['variant'] => {
+    switch (status) {
+      case MonthlyInvoicePaymentStatus.PAID:
+        return 'success'
+      case MonthlyInvoicePaymentStatus.UNPAID:
+        return 'warning'
+      case MonthlyInvoicePaymentStatus.OVERDUE:
+        return 'error'
+      case MonthlyInvoicePaymentStatus.CANCELLED:
+        return 'error'
+      default:
+        return 'default'
+    }
+  }, [])
+
+  const navigateToInvoiceDetail = useCallback(
+    (invoiceNumber: string) => {
+      if (!apartmentId || !invoiceNumber) return
+      navigate(ROUTES.monthlyInvoiceDetail.getPath(apartmentId, invoiceNumber))
+    },
+    [navigate, apartmentId],
+  )
+
   if (!isGenMonthSelected) {
     return (
       <EmptyPage
@@ -143,6 +169,12 @@ const PaymentTable = ({
           {data.map((item: IPayment) => (
             <TableRow key={item.paymentId}>
               <TableCell className="text-theme-primary">{item.paymentNumber || <FieldEmpty />}</TableCell>
+              <TableCell
+                className="text-theme-primary cursor-pointer hover:underline"
+                onClick={() => navigateToInvoiceDetail(item.invoiceNumber)}
+              >
+                {item.invoiceNumber || <FieldEmpty />}
+              </TableCell>
               <TableCell>{item.unitName || <FieldEmpty />}</TableCell>
               <TableCell>{item.buildingName || <FieldEmpty />}</TableCell>
               <TableCell>{item.amount ? formatCurrency(item.amount) : <FieldEmpty />}</TableCell>
@@ -154,6 +186,11 @@ const PaymentTable = ({
               <TableCell>
                 <Badge variant={verificationStatusVariant(item.verificationStatus)} className="capitalize">
                   {item.verificationStatus || <FieldEmpty />}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Badge variant={invoiceStatusVariant(item.invoiceStatus)} className="capitalize">
+                  {item.invoiceStatus || <FieldEmpty />}
                 </Badge>
               </TableCell>
               <TableCell>

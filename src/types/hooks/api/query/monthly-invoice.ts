@@ -51,6 +51,8 @@ export type IMonthlyInvoiceDetail = IMonthlyInvoice & {
   createdAt: string
 
   //payment
+  paymentId: string
+  //apartment payment
   apartmentPaymentMethodType: ApartmentPaymentMethodType
   bankName: string
   bankAccountNumber: string

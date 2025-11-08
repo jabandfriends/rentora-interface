@@ -32,8 +32,8 @@ import {
   FileUploadItemPreview,
   FileUploadList,
   FileUploadTrigger,
+  InfoTooltip,
 } from '@/components/feature'
-import InfoTooltip from '@/components/feature/InfoTooltip'
 import { useRentoraApiUpdateApartmentPayment } from '@/hooks'
 import type { IApartmentPayment, IUpdateApartmentPaymentServiceRequestPayload } from '@/types'
 import { getErrorMessage } from '@/utilities'

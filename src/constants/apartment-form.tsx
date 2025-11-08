@@ -1,7 +1,7 @@
 import { Building, Calendar, DollarSign, Phone, Upload } from 'lucide-react'
 import { z } from 'zod'
 
-import { APARTMENT_FORM_FIELD_KEY_ENUM, LateFeeType } from '@/enum'
+import { APARTMENT_FORM_FIELD_KEY_ENUM, APARTMENT_LATE_FEE_TYPE } from '@/enum'
 import type { APARTMENT_FORM_FIELD, FORM_SECTION } from '@/types'
 
 export const APARTMENT_FORM_SCHEMA = z.object({
@@ -22,9 +22,7 @@ export const APARTMENT_FORM_SCHEMA = z.object({
   lateFee: z.string().min(1, {
     message: 'Late fee is required',
   }),
-  lateFeeType: z.string().min(1, {
-    message: 'Late fee type is required',
-  }),
+  lateFeeType: z.enum(APARTMENT_LATE_FEE_TYPE).optional(),
   gracePeriodDays: z.string().min(1, {
     message: 'Grace period is required',
   }),
@@ -154,8 +152,8 @@ export const APARTMENT_FORM_SECTIONS: Array<FORM_SECTION<APARTMENT_FORM_FIELD>> 
         prefix: <Calendar size={16} />,
         type: 'select',
         options: [
-          { label: 'Fixed', value: LateFeeType.FIXED },
-          { label: 'Percentage', value: LateFeeType.PERCENTAGE },
+          { label: 'Fixed', value: APARTMENT_LATE_FEE_TYPE.FIXED },
+          { label: 'Percentage', value: APARTMENT_LATE_FEE_TYPE.PERCENTAGE },
         ],
       },
       {
