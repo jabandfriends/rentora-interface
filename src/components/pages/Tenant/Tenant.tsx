@@ -137,8 +137,8 @@ export const Tenant = () => {
   return (
     <PageTableBody className="space-y-4">
       <PageTableHeader
-        title="Tenants Management"
-        description="Manage and view all tenants"
+        title="Users Management"
+        description="Manage and view all users"
         stats={tenantStats}
         isLoading={isLoading}
         actionButton={
