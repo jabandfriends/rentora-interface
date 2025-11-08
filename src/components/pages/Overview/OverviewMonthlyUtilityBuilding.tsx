@@ -11,8 +11,8 @@ import { DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA } from '@/constants'
 import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks'
 import type { IMonthlyUtilityBuilding, ISearchBarProps } from '@/types'
 
-import { MonthlyUtilitySelectFloor } from '../OverviewMonthlyUtilityFloor'
-import MonthlyUtilityBuildingCard from './MonthlyUtilityBuildingCard'
+import MonthlyUtilityBuildingCard from './OverviewMonthlyUtilityBuilding/MonthlyUtilityBuildingCard'
+import { MonthlyUtilitySelectFloor } from './OverviewMonthlyUtilityFloor'
 
 const OverviewMonthlyUtilityBuilding = () => {
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
@@ -44,7 +44,7 @@ const OverviewMonthlyUtilityBuilding = () => {
     },
   })
 
-  const handleSearchChange = useCallback(
+  const handleSearchChange: ISearchBarProps['onChange'] = useCallback(
     ({ target: { value } }: Parameters<ISearchBarProps['onChange']>[0]) => {
       setValue('search', value)
       setCurrentPage(DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA.page)
@@ -62,14 +62,6 @@ const OverviewMonthlyUtilityBuilding = () => {
 
   const isSearched: boolean = useMemo(() => !!debouncedSearch, [debouncedSearch])
 
-  if (isSearched && monthlyUtiltyBuilding?.length === 0) {
-    return <PageTableSearchEmpty message="No Building Utility" subMessage="No Building Utility found for this search" />
-  }
-
-  if (!monthlyUtiltyBuilding || monthlyUtiltyBuilding.length === 0) {
-    return <PageTableEmpty message="No Building Utility found" />
-  }
-
   return (
     <Card className="justify-start rounded-2xl">
       <CardHeader>
@@ -79,17 +71,24 @@ const OverviewMonthlyUtilityBuilding = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <SearchBar onChange={handleSearchChange} />
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
-              <MonthlyUtilityBuildingCard key={index} item={item} isloading={isLoading} />
-            ))}
+        <SearchBar onChange={handleSearchChange} placeholder="search for building utility" />
+        {isSearched && monthlyUtiltyBuilding?.length === 0 ? (
+          <PageTableSearchEmpty message="No Building Utility" subMessage="No Building Utility found for this search" />
+        ) : !monthlyUtiltyBuilding || monthlyUtiltyBuilding.length === 0 ? (
+          <PageTableEmpty message="No Building Utility found" />
+        ) : (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
+                <MonthlyUtilityBuildingCard key={index} item={item} isloading={isLoading} />
+              ))}
+            </div>
+
+            <div>
+              <MonthlyUtilitySelectFloor props={{ buildingId: monthlyUtiltyBuilding[0].buildingID }} />
+            </div>
           </div>
-          <div>
-            <MonthlyUtilitySelectFloor props={{ buildingId: monthlyUtiltyBuilding[0].buildingID }} />
-          </div>
-        </div>
+        )}
       </CardContent>
 
       <PaginationBar
