@@ -41,7 +41,7 @@ export const getSidebarItems = (
     { icon: <Zap size={16} />, label: 'Meter Reading', to: ROUTES.meterReadingList.getPath(apartmentId) },
   ]
   const SIDEBAR_TENANTS_MANAGEMENT: Array<SidebarMenu> = [
-    { icon: <BookUser size={16} />, label: 'Tenants Management', to: ROUTES.tenant.getPath(apartmentId) },
+    { icon: <BookUser size={16} />, label: 'Users Management', to: ROUTES.tenant.getPath(apartmentId) },
   ]
   // sidebar reports
   const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [
