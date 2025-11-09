@@ -6,16 +6,13 @@ import { ContractType } from '@/constants'
 import type { MonthlyContractFormData } from '@/types'
 import { formatCurrency, formatDate, getDateDiff } from '@/utilities'
 
-import ContractNavigation from '../ContractNavigation'
 import ReviewItem from './ReviewItem'
 import SectionCard from './SectionCard'
 
 type IContractReview = {
   form: UseFormReturn<MonthlyContractFormData>
-  currentStep: number
-  onSubmit: (data: MonthlyContractFormData) => void
 }
-const ContractReview = ({ form, currentStep, onSubmit }: IContractReview) => {
+const ContractReview = ({ form }: IContractReview) => {
   const values = form.watch()
 
   return (
@@ -131,13 +128,6 @@ const ContractReview = ({ form, currentStep, onSubmit }: IContractReview) => {
           </div>
         </CardContent>
       </Card>
-      <ContractNavigation
-        currentStep={currentStep}
-        setCurrentStep={() => {
-          return
-        }}
-        onSubmit={form.handleSubmit(onSubmit)}
-      />
     </div>
   )
 }

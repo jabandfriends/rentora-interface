@@ -32,8 +32,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  InfoTooltip,
 } from '@/components/feature'
-import InfoTooltip from '@/components/feature/InfoTooltip'
 import { Separator } from '@/components/ui'
 import { supplyCreateFormSchema } from '@/constants'
 import { SupplyCategory } from '@/enum'

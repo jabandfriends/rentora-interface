@@ -12,7 +12,7 @@ type ISidebarProps = {
 
 const Sidebar = ({ isOpen, onClose, userData, className, ...props }: ISidebarProps) => {
   return (
-    <SidebarBody className={cn(className)} isOpen={isOpen} onClose={onClose} {...props}>
+    <SidebarBody className={cn('z-50 shadow', className)} isOpen={isOpen} onClose={onClose} {...props}>
       <SidebarHeader onClose={onClose} title="Rentora" />
       <SidebarNavigation onClose={onClose} />
       <SidebarBottom userData={userData} onClose={onClose} />

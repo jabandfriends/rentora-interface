@@ -12,7 +12,7 @@ import {
 import { ROUTES } from '@/constants'
 import type { IUser, Maybe } from '@/types'
 
-const SidebarUserProfile = ({ userData }: { userData: Maybe<IUser> }) => {
+const SidebarUserProfile = ({ userData, className }: { userData: Maybe<IUser>; className?: string }) => {
   // hooks
   const navigate: NavigateFunction = useNavigate()
   const handleLogout = useCallback(() => {
@@ -20,7 +20,7 @@ const SidebarUserProfile = ({ userData }: { userData: Maybe<IUser> }) => {
   }, [navigate])
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className={className}>
         <div className="hover:bg-theme-night-800/15 flex cursor-pointer items-center justify-between gap-x-3 rounded-lg px-1 py-1">
           <div className="flex items-center gap-x-2">
             <div className="flex size-8 items-center justify-center rounded-lg border">

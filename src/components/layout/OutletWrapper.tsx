@@ -1,5 +1,20 @@
 import type { PropsWithChildren } from 'react'
 
-export const OutletWrapper = ({ children }: PropsWithChildren) => {
-  return <div className="flex min-h-[calc(100dvh-var(--header-height))] overflow-y-auto">{children}</div>
+import { cn } from '@/utilities'
+
+export const OutletWrapper = ({
+  children,
+  isSidebar,
+  isNavbar,
+}: PropsWithChildren<{ isSidebar: boolean; isNavbar: boolean }>) => {
+  return (
+    <div
+      className={cn('min-h-[calc(100dvh-var(--header-height))] flex-col overflow-y-auto', [
+        isNavbar && 'mt-16',
+        isSidebar && 'desktop:ml-64',
+      ])}
+    >
+      {children}
+    </div>
+  )
 }

@@ -42,7 +42,7 @@ export const Tenant = () => {
   const debouncedSortBy = useDebounce(watch('sortBy') ? watch('sortBy') : undefined, 300)
   const debouncedSortDir = useDebounce(watch('sortDir') ? watch('sortDir') : undefined, 300)
   const {
-    data,
+    data: tenants,
     isLoading,
     pagination: { totalPages, totalElements },
     metadata: { totalTenants, totalOccupiedTenants, totalUnoccupiedTenants, totalActiveTenants },
@@ -137,8 +137,8 @@ export const Tenant = () => {
   return (
     <PageTableBody className="space-y-4">
       <PageTableHeader
-        title="Tenants Management"
-        description="Manage and view all tenants"
+        title="Users Management"
+        description="Manage and view all users"
         stats={tenantStats}
         isLoading={isLoading}
         actionButton={
@@ -155,7 +155,7 @@ export const Tenant = () => {
         onSortChange={handleSortChange}
       />
       <TenantTable
-        data={data}
+        data={tenants}
         isLoading={isLoading}
         currentPage={currentPage}
         totalPages={totalPages}

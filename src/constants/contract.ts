@@ -5,6 +5,14 @@ export enum ContractType {
   DAILY = 'daily',
   YEARLY = 'yearly',
 }
+export const contractUpdateFormSchema = z.object({
+  endDate: z.date().optional(),
+  rentalPrice: z.string().optional(),
+  depositAmount: z.string().optional(),
+  advancePaymentMonths: z.string().optional(),
+  termsAndConditions: z.string().optional(),
+  specialConditions: z.string().optional(),
+})
 
 export const MONTHLY_CONTRACT_SCHEMA = z
   .object({
@@ -28,11 +36,10 @@ export const MONTHLY_CONTRACT_SCHEMA = z
     electricMeterStart: z.string().min(1, 'Electricity meter is required'),
   })
   .superRefine((data, ctx) => {
-    const start = data.startDate
-    const end = data.endDate
+    const start: Date = data.startDate
+    const end: Date = data.endDate
 
     if (data.autoRenewal) {
-      console.log(data.renewalNoticeDays)
       if (Number(data.renewalNoticeDays) < 1) {
         ctx.addIssue({
           path: ['renewalNoticeDays'],

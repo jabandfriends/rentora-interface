@@ -4,6 +4,7 @@ import type {
   IAuthRequest,
   ICreateAdhocInvoiceRequestPayload,
   ICreateApartmentRequestApi,
+  ICreateApartmentServiceRequestPayload,
   ICreateBuildingRequestPayload,
   ICreateContractRequestPayload,
   ICreateFloorRequestPayload,
@@ -22,15 +23,22 @@ import type {
   IRentoraApiClientCreateApartmentResponse,
   IRentoraApiClientCreateMaintenanceResponse,
   IRentoraApiClientDeleteMaintenanceResponse,
+  IRentoraApiClientUpdateContractResponse,
   IRentoraApiClientUpdateMaintenanceResponse,
+  IRentoraApiClientUpdatePaymentResponse,
   ISetupApartmentRequestPayload,
   ISupplyCreatePayload,
   ISupplyUpdatePayload,
   ITerminateContractRequestPayload,
+  IUpdateApartmentPaymentServiceRequestPayload,
+  IUpdateApartmentPaymentServiceResponse,
   IUpdateApartmentRequestPayload,
+  IUpdateApartmentServiceRequestPayload,
   IUpdateBuildingRequestPayload,
+  IUpdateContractRequestPayload,
   IUpdateFloorPayload,
   IUpdateMaintenanceRequestPayload,
+  IUpdatePaymentRequestPayload,
   IUpdateTenantPasswordRequestPayload,
   IUpdateTenantRequestPayload,
   IUpdateUnitRequestPayload,
@@ -54,7 +62,11 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createTenant: 'CREATE_TENANT',
     updateTenant: 'UPDATE_TENANT',
     updateTenantPassword: 'UPDATE_TENANT_PASSWORD',
+
+    //contract
     createContract: 'CREATE_CONTRACT',
+    updateContract: 'UPDATE_CONTRACT',
+
     createAdhocInvoice: 'CREATE_ADHOC_INVOICE',
     createMeterReading: 'CREATE_METER_READING',
     updateMeterReading: 'UPDATE_METER_READING',
@@ -81,6 +93,16 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     updateUnit: 'UPDATE_UNIT',
     deleteUnit: 'DELETE_UNIT',
     terminateContract: 'TERMINATE_CONTRACT',
+
+    //apartment services
+    createApartmentService: 'CREATE_APARTMENT_SERVICE',
+    updateApartmentService: 'UPDATE_APARTMENT_SERVICE',
+
+    //apartment payment service
+    updateApartmentPaymentService: 'UPDATE_APARTMENT_PAYMENT_SERVICE',
+
+    //Update Payment
+    updatePayment: 'UPDATE_PAYMENT',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -337,5 +359,56 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   async deleteSupply(supplyId: string): Promise<void> {
     const response = await this.axiosWithAuthInstance.delete<void>(`/api/apartments/supply/delete/${supplyId}`)
     return response.data
+  }
+
+  //create apartment service
+  async createApartmentService(apartmentId: string, payload: ICreateApartmentServiceRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(
+      `/api/apartments/apartment-services/${apartmentId}`,
+      payload,
+    )
+    return response.data
+  }
+
+  //update apartment service
+  async updateApartmentService(payload: IUpdateApartmentServiceRequestPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.put<void>(`/api/apartments/apartment-services`, payload)
+    return response.data
+  }
+
+  //update apartment payment service
+  async updateApartmentPaymentService(
+    paymentId: string,
+    payload: IUpdateApartmentPaymentServiceRequestPayload,
+  ): Promise<IUpdateApartmentPaymentServiceResponse['data']> {
+    const response = await this.axiosWithAuthInstance.put<IUpdateApartmentPaymentServiceResponse>(
+      `/api/apartments/payment/${paymentId}`,
+      payload,
+    )
+    return response.data.data
+  }
+
+  //update payment
+  async updatePayment(
+    paymentId: string,
+    payload: IUpdatePaymentRequestPayload,
+  ): Promise<IRentoraApiClientUpdatePaymentResponse['data']> {
+    const response = await this.axiosWithAuthInstance.put<IRentoraApiClientUpdatePaymentResponse>(
+      `/api/payments/${paymentId}`,
+      payload,
+    )
+    return response.data.data
+  }
+
+  //update contract
+  async updateContract(
+    apartmentId: string,
+    payload: IUpdateContractRequestPayload,
+  ): Promise<IRentoraApiClientUpdateContractResponse['data']> {
+    const response = await this.axiosWithAuthInstance.put<IRentoraApiClientUpdateContractResponse>(
+      `/api/apartments/${apartmentId}/contracts/${payload.contractId}`,
+      payload,
+    )
+    return response.data.data
   }
 }

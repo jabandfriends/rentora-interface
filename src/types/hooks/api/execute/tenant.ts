@@ -1,3 +1,4 @@
+import type { TENANT_ROLE } from '@/enum'
 import type { IBaseUseMutation } from '@/types'
 
 type ITenantExecuteBasePayload = {
@@ -10,6 +11,7 @@ type ITenantExecuteBasePayload = {
   nationalId: string
   emergencyContactName: string
   emergencyContactPhone: string
+  role: TENANT_ROLE
 }
 //hooks type useRentoraApiTenantCreate
 export type IUseRentoraApiTenantCreate = IBaseUseMutation<void, ICreateTenantRequestPayload>
@@ -23,7 +25,9 @@ export type IUseRentoraApiTenantUpdatePassword = IBaseUseMutation<void, IUpdateT
 //create
 export type ICreateTenantRequestPayload = ITenantExecuteBasePayload
 //update
-export type IUpdateTenantRequestPayload = Partial<Omit<ITenantExecuteBasePayload, 'password'>>
+export type IUpdateTenantRequestPayload = Partial<
+  Omit<ITenantExecuteBasePayload, 'password'> & { isActive?: boolean }
+> & { apartmentUserId: string }
 //update password
 export type IUpdateTenantPasswordRequestPayload = {
   newPassword: string

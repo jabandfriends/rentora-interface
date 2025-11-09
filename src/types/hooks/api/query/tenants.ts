@@ -1,3 +1,4 @@
+import type { TENANT_ROLE } from '@/enum'
 import type {
   IBasePaginateQueryResult,
   IBaseUseQuery,
@@ -12,17 +13,16 @@ export type ITenant = {
   email: string
   phoneNumber: string
   createdAt: string
-  role: string
+  role: TENANT_ROLE
+  isActive: boolean
   accountStatus: boolean
   occupiedStatus: boolean
   unitName: string
 }
 
-export type ITenantDetail = Omit<
-  ITenant,
-  'apartmentUserId' | 'accountStatus' | 'occupiedStatus' | 'unitName' | 'role'
-> & {
+export type ITenantDetail = Omit<ITenant, 'apartmentUserId' | 'accountStatus' | 'occupiedStatus' | 'unitName'> & {
   firstName: string
+  apartmentUserId: string
   lastName: string
   nationalId: string
   dateOfBirth: string

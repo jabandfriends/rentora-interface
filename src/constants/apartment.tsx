@@ -1,4 +1,4 @@
-import { Building2, DollarSign, Droplets, Home } from 'lucide-react'
+import { Building2, CreditCard, DollarSign, Droplets, Home, Wrench } from 'lucide-react'
 import z from 'zod'
 
 import type { TTabApartmentSetting } from '@/types'
@@ -13,10 +13,10 @@ export enum APARTMENT_STATUS {
 export const TAB_APARTMNET_SETTING_LIST: Array<TTabApartmentSetting> = [
   { value: 'information', label: 'Information', icon: <Home /> },
   { value: 'financial', label: 'Financial', icon: <DollarSign /> },
-  // { value: 'services', label: 'Services', icon: <Wrench /> },
+  { value: 'services', label: 'Services', icon: <Wrench /> },
   { value: 'utilities', label: 'Utilities', icon: <Droplets /> },
   { value: 'building', label: 'Building', icon: <Building2 /> },
-  // { value: 'payment', label: 'Payment', icon: <CreditCard /> },
+  { value: 'payment', label: 'Payment', icon: <CreditCard /> },
 ]
 
 export const apartmentInformationFormSchema = z.object({
