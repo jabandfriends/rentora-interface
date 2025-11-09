@@ -11,6 +11,7 @@ import {
 } from '@/hooks'
 
 import PaymentSection from './PaymentSection'
+import PaymentStats from './PaymentStats'
 import TransactionVolumeSection from './TransactionVolumeSection'
 
 const PaymentRevenue = () => {
@@ -52,6 +53,7 @@ const PaymentRevenue = () => {
   if (isLoading) return <LoadingPage />
   return (
     <div className="space-y-4">
+      <PaymentStats />
       <PaymentSection
         year={year}
         handleYearChange={handleYearChange}
