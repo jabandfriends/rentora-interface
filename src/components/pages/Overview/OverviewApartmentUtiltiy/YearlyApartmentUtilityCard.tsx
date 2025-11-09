@@ -13,7 +13,7 @@ const YearlyApartmentUtilityCard = ({
   return (
     <Card className="flex-col gap-6 rounded-2xl shadow-lg hover:shadow-xl">
       <div className="flex justify-start">
-        <h3 className="text-start font-bold">Yearly Apartment Utility</h3>
+        <h3 className="text-start font-bold">Year-over-Year Utility Usage</h3>
       </div>
       <div className="desktop:flex-col justify-items-between-start flex flex-row gap-2">
         <YearlyUtilityElectChart item={item} isLoading={isLoading} />

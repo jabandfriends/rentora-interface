@@ -17,10 +17,10 @@ const OverviewYearlyApartmentUtility = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ChartColumnBig className="h-5 w-5" />
-          Building and Floor Utility
+          Apartment's Utility
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-10">
         <YearlyApartmentUtilityCard item={yearlyApartmentUtility} isLoading={isLoading} />
         <MonthlyUtilityApartmentSelect item={yearlyApartmentUtility} isLoading={isLoading} />
       </CardContent>
