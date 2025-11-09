@@ -45,12 +45,12 @@ const PaymentDistribution = () => {
     } satisfies ChartConfig
   }, [])
 
-  const dataWithFill = useMemo(
+  const dataWithFill: Array<IPaymentDistributionSummary & { fill: string }> = useMemo(
     () =>
       paymentDistribution?.map((item: IPaymentDistributionSummary) => ({
         ...item,
-        fill: chartConfig[item.paymentStatus].color,
-      })),
+        fill: chartConfig[item.paymentStatus as PaymentStatus].color,
+      })) ?? [],
     [paymentDistribution, chartConfig],
   )
   if (isLoadingPaymentDistribution) return <LoadingPage />
