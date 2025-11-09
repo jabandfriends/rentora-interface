@@ -82,5 +82,5 @@ export const DEFAULT_PAYMENT_LIST_METADATA: IPaymentListMetadata = {
 }
 
 export const DEFAULT_MONTHLY_UTILITY_BUILDING_METADATA: IMonthlyUtilityBuildingMetadata = {
-  totalBuildings: 0,
+  totalUtilityBuildings: 0,
 }
