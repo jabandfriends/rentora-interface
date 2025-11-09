@@ -11,7 +11,7 @@ import {
   EmptyPage,
   LoadingPage,
 } from '@/components/ui'
-import { PaymentStatus } from '@/enum'
+import { MonthlyInvoicePaymentStatus } from '@/enum'
 import { useRentoraApiPaymentDistribution } from '@/hooks'
 import type { IPaymentDistributionSummary } from '@/types'
 
@@ -22,23 +22,23 @@ const PaymentDistribution = () => {
   })
   const chartConfig = useMemo(() => {
     return {
-      [PaymentStatus.PAID]: {
+      [MonthlyInvoicePaymentStatus.PAID]: {
         label: 'Paid',
         color: 'var(--color-theme-success)',
       },
-      [PaymentStatus.PARTIALLY_PAID]: {
+      [MonthlyInvoicePaymentStatus.PARTIALLY_PAID]: {
         label: 'Partially Paid',
         color: 'var(--color-theme-warning)',
       },
-      [PaymentStatus.UNPAID]: {
+      [MonthlyInvoicePaymentStatus.UNPAID]: {
         label: 'Unpaid',
         color: 'var(--color-theme-primary)',
       },
-      [PaymentStatus.OVERDUE]: {
+      [MonthlyInvoicePaymentStatus.OVERDUE]: {
         label: 'Overdue',
         color: 'var(--color-theme-error)',
       },
-      [PaymentStatus.CANCELLED]: {
+      [MonthlyInvoicePaymentStatus.CANCELLED]: {
         label: 'Cancelled',
         color: 'var(--color-theme-secondary)',
       },
@@ -49,7 +49,7 @@ const PaymentDistribution = () => {
     () =>
       paymentDistribution?.map((item: IPaymentDistributionSummary) => ({
         ...item,
-        fill: chartConfig[item.paymentStatus as PaymentStatus].color,
+        fill: chartConfig[item.paymentStatus as MonthlyInvoicePaymentStatus].color,
       })) ?? [],
     [paymentDistribution, chartConfig],
   )

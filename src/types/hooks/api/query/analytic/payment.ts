@@ -1,4 +1,4 @@
-import type { PaymentStatus } from '@/enum'
+import type { MonthlyInvoicePaymentStatus } from '@/enum'
 import type { IBaseUseQuery, IRentoraApiClientBaseResponse } from '@/types'
 
 type IPaymentBaseSummary = {
@@ -25,7 +25,7 @@ export type IPaymentMonthlySummaryParam = {
 }
 
 export type IPaymentDistributionSummary = {
-  paymentStatus: PaymentStatus
+  paymentStatus: MonthlyInvoicePaymentStatus
   totalPayment: number
 }
 //response
