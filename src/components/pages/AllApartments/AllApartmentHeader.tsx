@@ -25,7 +25,7 @@ const AllApartmentHeader = ({ totalApartments, totalActiveApartments, isLoading 
     [totalApartments, totalActiveApartments],
   )
   return (
-    <div className="desktop:grid-cols-4 desktop:justify-start grid grid-cols-2 items-center justify-center gap-4">
+    <div className="desktop:flex desktop:justify-start grid grid-cols-2 items-center justify-center gap-4">
       {stats.map((stat, index) => (
         <StatsCard
           key={`stat-${index}`}

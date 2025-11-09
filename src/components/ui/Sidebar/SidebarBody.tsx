@@ -9,7 +9,7 @@ const SidebarBody = ({ children, className, isOpen, onClose, ...props }: ISideba
     <div>
       <div
         className={cn(
-          'bg-theme-white desktop:translate-x-0 desktop:static fixed left-0 top-0 z-50 h-full w-64 py-2 duration-200',
+          'bg-theme-white desktop:translate-x-0 fixed left-0 top-0 z-50 h-full w-64 duration-200',
           isOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >

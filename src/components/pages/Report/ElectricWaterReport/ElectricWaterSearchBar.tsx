@@ -1,7 +1,6 @@
-import { Download } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 
-import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Spinner } from '@/components/common'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Spinner } from '@/components/common'
 import { SearchBar } from '@/components/feature'
 import { PageTableEmpty } from '@/components/ui'
 import type { IReadingUnitUtility, Maybe } from '@/types'
@@ -74,11 +73,6 @@ const ElectricWaterSearchBar = ({
             </Select>
           )}
         </div>
-
-        {/* Export PDF */}
-        <Button className="flex items-center gap-2">
-          <Download size={18} /> Export PDF
-        </Button>
       </div>
     </div>
   )

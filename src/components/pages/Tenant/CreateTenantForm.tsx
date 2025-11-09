@@ -54,6 +54,32 @@ const CreateTenantForm = ({ onSubmit, isPending, errorMessage }: ICreateTenantFo
             <div className="space-y-2">
               {fields.map((item, index) => {
                 switch (item.fieldType) {
+                  case 'select':
+                    return (
+                      <FormField
+                        key={'form-tenant-field' + item.key + index}
+                        control={form.control}
+                        name={item.key}
+                        render={({ field }) => (
+                          <div className="space-y-1">
+                            <p>{item.label}</p>
+                            <Select onValueChange={field.onChange} defaultValue={field.value ?? ''}>
+                              <SelectTrigger className="w-full capitalize">
+                                <SelectValue placeholder={item.placeholder} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {item.options.map((fieldItem, index) => (
+                                  <SelectItem key={'select-value' + fieldItem.value + index} value={fieldItem.value}>
+                                    {fieldItem.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </div>
+                        )}
+                      />
+                    )
                   case 'input':
                     return (
                       <FormField

@@ -39,16 +39,21 @@ const NavBar = ({
   }, [navigate])
 
   return (
-    <header className="bg-theme-white border-theme-night-600 sticky top-0 z-50 border-b shadow-sm">
-      <div className="flex h-16 items-center justify-between px-6">
-        <div className="flex items-center gap-x-2">
+    <header
+      className={cn(
+        'bg-theme-white border-theme-secondary-300 fixed left-0 right-0 top-0 z-50 flex h-16 items-center border-b',
+        [isSidebar && 'desktop:left-64'],
+      )}
+    >
+      <div className="flex w-full items-center justify-between px-6">
+        <div className="desktop:w-auto flex w-full items-center justify-between gap-x-2">
           {/* Left button */}
           {isSidebar && (
             <button onClick={onSidebarToggle} className="desktop:hidden flex cursor-pointer items-center">
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           )}
-          <div className="desktop:flex hidden items-center gap-x-2">
+          <div className="desktop:hidden items-center gap-x-2">
             <Link className="flex items-center gap-x-2" to={ROUTES.allApartment.path}>
               <h5 className="bg-theme-primary text-theme-white flex size-8 items-center justify-center rounded-lg">
                 R
@@ -60,7 +65,7 @@ const NavBar = ({
 
         {/* Right Profile*/}
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-          <DropdownMenuTrigger onClick={handleSetDropdown}>
+          <DropdownMenuTrigger className="desktop:block hidden" onClick={handleSetDropdown}>
             <div className="hover:bg-theme-night-800/15 text-theme-secondary flex cursor-pointer items-center space-x-2 rounded-lg px-2 py-1 duration-200 focus:outline-none">
               <div className="bg-theme-night-600 flex size-8 items-center justify-center rounded-full">
                 <span className="text-body-2">{userData?.firstName.charAt(0)}</span>

@@ -29,21 +29,19 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
   useDeviceWatcher()
   if (isLoading) {
     return (
-      <div className="bg-page flex h-screen w-full items-center justify-center">
+      <div className="flex h-screen w-full items-center justify-center">
         <Spinner />
       </div>
     )
   }
 
   return (
-    <div className="relative min-h-screen">
-      <>
-        {isNavbar && (
-          <NavBar userData={userData} sidebarOpen={sidebarOpen} onSidebarToggle={setSidebar} isSidebar={isSidebar} />
-        )}
-      </>
-      <OutletWrapper>
-        {isSidebar && <Sidebar userData={userData} className="h-full" isOpen={sidebarOpen} onClose={setSidebar} />}
+    <div>
+      {isSidebar && <Sidebar userData={userData} isOpen={sidebarOpen} onClose={setSidebar} />}
+      {isNavbar && (
+        <NavBar userData={userData} sidebarOpen={sidebarOpen} onSidebarToggle={setSidebar} isSidebar={isSidebar} />
+      )}
+      <OutletWrapper isNavbar={isNavbar} isSidebar={isSidebar}>
         <Outlet />
       </OutletWrapper>
     </div>

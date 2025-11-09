@@ -1,11 +1,25 @@
-import { Ellipsis, Pencil, Trash2 } from 'lucide-react'
+import { Ellipsis, FileText, Pencil, Trash2 } from 'lucide-react'
 
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/common'
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/common'
 
 type IContractAction = {
   handleOpenDeleteModal: () => void
+  handleDownloadContract: () => void
+  handleOpenContractUpdateModal: () => void
 }
-const ContractAction = ({ handleOpenDeleteModal }: IContractAction) => {
+const ContractAction = ({
+  handleOpenDeleteModal,
+  handleDownloadContract,
+  handleOpenContractUpdateModal,
+}: IContractAction) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -14,11 +28,18 @@ const ContractAction = ({ handleOpenDeleteModal }: IContractAction) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Contract</DropdownMenuLabel>
+        <DropdownMenuItem onClick={handleDownloadContract}>
+          <FileText className="text-theme-primary" /> Download Contract (For Signature)
+        </DropdownMenuItem>
+
+        <DropdownMenuItem onClick={handleOpenContractUpdateModal}>
+          <Pencil className="text-theme-warning" /> Edit contract
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel>Danger Zone</DropdownMenuLabel>
         <DropdownMenuItem onClick={handleOpenDeleteModal}>
           <Trash2 className="text-theme-error" /> Terminate contract
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Pencil className="text-theme-warning" /> Update contract
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

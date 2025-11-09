@@ -1,0 +1,224 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { CloudUpload, X } from 'lucide-react'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+
+import {
+  Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Spinner,
+} from '@/components/common'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  FileUpload,
+  FileUploadDropzone,
+  FileUploadItem,
+  FileUploadItemDelete,
+  FileUploadItemMetadata,
+  FileUploadItemPreview,
+  FileUploadList,
+  FileUploadTrigger,
+} from '@/components/feature'
+import { paymentUpdateFormSchema } from '@/constants'
+import { PaymentStatus, VerifiedStatus } from '@/enum'
+import { useRentoraApiUpdatePayment } from '@/hooks'
+import type { IPayment, IUpdatePaymentRequestPayload, Maybe, PaymentUpdateFormValues } from '@/types'
+import { getErrorMessage } from '@/utilities'
+
+type IPaymentUpdateModalProps = {
+  selectedPayment: Maybe<IPayment>
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+const PaymentUpdateModal = ({ selectedPayment, open, onOpenChange }: IPaymentUpdateModalProps) => {
+  const form = useForm<PaymentUpdateFormValues>({
+    resolver: zodResolver(paymentUpdateFormSchema),
+    defaultValues: {
+      receiptImageFile: [],
+      verificationStatus: VerifiedStatus.PENDING,
+      paymentStatus: PaymentStatus.PENDING,
+    },
+  })
+
+  useEffect(() => {
+    if (selectedPayment) {
+      form.reset({
+        receiptImageFile: [],
+        verificationStatus: selectedPayment.verificationStatus,
+        paymentStatus: selectedPayment.paymentStatus,
+      })
+    }
+  }, [selectedPayment, form])
+
+  const { mutateAsync: updatePayment, isPending: isUpdatePaymentPending } = useRentoraApiUpdatePayment()
+
+  const handleSubmit = useCallback(
+    async (values: PaymentUpdateFormValues) => {
+      const payload: IUpdatePaymentRequestPayload = {
+        paymentId: selectedPayment?.paymentId,
+        receiptFile: values.receiptImageFile[0],
+        verificationStatus: values.verificationStatus,
+        paymentStatus: values.paymentStatus,
+      }
+      try {
+        await updatePayment(payload)
+        toast.success('Payment updated successfully')
+        onOpenChange(false)
+        form.reset()
+      } catch (error) {
+        toast.error(getErrorMessage(error))
+      }
+    },
+    [selectedPayment, onOpenChange, form, updatePayment],
+  )
+
+  const isButtonDisabled = useMemo(() => {
+    return isUpdatePaymentPending || !form.formState.isValid || !form.formState.isDirty
+  }, [isUpdatePaymentPending, form.formState.isValid, form.formState.isDirty])
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Receipt Upload</DialogTitle>
+          <DialogDescription>Upload the payment receipt.</DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form className="space-y-3" onSubmit={form.handleSubmit(handleSubmit)}>
+            <FormField
+              control={form.control}
+              name="receiptImageFile"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Receipt</FormLabel>
+                  <FormControl>
+                    <FileUpload
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      accept="image/*"
+                      maxFiles={1}
+                      maxSize={5 * 1024 * 1024}
+                      onFileReject={(_, message) => {
+                        form.setError('receiptImageFile', {
+                          message,
+                        })
+                      }}
+                    >
+                      <FileUploadDropzone className="text-body-2 flex-row flex-wrap border-dotted text-center">
+                        <CloudUpload className="size-4" />
+                        Drag and drop or
+                        <FileUploadTrigger asChild>
+                          <Button variant="link">choose files</Button>
+                        </FileUploadTrigger>
+                        to upload
+                      </FileUploadDropzone>
+                      <FileUploadList>
+                        {field.value.map((file, index) => (
+                          <FileUploadItem key={index} value={file}>
+                            <div className="flex w-full flex-col items-center gap-y-2">
+                              <div className="flex w-full">
+                                <FileUploadItemMetadata />
+                                <FileUploadItemDelete asChild>
+                                  <Button variant="ghost" size="icon" className="size-7">
+                                    <X />
+                                    <span className="sr-only">Delete</span>
+                                  </Button>
+                                </FileUploadItemDelete>
+                              </div>
+                              <FileUploadItemPreview className="desktop:w-68 h-fit w-48" />
+                            </div>
+                          </FileUploadItem>
+                        ))}
+                      </FileUploadList>
+                    </FileUpload>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-2 gap-x-2">
+              <FormField
+                control={form.control}
+                name="paymentStatus"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Payment Status</FormLabel>
+                    <FormControl>
+                      <Select key={field.value} onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger className="w-full capitalize">
+                          <SelectValue placeholder="Select Payment Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.values(PaymentStatus).map((status) => (
+                            <SelectItem className="capitalize" key={status} value={status}>
+                              {status}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="verificationStatus"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Verification Status</FormLabel>
+                    <FormControl>
+                      <Select key={field.value} onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger className="w-full capitalize">
+                          <SelectValue placeholder="Select Verification Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.values(VerifiedStatus).map((status) => (
+                            <SelectItem className="capitalize" key={status} value={status}>
+                              {status}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button className="desktop:w-auto w-full" type="button" variant="outline">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button className="desktop:w-auto w-full" type="submit" disabled={isButtonDisabled}>
+                {isUpdatePaymentPending ? <Spinner /> : 'Upload'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export default PaymentUpdateModal

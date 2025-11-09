@@ -4,23 +4,24 @@ import { type Dispatch, type SetStateAction, useCallback, useState } from 'react
 import toast from 'react-hot-toast'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Spinner } from '@/components/common'
 import { PageHeader, PageSection } from '@/components/layout'
 import { UpdateTenantForm } from '@/components/pages/Tenant/'
+import { LoadingPage } from '@/components/ui'
 import { ROUTES } from '@/constants'
 import { useRentoraApiTenantDetail, useRentoraApiTenantUpdate } from '@/hooks'
 import type { IUpdateTenantRequestPayload, UPDATE_TENANT_FORM_SCHEMA_TYPE } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
 const TenantUpdatePage = () => {
-  const { id, apartmentId } = useParams<{ id: string; apartmentId: string }>()
+  const { id: apartmentUserId, apartmentId } = useParams<{ id: string; apartmentId: string }>()
   const navigate: NavigateFunction = useNavigate()
-  const { data, isLoading, isPending } = useRentoraApiTenantDetail({ userId: id })
-  const { mutateAsync: updateTenant } = useRentoraApiTenantUpdate({ userId: id })
+  const { data: tenantDetail, isLoading, isPending } = useRentoraApiTenantDetail({ userId: apartmentUserId })
+  const { mutateAsync: updateTenant } = useRentoraApiTenantUpdate({ userId: tenantDetail?.userId })
   const [errorMessage, setErrorMessage]: [string, Dispatch<SetStateAction<string>>] = useState('')
   const onSubmit = useCallback(
     async (data: UPDATE_TENANT_FORM_SCHEMA_TYPE) => {
       const payload: IUpdateTenantRequestPayload = {
+        apartmentUserId: tenantDetail?.apartmentUserId ?? '',
         birthDate: data.dateOfBirth ? format(data.dateOfBirth, 'yyyy-MM-dd') : undefined,
         emergencyContactPhone: data.emergencyContactPhone ? data.emergencyContactPhone : undefined,
         emergencyContactName: data.emergencyContactName ? data.emergencyContactName : undefined,
@@ -29,6 +30,8 @@ const TenantUpdatePage = () => {
         email: data.email ? data.email : undefined,
         lastName: data.lastName ? data.lastName : undefined,
         firstName: data.firstName ? data.firstName : undefined,
+        role: data.role ? data.role : undefined,
+        isActive: data.isActive ? (data.isActive === 'active' ? true : false) : undefined,
       }
       try {
         await updateTenant(payload)
@@ -39,21 +42,16 @@ const TenantUpdatePage = () => {
         setErrorMessage(getErrorMessage(error))
       }
     },
-    [updateTenant, apartmentId, navigate],
+    [updateTenant, apartmentId, navigate, tenantDetail?.apartmentUserId],
   )
 
-  if (!data || isLoading)
-    return (
-      <div className="bg-page flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    )
+  if (!tenantDetail || isLoading) return <LoadingPage />
 
   return (
     <PageSection>
       <PageHeader title="Update Tenant" description="Fill out the form below to update a tenant." />
       <UpdateTenantForm
-        defaultValues={data}
+        defaultValues={tenantDetail}
         onSubmit={onSubmit}
         iconLabel={<PenLine />}
         buttonLabel="Update Tenant"

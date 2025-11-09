@@ -4,7 +4,6 @@ import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } fr
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
-import { PageHeader } from '@/components/layout'
 import { PageTableBody, PageTableHeader } from '@/components/ui'
 import { DEFAULT_PAYMENT_LIST_DATA } from '@/constants'
 import { PaymentStatus, VerifiedStatus } from '@/enum/payment'
@@ -26,20 +25,20 @@ const Payment = () => {
       search: '',
       status: '' as PaymentStatus,
       verifiedStatus: '',
+      genMonth: '',
+      buildingName: '',
     },
   })
 
-  const [search, status, verifiedStatus]: [string, PaymentStatus, string] = watch([
-    'search',
-    'status',
-    'verifiedStatus',
-  ])
+  const [search, status, verifiedStatus, genMonth, buildingName]: [string, PaymentStatus, string, string, string] =
+    watch(['search', 'status', 'verifiedStatus', 'genMonth', 'buildingName'])
 
   // debounce
   const debouncedSearch = useDebounce(search ? search : undefined, 500)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedVerified = useDebounce(verifiedStatus ? verifiedStatus : undefined, 300)
-
+  const debouncedGenMonth = useDebounce(genMonth ? genMonth : undefined, 300)
+  const debouncedBuildingName = useDebounce(buildingName ? buildingName : undefined, 300)
   // DATA
   const {
     data: paymentList,
@@ -52,7 +51,9 @@ const Payment = () => {
       page: currentPage,
       size: DEFAULT_PAYMENT_LIST_DATA.size,
       search: debouncedSearch,
-      ...(debouncedStatus ? { status: debouncedStatus } : {}),
+      genMonth: debouncedGenMonth,
+      status: debouncedStatus,
+      buildingName: debouncedBuildingName,
     },
   })
 
@@ -86,6 +87,22 @@ const Payment = () => {
       setCurrentPage(page)
     },
     [setCurrentPage],
+  )
+
+  const handleGenMonthChange = useCallback(
+    (value: string) => {
+      setValue('genMonth', value)
+      setCurrentPage(DEFAULT_PAYMENT_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
+  )
+
+  const handleBuildingNameChange = useCallback(
+    (value: string) => {
+      setValue('buildingName', value)
+      setCurrentPage(DEFAULT_PAYMENT_LIST_DATA.page)
+    },
+    [setValue, setCurrentPage],
   )
 
   const isSearched: boolean = useMemo(
@@ -125,7 +142,6 @@ const Payment = () => {
 
   return (
     <>
-      <PageHeader title="Payment" description="Manage and view all payments" />
       <PageTableBody className="space-y-8">
         <PageTableHeader
           title="Payment Analytics"
@@ -137,8 +153,11 @@ const Payment = () => {
           onSearchChange={handleSearchChange}
           onPaymentStatusChange={handleStatusChange}
           onVerifiedStatusChange={handleVerifiedChange}
+          onGenMonthChange={handleGenMonthChange}
+          onBuildingNameChange={handleBuildingNameChange}
         />
         <PaymentTable
+          isGenMonthSelected={debouncedGenMonth}
           data={paymentList}
           onPageChange={handlePageChange}
           isLoading={isLoading}
