@@ -1,7 +1,9 @@
 export enum PaymentStatus {
-  COMPLETED = 'completed',
-  PENDING = 'pending',
-  FAILED = 'failed',
+  UNPAID = 'unpaid',
+  PARTIALLY_PAID = 'partially_paid',
+  PAID = 'paid',
+  OVERDUE = 'overdue',
+  CANCELLED = 'cancelled',
 }
 export enum VerifiedStatus {
   PENDING = 'pending',

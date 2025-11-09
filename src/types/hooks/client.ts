@@ -36,6 +36,11 @@ export type RentoraApiQueryClientKey =
   | 'supplyTransactionList'
   | 'monthlyInvoiceListWithFullDetails'
   | 'apartmentPayment'
+  | 'paymentAvailableYear'
+  | 'paymentStatsSummary'
+  | 'monthlyPaymentAnalytics'
+  | 'yearlyPaymentAnalytics'
+  | 'paymentDistributionSummary'
 export type RentoraApiExecuteClientKey =
   | 'authenticate'
   | 'createApartment'
