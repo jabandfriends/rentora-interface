@@ -110,7 +110,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     supplyTransactionList: 'SUPPLY_TRANSACTION_LIST',
     monthlyUtilityBuilding: 'MONTHLY_UTILITY_BUILDING',
     monthlyUtilityFloor: 'MONTHLY_UTILITY_FLOOR',
-    apartmentUtililty: 'APARTMENT_UTILITY',
+    apartmentUtility: 'APARTMENT_UTILITY',
     yearlyApartmentUtility: 'YEARLY_APARTMENT_UTILITY',
 
     //monthly invoices with full details
@@ -453,12 +453,12 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     return response.data.data
   }
 
-  async apartmentUtililty(
+  async apartmentUtility(
     apartmentId: Maybe<string>,
     params: IApartmentUtilityParams,
   ): Promise<IRentoraApiClietApartmentUtilityResponse['data']> {
     const response = await this.axiosWithAuthInstance.get<IRentoraApiClietApartmentUtilityResponse>(
-      `/api/apartment/${apartmentId}/buildingUtility`,
+      `/api/apartment/${apartmentId}/apartmentUtility`,
       {
         params,
       },

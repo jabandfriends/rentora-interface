@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import {
   type ChartConfig,
@@ -16,7 +16,7 @@ type IApartmentUtilityElect = {
   item?: IApartmentUtility
   isLoading: boolean
 }
-const YearlyUtilityElectChart = ({ item, isLoading }: IApartmentUtilityElect) => {
+const MonthlyUtilityApartmentElect = ({ item, isLoading }: IApartmentUtilityElect) => {
   if (isLoading) {
     return <LoadingPage />
   }
@@ -40,7 +40,7 @@ const YearlyUtilityElectChart = ({ item, isLoading }: IApartmentUtilityElect) =>
     <div className="flex flex-col gap-2">
       <h4 className="text-start text-lg font-semibold"> Electric Utility </h4>
       <ChartContainer config={chartConfig} className="h-80 w-80">
-        <BarChart accessibilityLayer data={item.monthlyBreakdown.electric}>
+        <AreaChart accessibilityLayer data={item.monthlyBreakdown?.electric}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="month"
@@ -52,11 +52,11 @@ const YearlyUtilityElectChart = ({ item, isLoading }: IApartmentUtilityElect) =>
           <YAxis tickLine={false} tickMargin={10} axisLine={false} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="usageAmount" fill="#3b82f6" radius={10} />
-        </BarChart>
+          <Area dataKey="usageAmount" fill="#3b82f6" radius={10} />
+        </AreaChart>
       </ChartContainer>
     </div>
   )
 }
 
-export default YearlyUtilityElectChart
+export default MonthlyUtilityApartmentElect

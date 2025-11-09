@@ -1,67 +1,67 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@radix-ui/react-select'
-import { type Dispatch, type SetStateAction, useState } from 'react'
+import { type Dispatch, type SetStateAction, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { number } from 'zod'
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
 import { LoadingPage, PageTableEmpty } from '@/components/ui'
-import { useRentoraApiApartmetUtility, useRentoraApiApartmetUtiliyy } from '@/hooks'
-import { useRentoraApiYearlyApartmentUtility } from '@/hooks/api/queries/useRentoraApiYearlyApartmentUtility'
-import type { IApartmentUtility, IYearlyApartmentUtility } from '@/types'
+import { useRentoraApiApartmetUtility } from '@/hooks'
+import type { IYearlyApartmentUtility } from '@/types'
 
 import MonthlyUtilityApartmentCard from './MonthlyUtilityApartmentCard'
 
-type IYearlySelect = {
-    item?: Array<IYearlyApartmentUtility>
-    isLoading: boolean
-}
+const MonthlyUtilityApartmentSelect = ({
+  item,
+  isLoading,
+}: {
+  item?: Array<IYearlyApartmentUtility>
+  isLoading: boolean
+}) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
 
-const MonthlyUtilityApartmentSelect = ({ item, isLoading }: IYearlySelect) => {
-    const [selectedYear, setSelectedYear]: [string, Dispatch<SetStateAction<string>>] = useState('')
+  const [selectedYear, setSelectedYear]: [string, Dispatch<SetStateAction<string>>] = useState('')
 
-    const { apartmentId } = useParams<{ apartmentId: string }>()
-    const { data: monthlyApartmentUtility, isLoading: boolean } = useRentoraApiApartmetUtility({
-        apartmentId: apartmentId!,
-        params: {
-            year: selectedYear,
-        },
-    })
-    if (isLoading) {
-        return <LoadingPage />
+  useEffect(() => {
+    if (item && item.length > 0 && selectedYear === '') {
+      setSelectedYear(String(item[0].year))
     }
+  }, [item, selectedYear])
 
-    if (!item || item.length === 0) {
-        return <PageTableEmpty message="No Floor found" />
-    }
+  const { data: monthlySummary, isLoading: isLoadingSummary } = useRentoraApiApartmetUtility({
+    apartmentId: apartmentId!,
+    params: {
+      year: Number(selectedYear)!,
+    },
+  })
 
-    if (selectedYear === '' && item.length > 0) {
-        setSelectedYear(String(item[0].year))
-    }
+  if (isLoading || isLoadingSummary) {
+    return <LoadingPage />
+  }
 
-    return (
-        <div className="justify-center space-y-4 rounded-2xl">
-            <div>
-                <Select value={selectedYear} onValueChange={(value) => setSelectedYear(value)}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select floor Number" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {item.map((yearSummary: IYearlyApartmentUtility) => (
-                            <SelectItem key={yearSummary.year} value={String(yearSummary.year)}>
-                                <div className="flex items-center gap-2">
-                                    <span>{yearSummary.year}</span>
-                                </div>
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-            <div>
-                {monthlyApartmentUtility?.map((item: IApartmentUtility, index: number) => (
-                    <MonthlyUtilityApartmentCard key={index} item={item} isLoading={isLoading} props={number(selectedYear)} />
-                ))}
-            </div>
-        </div>
-    )
+  if (!item || item.length === 0) {
+    return <PageTableEmpty message="No historical data found to select a year." />
+  }
+
+  return (
+    <div className="justify-center space-y-4 rounded-2xl">
+      <p> Select a year to view this apartment's monthly utility summary </p>
+      <div>
+        <Select value={selectedYear} onValueChange={(value) => setSelectedYear(value)}>
+          <SelectTrigger className="w-[150px]">
+            <SelectValue placeholder="Select Year" />
+          </SelectTrigger>
+          <SelectContent>
+            {item.map((year: IYearlyApartmentUtility) => (
+              <SelectItem key={year.year} value={String(year.year)}>
+                <div className="flex items-center gap-2">
+                  <span>{year.year}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <MonthlyUtilityApartmentCard item={monthlySummary} isLoading={isLoading} />
+    </div>
+  )
 }
 
 export default MonthlyUtilityApartmentSelect
