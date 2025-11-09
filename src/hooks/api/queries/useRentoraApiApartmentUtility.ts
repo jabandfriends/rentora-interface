@@ -15,9 +15,9 @@ export const useRentoraApiApartmetUtility = (props: {
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
 
   const { data: data, ...rest }: UseQueryResult<IRentoraApiClietApartmentUtilityResponse['data']> = useQuery({
-    queryKey: [rentoraApiQueryClient.key.monthlyUtilityFloor, props.apartmentId, props?.params.year],
+    queryKey: [rentoraApiQueryClient.key.apartmentUtility, props.apartmentId, props?.params?.year],
     queryFn: async () => {
-      return await rentoraApiQueryClient.apartmentUtililty(props.apartmentId, {
+      return await rentoraApiQueryClient.apartmentUtility(props.apartmentId, {
         year: props.params.year,
       })
     },
