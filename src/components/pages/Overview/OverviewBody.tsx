@@ -14,6 +14,7 @@ import OverviewMonthlyUtilityBuilding from './OverviewMonthlyUtilityBuilding'
 import OverviewStats from './OverviewStats'
 import OverviewUpcomingRecurringMaintenance from './OverviewUpcomingRecurringMaintenance'
 import OverviewVacantUnits from './OverviewVacantUnits'
+import OverviewApartmentUtility from './OverviewYearlyApartmentUtility'
 
 const OverviewBody = () => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
@@ -108,6 +109,8 @@ const OverviewBody = () => {
 
         <OverviewLeaseExpiration leaseExpirations={contractExpiring} />
       </div>
+
+      <OverviewApartmentUtility />
 
       <OverviewMonthlyUtilityBuilding />
 
