@@ -21,15 +21,9 @@ type IMaintenanceBaseSummaryTrend = {
   totalCost: number
 }
 
-export type IMaintenanceYearlySummaryTrend = {
-  year: number
-  summary: IMaintenanceBaseSummaryTrend
-} & { period: number }
+export type IMaintenanceYearlySummaryTrend = IMaintenanceBaseSummaryTrend & { period: number }
 
-export type IMaintenanceMonthlySummaryTrend = {
-  month: number
-  summary: IMaintenanceBaseSummaryTrend
-} & { period: string }
+export type IMaintenanceMonthlySummaryTrend = IMaintenanceBaseSummaryTrend & { period: string }
 
 //param
 export type IMaintenanceMonthlySummaryTrendParam = {
