@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
@@ -22,6 +23,20 @@ const MonthlyUtilityUnitElectChart = () => {
     unitId: unitId!,
   })
 
+  const chartConfig = useMemo(() => {
+    return {
+      usageAmoung: {
+        label: 'Usage Amount',
+        color: '#3b82f6',
+      },
+    } satisfies ChartConfig
+  }, [])
+
+  const electricUtility: Array<IUtilityUnitData> = useMemo(
+    () => monthlyUtilityUnit?.utilityGroupName.electric || [],
+    [monthlyUtilityUnit],
+  )
+
   if (monthlyUtiltiyUnitLoading) {
     return <LoadingPage />
   }
@@ -29,15 +44,6 @@ const MonthlyUtilityUnitElectChart = () => {
   if (!monthlyUtilityUnit) {
     return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
   }
-
-  const electricUtility: Array<IUtilityUnitData> = monthlyUtilityUnit.utilityGroupName.electric.map((item) => item)
-
-  const chartConfig = {
-    usageAmoung: {
-      label: 'Usage Amount',
-      color: '#3b82f6',
-    },
-  } satisfies ChartConfig
 
   return (
     <div>

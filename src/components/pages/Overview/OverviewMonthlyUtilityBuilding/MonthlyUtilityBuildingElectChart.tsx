@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import {
@@ -16,7 +17,17 @@ type IMonthlyUtilityBuildElect = {
   item: IMonthlyUtilityBuilding
   isLoading: boolean
 }
+
 const MonthlyUtilityBuildingElectChart = ({ item, isLoading }: IMonthlyUtilityBuildElect) => {
+  const chartConfig = useMemo(() => {
+    return {
+      totalUsageAmount: {
+        label: 'Total Usage Amount',
+        color: '#3b82f6',
+      },
+    } satisfies ChartConfig
+  }, [])
+
   if (isLoading) {
     return <LoadingPage />
   }
@@ -24,13 +35,6 @@ const MonthlyUtilityBuildingElectChart = ({ item, isLoading }: IMonthlyUtilityBu
   if (!item) {
     return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
   }
-
-  const chartConfig = {
-    totalUsageAmount: {
-      label: 'Total Usage Amount',
-      color: '#3b82f6',
-    },
-  } satisfies ChartConfig
 
   return (
     <div className="flex flex-col gap-2">
