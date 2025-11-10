@@ -1,9 +1,8 @@
 import { useDebounce } from '@uidotdev/usehooks'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
-import { LoadingPage } from '@/components/ui'
 import {
   useRentoraApiGetPaymentAnalyticAvailableYears,
   useRentoraApiMonthlyPaymentAnalytic,
@@ -24,7 +23,7 @@ const PaymentRevenue = () => {
   const [year]: [number] = watch(['year'])
   const debouncedYear = useDebounce(year ? year : new Date().getFullYear(), 500)
 
-  const { data: availableYears, isLoading: isLoadingAvailableYears } = useRentoraApiGetPaymentAnalyticAvailableYears({
+  const { data: availableYears } = useRentoraApiGetPaymentAnalyticAvailableYears({
     apartmentId,
   })
 
@@ -46,11 +45,7 @@ const PaymentRevenue = () => {
     },
     [setValue],
   )
-  const isLoading: boolean = useMemo(
-    () => isLoadingAvailableYears || isLoadingMonthlyPaymentAnalytics || isLoadingYearlyPaymentAnalytics,
-    [isLoadingAvailableYears, isLoadingMonthlyPaymentAnalytics, isLoadingYearlyPaymentAnalytics],
-  )
-  if (isLoading) return <LoadingPage />
+
   return (
     <div className="space-y-4">
       <PaymentStats />

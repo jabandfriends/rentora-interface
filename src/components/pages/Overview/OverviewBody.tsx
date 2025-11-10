@@ -113,10 +113,10 @@ const OverviewBody = () => {
             Overview
           </TabsTrigger>
           <TabsTrigger value="maintenance" onClick={() => setTab('maintenance')}>
-            Maintenance
+            Maintenance Analytics
           </TabsTrigger>
           <TabsTrigger value="payments" onClick={() => setTab('payments')}>
-            Payments
+            Payments Analytics
           </TabsTrigger>
         </TabsList>
         <TabsContent value="overview">

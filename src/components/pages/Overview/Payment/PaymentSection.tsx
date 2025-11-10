@@ -37,7 +37,7 @@ const PaymentSection = ({
 }: IPaymentSectionProps) => {
   return (
     <div className="desktop:flex-row flex flex-col gap-4">
-      <Card className="flex-2 space-y-4 rounded-2xl">
+      <Card className="flex-2 justify-start space-y-4 rounded-2xl">
         <CardHeader className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <TrendingUp className="bg-theme-primary text-theme-white size-8 rounded-md p-1" />
