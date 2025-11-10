@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import {
@@ -17,37 +18,38 @@ type IYearlyUtilityElect = {
   isLoading: boolean
 }
 const YearlyUtilityElectChart = ({ item, isLoading }: IYearlyUtilityElect) => {
-  if (isLoading) {
-    return <LoadingPage />
-  }
+  const chartConfig = useMemo(() => {
+    return {
+      totalUsageAmount: {
+        label: 'Total Usage Amount',
+        color: '#3b82f6',
+      },
+    } satisfies ChartConfig
+  }, [])
+
+  const yearlySummary = item?.[0]
+
+  const chartData = useMemo(
+    () => [
+      {
+        year: yearlySummary?.year,
+        electricUsage: yearlySummary?.usageTotals.electric,
+      },
+    ],
+    [yearlySummary],
+  )
 
   if (!item) {
     return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
   }
 
-  const chartConfig = {
-    totalUsageAmount: {
-      label: 'Total Usage Amount',
-      color: '#3b82f6',
-    },
-  } satisfies ChartConfig
-
-  if (isLoading || !item) {
+  if (isLoading) {
     return <LoadingPage />
   }
 
-  const yearlySummary = item[0]
-
-  const chartData = [
-    {
-      year: yearlySummary.year,
-      electricUsage: yearlySummary.usageTotals.electric,
-    },
-  ]
-
   return (
     <div className="flex flex-col gap-2">
-      <h4 className="text-start text-lg font-semibold"> Electric Utility </h4>
+      <h4 className="text-start font-semibold"> Electric Utility </h4>
       <ChartContainer config={chartConfig} className="h-80 w-80">
         <BarChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />

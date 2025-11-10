@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import {
@@ -17,6 +18,15 @@ type IApartmentUtilityElect = {
   isLoading: boolean
 }
 const MonthlyUtilityApartmentElect = ({ item, isLoading }: IApartmentUtilityElect) => {
+  const chartConfig = useMemo(() => {
+    return {
+      totalUsageAmount: {
+        label: 'Total Usage Amount',
+        color: '#3b82f6',
+      },
+    } satisfies ChartConfig
+  }, [])
+
   if (isLoading) {
     return <LoadingPage />
   }
@@ -25,20 +35,13 @@ const MonthlyUtilityApartmentElect = ({ item, isLoading }: IApartmentUtilityElec
     return <EmptyPage title="Electric Utility not found" description="No Electric Utility you looking for." />
   }
 
-  const chartConfig = {
-    totalUsageAmount: {
-      label: 'Total Usage Amount',
-      color: '#3b82f6',
-    },
-  } satisfies ChartConfig
-
   if (isLoading || !item) {
     return <LoadingPage />
   }
 
   return (
     <div className="flex flex-col gap-2">
-      <h4 className="text-start text-lg font-semibold"> Electric Utility </h4>
+      <h4 className="text-start font-semibold"> Electric Utility </h4>
       <ChartContainer config={chartConfig} className="h-80 w-80">
         <AreaChart accessibilityLayer data={item.monthlyBreakdown?.electric}>
           <CartesianGrid vertical={false} />

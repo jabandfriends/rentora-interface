@@ -39,7 +39,7 @@ const MonthlyUtilitySelectFloor = ({ props }: { props: IRentoraApiMonthlyUtility
   }
 
   if (!floorNumber || floorNumber.length === 0) {
-    return <PageTableEmpty message="No Floor found" />
+    return <PageTableEmpty message="No floors available in this building yet 🏢" />
   }
 
   return (

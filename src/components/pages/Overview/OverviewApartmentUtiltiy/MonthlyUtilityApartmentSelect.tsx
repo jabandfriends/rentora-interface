@@ -49,10 +49,10 @@ const MonthlyUtilityApartmentSelect = ({
             <SelectValue placeholder="Select Year" />
           </SelectTrigger>
           <SelectContent>
-            {item.map((year: IYearlyApartmentUtility) => (
-              <SelectItem key={year.year} value={String(year.year)}>
+            {item.map((data: IYearlyApartmentUtility) => (
+              <SelectItem key={data.year} value={String(data.year)}>
                 <div className="flex items-center gap-2">
-                  <span>{year.year}</span>
+                  <span>{data.year}</span>
                 </div>
               </SelectItem>
             ))}

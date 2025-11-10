@@ -16,7 +16,7 @@ const OverviewYearlyApartmentUtility = () => {
     <Card className="justify-start rounded-2xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ChartColumnBig className="h-5 w-5" />
+          <ChartColumnBig className="size-5" />
           Apartment's Utility
         </CardTitle>
       </CardHeader>

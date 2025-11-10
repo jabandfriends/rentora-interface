@@ -1,8 +1,4 @@
-import type {
-  IBasePaginateQueryResult,
-  IBaseUseQuery,
-  IRentoraApiClientBasePaginateWithMetadataResponse,
-} from '../base-api'
+import type { IBasePaginateQueryResult, IRentoraApiClientBasePaginateWithMetadataResponse } from '@/types'
 
 //data
 export type IMonthtlyUtilityFloor = {
@@ -42,8 +38,6 @@ export type IRentoraApiMonthlyUtilityFloorParams = {
   sortBy?: 'name' | 'createdAt' | 'updatedAt'
   sortDir?: 'asc' | 'desc'
 }
-
-export type IuseRentoraApiMonthlyUtilityFloorList = IBaseUseQuery<IRentoraApiMonthlyUtilityFloorListResponse['data']>
 
 //response
 export type IRentoraApiMonthlyUtilityFloorListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<

@@ -11,7 +11,7 @@ import { DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA } from '@/constants'
 import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks'
 import type { IMonthlyUtilityBuilding, ISearchBarProps } from '@/types'
 
-import MonthlyUtilityBuildingCard from './OverviewMonthlyUtilityBuilding/MonthlyUtilityBuildingCard'
+import { MonthlyUtilityBuildingCard } from './OverviewMonthlyUtilityBuilding'
 import { MonthlyUtilitySelectFloor } from './OverviewMonthlyUtilityFloor'
 
 const OverviewMonthlyUtilityBuilding = () => {
@@ -66,7 +66,7 @@ const OverviewMonthlyUtilityBuilding = () => {
     <Card className="justify-start rounded-2xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ChartColumnBig className="h-5 w-5" />
+          <ChartColumnBig className="size-5" />
           Building and Floor Utility
         </CardTitle>
       </CardHeader>
@@ -78,14 +78,14 @@ const OverviewMonthlyUtilityBuilding = () => {
           <PageTableEmpty message="No Building Utility found" />
         ) : (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid-cols grid gap-2">
               {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
                 <MonthlyUtilityBuildingCard key={index} item={item} isloading={isLoading} />
               ))}
             </div>
 
             <div>
-              <MonthlyUtilitySelectFloor props={{ buildingId: monthlyUtiltyBuilding[0].buildingID }} />
+              <MonthlyUtilitySelectFloor props={{ buildingId: monthlyUtiltyBuilding?.[0].buildingID }} />
             </div>
           </div>
         )}

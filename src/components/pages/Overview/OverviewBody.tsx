@@ -9,7 +9,7 @@ import OverviewHeader from './OverviewHeader'
 import OverviewLeaseExpiration from './OverviewLeaseExpiration'
 import OverviewMaintenanceAlert from './OverviewMaintenanceAlert'
 import OverviewMaintenanceRequest from './OverviewMaintenanceRequest'
-import OverviewMonthlyUtilityBuilding from './OverviewMonthlyUtilityBuilding'
+import OverviewMonthlyUtilityBuildingandFloor from './OverviewMonthlyUtilityBuildingandFloor'
 // import OverviewPaymentStatus from './OverviewPaymentStatus'
 import OverviewStats from './OverviewStats'
 import OverviewUpcomingRecurringMaintenance from './OverviewUpcomingRecurringMaintenance'
@@ -112,7 +112,7 @@ const OverviewBody = () => {
 
       <OverviewApartmentUtility />
 
-      <OverviewMonthlyUtilityBuilding />
+      <OverviewMonthlyUtilityBuildingandFloor />
 
       {/* Payment Status
       <OverviewPaymentStatus paymentStatus={paymentStatus} /> */}

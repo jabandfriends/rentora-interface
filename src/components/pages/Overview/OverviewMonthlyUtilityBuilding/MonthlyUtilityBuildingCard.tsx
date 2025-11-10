@@ -19,7 +19,7 @@ const MonthlyUtilityBuildingCard = ({ item, isloading }: IMonthlyUtilityBuildCar
       <div className="flex justify-start">
         <h3 className="text-start font-bold">{item.buildingName}</h3>
       </div>
-      <div className="desktop:flex-col justify-items-between-start flex flex-row gap-2">
+      <div className="desktop:flex-col justify-items-between-start grid grid-cols-2 gap-2">
         <MonthlyUtilityBuildingElectChart item={item} isLoading={isloading} />
         <MonthlyUtilityBuildingWaterChart item={item} isLoading={isloading} />
       </div>

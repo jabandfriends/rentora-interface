@@ -1,7 +1,7 @@
 import { Card } from '@/components/common'
 import type { IYearlyApartmentUtility } from '@/types'
 
-import { YearlyUtilityElectChart } from '.'
+import { YearlyUtilityElectChart, YearlyUtilityWaterChart } from '.'
 
 const YearlyApartmentUtilityCard = ({
   item,
@@ -15,8 +15,9 @@ const YearlyApartmentUtilityCard = ({
       <div className="flex justify-start">
         <h3 className="text-start font-bold">Year-over-Year Utility Usage</h3>
       </div>
-      <div className="desktop:flex-col justify-items-between-start flex flex-row gap-2">
+      <div className="justify-items-between-start grid grid-cols-2 gap-2">
         <YearlyUtilityElectChart item={item} isLoading={isLoading} />
+        <YearlyUtilityWaterChart item={item} isLoading={isLoading} />
       </div>
     </Card>
   )

@@ -1,5 +1,5 @@
 import { Card } from '@/components/common'
-import { LoadingPage } from '@/components/ui'
+import { LoadingPage, PageTableEmpty } from '@/components/ui'
 import type { IMonthtlyUtilityFloor } from '@/types'
 
 import MonthlyUtilityFloorElectChart from './MonthlyUtilityFloorElectChart'
@@ -12,6 +12,10 @@ type IMonthlyUtilityFloorCard = {
 const MonthlyUtilityFloorCard = ({ item, isLoading }: IMonthlyUtilityFloorCard) => {
   if (isLoading) {
     return <LoadingPage />
+  }
+
+  if (!item.floorName || item.floorName === null) {
+    return <PageTableEmpty message="No Utility found for this floor" />
   }
 
   return (

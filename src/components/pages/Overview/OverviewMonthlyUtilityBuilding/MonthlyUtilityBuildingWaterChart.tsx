@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import {
@@ -17,6 +18,15 @@ type IMonthlyUtilityBuildWater = {
   isLoading: boolean
 }
 const MonthlyUtilityBuildingWaterChart = ({ item, isLoading }: IMonthlyUtilityBuildWater) => {
+  const chartConfig = useMemo(() => {
+    return {
+      totalUsageAmount: {
+        label: 'Total Usage Amount',
+        color: '#3b82f6',
+      },
+    } satisfies ChartConfig
+  }, [])
+
   if (isLoading) {
     return <LoadingPage />
   }
@@ -25,17 +35,10 @@ const MonthlyUtilityBuildingWaterChart = ({ item, isLoading }: IMonthlyUtilityBu
     return <EmptyPage title="Water Utility not found" description="No Water Utility you looking for." />
   }
 
-  const chartConfig = {
-    totalUsageAmount: {
-      label: 'Total Usage Amount',
-      color: '#3b82f6',
-    },
-  } satisfies ChartConfig
-
   return (
     <div className="flex flex-col gap-2">
-      <h4 className="text-start text-lg font-semibold"> Water Utility </h4>
-      <ChartContainer config={chartConfig} className="h-80 w-80">
+      <h4 className="text-start font-semibold"> Water Utility </h4>
+      <ChartContainer config={chartConfig} className="size-80">
         <BarChart accessibilityLayer data={item.utilityGroupName.water}>
           <CartesianGrid vertical={false} />
           <XAxis
