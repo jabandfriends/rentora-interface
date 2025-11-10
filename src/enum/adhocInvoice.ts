@@ -7,9 +7,10 @@ export enum ADHOC_INVOICE_PAYMENT_STATUS {
 
 export enum ADHOC_INVOICE_STATUS {
   ACTIVE = 'active',
-  DRAFT = 'draft',
-  CANCELLED = 'cancelled',
-  INCLUDED = 'included',
+  INACTIVE = 'inactive',
+  // DRAFT = 'draft',
+  // CANCELLED = 'cancelled',
+  // INCLUDED = 'included',
 }
 
 export enum ADHOC_INVOICE_PRIORITY {

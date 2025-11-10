@@ -52,9 +52,7 @@ const AdhocInvoiceInformation = ({ form }: IAdhocInvoiceInformation) => {
                     name="description"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>
-                                Description<span className="text-theme-error">*</span>
-                            </FormLabel>
+                            <FormLabel>Description</FormLabel>
                             <FormControl>
                                 <Textarea placeholder="Enter invoice title" {...field} />
                             </FormControl>
@@ -138,7 +136,9 @@ const AdhocInvoiceInformation = ({ form }: IAdhocInvoiceInformation) => {
                         name="unitId"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Location</FormLabel>
+                                <FormLabel>
+                                    Location<span className="text-theme-error">*</span>
+                                </FormLabel>
                                 <FormControl>
                                     <SelectRoomModal onRoomSelect={field.onChange} selectedRoomId={field.value} />
                                 </FormControl>
