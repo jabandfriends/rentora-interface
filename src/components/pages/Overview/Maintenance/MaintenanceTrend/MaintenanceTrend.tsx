@@ -7,12 +7,16 @@ import { useParams } from 'react-router-dom'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/feature'
 import { useRentoraApiMaintenanceAnalyticAvailableYears } from '@/hooks'
+import { cn } from '@/utilities'
 
 import MaintenanceMonthlyTrendChart from './MaintenanceMonthlyTrendChart'
 import MaintenanceSelectYears from './MaintenanceSelectYears'
 import MaintenanceYearlyTrendChart from './MaintenanceYearlyTrendChart'
 
-const MaintenanceTrend = () => {
+type IMaintenanceTrendProps = {
+  className?: string
+}
+const MaintenanceTrend = ({ className }: IMaintenanceTrendProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const { data: availableYears, isLoading: isLoadingAvailableYears } = useRentoraApiMaintenanceAnalyticAvailableYears({
     apartmentId,
@@ -33,7 +37,7 @@ const MaintenanceTrend = () => {
   )
 
   return (
-    <Card className="space-y-2 rounded-2xl">
+    <Card className={cn('justify-start space-y-2 rounded-2xl', className)}>
       <CardHeader className="flex items-center gap-2">
         <Wrench className="bg-theme-primary text-theme-white size-8 rounded-lg p-1" />
         <div>
