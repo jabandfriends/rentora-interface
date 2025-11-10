@@ -41,6 +41,11 @@ export type RentoraApiQueryClientKey =
   | 'monthlyPaymentAnalytics'
   | 'yearlyPaymentAnalytics'
   | 'paymentDistributionSummary'
+  | 'maintenanceAvailableYears'
+  | 'maintenanceCategorySummary'
+  | 'maintenanceYearlyStatistics'
+  | 'maintenanceYearlySummaryTrend'
+  | 'maintenanceMonthlySummaryTrend'
 export type RentoraApiExecuteClientKey =
   | 'authenticate'
   | 'createApartment'
