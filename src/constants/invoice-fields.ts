@@ -208,9 +208,9 @@ export const INVOICE_FORM_FIELDS: Array<FORM_SECTION<INVOICE_FORM_FIELDS_TYPE>> 
         placeholder: 'Select status',
         options: [
           { value: ADHOC_INVOICE_STATUS.ACTIVE, label: ADHOC_INVOICE_STATUS.ACTIVE },
-          { value: ADHOC_INVOICE_STATUS.CANCELLED, label: ADHOC_INVOICE_STATUS.CANCELLED },
-          { value: ADHOC_INVOICE_STATUS.DRAFT, label: ADHOC_INVOICE_STATUS.DRAFT },
-          { value: ADHOC_INVOICE_STATUS.INCLUDED, label: ADHOC_INVOICE_STATUS.INCLUDED },
+          // { value: ADHOC_INVOICE_STATUS.CANCELLED, label: ADHOC_INVOICE_STATUS.CANCELLED },
+          // { value: ADHOC_INVOICE_STATUS.DRAFT, label: ADHOC_INVOICE_STATUS.DRAFT },
+          // { value: ADHOC_INVOICE_STATUS.INCLUDED, label: ADHOC_INVOICE_STATUS.INCLUDED },
         ],
       },
     ],
