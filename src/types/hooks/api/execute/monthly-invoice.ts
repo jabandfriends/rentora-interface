@@ -3,7 +3,6 @@ import type { IBaseUseMutation } from '@/types'
 export type IGenerateMonthlyInvoiceRequestPayload = {
   unitId: string
   readingDate: string
-  paymentDueDay: number
 }
 
 //hook

@@ -7,7 +7,7 @@ import { Tooltip } from '@/components/common/Tooltip'
 const InfoTooltip = ({ children }: PropsWithChildren) => {
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger disabled>
         <Info className="size-4" />
       </TooltipTrigger>
       <TooltipContent>{children}</TooltipContent>

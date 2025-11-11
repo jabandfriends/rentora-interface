@@ -1,4 +1,4 @@
-import { Calendar, FileWarning, Info } from 'lucide-react'
+import { Calendar, FileWarning } from 'lucide-react'
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -11,9 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
   Spinner,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
 } from '@/components/common'
 import {
   Dialog,
@@ -34,8 +31,6 @@ type IMonthlyInvoiceCreateFilter = {
   debouncedBuildingName: string
   onBuildingChange: (buildingName: string) => void
   onReadingDateChange: (readingDate: string) => void
-  onPaymentDueDateChange: (paymentDueDate: string) => void
-  paymentDueDate: number
   onFilterReset: () => void
 }
 const MonthlyInvoiceCreateFilter = ({
@@ -43,8 +38,6 @@ const MonthlyInvoiceCreateFilter = ({
   debouncedBuildingName,
   onBuildingChange,
   onReadingDateChange,
-  paymentDueDate,
-  onPaymentDueDateChange,
   onFilterReset,
 }: IMonthlyInvoiceCreateFilter) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
@@ -123,32 +116,6 @@ const MonthlyInvoiceCreateFilter = ({
                 {availableBuildings?.map((building) => (
                   <SelectItem key={building.id} value={building.name}>
                     {building.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label className="text-theme-secondary flex items-center font-medium">
-              <span>Payment Due Date</span>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Info className="size-5" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Payment due date is the day of the month when the payment is due.</p>
-                </TooltipContent>
-              </Tooltip>
-            </Label>
-
-            <Select value={paymentDueDate?.toString()} onValueChange={onPaymentDueDateChange}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a payment due date" />
-              </SelectTrigger>
-              <SelectContent>
-                {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
-                  <SelectItem key={day} value={day.toString()}>
-                    {day}
                   </SelectItem>
                 ))}
               </SelectContent>

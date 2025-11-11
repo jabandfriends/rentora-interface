@@ -29,13 +29,13 @@ export const MAINTENANCE_TABLE_HEADER = [
   'Ticket Number',
   'Service Request Reason',
   'Room',
-  'Buildings',
   'Appointment Date',
   'Due Date',
   'Priority',
   'Status',
   'Recurring',
   'Recurring Schedule',
+  'Actual Cost',
   'Action',
 ]
 

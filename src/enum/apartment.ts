@@ -12,3 +12,8 @@ export enum ApartmentPaymentMethodType {
   CASH = 'cash',
   CHEQUE = 'cheque',
 }
+
+export enum APARTMENT_LATE_FEE_TYPE {
+  FIXED = 'fixed',
+  PERCENTAGE = 'percentage',
+}

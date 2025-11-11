@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf'
 
-import { ApartmentPaymentMethodType, CONTRACT_RENTAL_TYPE, CONTRACT_STATUS, UtilityPriceType } from '@/enum'
+import { ApartmentPaymentMethodType, CONTRACT_RENTAL_TYPE, UtilityPriceType } from '@/enum'
 import type { IContract, IMonthlyInvoiceDetail } from '@/types'
 
 import { formatCurrency, formatDate } from '.'
@@ -41,12 +41,12 @@ export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
       // Helper function for section headers
       const addSectionHeader = (title: string, yPos: number) => {
         pdf.setFillColor(236, 240, 241)
-        pdf.rect(margin, yPos - 5, pageWidth - 2 * margin, 30, 'F')
+        pdf.rect(margin, yPos - 5, pageWidth - 2 * margin, 20, 'F')
         pdf.setTextColor(41, 128, 185)
-        pdf.setFontSize(14)
+        pdf.setFontSize(10)
         pdf.setFont('bold')
-        pdf.text(title, margin + 10, yPos + 15)
-        return yPos + 45
+        pdf.text(title, margin + 10, yPos + 10)
+        return yPos + 30
       }
 
       // Helper function for two-column layout
@@ -140,15 +140,52 @@ export const contractHandlePDFDownload = (data: IContract): Promise<void> => {
       )
       y += 10
 
-      // Status Section
-      y = addSectionHeader('Contract Status', y)
-      const getStatusEmoji = (status: string) => {
-        if (status === CONTRACT_STATUS.ACTIVE) return 'Active'
-        if (status === CONTRACT_STATUS.EXPIRED) return 'Expired'
-        if (status === CONTRACT_STATUS.TERMINATED) return 'Terminated'
-        return safe(status)
-      }
-      y = addFieldRow('Status', getStatusEmoji(data.status), 'Signed At', data.signedAt || 'Not signed', y)
+      const colWidth = (pageWidth - 2 * margin) / 2
+      const signatureLineWidth = 180
+
+      // Landlord Signature
+      pdf.setTextColor(127, 140, 141)
+      pdf.setFontSize(10)
+      pdf.setFont('normal')
+      pdf.text('Landlord / Property Owner', margin + 10, y)
+
+      // Signature line
+      pdf.setDrawColor(127, 140, 141)
+      pdf.setLineWidth(1)
+      pdf.line(margin + 10, y + 50, margin + 10 + signatureLineWidth, y + 50)
+
+      // Label under line
+      pdf.setFontSize(9)
+      pdf.text('Signature', margin + 10, y + 65)
+
+      // Full name line
+      pdf.line(margin + 10, y + 90, margin + 10 + signatureLineWidth, y + 90)
+      pdf.text('Full Name', margin + 10, y + 105)
+
+      // Date line
+      pdf.line(margin + 10, y + 130, margin + 10 + signatureLineWidth, y + 130)
+      pdf.text('Date', margin + 10, y + 145)
+
+      // Tenant Signature
+      pdf.setTextColor(127, 140, 141)
+      pdf.setFontSize(10)
+      pdf.setFont('normal')
+      pdf.text('Tenant', margin + colWidth + 10, y)
+
+      // Signature line
+      pdf.line(margin + colWidth + 10, y + 50, margin + colWidth + 10 + signatureLineWidth, y + 50)
+      pdf.setFontSize(9)
+      pdf.text('Signature', margin + colWidth + 10, y + 65)
+
+      // Full name line
+      pdf.line(margin + colWidth + 10, y + 90, margin + colWidth + 10 + signatureLineWidth, y + 90)
+      pdf.text('Full Name', margin + colWidth + 10, y + 105)
+
+      // Date line
+      pdf.line(margin + colWidth + 10, y + 130, margin + colWidth + 10 + signatureLineWidth, y + 130)
+      pdf.text('Date', margin + colWidth + 10, y + 145)
+
+      y += 170
 
       // Add some space before footer
       y += 20

@@ -34,7 +34,7 @@ const SidebarItemCollapse = ({ onClose, title, icon, menu, className, ...props }
         <ul className="border-theme-secondary-200 space-y-1 border-l">
           {menu?.map((item, index) => {
             return (
-              <div className="ml-1">
+              <div className="ml-1" key={`sidebar-item-collapse-${item.label}-${index}`}>
                 <NavLink
                   key={'sidebar-item-collapse-' + index}
                   to={item.to}

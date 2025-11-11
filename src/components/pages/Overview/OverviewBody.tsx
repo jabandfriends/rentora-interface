@@ -1,22 +1,25 @@
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/feature'
 import { LoadingPage } from '@/components/ui'
 import { CONTRACT_STATUS, UnitStatus } from '@/enum'
-import { useRentoraApiContractList, useRentoraApiMaintenanceList, useRentoraApiUnitList } from '@/hooks'
+import {
+  useRentoraApiBuildingListNoPaginate,
+  useRentoraApiContractList,
+  useRentoraApiMaintenanceList,
+  useRentoraApiUnitList,
+  useTabQuery,
+} from '@/hooks'
 
+import { OverviewMaintenanceMainSection } from './Maintenance'
+import { OverviewMainSection, OverviewStats } from './Overview'
 import OverviewHeader from './OverviewHeader'
-import OverviewLeaseExpiration from './OverviewLeaseExpiration'
-import OverviewMaintenanceAlert from './OverviewMaintenanceAlert'
-import OverviewMaintenanceRequest from './OverviewMaintenanceRequest'
-// import OverviewPaymentStatus from './OverviewPaymentStatus'
-import OverviewStats from './OverviewStats'
-import OverviewUpcomingRecurringMaintenance from './OverviewUpcomingRecurringMaintenance'
-import OverviewVacantUnits from './OverviewVacantUnits'
+import { OverviewPaymentMainSection } from './Payment'
 
 const OverviewBody = () => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
-
+  const { currentTab, setTab } = useTabQuery('overview')
   const { data: recurringMaintenance, isLoading: isLoadingRecurringMaintenance } = useRentoraApiMaintenanceList({
     apartmentId: apartmentId,
     params: {
@@ -68,10 +71,23 @@ const OverviewBody = () => {
     contractStatus: CONTRACT_STATUS.ACTIVE,
   })
 
+  //building list
+  const { data: buildings, isLoading: isLoadingBuildings } = useRentoraApiBuildingListNoPaginate({ apartmentId })
+
   const isDataLoading: boolean = useMemo(
     () =>
-      isLoadingRecurringMaintenance || isLoadingMaintenanceRequests || isLoadingAllRooms || isLoadingContractExpiring,
-    [isLoadingRecurringMaintenance, isLoadingMaintenanceRequests, isLoadingAllRooms, isLoadingContractExpiring],
+      isLoadingRecurringMaintenance ||
+      isLoadingMaintenanceRequests ||
+      isLoadingAllRooms ||
+      isLoadingContractExpiring ||
+      isLoadingBuildings,
+    [
+      isLoadingRecurringMaintenance,
+      isLoadingMaintenanceRequests,
+      isLoadingAllRooms,
+      isLoadingContractExpiring,
+      isLoadingBuildings,
+    ],
   )
   const occupancyRate: number = useMemo(() => {
     return Math.round((totalUnitsOccupied / totalUnits) * 100)
@@ -84,32 +100,42 @@ const OverviewBody = () => {
     <div className="space-y-6">
       {/* Header */}
       <OverviewHeader />
-
-      {/* Stats Grid */}
       <OverviewStats
+        totalBuildings={buildings?.length}
         occupiedUnits={totalUnitsOccupied}
         totalUnits={totalUnits}
         occupancyRate={occupancyRate}
         maintenanceRequests={totalMaintenance}
       />
-
-      {/* Vacant Units */}
-      <OverviewVacantUnits totalUnits={totalUnitsAvailable} allRooms={allRooms} />
-
-      {/* Urgent Maintenance Alert */}
-      <OverviewMaintenanceAlert urgentCount={urgentCount} />
-
-      {/* Upcoming Recurring Maintenance */}
-      <OverviewUpcomingRecurringMaintenance maintenance={recurringMaintenance} />
-
-      <div className="desktop:grid-cols-2 grid gap-6">
-        <OverviewMaintenanceRequest maintenanceRequests={maintenanceRequests} />
-
-        <OverviewLeaseExpiration leaseExpirations={contractExpiring} />
-      </div>
-
-      {/* Payment Status
-      <OverviewPaymentStatus paymentStatus={paymentStatus} /> */}
+      <Tabs defaultValue={currentTab}>
+        <TabsList>
+          <TabsTrigger value="overview" onClick={() => setTab('overview')}>
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="maintenance" onClick={() => setTab('maintenance')}>
+            Maintenance
+          </TabsTrigger>
+          <TabsTrigger value="payments" onClick={() => setTab('payments')}>
+            Payments
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          <OverviewMainSection
+            totalUnitsAvailable={totalUnitsAvailable}
+            allRooms={allRooms}
+            urgentCount={urgentCount}
+            recurringMaintenance={recurringMaintenance}
+            maintenanceRequests={maintenanceRequests}
+            contractExpiring={contractExpiring}
+          />
+        </TabsContent>
+        <TabsContent value="maintenance">
+          <OverviewMaintenanceMainSection />
+        </TabsContent>
+        <TabsContent value="payments">
+          <OverviewPaymentMainSection />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

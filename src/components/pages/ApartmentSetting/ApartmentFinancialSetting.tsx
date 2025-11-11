@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -20,14 +19,17 @@ import {
   SelectValue,
   Spinner,
 } from '@/components/common'
+import { InfoTooltip } from '@/components/feature'
 import { PageTableEmpty } from '@/components/ui'
+import { APARTMENT_LATE_FEE_TYPE } from '@/enum'
 import { useRentoraApiApartmentDetail, useRentoraApiUpdateApartment } from '@/hooks'
-import type { IUpdateApartmentRequestPayload } from '@/types'
+import type { IUpdateApartmentRequestPayload, Maybe } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
 const apartmentFinancialFormSchema = z.object({
   paymentDueDay: z.string().optional(),
   lateFee: z.string().optional(),
+  lateFeeType: z.enum(APARTMENT_LATE_FEE_TYPE).optional(),
   gracePeriodDays: z.string().optional(),
   taxId: z.string().optional(),
 })
@@ -43,16 +45,27 @@ const ApartmentFinancialSetting = () => {
     defaultValues: {
       paymentDueDay: '',
       lateFee: '',
+      lateFeeType: APARTMENT_LATE_FEE_TYPE.FIXED,
       gracePeriodDays: '',
       taxId: '',
     },
   })
+
+  const [lateFeeType]: [Maybe<APARTMENT_LATE_FEE_TYPE>] = form.watch(['lateFeeType'])
+
+  //late fee title
+  const { title }: { title: string } = useMemo(() => {
+    return {
+      title: lateFeeType === APARTMENT_LATE_FEE_TYPE.FIXED ? 'Late Fee' : 'Late Fee (%)',
+    }
+  }, [lateFeeType])
 
   useEffect(() => {
     if (apartment) {
       const values = {
         paymentDueDay: String(apartment.paymentDueDay ?? 10),
         lateFee: String(apartment.lateFee ?? 0),
+        lateFeeType: apartment.lateFeeType ?? APARTMENT_LATE_FEE_TYPE.FIXED,
         gracePeriodDays: String(apartment.gracePeriodDays ?? 10),
         taxId: apartment.taxId ?? '',
       }
@@ -67,6 +80,7 @@ const ApartmentFinancialSetting = () => {
         lateFee: data.lateFee ? Number(data.lateFee) : undefined,
         gracePeriodDays: data.gracePeriodDays ? Number(data.gracePeriodDays) : undefined,
         taxId: data.taxId ? data.taxId : undefined,
+        lateFeeType: data.lateFeeType ?? APARTMENT_LATE_FEE_TYPE.FIXED,
       }
       try {
         updateApartment(updatePayload)
@@ -103,60 +117,106 @@ const ApartmentFinancialSetting = () => {
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid gap-4">
-            <FormField
-              control={form.control}
-              name="paymentDueDay"
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="paymentDueDay">Payment Due Day</Label>
-                  <Select onValueChange={field.onChange} value={field.value} key={`payment-${field.value}`}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select payment due day" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 30 }, (_, i) => i + 1).map((day) => (
-                        <SelectItem key={day} value={day.toString()}>
-                          {day}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lateFee"
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="lateFee">Late Fee</Label>
-                  <InputNumber decimal placeholder="Enter late fee" {...field} />
-                </div>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="gracePeriodDays"
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="gracePeriodDays">Grace Period Days</Label>
-                  <Select value={field.value} key={`grace-${field.value}`} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select grace period days" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {/* TODO: 30 days */}
-                      {Array.from({ length: 30 }, (_, i) => i + 1).map((day) => (
-                        <SelectItem key={day} value={day.toString()}>
-                          {day}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            />
+          <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-x-4">
+              <div>
+                <FormField
+                  control={form.control}
+                  name="paymentDueDay"
+                  render={({ field }) => (
+                    <div className="space-y-2">
+                      <Label htmlFor="paymentDueDay">
+                        Payment Due Day
+                        <InfoTooltip>
+                          The payment due day is calculated by adding the number of days you select here to the invoice
+                          generation date. For example, if you enter 10, the due date will be 10 days after the invoice
+                          is generated.
+                        </InfoTooltip>
+                      </Label>
+                      <Select onValueChange={field.onChange} value={field.value} key={`payment-${field.value}`}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select payment due day" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 30 }, (_, i) => i + 1).map((day) => (
+                            <SelectItem key={day} value={day.toString()}>
+                              {day}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                />
+              </div>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="gracePeriodDays"
+                  render={({ field }) => (
+                    <div className="space-y-2">
+                      <Label htmlFor="gracePeriodDays">
+                        Grace Period Days
+                        <InfoTooltip>
+                          The grace period is the number of days after the payment due day when late fees begin to
+                          accrue.
+                        </InfoTooltip>
+                      </Label>
+                      <Select value={field.value} key={`grace-${field.value}`} onValueChange={field.onChange}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select grace period days" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {/* TODO: 30 days */}
+                          {Array.from({ length: 30 }, (_, i) => i + 1).map((day) => (
+                            <SelectItem key={day} value={day.toString()}>
+                              {day}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-x-4">
+              <div>
+                <FormField
+                  control={form.control}
+                  name="lateFee"
+                  render={({ field }) => (
+                    <div className="space-y-2">
+                      <Label htmlFor="lateFee">{title}</Label>
+                      <InputNumber decimal maxLength={8} placeholder="Enter late fee" {...field} />
+                    </div>
+                  )}
+                />
+              </div>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="lateFeeType"
+                  render={({ field }) => (
+                    <div className="space-y-2">
+                      <Label htmlFor="lateFeeType">Late Fee Type</Label>
+                      <Select onValueChange={field.onChange} value={field.value} key={`lateFeeType-${field.value}`}>
+                        <SelectTrigger className="w-full capitalize">
+                          <SelectValue placeholder="Select late fee type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.values(APARTMENT_LATE_FEE_TYPE).map((type) => (
+                            <SelectItem className="capitalize" key={type} value={type}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                />
+              </div>
+            </div>
 
             <FormField
               control={form.control}
@@ -174,7 +234,7 @@ const ApartmentFinancialSetting = () => {
                 disabled={isButtonDisabled}
                 type="submit"
               >
-                <Save /> Save
+                {isUpdateApartmentPending ? <Spinner className="size-4" /> : 'Save Changes'}
               </Button>
             </div>
           </div>

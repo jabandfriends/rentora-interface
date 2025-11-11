@@ -12,8 +12,3 @@ export enum APARTMENT_FORM_FIELD_KEY_ENUM {
   postalCode = 'postalCode',
   country = 'country',
 }
-
-export enum LateFeeType {
-  FIXED = 'fixed',
-  PERCENTAGE = 'percentage',
-}
