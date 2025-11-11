@@ -31,9 +31,9 @@ export type IMonthlyUtilityBuldingParams = {
 }
 
 export type IRentoraApiMonthlyUtilityDetailParams = {
+  buildingId?: string
   page?: number
   size?: number
-  search?: string
   sortBy?: 'name' | 'createdAt' | 'updatedAt'
   sortDir?: 'asc' | 'desc'
 }
