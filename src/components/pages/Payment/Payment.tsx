@@ -34,7 +34,7 @@ const Payment = () => {
     watch(['search', 'status', 'verifiedStatus', 'genMonth', 'buildingName'])
 
   // debounce
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch = useDebounce(search ? search : undefined, 150)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedVerified = useDebounce(verifiedStatus ? verifiedStatus : undefined, 300)
   const debouncedGenMonth = useDebounce(genMonth ? genMonth : undefined, 300)

@@ -36,7 +36,7 @@ const OverdueInvoice = () => {
     'sortDir',
   ])
 
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch = useDebounce(search ? search : undefined, 150)
   const debouncedSortBy = useDebounce(sortBy ? sortBy : undefined, 300)
   const debouncedSortDir = useDebounce(sortDir ? sortDir : undefined, 300)
 
