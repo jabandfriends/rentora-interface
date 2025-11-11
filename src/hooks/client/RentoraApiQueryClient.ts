@@ -1,7 +1,10 @@
 import type { AxiosResponse } from 'axios'
 
 import type {
+  IApartmentUtilityParams,
+  IMaintenanceMonthlySummaryTrendParam,
   IMonthlyUtilityUnitParams,
+  IPaymentMonthlySummaryParam,
   IRentoraApiAllUnitMonthlyInvoiceStatusParams,
   IRentoraApiApartmentDetailParams,
   IRentoraApiApartmentListParams,
@@ -17,12 +20,23 @@ import type {
   IRentoraApiClientFloorListResponse,
   IRentoraApiClientInvoiceDetailResponse,
   IRentoraApiClientInvoiceListResponse,
+  IRentoraApiClientMaintenanceAvailableYearsResponse,
+  IRentoraApiClientMaintenanceCategorySummaryResponse,
   IRentoraApiClientMaintenanceDetailResponse,
   IRentoraApiClientMaintenanceListResponse,
+  IRentoraApiClientMaintenanceMonthlySummaryTrendResponse,
+  IRentoraApiClientMaintenanceYearlyStatisticsResponse,
+  IRentoraApiClientMaintenanceYearlySummaryTrendResponse,
   IRentoraApiClientMonthlyInvoiceDetailResponse,
   IRentoraApiClientMonthlyInvoiceListResponse,
   IRentoraApiClientMonthlyInvoiceListWithFullDetailsResponse,
   IRentoraApiClientOverdueInvoiceListResponse,
+  IRentoraApiClientPaymentAvailableYearResponse,
+  IRentoraApiClientPaymentDistributionSummaryResponse,
+  IRentoraApiClientPaymentListResponse,
+  IRentoraApiClientPaymentMonthlySummaryResponse,
+  IRentoraApiClientPaymentStatsSummaryResponse,
+  IRentoraApiClientPaymentYearlySummaryResponse,
   IRentoraApiClientReadingUnitUtilityResponse,
   IRentoraApiClientReportUtilityListResponse,
   IRentoraApiClientSupplyListResponse,
@@ -37,19 +51,22 @@ import type {
   IRentoraApiClientUnitWithUtilityResponse,
   IRentoraApiClientUserResponse,
   IRentoraApiClientUtilityListResponse,
+  IRentoraApiClietApartmentUtilityResponse,
   IRentoraApiClietMonthlyUtilityUnitResponse,
+  IRentoraApiClietYearlyApartmentResponse,
   IRentoraApiContractListParams,
   IRentoraApiInvoiceListParams,
   IRentoraApiMaintenanceApartmentIdParams,
   IRentoraApiMaintenanceDetailParams,
   IRentoraApiMaintenanceListParams,
   IRentoraApiMonthlyInvoiceListParams,
+  IRentoraApiMonthlyInvoiceListWithFullDetailsParams,
   IRentoraApiMonthlyUtilityBuildingListResponse,
   IRentoraApiMonthlyUtilityDetailParams,
   IRentoraApiMonthlyUtilityFloorListResponse,
   IRentoraApiMonthlyUtilityFloorParams,
-  IRentoraApiMonthlyInvoiceListWithFullDetailsParams,
   IRentoraApiOverdueInvoiceListParams,
+  IRentoraApiPaymentListParams,
   IRentoraApiReportUtilityListParams,
   IRentoraApiSupplyListParams,
   IRentoraApiSupplyTransactionListParams,
@@ -60,15 +77,6 @@ import type {
   Maybe,
   RentoraApiQueryClientKey,
 } from '@/types'
-import type {
-  IApartmentUtilityParams,
-  IRentoraApiClietApartmentUtilityResponse,
-  IRentoraApiClietYearlyApartmentResponse,
-} from '@/types/hooks/api/query/apartment-utility'
-import type {
-  IRentoraApiClientPaymentListResponse,
-  IRentoraApiPaymentListParams,
-} from '@/types/hooks/api/query/payment'
 
 import { RentoraApiBaseClient as RentoraApiBaseClient } from './RentoraApiBaseClient'
 
@@ -118,6 +126,22 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
 
     //get apartment payment
     apartmentPayment: 'APARTMENT_PAYMENT',
+
+    //analytics
+    //payment
+    paymentAvailableYear: 'PAYMENT_AVAILABLE_YEAR',
+    paymentStatsSummary: 'PAYMENT_STATS_SUMMARY',
+    monthlyPaymentAnalytics: 'MONTHLY_PAYMENT_ANALYTICS',
+    yearlyPaymentAnalytics: 'YEARLY_PAYMENT_ANALYTICS',
+    paymentDistributionSummary: 'PAYMENT_DISTRIBUTION_SUMMARY',
+
+    //analytics
+    //maintenance
+    maintenanceAvailableYears: 'MAINTENANCE_AVAILABLE_YEARS',
+    maintenanceCategorySummary: 'MAINTENANCE_CATEGORY_SUMMARY',
+    maintenanceYearlyStatistics: 'MAINTENANCE_YEARLY_STATISTICS',
+    maintenanceYearlySummaryTrend: 'MAINTENANCE_YEARLY_SUMMARY_TREND',
+    maintenanceMonthlySummaryTrend: 'MAINTENANCE_MONTHLY_SUMMARY_TREND',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -562,6 +586,113 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
   async apartmentPayment(apartmentId: Maybe<string>): Promise<IRentoraApiClientApartmentPaymentResponse['data']> {
     const response = await this.axiosWithAuthInstance.get<IRentoraApiClientApartmentPaymentResponse>(
       `/api/apartments/${apartmentId}/payment`,
+    )
+    return response.data.data
+  }
+
+  //----- analytics -----
+  //payment available year
+  async paymentAvailableYear(
+    apartmentId: Maybe<string>,
+  ): Promise<IRentoraApiClientPaymentAvailableYearResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientPaymentAvailableYearResponse>(
+      `/api/apartments/analytic/${apartmentId}/payment/years`,
+    )
+    return response.data.data
+  }
+
+  //monthly payment summary
+  async monthlyPaymentAnalytics(
+    apartmentId: Maybe<string>,
+    params: IPaymentMonthlySummaryParam,
+  ): Promise<IRentoraApiClientPaymentMonthlySummaryResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientPaymentMonthlySummaryResponse>(
+      `/api/apartments/analytic/${apartmentId}/payment/monthly`,
+      {
+        params,
+      },
+    )
+    return response.data.data
+  }
+
+  //yearly payment summary
+  async yearlyPaymentAnalytics(
+    apartmentId: Maybe<string>,
+  ): Promise<IRentoraApiClientPaymentYearlySummaryResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientPaymentYearlySummaryResponse>(
+      `/api/apartments/analytic/${apartmentId}/payment/yearly`,
+    )
+    return response.data.data
+  }
+
+  //payment stats summary
+  async paymentStatsSummary(apartmentId: Maybe<string>): Promise<IRentoraApiClientPaymentStatsSummaryResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientPaymentStatsSummaryResponse>(
+      `/api/apartments/analytic/${apartmentId}/payment`,
+    )
+    return response.data.data
+  }
+
+  //payment distribution summary
+  async paymentDistributionSummary(
+    apartmentId: Maybe<string>,
+  ): Promise<IRentoraApiClientPaymentDistributionSummaryResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientPaymentDistributionSummaryResponse>(
+      `/api/apartments/analytic/${apartmentId}/payment/distribution`,
+    )
+    return response.data.data
+  }
+
+  //maintenance available years
+  async maintenanceAvailableYears(
+    apartmentId: Maybe<string>,
+  ): Promise<IRentoraApiClientMaintenanceAvailableYearsResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceAvailableYearsResponse>(
+      `/api/apartments/analytic/${apartmentId}/maintenance/years`,
+    )
+    return response.data.data
+  }
+
+  //maintenance category summary
+  async maintenanceCategorySummary(
+    apartmentId: Maybe<string>,
+  ): Promise<IRentoraApiClientMaintenanceCategorySummaryResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceCategorySummaryResponse>(
+      `/api/apartments/analytic/${apartmentId}/maintenance/category`,
+    )
+    return response.data.data
+  }
+
+  //maintenance yearly statistics
+  async maintenanceYearlyStatistics(
+    apartmentId: Maybe<string>,
+  ): Promise<IRentoraApiClientMaintenanceYearlyStatisticsResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceYearlyStatisticsResponse>(
+      `/api/apartments/analytic/${apartmentId}/maintenance/yearly/statistic`,
+    )
+    return response.data.data
+  }
+
+  //maintenance yearly summary trend
+  async maintenanceYearlySummaryTrend(
+    apartmentId: Maybe<string>,
+  ): Promise<IRentoraApiClientMaintenanceYearlySummaryTrendResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceYearlySummaryTrendResponse>(
+      `/api/apartments/analytic/${apartmentId}/maintenance/yearly`,
+    )
+    return response.data.data
+  }
+
+  //maintenance monthly summary trend
+  async maintenanceMonthlySummaryTrend(
+    apartmentId: Maybe<string>,
+    params: IMaintenanceMonthlySummaryTrendParam,
+  ): Promise<IRentoraApiClientMaintenanceMonthlySummaryTrendResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceMonthlySummaryTrendResponse>(
+      `/api/apartments/analytic/${apartmentId}/maintenance/monthly`,
+      {
+        params,
+      },
     )
     return response.data.data
   }
