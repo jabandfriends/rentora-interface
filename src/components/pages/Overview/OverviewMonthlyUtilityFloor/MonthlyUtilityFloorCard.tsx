@@ -23,7 +23,7 @@ const MonthlyUtilityFloorCard = ({ item, isLoading }: IMonthlyUtilityFloorCard) 
       <div className="flex justify-start">
         <h3 className="text-start font-bold">{item.floorName}</h3>
       </div>
-      <div className="desktop:flex-col justify-items-between-start flex flex-row gap-2">
+      <div className="desktop:grid desktop:grid-cols-2 flex flex-col gap-6">
         <MonthlyUtilityFloorElectChart item={item} isLoading={isLoading} />
         <MonthlyUtilityFloorWaterChart item={item} isLoading={isLoading} />
       </div>
