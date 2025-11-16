@@ -7,7 +7,6 @@ export type IUserAuthenticationResponse = {
   lastName: string
   email: string
   phoneNumber: Maybe<string>
-  profileImageUrl: Maybe<string>
   mustChangePassword: boolean
   lastLogin: string
   apartmentRoles: Array<IUserAuthenticationApartmentRole>

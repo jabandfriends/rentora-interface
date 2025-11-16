@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/common'
-import { ROUTES } from '@/constants'
+import { APARTMENT_NAME, ROUTES } from '@/constants'
 import type { IUserAuthenticationResponse, Maybe } from '@/types'
 import { cn } from '@/utilities'
 
@@ -56,9 +56,9 @@ const NavBar = ({
           <div className="desktop:hidden items-center gap-x-2">
             <Link className="flex items-center gap-x-2" to={ROUTES.allApartment.path}>
               <h5 className="bg-theme-primary text-theme-white flex size-8 items-center justify-center rounded-lg">
-                R
+                {APARTMENT_NAME.charAt(0)}
               </h5>
-              <h3>Rentora</h3>
+              <h3>{APARTMENT_NAME}</h3>
             </Link>
           </div>
         </div>

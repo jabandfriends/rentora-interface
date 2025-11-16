@@ -1,12 +1,13 @@
 import type { HTMLAttributes } from 'react'
 import { useParams } from 'react-router-dom'
 
-import SidebarUserProfile from '@/components/ui/Sidebar/SidebarBottom/SidebarUserProfile'
 import { SidebarItem, SidebarItemCollapse } from '@/components/ui/Sidebar/SidebarNavigation'
 import { getSidebarItems } from '@/constants'
 import type { TENANT_ROLE } from '@/enum'
 import type { IUserAuthenticationResponse, Maybe, SidebarItems } from '@/types'
 import { cn } from '@/utilities'
+
+import SidebarUserProfile from './SidebarUserProfile'
 
 type ISidebarBottomProps = {
   onClose: () => void

@@ -23,21 +23,26 @@ const authLoader = async (): Promise<{
   valid: boolean
   mustChangePassword: boolean
   apartmentRoles: Array<IUserAuthenticationApartmentRole>
+  userData: Maybe<IUserAuthenticationResponse>
 }> => {
   const rentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
   const auth: Maybe<string> = localStorage.getItem(parseStorageKey('auth'))
   if (!auth) {
-    return { valid: false, mustChangePassword: false, apartmentRoles: [] }
+    return { valid: false, mustChangePassword: false, apartmentRoles: [], userData: undefined }
   }
   const { accessToken }: { accessToken: string } = JSON.parse(auth)
 
   try {
-    const { mustChangePassword, apartmentRoles }: IUserAuthenticationResponse =
-      await rentoraApiQueryClient.checkAuth(accessToken)
-    return { valid: true, mustChangePassword, apartmentRoles }
+    const userData: IUserAuthenticationResponse = await rentoraApiQueryClient.checkAuth(accessToken)
+    return {
+      valid: true,
+      mustChangePassword: userData.mustChangePassword,
+      apartmentRoles: userData.apartmentRoles,
+      userData,
+    }
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_: unknown) {
-    return { valid: false, mustChangePassword: false, apartmentRoles: [] }
+    return { valid: false, mustChangePassword: false, apartmentRoles: [], userData: undefined }
   }
 }
 
