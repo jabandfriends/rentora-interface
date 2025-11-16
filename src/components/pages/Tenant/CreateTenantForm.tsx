@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { CalendarIcon, Plus } from 'lucide-react'
-import { useMemo } from 'react'
+import { CalendarIcon, CloudUpload, FileText, Plus, X } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 import {
   Button,
@@ -22,21 +23,92 @@ import {
   SelectValue,
   Textarea,
 } from '@/components/common'
+import {
+  FileUpload,
+  FileUploadDropzone,
+  FileUploadItem,
+  FileUploadItemDelete,
+  FileUploadItemMetadata,
+  FileUploadList,
+  FileUploadTrigger,
+} from '@/components/feature'
 import { Calendar } from '@/components/ui'
 import { CREATE_TENANT_DEFAULT_VALUES, CREATE_TENANT_FORM_FIELDS, CREATE_TENANT_FORM_SCHEMA } from '@/constants'
-import type { CREATE_TENANT_FORM_SCHEMA_TYPE } from '@/types'
+import { TENANT_ROLE } from '@/enum'
+import { useRentoraApiCreateReadingContact } from '@/hooks'
+import type { CREATE_TENANT_FORM_SCHEMA_TYPE, IReadingContact } from '@/types'
+import { getErrorMessage } from '@/utilities'
 
 type ICreateTenantFormProps = {
   onSubmit: (data: CREATE_TENANT_FORM_SCHEMA_TYPE) => void
   isPending: boolean
   errorMessage: string
+  initialValues?: Partial<CREATE_TENANT_FORM_SCHEMA_TYPE>
 }
-const CreateTenantForm = ({ onSubmit, isPending, errorMessage }: ICreateTenantFormProps) => {
+const CreateTenantForm = ({ onSubmit, isPending, errorMessage, initialValues }: ICreateTenantFormProps) => {
   const form = useForm<CREATE_TENANT_FORM_SCHEMA_TYPE>({
     mode: 'onChange',
     resolver: zodResolver(CREATE_TENANT_FORM_SCHEMA),
     defaultValues: CREATE_TENANT_DEFAULT_VALUES,
   })
+
+  const [ocrFile, setOcrFile] = useState<Array<File>>([])
+  const { mutateAsync: createReadingContact, isPending: isOcrProcessing } = useRentoraApiCreateReadingContact()
+
+  // Populate form when initialValues from OCR data is provided
+  useEffect(() => {
+    if (initialValues) {
+      form.reset({
+        ...CREATE_TENANT_DEFAULT_VALUES,
+        ...initialValues,
+      })
+    }
+  }, [initialValues, form])
+
+  // Handle OCR file upload and auto-fill form
+  const handleOcrFileChange = useCallback(
+    async (files: Array<File>) => {
+      if (files.length === 0) {
+        setOcrFile([])
+        return
+      }
+
+      const file = files[0]
+      setOcrFile([file])
+
+      try {
+        const ocrData: IReadingContact = await createReadingContact(file)
+
+        // Map OCR data to form values
+        const mappedValues: Partial<CREATE_TENANT_FORM_SCHEMA_TYPE> = {
+          firstName: ocrData.firstName || '',
+          lastName: ocrData.lastName || '',
+          email: ocrData.email || '',
+          phoneNumber: ocrData.phoneNumber || '',
+          nationalId: ocrData.nationId || '',
+          dateOfBirth: ocrData.dateOfBirth || '',
+          emergencyContactName: ocrData.emergencyContactName || '',
+          emergencyContactPhone: ocrData.emergencyContactPhone || '',
+          // Password fields remain empty - user must fill them
+          password: '',
+          confirmPassword: '',
+          role: TENANT_ROLE.TENANT,
+        }
+
+        // Populate form with OCR data
+        form.reset({
+          ...CREATE_TENANT_DEFAULT_VALUES,
+          ...mappedValues,
+        })
+
+        toast.success('Contact information extracted successfully! Please review and complete the form.')
+      } catch (error) {
+        toast.error(`Failed to read contact information: ${getErrorMessage(error)}`)
+        // Keep form as is - user can fill manually
+      }
+    },
+    [createReadingContact, form],
+  )
 
   const isButtonDisabled: boolean = useMemo(() => {
     return form.formState.isSubmitting || !form.formState.isDirty || !form.formState.isValid || isPending
@@ -44,6 +116,58 @@ const CreateTenantForm = ({ onSubmit, isPending, errorMessage }: ICreateTenantFo
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        {/* OCR File Upload Section */}
+        <Card className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
+          <div>
+            <h3 className="flex items-center gap-2">
+              <FileText size={20} className="text-theme-primary" />
+              Upload Contact Form (OCR)
+            </h3>
+            <p className="text-theme-secondary">
+              Upload a scanned image or PDF of the contact form to automatically fill in tenant information
+            </p>
+          </div>
+          <FileUpload
+            value={ocrFile}
+            onValueChange={handleOcrFileChange}
+            accept="image/*,.pdf,application/pdf"
+            maxFiles={1}
+            maxSize={10 * 1024 * 1024} // 10MB
+            disabled={isOcrProcessing}
+          >
+            <FileUploadDropzone className="text-body-2 border-theme-secondary-500 border-3 flex-row flex-wrap border-dotted text-center">
+              <CloudUpload className="size-4" />
+              {isOcrProcessing ? 'Processing...' : 'Drag and drop or'}
+              <FileUploadTrigger asChild>
+                <Button variant="link" disabled={isOcrProcessing}>
+                  choose file
+                </Button>
+              </FileUploadTrigger>
+              {!isOcrProcessing && 'to extract contact information'}
+            </FileUploadDropzone>
+            <FileUploadList>
+              {ocrFile.map((file, index) => (
+                <FileUploadItem key={index} value={file}>
+                  <FileUploadItemMetadata />
+                  <FileUploadItemDelete asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-7"
+                      onClick={() => {
+                        setOcrFile([])
+                      }}
+                    >
+                      <X />
+                      <span className="sr-only">Delete</span>
+                    </Button>
+                  </FileUploadItemDelete>
+                </FileUploadItem>
+              ))}
+            </FileUploadList>
+          </FileUpload>
+        </Card>
+
         {/* Task Detail */}
         {CREATE_TENANT_FORM_FIELDS.map(({ title, description, fields }) => (
           <Card key={'form-section' + title + description} className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
