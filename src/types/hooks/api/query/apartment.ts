@@ -26,6 +26,7 @@ export type IApartment = {
   unitCount: number
   activeContractCount: number
   logoPresignedUrl: string
+  userRole: TENANT_ROLE
 }
 
 export type IApartmentDetail = IApartment & {
