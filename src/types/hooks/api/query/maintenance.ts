@@ -129,4 +129,6 @@ export type IRentoraApiTenantMaintenanceListParams = {
 export type IRentoraApiClientTenantMaintenanceListResponse = IRentoraApiClientBasePaginateResponse<IMaintenanceInfo>
 
 //hooks type useRentoraApiTenantMaintenanceList
-export type IUseRentoraApiTenantMaintenanceList = IBasePaginateQueryResult<IRentoraApiClientTenantMaintenanceListResponse['data']>
+export type IUseRentoraApiTenantMaintenanceList = IBasePaginateQueryResult<
+  IRentoraApiClientTenantMaintenanceListResponse['data']
+>

@@ -5,6 +5,7 @@ export type RentoraApiQueryClientKey =
   | 'invoiceList'
   | 'overdueInvoiceList'
   | 'invoiceDetail'
+  | 'tenantAdhocInvoiceList'
   | 'tenantList'
   | 'tenantDetail'
   | 'tenantList'
