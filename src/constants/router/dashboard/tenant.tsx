@@ -8,7 +8,7 @@ import TenantUpdatePage from '@/pages/Tenant/TenantUpdate'
 import RequireApartmentWrapper from '@/router/RequireApartmentWrapper'
 import type { IRouter } from '@/types'
 
-export const TENANT_ROUTES: Array<IRouter> = [
+export const TENANT_SETTINGS_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.tenantUpdate.path,
     element: (
