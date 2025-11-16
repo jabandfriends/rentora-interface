@@ -1,4 +1,5 @@
 import { MonthlyInvoiceCreate, MonthlyInvoiceDetail } from '@/components/pages/Invoice'
+import { DASHBOARD_ROUTE_ID } from '@/constants'
 import { ROUTES } from '@/constants/router/routes'
 import { TENANT_ROLE } from '@/enum'
 import InvoiceCreatePage from '@/pages/Invoice/InvoiceCreate'
@@ -14,7 +15,7 @@ export const INVOICE_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.normalInvoice.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId="dashboard">
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <NormalInvoicePage />
       </RequireApartmentWrapper>
     ),
@@ -22,7 +23,7 @@ export const INVOICE_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.monthlyInvoice.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId="dashboard">
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <MonthlyInvoicePage />
       </RequireApartmentWrapper>
     ),
@@ -30,7 +31,7 @@ export const INVOICE_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.invoiceCreate.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId="dashboard">
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <InvoiceCreatePage />
       </RequireApartmentWrapper>
     ),
@@ -38,7 +39,7 @@ export const INVOICE_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.overdueInvoice.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId="dashboard">
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <OverdueInvoicePage />
       </RequireApartmentWrapper>
     ),
@@ -46,7 +47,7 @@ export const INVOICE_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.serviceInvoice.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId="dashboard">
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <ServiceInvoicePage />
       </RequireApartmentWrapper>
     ),
@@ -54,7 +55,7 @@ export const INVOICE_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.monthlyInvoiceCreate.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId="dashboard">
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <MonthlyInvoiceCreate />
       </RequireApartmentWrapper>
     ),
@@ -62,7 +63,7 @@ export const INVOICE_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.monthlyInvoiceDetail.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId="dashboard">
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <MonthlyInvoiceDetail />
       </RequireApartmentWrapper>
     ),
@@ -70,7 +71,7 @@ export const INVOICE_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.invoiceDetail.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId="dashboard">
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <InvoiceDetailPage />
       </RequireApartmentWrapper>
     ),

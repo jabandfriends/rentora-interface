@@ -9,7 +9,10 @@ export const REPORT_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.electricWaterReport.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper
+        allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE]}
+        routeId={DASHBOARD_ROUTE_ID}
+      >
         <ElectricWaterReportPage />
       </RequireApartmentWrapper>
     ),

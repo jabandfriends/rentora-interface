@@ -12,7 +12,7 @@ export const TENANT_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.tenantUpdate.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <TenantUpdatePage />
       </RequireApartmentWrapper>
     ),
@@ -21,7 +21,7 @@ export const TENANT_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.tenant.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <TenantPage />
       </RequireApartmentWrapper>
     ),
@@ -29,7 +29,7 @@ export const TENANT_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.tenantCreate.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <TenantCreatePage />
       </RequireApartmentWrapper>
     ),
@@ -37,7 +37,7 @@ export const TENANT_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.tenantUpdatePassword.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <TenantUpdatePassword />
       </RequireApartmentWrapper>
     ),

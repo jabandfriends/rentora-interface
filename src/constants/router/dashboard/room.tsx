@@ -10,7 +10,7 @@ export const ROOM_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.allRoom.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <AllRoomsPage />
       </RequireApartmentWrapper>
     ),
@@ -18,7 +18,7 @@ export const ROOM_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.roomDetail.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <RoomDetail />
       </RequireApartmentWrapper>
     ),

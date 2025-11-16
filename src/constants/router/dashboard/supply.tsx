@@ -10,7 +10,10 @@ export const SUPPLY_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.supplyList.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper
+        allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE]}
+        routeId={DASHBOARD_ROUTE_ID}
+      >
         <SupplyList />
       </RequireApartmentWrapper>
     ),
@@ -18,7 +21,10 @@ export const SUPPLY_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.supplyTransactions.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper
+        allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE]}
+        routeId={DASHBOARD_ROUTE_ID}
+      >
         <SupplyTransactions />
       </RequireApartmentWrapper>
     ),

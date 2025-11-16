@@ -10,7 +10,10 @@ export const UTILITY_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.meterReadingList.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper
+        allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE]}
+        routeId={DASHBOARD_ROUTE_ID}
+      >
         <MeterReadingListPage />
       </RequireApartmentWrapper>
     ),
@@ -18,7 +21,10 @@ export const UTILITY_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.meterReadingCreate.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper
+        allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE]}
+        routeId={DASHBOARD_ROUTE_ID}
+      >
         <MeterReadingCreatePage />
       </RequireApartmentWrapper>
     ),

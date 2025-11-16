@@ -10,7 +10,7 @@ export const CONTRACT_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.contractCreate.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <ContractCreate />
       </RequireApartmentWrapper>
     ),
@@ -18,7 +18,7 @@ export const CONTRACT_ROUTES: Array<IRouter> = [
   {
     path: ROUTES.contractDetail.path,
     element: (
-      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]} routeId={DASHBOARD_ROUTE_ID}>
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
         <ContractDetail />
       </RequireApartmentWrapper>
     ),
