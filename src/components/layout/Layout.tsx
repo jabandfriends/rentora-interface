@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Outlet, useLoaderData } from 'react-router-dom'
 
 import type { TENANT_ROLE } from '@/enum'
@@ -20,8 +20,6 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
     userData: Maybe<IUserAuthenticationResponse>
   }> = useLoaderData()
 
-  const userRole: Maybe<TENANT_ROLE> = useMemo(() => loaderData?.userRole ?? undefined, [loaderData])
-
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const toggleRef = useRef(false)
 
@@ -37,10 +35,16 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
   return (
     <div>
       {isSidebar && (
-        <Sidebar isOpen={sidebarOpen} onClose={setSidebar} currentUserRole={userRole} userData={loaderData?.userData} />
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={setSidebar}
+          currentUserRole={loaderData?.userRole}
+          userData={loaderData?.userData}
+        />
       )}
       {isNavbar && (
         <NavBar
+          currentUserRole={loaderData?.userRole}
           sidebarOpen={sidebarOpen}
           onSidebarToggle={setSidebar}
           isSidebar={isSidebar}

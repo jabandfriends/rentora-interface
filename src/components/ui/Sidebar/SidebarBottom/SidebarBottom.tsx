@@ -39,7 +39,7 @@ const SidebarBottom = ({ onClose, className, userData, currentUserRole, ...props
             )
           }
         })}
-        <SidebarUserProfile userData={userData} className="desktop:hidden" />
+        <SidebarUserProfile currentUserRole={currentUserRole} userData={userData} className="desktop:hidden" />
       </nav>
     </div>
   )
