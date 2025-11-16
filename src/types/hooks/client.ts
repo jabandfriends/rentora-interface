@@ -46,6 +46,7 @@ export type RentoraApiQueryClientKey =
   | 'maintenanceYearlyStatistics'
   | 'maintenanceYearlySummaryTrend'
   | 'maintenanceMonthlySummaryTrend'
+  | 'tenantCurrentContract'
 export type RentoraApiExecuteClientKey =
   | 'authenticate'
   | 'createApartment'

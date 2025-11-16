@@ -39,6 +39,7 @@ import type {
   IRentoraApiClientReportUtilityListResponse,
   IRentoraApiClientSupplyListResponse,
   IRentoraApiClientSupplyTransactionListResponse,
+  IRentoraApiClientTenantCurrentContractResponse,
   IRentoraApiClientTenantDetailResponse,
   IRentoraApiClientTenantListResponse,
   IRentoraApiClientUnitDetailResponse,
@@ -128,6 +129,9 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     maintenanceYearlyStatistics: 'MAINTENANCE_YEARLY_STATISTICS',
     maintenanceYearlySummaryTrend: 'MAINTENANCE_YEARLY_SUMMARY_TREND',
     maintenanceMonthlySummaryTrend: 'MAINTENANCE_MONTHLY_SUMMARY_TREND',
+
+    //tenant
+    tenantCurrentContract: 'TENANT_CURRENT_CONTRACT',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -622,6 +626,17 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
       {
         params,
       },
+    )
+    return response.data.data
+  }
+
+  //tenant section---------------------------
+  //get tenant current contract
+  async tenantCurrentContract(
+    apartmentId: Maybe<string>,
+  ): Promise<IRentoraApiClientTenantCurrentContractResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientTenantCurrentContractResponse>(
+      `/api/apartments/${apartmentId}/contracts/tenant`,
     )
     return response.data.data
   }
