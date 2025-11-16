@@ -1,6 +1,7 @@
+import type { TENANT_ROLE } from '@/enum'
 import type { IBaseUseQuery, IRentoraApiClientBaseResponse, Maybe } from '@/types'
 
-export type IUser = {
+export type IUserAuthenticationResponse = {
   id: string
   firstName: string
   lastName: string
@@ -9,9 +10,16 @@ export type IUser = {
   profileImageUrl: Maybe<string>
   mustChangePassword: boolean
   lastLogin: string
+  apartmentRoles: Array<IUserAuthenticationApartmentRole>
 }
 
-export type IRentoraApiClientUserResponse = IRentoraApiClientBaseResponse<IUser>
+export type IUserAuthenticationApartmentRole = {
+  apartmentId: string
+  apartmentName: string
+  role: TENANT_ROLE
+}
+
+export type IRentoraApiClientUserResponse = IRentoraApiClientBaseResponse<IUserAuthenticationResponse>
 
 //hook
 export type IUseRentoraApiClientUserResponse = IBaseUseQuery<IRentoraApiClientUserResponse['data']>

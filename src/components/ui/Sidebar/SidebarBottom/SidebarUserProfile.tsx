@@ -10,9 +10,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/common'
 import { ROUTES } from '@/constants'
-import type { IUser, Maybe } from '@/types'
+import type { IUserAuthenticationResponse, Maybe } from '@/types'
 
-const SidebarUserProfile = ({ userData, className }: { userData: Maybe<IUser>; className?: string }) => {
+const SidebarUserProfile = ({
+  userData,
+  className,
+}: {
+  userData: Maybe<IUserAuthenticationResponse>
+  className?: string
+}) => {
   // hooks
   const navigate: NavigateFunction = useNavigate()
   const handleLogout = useCallback(() => {

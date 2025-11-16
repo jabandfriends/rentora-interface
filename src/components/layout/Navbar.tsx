@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/common'
 import { ROUTES } from '@/constants'
-import type { IUser, Maybe } from '@/types'
+import type { IUserAuthenticationResponse, Maybe } from '@/types'
 import { cn } from '@/utilities'
 
 const NavBar = ({
@@ -23,7 +23,7 @@ const NavBar = ({
   onSidebarToggle: () => void
   isSidebar: boolean
   sidebarOpen: boolean
-  userData: Maybe<IUser>
+  userData: Maybe<IUserAuthenticationResponse>
 }) => {
   // hooks
   const navigate: NavigateFunction = useNavigate()

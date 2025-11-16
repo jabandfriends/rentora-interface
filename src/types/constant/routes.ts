@@ -11,6 +11,7 @@ export type IRouteWithUrl = IRoute & {
 }
 
 export type IRoutes = {
+  forbidden: Omit<IRoute, 'getPath'>
   auth: Omit<IRoute, 'getPath'>
   firstTimePasswordReset: Omit<IRoute, 'getPath'>
   apartmentCreate: Omit<IRoute, 'getPath'>
