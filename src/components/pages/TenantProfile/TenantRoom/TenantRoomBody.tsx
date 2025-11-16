@@ -1,3 +1,4 @@
+import { PageHeader } from '@/components/layout'
 import { EmptyPage, LoadingPage } from '@/components/ui'
 import type { ITenantCurrentContract, Maybe } from '@/types'
 
@@ -19,13 +20,19 @@ const TenantRoomBody = ({ currentContract, isLoadingCurrentContract }: ITenantRo
     )
   }
   return (
-    <div className="space-y-4">
-      <TenantRoomCurrentContract currentContract={currentContract} />
-      <div className="desktop:grid-cols-2 grid gap-4">
-        <TenantRoomServices services={currentContract.roomServices} />
-        <TenantLatestUtilityUsage utilityUsages={currentContract.utilityUsage} />
+    <>
+      <PageHeader
+        title={currentContract?.roomNumber || 'N/A'}
+        description={`${currentContract?.floorNumber || 'N/A'} , ${currentContract?.buildingName || 'N/A'}`}
+      />
+      <div className="space-y-4">
+        <TenantRoomCurrentContract currentContract={currentContract} />
+        <div className="desktop:grid-cols-2 grid gap-4">
+          <TenantRoomServices services={currentContract.roomServices} />
+          <TenantLatestUtilityUsage utilityUsages={currentContract.utilityUsage} />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

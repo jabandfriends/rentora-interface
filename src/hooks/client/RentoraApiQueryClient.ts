@@ -42,6 +42,7 @@ import type {
   IRentoraApiClientTenantCurrentContractResponse,
   IRentoraApiClientTenantDetailResponse,
   IRentoraApiClientTenantListResponse,
+  IRentoraApiClientTenantPaymentResponse,
   IRentoraApiClientUnitDetailResponse,
   IRentoraApiClientUnitListResponse,
   IRentoraApiClientUnitServiceResponse,
@@ -66,6 +67,7 @@ import type {
   IRentoraApiUnitListParams,
   IRentoraApiUnitUtilityAvailableMonthParams,
   IRentoraApiUnitWithUtilityParams,
+  ITenantApartmentParams,
   Maybe,
   RentoraApiQueryClientKey,
 } from '@/types'
@@ -132,6 +134,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
 
     //tenant
     tenantCurrentContract: 'TENANT_CURRENT_CONTRACT',
+    tenantPayment: 'TENANT_PAYMENT',
   }
 
   async checkAuth(accessToken: string): Promise<IRentoraApiClientUserResponse['data']> {
@@ -637,6 +640,20 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
   ): Promise<IRentoraApiClientTenantCurrentContractResponse['data']> {
     const response = await this.axiosWithAuthInstance.get<IRentoraApiClientTenantCurrentContractResponse>(
       `/api/apartments/${apartmentId}/contracts/tenant`,
+    )
+    return response.data.data
+  }
+
+  //get tenant payment
+  async tenantPayment(
+    apartmentId: Maybe<string>,
+    params: ITenantApartmentParams,
+  ): Promise<IRentoraApiClientTenantPaymentResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClientTenantPaymentResponse>(
+      `/api/payments/tenant/${apartmentId}`,
+      {
+        params,
+      },
     )
     return response.data.data
   }

@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 
-import { PageHeader, PageSection } from '@/components/layout'
+import { PageSection } from '@/components/layout'
 import { TenantRoomBody } from '@/components/pages/TenantProfile/TenantRoom'
 import { useRentoraApiTenantCurrentContract } from '@/hooks'
 
@@ -11,10 +11,6 @@ const TenantRoom = () => {
   })
   return (
     <PageSection>
-      <PageHeader
-        title={currentContract?.roomNumber || 'N/A'}
-        description={`${currentContract?.floorNumber || 'N/A'} , ${currentContract?.buildingName || 'N/A'}`}
-      />
       <TenantRoomBody currentContract={currentContract} isLoadingCurrentContract={isLoadingCurrentContract} />
     </PageSection>
   )

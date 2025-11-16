@@ -1,5 +1,9 @@
 import type { MonthlyInvoicePaymentStatus, PaymentStatus, VerifiedStatus } from '@/enum'
-import type { IBasePaginateQueryResult, IRentoraApiClientBasePaginateWithMetadataResponse } from '@/types'
+import type {
+  IBasePaginateQueryResult,
+  IRentoraApiClientBasePaginateResponse,
+  IRentoraApiClientBasePaginateWithMetadataResponse,
+} from '@/types'
 
 export type IUseRentoraApiPaymentList = IBasePaginateQueryResult<IRentoraApiClientPaymentListResponse['data']>
 export type IRentoraApiClientPaymentListResponse = IRentoraApiClientBasePaginateWithMetadataResponse<
@@ -29,6 +33,28 @@ export type IPayment = {
   floorName: string
   receiptUrl: string
 }
+
+export type ITenantPayment = {
+  paymentId: string
+  invoiceNumber: string
+  paymentDueDate: string
+  paymentStatus: PaymentStatus
+  verificationStatus: VerifiedStatus
+  paymentReceiptUrl: string
+  paymentAmount: number
+  paidDate: string
+}
+
+export type ITenantApartmentParams = {
+  page: number
+  size: number
+  paymentStatus?: PaymentStatus
+  verificationStatus?: VerifiedStatus
+}
+
+//response
+export type IRentoraApiClientTenantPaymentResponse = IRentoraApiClientBasePaginateResponse<ITenantPayment>
+export type IUseRentoraApiTenantPayments = IBasePaginateQueryResult<IRentoraApiClientTenantPaymentResponse['data']>
 
 //param
 export type IRentoraApiPaymentListParams = {

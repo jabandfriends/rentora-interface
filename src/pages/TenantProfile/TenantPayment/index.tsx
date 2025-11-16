@@ -4,7 +4,7 @@ import { TenantPaymentList } from '@/components/pages/TenantProfile/TenantPaymen
 const TennantPayment = () => {
   return (
     <PageSection>
-      <PageHeader title="Payment" description="Manage your payments and view your payment history" />
+      <PageHeader title="Rental Payments" description="Manage your payments and view your payment history" />
       <TenantPaymentList />
     </PageSection>
   )
