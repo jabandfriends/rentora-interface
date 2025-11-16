@@ -42,8 +42,6 @@ import type {
   IRentoraApiClientTenantAdhocInvoiceListResponse,
   IRentoraApiClientTenantCurrentContractResponse,
   IRentoraApiClientTenantDetailResponse,
-  IRentoraApiClientTenantDetailResponse,
-  IRentoraApiClientTenantListResponse,
   IRentoraApiClientTenantListResponse,
   IRentoraApiClientTenantMaintenanceListResponse,
   IRentoraApiClientTenantPaymentResponse,
