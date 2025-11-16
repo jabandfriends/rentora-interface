@@ -49,4 +49,10 @@ export type IRoutes = {
   meterReadingCreate: IRoute
   supplyList: IRoute
   supplyTransactions: IRoute
+
+  //tenant
+  tenantAdhocInvoice: IRoute
+  tenantPayment: IRoute
+  tenantMaintenance: IRoute
+  tenantRoom: IRoute
 }

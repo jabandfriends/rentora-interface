@@ -1,6 +1,6 @@
 import { Building, Eye, FileDown, Image as ImageIcon, Sofa, User, UserCog, Wrench } from 'lucide-react'
 import type { MouseEvent, ReactNode } from 'react'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { type NavigateFunction, useNavigate } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
 
@@ -14,10 +14,18 @@ import { formatTimestamp } from '@/utilities'
 const ApartmentCard = ({ apartment }: { apartment: IApartment }) => {
   const navigate: NavigateFunction = useNavigate()
 
-  const handleViewApartment = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
-    navigate(ROUTES.overview.getPath(apartment.id))
-  }
+  const handleViewApartment = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation()
+      if (!apartment.id) return
+      if (apartment.userRole === TENANT_ROLE.TENANT) {
+        navigate(ROUTES.tenantRoom.getPath(apartment.id))
+      } else {
+        navigate(ROUTES.overview.getPath(apartment.id))
+      }
+    },
+    [apartment.id, apartment.userRole, navigate],
+  )
 
   const { isButtonDisabled, buttonText, buttonVariant, buttonIcon } = useMemo(() => {
     let text: string = ''

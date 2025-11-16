@@ -18,6 +18,35 @@ import type { Maybe, SidebarItems } from '@/types'
 export const SIDEBAR_CONFIG: Array<SidebarItems> = [
   {
     type: 'item',
+    topic: 'Tenant',
+    label: 'Room',
+    icon: <BookUser size={16} />,
+    roles: [TENANT_ROLE.TENANT],
+    to: (id?: string) => ROUTES.tenantRoom.getPath(id),
+  },
+  {
+    type: 'item',
+    label: 'Payment',
+    icon: <DollarSign size={16} />,
+    roles: [TENANT_ROLE.TENANT],
+    to: (id?: string) => ROUTES.tenantPayment.getPath(id),
+  },
+  {
+    type: 'item',
+    label: 'Maintenance',
+    icon: <Wrench size={16} />,
+    roles: [TENANT_ROLE.TENANT],
+    to: (id?: string) => ROUTES.tenantMaintenance.getPath(id),
+  },
+  {
+    type: 'item',
+    label: 'Adhoc Invoice',
+    icon: <FileSpreadsheet size={16} />,
+    roles: [TENANT_ROLE.TENANT],
+    to: (id?: string) => ROUTES.tenantAdhocInvoice.getPath(id),
+  },
+  {
+    type: 'item',
     topic: 'All Apartments',
     label: 'All Apartments',
     icon: <Table size={16} />,

@@ -10,7 +10,7 @@ import { PAYMENT_ROUTES } from './payment'
 import { REPORT_ROUTES } from './report'
 import { ROOM_ROUTES } from './room'
 import { SUPPLY_ROUTES } from './supply'
-import { TENANT_SETTINGS_ROUTES } from './tenant'
+import { TENANT_ROUTES, TENANT_SETTINGS_ROUTES } from './tenant'
 import { UTILITY_ROUTES } from './utility'
 
 export const DASHBOARD_ROUTES: Array<IRouter> = [
@@ -23,6 +23,7 @@ export const DASHBOARD_ROUTES: Array<IRouter> = [
   ...REPORT_ROUTES,
   ...SUPPLY_ROUTES,
   ...TENANT_SETTINGS_ROUTES,
+  ...TENANT_ROUTES,
   ...UTILITY_ROUTES,
   ...CONTRACT_ROUTES,
 

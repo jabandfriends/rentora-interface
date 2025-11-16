@@ -196,7 +196,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     element: (
       <RequireAuthWrapper>
         <RequireApartmentWrapper
-          allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE]}
+          allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE, TENANT_ROLE.TENANT]}
           routeId={DASHBOARD_ROUTE_ID}
         >
           <ScrollRestoration />
