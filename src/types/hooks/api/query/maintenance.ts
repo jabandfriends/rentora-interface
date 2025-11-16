@@ -2,6 +2,7 @@ import type { MAINTENANCE_CATEGORY, MAINTENANCE_PRIORITY, MAINTENANCE_STATUS, Re
 import type {
   IBasePaginateQueryResult,
   IBaseUseQuery,
+  IRentoraApiClientBasePaginateResponse,
   IRentoraApiClientBasePaginateWithMetadataResponse,
   IRentoraApiClientBaseResponse,
   ISuppliesUsage,
@@ -95,3 +96,39 @@ export type IRentoraApiMaintenanceDetailParams = {
   apartmentId: Maybe<string>
   maintenanceId: Maybe<string>
 }
+
+//Tenant Maintenance Info (simplified maintenance DTO)
+export type IMaintenanceInfo = {
+  id: string
+  ticketNumber: string
+  unitName: string
+  buildingsName: string
+  title: string
+  appointmentDate: string
+  dueDate: string
+  status: MAINTENANCE_STATUS
+  priority: MAINTENANCE_PRIORITY
+  actualCost: number
+  isRecurring: boolean
+  recurringSchedule: RecurringSchedule | null
+  createdAt: string
+}
+
+//Tenant maintenance list params
+export type IRentoraApiTenantMaintenanceListParams = {
+  page?: number
+  size?: number
+  sortBy?: string
+  sortDir?: string
+  status?: string
+  isRecurring?: boolean
+  priority?: string
+}
+
+//Tenant maintenance list response
+export type IRentoraApiClientTenantMaintenanceListResponse = IRentoraApiClientBasePaginateResponse<IMaintenanceInfo>
+
+//hooks type useRentoraApiTenantMaintenanceList
+export type IUseRentoraApiTenantMaintenanceList = IBasePaginateQueryResult<
+  IRentoraApiClientTenantMaintenanceListResponse['data']
+>
