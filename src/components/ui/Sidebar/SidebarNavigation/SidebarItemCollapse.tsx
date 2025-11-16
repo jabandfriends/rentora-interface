@@ -1,17 +1,19 @@
 import type { SetStateAction } from 'jotai'
 import { ChevronDown } from 'lucide-react'
 import { type Dispatch, type HTMLAttributes, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/feature'
-import type { SidebarNavMenu } from '@/types'
+import type { SidebarCollapsible } from '@/types'
 import { cn } from '@/utilities'
 
 type ISidebarItemCollapseProps = {
   onClose: () => void
-} & HTMLAttributes<HTMLDivElement> &
-  Pick<SidebarNavMenu, 'title' | 'icon' | 'menu'>
-const SidebarItemCollapse = ({ onClose, title, icon, menu, className, ...props }: ISidebarItemCollapseProps) => {
+  sidebarItem: SidebarCollapsible
+} & HTMLAttributes<HTMLDivElement>
+
+const SidebarItemCollapse = ({ onClose, className, sidebarItem, ...props }: ISidebarItemCollapseProps) => {
+  const { apartmentId } = useParams<{ apartmentId: string }>()
   const [isNavLinkShow, setNavlinkShow]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
   return (
     <Collapsible
@@ -22,9 +24,9 @@ const SidebarItemCollapse = ({ onClose, title, icon, menu, className, ...props }
     >
       <CollapsibleTrigger className="text-body-2 duration-20 hover:bg-theme-night-800/20 text-theme-night-50 hover:text-theme-gray-50 flex items-center justify-between gap-x-2 rounded-lg px-2 py-1.5">
         {/* label + icon */}
-        <div className="flex gap-x-2">
-          {icon}
-          {title}
+        <div className="flex items-center gap-x-2">
+          {sidebarItem.icon}
+          {sidebarItem.label}
         </div>
         {/* icon */}
 
@@ -32,12 +34,12 @@ const SidebarItemCollapse = ({ onClose, title, icon, menu, className, ...props }
       </CollapsibleTrigger>
       <CollapsibleContent className="pl-4">
         <ul className="border-theme-secondary-200 space-y-1 border-l">
-          {menu?.map((item, index) => {
+          {sidebarItem.collapsibleMenu?.map((item, index) => {
             return (
               <div className="ml-1" key={`sidebar-item-collapse-${item.label}-${index}`}>
                 <NavLink
                   key={'sidebar-item-collapse-' + index}
-                  to={item.to}
+                  to={item.to(apartmentId)}
                   onClick={onClose}
                   className={({ isActive }) =>
                     cn(

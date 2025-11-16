@@ -1,8 +1,10 @@
-import { useCallback, useRef, useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { useCallback, useMemo, useRef, useState } from 'react'
+import { Outlet, useLoaderData } from 'react-router-dom'
 
 import { Spinner } from '@/components/common'
-import { useDeviceWatcher, useRentoraApiUser } from '@/hooks'
+import type { TENANT_ROLE } from '@/enum'
+import { useRentoraApiUser } from '@/hooks'
+import type { IUserAuthenticationApartmentRole, Maybe } from '@/types'
 
 import NavBar from './Navbar'
 import { OutletWrapper } from './OutletWrapper'
@@ -13,6 +15,14 @@ type ILayoutProps = {
   isSidebar?: boolean
 }
 const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
+  const loaderData: Maybe<{
+    apartmentRoles: Array<IUserAuthenticationApartmentRole>
+    userRole: TENANT_ROLE
+    id: string
+  }> = useLoaderData()
+
+  const userRole: Maybe<TENANT_ROLE> = useMemo(() => loaderData?.userRole ?? undefined, [loaderData])
+
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const toggleRef = useRef(false)
 
@@ -26,7 +36,6 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
     }, 300)
   }, [])
 
-  useDeviceWatcher()
   if (isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -37,10 +46,13 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
 
   return (
     <div>
-      {isSidebar && <Sidebar userData={userData} isOpen={sidebarOpen} onClose={setSidebar} />}
+      {isSidebar && (
+        <Sidebar userData={userData} isOpen={sidebarOpen} onClose={setSidebar} currentUserRole={userRole} />
+      )}
       {isNavbar && (
         <NavBar userData={userData} sidebarOpen={sidebarOpen} onSidebarToggle={setSidebar} isSidebar={isSidebar} />
       )}
+
       <OutletWrapper isNavbar={isNavbar} isSidebar={isSidebar}>
         <Outlet />
       </OutletWrapper>

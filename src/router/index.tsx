@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-ro
 
 import { Layout } from '@/components/layout'
 import { RENTORA_API_BASE_URL } from '@/config'
-import { DASHBOARD_ROUTES, ROUTES } from '@/constants'
+import { DASHBOARD_ROUTE_ID, DASHBOARD_ROUTES, ROUTES } from '@/constants'
 import { TENANT_ROLE } from '@/enum'
 import { RentoraApiQueryClient } from '@/hooks'
 import AccountSettingsPage from '@/pages/Account/AccountSetting'
@@ -190,8 +190,13 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     },
     element: (
       <RequireAuthWrapper>
-        <ScrollRestoration />
-        <Layout />
+        <RequireApartmentWrapper
+          allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE]}
+          routeId={DASHBOARD_ROUTE_ID}
+        >
+          <ScrollRestoration />
+          <Layout />
+        </RequireApartmentWrapper>
       </RequireAuthWrapper>
     ),
     children: DASHBOARD_ROUTES,
