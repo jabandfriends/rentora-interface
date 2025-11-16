@@ -41,6 +41,7 @@ import type {
   IRentoraApiClientSupplyTransactionListResponse,
   IRentoraApiClientTenantDetailResponse,
   IRentoraApiClientTenantListResponse,
+  IRentoraApiClientTenantMaintenanceListResponse,
   IRentoraApiClientUnitDetailResponse,
   IRentoraApiClientUnitListResponse,
   IRentoraApiClientUnitServiceResponse,
@@ -62,6 +63,7 @@ import type {
   IRentoraApiSupplyListParams,
   IRentoraApiSupplyTransactionListParams,
   IRentoraApiTenantListParams,
+  IRentoraApiTenantMaintenanceListParams,
   IRentoraApiUnitListParams,
   IRentoraApiUnitUtilityAvailableMonthParams,
   IRentoraApiUnitWithUtilityParams,
@@ -78,6 +80,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     apartmentDetail: 'APARTMENT_DETAIL',
     maintenanceList: 'MAINTENANCE_LIST',
     maintenanceDetail: 'MAINTENANCE_DETAIL',
+    tenantMaintenanceList: 'TENANT_MAINTENANCE_LIST',
     invoiceList: 'INVOICE_LIST',
     overdueInvoiceList: 'OVERDUE_INVOICE_LIST',
     invoiceDetail: 'INVOICE_DETAIL',
@@ -171,6 +174,21 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     const response: AxiosResponse<IRentoraApiClientMaintenanceListResponse, unknown> =
       await this.axiosWithAuthInstance.get<IRentoraApiClientMaintenanceListResponse>(
         `/api/apartment/${apartmentId}/maintenance`,
+        {
+          params,
+        },
+      )
+    return response.data.data
+  }
+
+  async tenantMaintenanceList(
+    apartmentId: Maybe<string>,
+    tenantUserId: Maybe<string>,
+    params: IRentoraApiTenantMaintenanceListParams,
+  ): Promise<IRentoraApiClientTenantMaintenanceListResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientTenantMaintenanceListResponse, unknown> =
+      await this.axiosWithAuthInstance.get<IRentoraApiClientTenantMaintenanceListResponse>(
+        `/api/apartment/${apartmentId}/maintenance/tenant/${tenantUserId}`,
         {
           params,
         },

@@ -11,6 +11,7 @@ export type RentoraApiQueryClientKey =
   | 'tenantDetail'
   | 'maintenanceList'
   | 'maintenanceDetail'
+  | 'tenantMaintenanceList'
   | 'unitList'
   | 'reportUtilityList'
   | 'reportReadingDateUtility'
