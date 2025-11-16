@@ -94,7 +94,7 @@ const ApartmentCard = ({ apartment }: { apartment: IApartment }) => {
         case TENANT_ROLE.ADMIN:
           return { variant: 'default', label: 'Admin', icon: <UserCog /> }
         case TENANT_ROLE.TENANT:
-          return { variant: 'success', label: 'Tenant', icon: <User size={16} /> }
+          return { variant: 'outline', label: 'Tenant', icon: <User size={16} /> }
         case TENANT_ROLE.MAINTENANCE:
           return { variant: 'warning', label: 'Maintenance', icon: <Wrench size={16} /> }
         case TENANT_ROLE.ACCOUNTING:

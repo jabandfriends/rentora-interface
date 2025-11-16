@@ -81,7 +81,11 @@ const NavBar = ({
               </Avatar>
               <div className="text-body-2 flex flex-col">
                 <p className="capitalize">{userName}</p>
-                {currentUserRole && <Badge className="text-body-4 capitalize">{currentUserRole}</Badge>}
+                {currentUserRole && (
+                  <Badge variant="outline" className="text-body-4 capitalize">
+                    {currentUserRole}
+                  </Badge>
+                )}
               </div>
 
               <div className={cn('text-theme-secondary-400 duration-200', [isDropdownOpen && 'rotate-180'])}>
