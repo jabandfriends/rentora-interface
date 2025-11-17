@@ -15,12 +15,14 @@ const TenantLatestUtilityUsage = ({ utilityUsages }: ITenantLatestUtilityUsagePr
       </CardHeader>
       <CardContent>
         <div className="desktop:grid-cols-2 grid gap-4">
-          {utilityUsages.map((utilityUsage: ITenantContractUtilityUsage, index: number) => (
-            <TenantLatestUtilityUsageCard
-              key={`${utilityUsage.utilityType}-${utilityUsage.readingDate}-${index}`}
-              utilityUsage={utilityUsage}
-            />
-          ))}
+          {utilityUsages
+            ?.filter((utilityUsage) => utilityUsage !== null)
+            .map((utilityUsage: ITenantContractUtilityUsage, index: number) => (
+              <TenantLatestUtilityUsageCard
+                key={`${utilityUsage.utilityType}-${utilityUsage.readingDate}-${index}`}
+                utilityUsage={utilityUsage}
+              />
+            ))}
         </div>
       </CardContent>
     </Card>
