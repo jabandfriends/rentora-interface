@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Card } from '@/components/common'
+import { PageSection } from '@/components/layout'
 import { PageTableEmpty } from '@/components/ui'
 import { filterFormSchema, ROOMSTATUSENUM } from '@/constants'
 import { useRentoraApiUnitWithMonthlyInvoiceStatus } from '@/hooks'
@@ -66,7 +67,7 @@ const MonthlyInvoiceCreate = () => {
   }, [filterForm])
 
   return (
-    <div className="space-y-4">
+    <PageSection>
       <div className="flex items-center gap-4">
         <Button className="flex items-center gap-x-2" onClick={() => navigate(-1)}>
           <ArrowLeft className="size-5" />
@@ -126,7 +127,7 @@ const MonthlyInvoiceCreate = () => {
           />
         )}
       </div>
-    </div>
+    </PageSection>
   )
 }
 
