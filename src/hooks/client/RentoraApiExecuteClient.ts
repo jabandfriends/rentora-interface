@@ -9,6 +9,7 @@ import type {
   ICreateContractRequestPayload,
   ICreateFloorRequestPayload,
   ICreateMaintenanceRequestPayload,
+  ICreateTenantMaintenanceRequestPayload,
   ICreateTenantRequestPayload,
   ICreateUnitRequestPayload,
   ICreateUnitServiceRequestPayload,
@@ -57,6 +58,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     setupApartment: 'SETUP_APARTMENT',
     firstTimePasswordReset: 'FIRST_TIME_PASSWORD_RESET',
     createMaintenance: 'CREATE_MAINTENANCE',
+    createTenantMaintenance: 'CREATE_TENANT_MAINTENANCE',
     updateMaintenance: 'UPDATE_MAINTENANCE',
     deleteMaintenance: 'DELETE_MAINTENANCE',
     createTenant: 'CREATE_TENANT',
@@ -143,6 +145,18 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     const response: AxiosResponse<IRentoraApiClientCreateMaintenanceResponse, unknown> =
       await this.axiosWithAuthInstance.post<IRentoraApiClientCreateMaintenanceResponse>(
         `/api/apartment/${apartmentId}/maintenance/users/create`,
+        payload,
+      )
+    return response.data.data
+  }
+
+  async createTenantMaintenance(
+    apartmentId: string,
+    payload: ICreateTenantMaintenanceRequestPayload,
+  ): Promise<IRentoraApiClientCreateMaintenanceResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientCreateMaintenanceResponse, unknown> =
+      await this.axiosWithAuthInstance.post<IRentoraApiClientCreateMaintenanceResponse>(
+        `/api/apartment/${apartmentId}/maintenance/tenant/create`,
         payload,
       )
     return response.data.data

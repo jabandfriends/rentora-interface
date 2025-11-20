@@ -1,6 +1,6 @@
 import type { SetStateAction } from 'jotai'
 import { ChevronDown, LogOut, Menu, Settings, User, X } from 'lucide-react'
-import { type Dispatch, useCallback, useState } from 'react'
+import { type Dispatch, useCallback, useMemo, useState } from 'react'
 import { Link, type NavigateFunction, useNavigate } from 'react-router-dom'
 
 import {
@@ -10,8 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/common'
-import { ROUTES } from '@/constants'
-import type { IUser, Maybe } from '@/types'
+import { Avatar, AvatarFallback, Badge } from '@/components/ui'
+import { APARTMENT_NAME, ROUTES } from '@/constants'
+import type { TENANT_ROLE } from '@/enum'
+import type { IUserAuthenticationResponse, Maybe } from '@/types'
 import { cn } from '@/utilities'
 
 const NavBar = ({
@@ -19,11 +21,13 @@ const NavBar = ({
   isSidebar,
   sidebarOpen,
   userData,
+  currentUserRole,
 }: {
   onSidebarToggle: () => void
   isSidebar: boolean
   sidebarOpen: boolean
-  userData: Maybe<IUser>
+  userData: Maybe<IUserAuthenticationResponse>
+  currentUserRole: Maybe<TENANT_ROLE>
 }) => {
   // hooks
   const navigate: NavigateFunction = useNavigate()
@@ -31,6 +35,11 @@ const NavBar = ({
   const handleSetDropdown = useCallback(() => {
     setIsDropdownOpen((prev) => !prev)
   }, [])
+
+  const userName: string = useMemo(() => {
+    return userData?.firstName + ' ' + userData?.lastName
+  }, [userData])
+
   const handleLogout = useCallback(() => {
     navigate(ROUTES.auth.path)
   }, [navigate])
@@ -56,9 +65,9 @@ const NavBar = ({
           <div className="desktop:hidden items-center gap-x-2">
             <Link className="flex items-center gap-x-2" to={ROUTES.allApartment.path}>
               <h5 className="bg-theme-primary text-theme-white flex size-8 items-center justify-center rounded-lg">
-                R
+                {APARTMENT_NAME.charAt(0)}
               </h5>
-              <h3>Rentora</h3>
+              <h3>{APARTMENT_NAME}</h3>
             </Link>
           </div>
         </div>
@@ -66,11 +75,18 @@ const NavBar = ({
         {/* Right Profile*/}
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
           <DropdownMenuTrigger className="desktop:block hidden" onClick={handleSetDropdown}>
-            <div className="hover:bg-theme-night-800/15 text-theme-secondary flex cursor-pointer items-center space-x-2 rounded-lg px-2 py-1 duration-200 focus:outline-none">
-              <div className="bg-theme-night-600 flex size-8 items-center justify-center rounded-full">
-                <span className="text-body-2">{userData?.firstName.charAt(0)}</span>
+            <div className="hover:bg-theme-night-800/15 text-theme-secondary flex cursor-pointer items-center space-x-4 rounded-lg px-2 py-1 duration-200 focus:outline-none">
+              <Avatar>
+                <AvatarFallback>{userData?.firstName.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div className="text-body-2 flex flex-col">
+                <p className="capitalize">{userName}</p>
+                {currentUserRole && (
+                  <Badge variant="outline" className="text-body-4 capitalize">
+                    {currentUserRole}
+                  </Badge>
+                )}
               </div>
-              <p className="text-body-2">{userData?.firstName + ' ' + userData?.lastName}</p>
 
               <div className={cn('text-theme-secondary-400 duration-200', [isDropdownOpen && 'rotate-180'])}>
                 <ChevronDown size={16} />

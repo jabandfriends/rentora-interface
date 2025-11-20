@@ -216,3 +216,53 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
     ],
   },
 ]
+
+// Tenant Maintenance Form Schema (without suppliesUsage, status, and unitId)
+export const TENANT_MAINTENANCE_FORM_SCHEMA = z.object({
+  title: z.string({ error: 'Task title is required.' }).min(1, 'Task title is required.'),
+  description: z.string().optional(),
+  category: z.enum([MAINTENANCE_CATEGORY.GENERAL, MAINTENANCE_CATEGORY.PLUMBING, MAINTENANCE_CATEGORY.ELECTRICITY], {
+    error: 'Category is required',
+  }),
+})
+
+// Tenant Maintenance Form Fields (without status field and supplies section)
+export const TENANT_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS_TYPE>> = [
+  {
+    title: 'Task Detail',
+    description: 'Basic information about the maintenance task',
+    fields: [
+      {
+        key: 'title',
+        label: 'Title',
+        description: 'Basic information about the maintenance task',
+        fieldType: 'input',
+        placeholder: 'Enter task title',
+        maxLength: 100,
+        isRequired: true,
+      },
+      {
+        key: 'description',
+        label: 'Description',
+        description: 'Basic information about the maintenance task',
+        fieldType: 'input',
+        inputType: 'textarea',
+        placeholder: 'Enter task description',
+        maxLength: 200,
+      },
+      {
+        key: 'category',
+        label: 'Category',
+        description: 'Basic information about the maintenance task',
+        fieldType: 'select',
+        isRequired: true,
+        options: [
+          { value: MAINTENANCE_CATEGORY.GENERAL, label: MAINTENANCE_CATEGORY.GENERAL },
+          { value: MAINTENANCE_CATEGORY.PLUMBING, label: MAINTENANCE_CATEGORY.PLUMBING },
+          { value: MAINTENANCE_CATEGORY.ELECTRICITY, label: MAINTENANCE_CATEGORY.ELECTRICITY },
+        ],
+        placeholder: 'Select category',
+      },
+    ],
+  },
+]
