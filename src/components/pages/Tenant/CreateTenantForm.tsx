@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { CalendarIcon, CloudUpload, FileText, Plus, X } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
@@ -36,16 +36,15 @@ import { Calendar } from '@/components/ui'
 import { CREATE_TENANT_DEFAULT_VALUES, CREATE_TENANT_FORM_FIELDS, CREATE_TENANT_FORM_SCHEMA } from '@/constants'
 import { TENANT_ROLE } from '@/enum'
 import { useRentoraApiCreateReadingContact } from '@/hooks'
-import type { CREATE_TENANT_FORM_SCHEMA_TYPE, IReadingContact } from '@/types'
+import type { CREATE_TENANT_FORM_SCHEMA_TYPE, IReadingContract } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
 type ICreateTenantFormProps = {
   onSubmit: (data: CREATE_TENANT_FORM_SCHEMA_TYPE) => void
   isPending: boolean
   errorMessage: string
-  initialValues?: Partial<CREATE_TENANT_FORM_SCHEMA_TYPE>
 }
-const CreateTenantForm = ({ onSubmit, isPending, errorMessage, initialValues }: ICreateTenantFormProps) => {
+const CreateTenantForm = ({ onSubmit, isPending, errorMessage }: ICreateTenantFormProps) => {
   const form = useForm<CREATE_TENANT_FORM_SCHEMA_TYPE>({
     mode: 'onChange',
     resolver: zodResolver(CREATE_TENANT_FORM_SCHEMA),
@@ -54,16 +53,6 @@ const CreateTenantForm = ({ onSubmit, isPending, errorMessage, initialValues }: 
 
   const [ocrFile, setOcrFile] = useState<Array<File>>([])
   const { mutateAsync: createReadingContact, isPending: isOcrProcessing } = useRentoraApiCreateReadingContact()
-
-  // Populate form when initialValues from OCR data is provided
-  useEffect(() => {
-    if (initialValues) {
-      form.reset({
-        ...CREATE_TENANT_DEFAULT_VALUES,
-        ...initialValues,
-      })
-    }
-  }, [initialValues, form])
 
   // Handle OCR file upload and auto-fill form
   const handleOcrFileChange = useCallback(
@@ -77,7 +66,7 @@ const CreateTenantForm = ({ onSubmit, isPending, errorMessage, initialValues }: 
       setOcrFile([file])
 
       try {
-        const ocrData: IReadingContact = await createReadingContact(file)
+        const ocrData: IReadingContract = await createReadingContact(file)
 
         // Map OCR data to form values
         const mappedValues: Partial<CREATE_TENANT_FORM_SCHEMA_TYPE> = {
@@ -89,7 +78,6 @@ const CreateTenantForm = ({ onSubmit, isPending, errorMessage, initialValues }: 
           dateOfBirth: ocrData.dateOfBirth || '',
           emergencyContactName: ocrData.emergencyContactName || '',
           emergencyContactPhone: ocrData.emergencyContactPhone || '',
-          // Password fields remain empty - user must fill them
           password: '',
           confirmPassword: '',
           role: TENANT_ROLE.TENANT,
@@ -97,14 +85,12 @@ const CreateTenantForm = ({ onSubmit, isPending, errorMessage, initialValues }: 
 
         // Populate form with OCR data
         form.reset({
-          ...CREATE_TENANT_DEFAULT_VALUES,
           ...mappedValues,
         })
 
         toast.success('Contact information extracted successfully! Please review and complete the form.')
       } catch (error) {
-        toast.error(`Failed to read contact information: ${getErrorMessage(error)}`)
-        // Keep form as is - user can fill manually
+        toast.error(getErrorMessage(error))
       }
     },
     [createReadingContact, form],
@@ -113,6 +99,7 @@ const CreateTenantForm = ({ onSubmit, isPending, errorMessage, initialValues }: 
   const isButtonDisabled: boolean = useMemo(() => {
     return form.formState.isSubmitting || !form.formState.isDirty || !form.formState.isValid || isPending
   }, [form.formState.isSubmitting, form.formState.isDirty, form.formState.isValid, isPending])
+
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -129,7 +116,7 @@ const CreateTenantForm = ({ onSubmit, isPending, errorMessage, initialValues }: 
           </div>
           <FileUpload
             value={ocrFile}
-            onValueChange={handleOcrFileChange}
+            onFileAccept={(file: File) => handleOcrFileChange([file])}
             accept="image/*,.pdf,application/pdf"
             maxFiles={1}
             maxSize={10 * 1024 * 1024} // 10MB
