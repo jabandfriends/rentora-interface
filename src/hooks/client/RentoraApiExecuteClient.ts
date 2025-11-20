@@ -9,6 +9,7 @@ import type {
   ICreateContractRequestPayload,
   ICreateFloorRequestPayload,
   ICreateMaintenanceRequestPayload,
+  ICreateTenantMaintenanceRequestPayload,
   ICreateTenantRequestPayload,
   ICreateUnitRequestPayload,
   ICreateUnitServiceRequestPayload,
@@ -28,10 +29,12 @@ import type {
   IRentoraApiClientUpdateContractResponse,
   IRentoraApiClientUpdateMaintenanceResponse,
   IRentoraApiClientUpdatePaymentResponse,
+  IRentoraBaseApiClientUpdateAdhocInvoiceResponse,
   ISetupApartmentRequestPayload,
   ISupplyCreatePayload,
   ISupplyUpdatePayload,
   ITerminateContractRequestPayload,
+  IUpdateAdhocInvoicePayload,
   IUpdateApartmentPaymentServiceRequestPayload,
   IUpdateApartmentPaymentServiceResponse,
   IUpdateApartmentRequestPayload,
@@ -59,6 +62,7 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     setupApartment: 'SETUP_APARTMENT',
     firstTimePasswordReset: 'FIRST_TIME_PASSWORD_RESET',
     createMaintenance: 'CREATE_MAINTENANCE',
+    createTenantMaintenance: 'CREATE_TENANT_MAINTENANCE',
     updateMaintenance: 'UPDATE_MAINTENANCE',
     deleteMaintenance: 'DELETE_MAINTENANCE',
     createTenant: 'CREATE_TENANT',
@@ -108,6 +112,8 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
 
     //Create Reading Contact (OCR)
     createReadingContact: 'CREATE_READING_CONTACT',
+    //adhoc invoice update
+    adhocInvoiceUpdate: 'ADHOC_INVOICE_UPDATE',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -148,6 +154,18 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     const response: AxiosResponse<IRentoraApiClientCreateMaintenanceResponse, unknown> =
       await this.axiosWithAuthInstance.post<IRentoraApiClientCreateMaintenanceResponse>(
         `/api/apartment/${apartmentId}/maintenance/users/create`,
+        payload,
+      )
+    return response.data.data
+  }
+
+  async createTenantMaintenance(
+    apartmentId: string,
+    payload: ICreateTenantMaintenanceRequestPayload,
+  ): Promise<IRentoraApiClientCreateMaintenanceResponse['data']> {
+    const response: AxiosResponse<IRentoraApiClientCreateMaintenanceResponse, unknown> =
+      await this.axiosWithAuthInstance.post<IRentoraApiClientCreateMaintenanceResponse>(
+        `/api/apartment/${apartmentId}/maintenance/tenant/create`,
         payload,
       )
     return response.data.data
@@ -429,6 +447,17 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
           'Content-Type': 'multipart/form-data',
         },
       },
+    )
+    return response.data.data
+  }
+
+  async updateAdhocInvoice(
+    apartmentId: string,
+    payload: IUpdateAdhocInvoicePayload,
+  ): Promise<IRentoraBaseApiClientUpdateAdhocInvoiceResponse['data']> {
+    const response = await this.axiosWithAuthInstance.put<IRentoraBaseApiClientUpdateAdhocInvoiceResponse>(
+      `/api/invoices/${apartmentId}/adhocInvoice/update`,
+      payload,
     )
     return response.data.data
   }

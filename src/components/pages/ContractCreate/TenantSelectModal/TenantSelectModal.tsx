@@ -15,6 +15,7 @@ import { Button } from '@/components/common'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, SearchBar } from '@/components/feature'
 import { DEFAULT_TENANT_LIST_DATA, ROUTES } from '@/constants'
 import { useRentoraApiTenantList } from '@/hooks'
+import type { Maybe } from '@/types'
 
 import TenantSelectModalData from './TenantSelectModalData'
 
@@ -39,7 +40,7 @@ const TenantSelectModal = ({ selectedTenantId, onSelectTenant, onOpenChange, isO
 
   const [search]: [string] = watch(['search'])
 
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch: Maybe<string> = useDebounce(search ? search : undefined, 150)
   const {
     data: tenantsData,
     isLoading: isLoadingTenants,

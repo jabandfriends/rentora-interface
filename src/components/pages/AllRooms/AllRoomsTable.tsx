@@ -69,7 +69,7 @@ const AllRoomsTable = ({
       case 'renewed':
         return 'default'
       default:
-        return 'default'
+        return 'outline'
     }
   }, [])
 
@@ -82,7 +82,7 @@ const AllRoomsTable = ({
       case 'daily':
         return 'secondary'
       default:
-        return 'default'
+        return 'outline'
     }
   }, [])
 

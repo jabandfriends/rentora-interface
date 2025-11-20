@@ -65,7 +65,12 @@ const MonthlyInvoiceCreateFilter = ({
       />
     )
 
-  if (!readingDateUtility || (!availableBuildings && readingDateUtility.length === 0))
+  if (
+    !readingDateUtility ||
+    readingDateUtility.length === 0 ||
+    !availableBuildings ||
+    (availableBuildings && availableBuildings.length === 0)
+  )
     return (
       <PageTableEmpty
         message="No meter reading found"
@@ -98,7 +103,7 @@ const MonthlyInvoiceCreateFilter = ({
                 <SelectValue placeholder="Select a year" />
               </SelectTrigger>
               <SelectContent>
-                {readingDateUtility?.map((item: IReadingUnitUtility) => (
+                {readingDateUtility.map((item: IReadingUnitUtility) => (
                   <SelectItem key={item.readingDate} value={item.readingDate}>
                     {item.readingDate}
                   </SelectItem>
