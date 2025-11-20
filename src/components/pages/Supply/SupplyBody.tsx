@@ -32,7 +32,7 @@ const SupplyBody = () => {
 
   const [search, category]: [string, Maybe<SupplyCategory>] = watch(['search', 'category'])
 
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch = useDebounce(search ? search : undefined, 150)
   const {
     data: supplies,
     pagination: { totalPages, totalElements },

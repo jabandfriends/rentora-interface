@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Save } from 'lucide-react'
 import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -11,6 +10,7 @@ import {
   Card,
   Form,
   FormField,
+  FormMessage,
   InputNumber,
   Label,
   Select,
@@ -22,18 +22,18 @@ import {
 } from '@/components/common'
 import { PageTableEmpty } from '@/components/ui'
 import { useRentoraApiUpdateUtility, useRentoraApiUtilityList } from '@/hooks'
-import type { IUpdateUnitServiceRequestPayload } from '@/types'
+import type { IUpdateUnitServiceRequestPayload, Maybe } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
 const apartmentUtilityFormSchema = z.object({
   waterUtilityId: z.string(),
   waterUtilityType: z.string().optional(),
-  waterUtilityUnitPrice: z.number().optional(),
-  waterUtilityFixedPrice: z.number().optional(),
+  waterUtilityUnitPrice: z.string().optional(),
+  waterUtilityFixedPrice: z.string().optional(),
   electricUtilityId: z.string(),
   electricUtilityType: z.string().optional(),
-  electricUtilityUnitPrice: z.number().optional(),
-  electricUtilityFixedPrice: z.number().optional(),
+  electricUtilityUnitPrice: z.string().optional(),
+  electricUtilityFixedPrice: z.string().optional(),
 })
 type ApartmentUtilityFormSchema = z.infer<typeof apartmentUtilityFormSchema>
 const ApartmentUtilitySetting = () => {
@@ -43,21 +43,28 @@ const ApartmentUtilitySetting = () => {
   const { data: utilityList, isLoading: isUtilityListLoading } = useRentoraApiUtilityList({ apartmentId: apartmentId! })
 
   //update data
-  const { mutateAsync: updateUtility } = useRentoraApiUpdateUtility({ apartmentId: apartmentId! })
+  const { mutateAsync: updateUtility, isPending: isUpdateUtilityPending } = useRentoraApiUpdateUtility({
+    apartmentId: apartmentId!,
+  })
 
   const form = useForm<ApartmentUtilityFormSchema>({
     resolver: zodResolver(apartmentUtilityFormSchema),
     defaultValues: {
       waterUtilityId: '',
       waterUtilityType: 'meter',
-      waterUtilityUnitPrice: 0,
-      waterUtilityFixedPrice: 0,
+      waterUtilityUnitPrice: '',
+      waterUtilityFixedPrice: '',
       electricUtilityId: '',
       electricUtilityType: 'meter',
-      electricUtilityUnitPrice: 0,
-      electricUtilityFixedPrice: 0,
+      electricUtilityUnitPrice: '',
+      electricUtilityFixedPrice: '',
     },
   })
+
+  const [waterUtilityType, electricUtilityType]: [Maybe<string>, Maybe<string>] = form.watch([
+    'waterUtilityType',
+    'electricUtilityType',
+  ])
 
   useEffect(() => {
     if (!utilityList) return
@@ -67,8 +74,8 @@ const ApartmentUtilitySetting = () => {
         const name = utility.utilityName.toLowerCase() // e.g., "water"
         acc[`${name}UtilityId`] = utility.utilityId
         acc[`${name}UtilityType`] = utility.utilityType
-        acc[`${name}UtilityUnitPrice`] = utility.utilityUnitPrice
-        acc[`${name}UtilityFixedPrice`] = utility.utilityFixedPrice
+        acc[`${name}UtilityUnitPrice`] = utility.utilityUnitPrice?.toString() ?? ''
+        acc[`${name}UtilityFixedPrice`] = utility.utilityFixedPrice?.toString() ?? ''
         return acc
       },
       {} as Record<string, any>,
@@ -83,12 +90,12 @@ const ApartmentUtilitySetting = () => {
         const payload: IUpdateUnitServiceRequestPayload = {
           waterUtilityId: data.waterUtilityId,
           waterUtilityType: data.waterUtilityType ?? 'meter',
-          waterUtilityUnitPrice: data.waterUtilityUnitPrice ?? 0,
-          waterUtilityFixedPrice: data.waterUtilityFixedPrice ?? 0,
+          waterUtilityUnitPrice: data.waterUtilityUnitPrice ? Number(data.waterUtilityUnitPrice) : 0,
+          waterUtilityFixedPrice: data.waterUtilityFixedPrice ? Number(data.waterUtilityFixedPrice) : 0,
           electricUtilityId: data.electricUtilityId,
           electricUtilityType: data.electricUtilityType ?? 'meter',
-          electricUtilityUnitPrice: data.electricUtilityUnitPrice ?? 0,
-          electricUtilityFixedPrice: data.electricUtilityFixedPrice ?? 0,
+          electricUtilityUnitPrice: data.electricUtilityUnitPrice ? Number(data.electricUtilityUnitPrice) : 0,
+          electricUtilityFixedPrice: data.electricUtilityFixedPrice ? Number(data.electricUtilityFixedPrice) : 0,
         }
         updateUtility(payload)
         toast.success('Utility updated successfully')
@@ -115,7 +122,7 @@ const ApartmentUtilitySetting = () => {
       </div>
       <Form {...form}>
         <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
-          <div className="grid grid-cols-3 gap-4 space-y-2">
+          <div className="grid grid-cols-2 gap-4 space-y-2">
             <FormField
               control={form.control}
               name="waterUtilityType"
@@ -123,7 +130,7 @@ const ApartmentUtilitySetting = () => {
                 <div className="space-y-2">
                   <Label htmlFor="lateFee">Water Utility Type</Label>
                   <Select onValueChange={field.onChange} value={field.value} key={'waterUtilityType' + field.value}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select water utility type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -135,29 +142,35 @@ const ApartmentUtilitySetting = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="waterUtilityUnitPrice"
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="gracePeriodDays">Water Utility Price (THB/Unit)</Label>
-                  <InputNumber maxLength={9} placeholder="Enter water utility price" {...field} />
-                </div>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="waterUtilityFixedPrice"
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="gracePeriodDays">Water Utility Fixed Price (THB)</Label>
-                  <InputNumber maxLength={9} placeholder="Enter water utility fixed price" {...field} />
-                </div>
-              )}
-            />
+            {waterUtilityType === 'meter' && (
+              <FormField
+                control={form.control}
+                name="waterUtilityUnitPrice"
+                render={({ field }) => (
+                  <div className="space-y-2">
+                    <Label htmlFor="gracePeriodDays">Water Utility Price (THB/Unit)</Label>
+                    <InputNumber decimal maxLength={8} placeholder="Enter water utility price" {...field} />
+                    <FormMessage />
+                  </div>
+                )}
+              />
+            )}
+            {waterUtilityType === 'fixed' && (
+              <FormField
+                control={form.control}
+                name="waterUtilityFixedPrice"
+                render={({ field }) => (
+                  <div className="space-y-2">
+                    <Label htmlFor="gracePeriodDays">Water Utility Fixed Price (THB)</Label>
+                    <InputNumber decimal maxLength={8} placeholder="Enter water utility fixed price" {...field} />
+                    <FormMessage />
+                  </div>
+                )}
+              />
+            )}
           </div>
 
-          <div className="grid grid-cols-3 gap-4 space-y-2">
+          <div className="grid grid-cols-2 gap-4 space-y-2">
             <FormField
               control={form.control}
               name="electricUtilityType"
@@ -165,7 +178,7 @@ const ApartmentUtilitySetting = () => {
                 <div className="space-y-2">
                   <Label htmlFor="lateFee">Electric Utility Type</Label>
                   <Select onValueChange={field.onChange} value={field.value} key={'electricUtilityType' + field.value}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select water utility type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -176,30 +189,38 @@ const ApartmentUtilitySetting = () => {
                 </div>
               )}
             />
-            <FormField
-              control={form.control}
-              name="electricUtilityUnitPrice"
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="gracePeriodDays">Electric Utility Price (THB/Unit)</Label>
-                  <InputNumber maxLength={9} placeholder="Enter electric utility price" {...field} />
-                </div>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="electricUtilityFixedPrice"
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="gracePeriodDays">Electric Utility Fixed Price (THB)</Label>
-                  <InputNumber maxLength={9} placeholder="Enter electric utility fixed price" {...field} />
-                </div>
-              )}
-            />
+            {electricUtilityType === 'meter' && (
+              <FormField
+                control={form.control}
+                name="electricUtilityUnitPrice"
+                render={({ field }) => (
+                  <div className="space-y-2">
+                    <Label htmlFor="gracePeriodDays">Electric Utility Price (THB/Unit)</Label>
+                    <InputNumber decimal maxLength={8} placeholder="Enter electric utility price" {...field} />
+                  </div>
+                )}
+              />
+            )}
+            {electricUtilityType === 'fixed' && (
+              <FormField
+                control={form.control}
+                name="electricUtilityFixedPrice"
+                render={({ field }) => (
+                  <div className="space-y-2">
+                    <Label htmlFor="gracePeriodDays">Electric Utility Fixed Price (THB)</Label>
+                    <InputNumber maxLength={8} placeholder="Enter electric utility fixed price" {...field} />
+                  </div>
+                )}
+              />
+            )}
           </div>
           <div className="flex justify-end">
-            <Button className="desktop:w-auto flex w-full items-center gap-x-2" type="submit">
-              <Save /> Save
+            <Button
+              disabled={isUpdateUtilityPending}
+              className="desktop:w-auto flex w-full items-center gap-x-2"
+              type="submit"
+            >
+              {isUpdateUtilityPending ? <Spinner className="size-4" /> : 'Save Changes'}
             </Button>
           </div>
         </form>

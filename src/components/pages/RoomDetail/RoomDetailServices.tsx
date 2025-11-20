@@ -29,6 +29,7 @@ const RoomDetailServices = () => {
   //apartment service
   const { data: apartmentServices, isLoading: isLoadingApartmentServices } = useRentoraApiApartmentServiceList({
     apartmentId: apartmentId!,
+    activeService: true,
   })
 
   //unit services

@@ -1,4 +1,4 @@
-import type { LateFeeType } from '@/enum'
+import type { APARTMENT_LATE_FEE_TYPE } from '@/enum'
 import type { IBaseUseMutation, IRentoraApiClientBaseResponse } from '@/types'
 
 //put presigned url payload type
@@ -14,7 +14,7 @@ type ICreateApartmentRequestBase = {
   taxId?: string
   paymentDueDay: number
   lateFee: number
-  lateFeeType: LateFeeType
+  lateFeeType: APARTMENT_LATE_FEE_TYPE
   gracePeriodDays: number
   address?: string
   city?: string
@@ -73,7 +73,7 @@ export type IUpdateApartmentRequestPayload = Partial<{
   taxId: string
   paymentDueDay: number
   lateFee: number
-  lateFeeType: LateFeeType
+  lateFeeType: APARTMENT_LATE_FEE_TYPE
   gracePeriodDays: number
   address: string
   city: string

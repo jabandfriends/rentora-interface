@@ -7,7 +7,7 @@ import { type NavigateFunction, useNavigate } from 'react-router-dom'
 import { Button, Card, Form, Spinner } from '@/components/common'
 import { ApartmentFormField, ApartmentUpload } from '@/components/pages/ApartmentCreate'
 import { APARTMENT_FORM_SCHEMA, APARTMENT_FORM_SECTIONS, ROUTES } from '@/constants'
-import { LateFeeType } from '@/enum'
+import { APARTMENT_LATE_FEE_TYPE } from '@/enum'
 import { useRentoraApiCreateApartment } from '@/hooks'
 import type {
   APARTMENT_FORM_FIELD,
@@ -28,7 +28,7 @@ const ApartmentCreateForm = () => {
       taxId: '',
       paymentDueDay: '',
       lateFee: '',
-      lateFeeType: '',
+      lateFeeType: APARTMENT_LATE_FEE_TYPE.FIXED,
       gracePeriodDays: '',
       city: '',
       state: '',
@@ -55,7 +55,7 @@ const ApartmentCreateForm = () => {
         ...rest,
         paymentDueDay: Number(data.paymentDueDay),
         lateFee: Number(data.lateFee),
-        lateFeeType: LateFeeType.FIXED,
+        lateFeeType: APARTMENT_LATE_FEE_TYPE.FIXED,
         gracePeriodDays: Number(data.gracePeriodDays),
         logoFile: firstFile,
       }

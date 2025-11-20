@@ -12,134 +12,161 @@ import {
 } from 'lucide-react'
 
 import { ROUTES } from '@/constants'
-import type { Maybe, SidebarMenu, SidebarNavMenu } from '@/types'
+import { TENANT_ROLE } from '@/enum'
+import type { Maybe, SidebarItems } from '@/types'
 
-export const getSidebarItems = (
-  apartmentId: Maybe<string>,
-): { topNav: Array<SidebarNavMenu>; bottomNav: Array<SidebarNavMenu> } => {
-  if (!apartmentId) return { topNav: [], bottomNav: [] }
-  // sidebar main items
-  const SIDEBAR_ITEMS: Array<SidebarMenu> = [
-    { icon: <Home size={16} />, label: 'Dashboard', to: ROUTES.overview.getPath(apartmentId) },
-  ]
-
-  // sidebar all rooms
-  const SIDEBAR_ALL_ROOMS: Array<SidebarMenu> = [
-    { icon: <Table size={16} />, label: 'All Rooms', to: ROUTES.allRoom.getPath(apartmentId) },
-  ]
-  //sidebar payments
-  const SIDEBAR_PAYMENT: Array<SidebarMenu> = [
-    { icon: <DollarSign size={16} />, label: 'Payments', to: ROUTES.payment.getPath(apartmentId) },
-  ]
-
-  const SIDEBAR_SUPPLY_LIST: Array<SidebarMenu> = [
-    { icon: <Package size={16} />, label: 'Supplies', to: ROUTES.supplyList.getPath(apartmentId) },
-  ]
-
-  // sidebar meter reading
-  const SIDEBAR_METER_READING: Array<SidebarMenu> = [
-    { icon: <Zap size={16} />, label: 'Meter Reading', to: ROUTES.meterReadingList.getPath(apartmentId) },
-  ]
-  const SIDEBAR_TENANTS_MANAGEMENT: Array<SidebarMenu> = [
-    { icon: <BookUser size={16} />, label: 'Tenants Management', to: ROUTES.tenant.getPath(apartmentId) },
-  ]
-  // sidebar reports
-  const SIDEBAR_COLLAPSE_ROOMS_REPORT: Array<SidebarMenu> = [
-    { label: 'Electric & Water Report', to: ROUTES.electricWaterReport.getPath(apartmentId) },
-  ]
-
-  // sidebar invoices
-  const SIDEBAR_COLLAPSE_ITEMS: Array<SidebarMenu> = [
-    { label: 'Adhoc Invoices', to: ROUTES.normalInvoice.getPath(apartmentId) },
-    { label: 'Monthly Rental Invoices', to: ROUTES.monthlyInvoice.getPath(apartmentId) },
-    { label: 'Overdue Adhoc Invoices', to: ROUTES.overdueInvoice.getPath(apartmentId) },
-    // { label: 'Service Invoices', to: ROUTES.serviceInvoice.getPath(apartmentId) },
-  ]
-
-  // sidebar maintenance
-  const SIDEBAR_MAINTENANCE: Array<SidebarMenu> = [
-    { icon: <Wrench size={16} />, label: 'Maintenance', to: ROUTES.maintenance.getPath(apartmentId) },
-  ]
-
-  // sidebar bottom items (static)
-  const SIDEBAR_BOTTOM_ITEMS: Array<SidebarMenu> = [
-    { icon: <Settings size={16} />, label: 'Apartment Settings', to: ROUTES.apartmentSetting.getPath(apartmentId) },
-  ]
-
-  const SIDEBAR_ALL_APARTMENTS: Array<SidebarMenu> = [
-    { icon: <Table size={16} />, label: 'All Apartments', to: ROUTES.allApartment.path },
-  ]
-
-  return {
-    topNav: [
+export const SIDEBAR_CONFIG: Array<SidebarItems> = [
+  {
+    type: 'item',
+    topic: 'All Apartments',
+    label: 'All Apartments',
+    icon: <Table size={16} />,
+    roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE, TENANT_ROLE.TENANT],
+    to: () => ROUTES.allApartment.path,
+  },
+  {
+    type: 'item',
+    topic: 'Tenant',
+    label: 'Room',
+    icon: <BookUser size={16} />,
+    roles: [TENANT_ROLE.TENANT],
+    to: (id?: string) => ROUTES.tenantRoom.getPath(id),
+  },
+  {
+    type: 'item',
+    label: 'Payment',
+    icon: <DollarSign size={16} />,
+    roles: [TENANT_ROLE.TENANT],
+    to: (id?: string) => ROUTES.tenantPayment.getPath(id),
+  },
+  {
+    type: 'item',
+    label: 'Maintenance',
+    icon: <Wrench size={16} />,
+    roles: [TENANT_ROLE.TENANT],
+    to: (id?: string) => ROUTES.tenantMaintenance.getPath(id),
+  },
+  {
+    type: 'item',
+    label: 'Adhoc Invoice',
+    icon: <FileSpreadsheet size={16} />,
+    roles: [TENANT_ROLE.TENANT],
+    to: (id?: string) => ROUTES.tenantAdhocInvoice.getPath(id),
+  },
+  {
+    type: 'item',
+    topic: 'Main Menu',
+    label: 'Dashboard',
+    icon: <Home size={16} />,
+    roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE],
+    to: (id?: string) => ROUTES.overview.getPath(id),
+  },
+  {
+    type: 'collapsible',
+    label: 'Invoices',
+    icon: <FileSpreadsheet size={16} />,
+    collapsibleMenu: [
       {
-        type: 'item',
-        topic: 'All Apartments',
-        icon: <Table size={16} />,
-        menu: SIDEBAR_ALL_APARTMENTS,
+        label: 'Adhoc Invoices',
+        roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING],
+        to: (id?: string) => ROUTES.normalInvoice.getPath(id),
       },
       {
-        type: 'item',
-        topic: 'Dashboard',
-        icon: <Home size={16} />,
-        menu: SIDEBAR_ITEMS,
-      },
-
-      {
-        type: 'collapsible',
-        title: 'Invoices',
-        icon: <FileSpreadsheet size={16} />,
-        menu: SIDEBAR_COLLAPSE_ITEMS,
+        label: 'Monthly Rental Invoices',
+        roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING],
+        to: (id?: string) => ROUTES.monthlyInvoice.getPath(id),
       },
       {
-        type: 'item',
-        title: 'Payments',
-        icon: <FileSpreadsheet size={16} />,
-        menu: SIDEBAR_PAYMENT,
-      },
-      {
-        type: 'item',
-        title: 'All Room',
-        icon: <Table size={16} />,
-        menu: SIDEBAR_ALL_ROOMS,
-      },
-      {
-        type: 'item',
-        title: 'Supply List',
-        icon: <Zap size={16} />,
-        menu: SIDEBAR_SUPPLY_LIST,
-      },
-      {
-        type: 'item',
-        icon: <Table size={16} />,
-        menu: SIDEBAR_METER_READING,
-      },
-      {
-        type: 'collapsible',
-        title: 'Reports',
-        icon: <FileText size={16} />,
-        menu: SIDEBAR_COLLAPSE_ROOMS_REPORT,
-      },
-      {
-        type: 'item',
-        title: 'Maintenance',
-        icon: <Wrench size={16} />,
-        menu: SIDEBAR_MAINTENANCE,
-      },
-      {
-        type: 'item',
-        title: 'Tenants Management',
-        icon: <Wrench size={16} />,
-        menu: SIDEBAR_TENANTS_MANAGEMENT,
+        label: 'Overdue Invoices',
+        roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING],
+        to: (id?: string) => ROUTES.overdueInvoice.getPath(id),
       },
     ],
-    bottomNav: [
+  },
+  {
+    type: 'item',
+    label: 'Payments',
+    icon: <DollarSign size={16} />,
+    roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING],
+    to: (id?: string) => ROUTES.payment.getPath(id),
+  },
+  {
+    type: 'item',
+    label: 'All Rooms',
+    icon: <Table size={16} />,
+    roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING],
+    to: (id?: string) => ROUTES.allRoom.getPath(id),
+  },
+  {
+    type: 'item',
+    label: 'Supplies',
+    icon: <Package size={16} />,
+    roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.MAINTENANCE],
+    to: (id?: string) => ROUTES.supplyList.getPath(id),
+  },
+  {
+    type: 'item',
+    label: 'Meter Reading',
+    icon: <Zap size={16} />,
+    roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING],
+    to: (id?: string) => ROUTES.meterReadingList.getPath(id),
+  },
+  {
+    type: 'collapsible',
+    label: 'Reports',
+    icon: <FileText size={16} />,
+    collapsibleMenu: [
       {
-        type: 'item',
-        title: 'Settings',
-        icon: <Settings size={16} />,
-        menu: SIDEBAR_BOTTOM_ITEMS,
+        label: 'Electric & Water Report',
+        roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING],
+        to: (id?: string) => ROUTES.electricWaterReport.getPath(id),
       },
     ],
-  }
+  },
+  {
+    type: 'item',
+    label: 'Maintenance',
+    icon: <Wrench size={16} />,
+    roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.MAINTENANCE],
+    to: (id?: string) => ROUTES.maintenance.getPath(id),
+  },
+  {
+    type: 'item',
+    label: 'Users Management',
+    icon: <BookUser size={16} />,
+    roles: [TENANT_ROLE.ADMIN],
+    to: (id?: string) => ROUTES.tenant.getPath(id),
+  },
+]
+
+export const SIDEBAR_BOTTOM: Array<SidebarItems> = [
+  {
+    type: 'item',
+    topic: 'Settings',
+    label: 'Settings',
+    icon: <Settings size={16} />,
+    roles: [TENANT_ROLE.ADMIN],
+    to: (id?: string) => ROUTES.apartmentSetting.getPath(id),
+  },
+]
+
+export const getSidebarItems = (apartmentId: Maybe<string>, currentUserRole: Maybe<TENANT_ROLE>) => {
+  if (!apartmentId || !currentUserRole) return { topNav: [], bottomNav: [] }
+
+  const filterMenu = (menu: Array<SidebarItems>) =>
+    menu.filter((item: SidebarItems) => {
+      if (item.type === 'item') {
+        return item.roles.includes(currentUserRole)
+      }
+      if (item.type === 'collapsible') {
+        return item.collapsibleMenu.some((m) => m.roles.includes(currentUserRole))
+      }
+      return false
+    })
+
+  const processedTop: Array<SidebarItems> = filterMenu(SIDEBAR_CONFIG)
+
+  const processedBottom: Array<SidebarItems> = filterMenu(SIDEBAR_BOTTOM)
+
+  return { topNav: processedTop, bottomNav: processedBottom }
 }

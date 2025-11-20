@@ -19,24 +19,19 @@ const MonthlyInvoiceCreate = () => {
   const filterForm = useForm<FilterFormType>({
     resolver: zodResolver(filterFormSchema),
     defaultValues: {
-      paymentDueDate: undefined,
       readingDate: '',
       buildingName: '',
     },
   })
 
-  const [readingDate, buildingName, paymentDueDate]: [string, string, number] = filterForm.watch([
-    'readingDate',
-    'buildingName',
-    'paymentDueDate',
-  ])
+  const [readingDate, buildingName]: [string, string] = filterForm.watch(['readingDate', 'buildingName'])
 
   const debouncedBuildingName = useDebounce(buildingName, 300)
   const debouncedReadingDate = useDebounce(readingDate, 300)
 
   const isFilterSelected: boolean = useMemo(
-    () => !!debouncedReadingDate && !!debouncedBuildingName && !!paymentDueDate,
-    [debouncedReadingDate, debouncedBuildingName, paymentDueDate],
+    () => !!debouncedReadingDate && !!debouncedBuildingName,
+    [debouncedReadingDate, debouncedBuildingName],
   )
   //get all units with utility
   const { data: rooms } = useRentoraApiUnitWithMonthlyInvoiceStatus({
@@ -55,12 +50,6 @@ const MonthlyInvoiceCreate = () => {
   const handleReadingDateChange = useCallback(
     (value: string) => {
       filterForm.setValue('readingDate', value)
-    },
-    [filterForm],
-  )
-  const handlePaymentDueDateChange = useCallback(
-    (value: string) => {
-      filterForm.setValue('paymentDueDate', Number(value))
     },
     [filterForm],
   )
@@ -97,12 +86,10 @@ const MonthlyInvoiceCreate = () => {
 
           {/* Controls */}
           <MonthlyInvoiceCreateFilter
-            paymentDueDate={paymentDueDate}
             debouncedReadingDate={debouncedReadingDate}
             debouncedBuildingName={debouncedBuildingName}
             onBuildingChange={handleBuildingChange}
             onReadingDateChange={handleReadingDateChange}
-            onPaymentDueDateChange={handlePaymentDueDateChange}
             onFilterReset={handleFilterReset}
           />
         </Card>
@@ -126,7 +113,6 @@ const MonthlyInvoiceCreate = () => {
                     key={room.unitId}
                     room={room}
                     debouncedReadingDate={debouncedReadingDate}
-                    paymentDueDate={paymentDueDate}
                   />
                 ))}
               </div>

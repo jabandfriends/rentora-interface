@@ -44,30 +44,33 @@ const ContractDetail = ({ form }: IContractDetail) => {
       </div>
       <Separator />
       <div className="desktop:grid-cols-2 grid gap-4">
-        <FormField
-          control={form.control}
-          name="rentalType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Rental Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="w-full capitalize">
-                    <SelectValue placeholder="Select a rental type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {Object.entries(ContractType).map(([key, value]) => (
-                    <SelectItem className="capitalize" key={key} value={value}>
-                      {value}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div>
+          <FormField
+            control={form.control}
+            name="rentalType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Rental Type</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="w-full capitalize">
+                      <SelectValue placeholder="Select a rental type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {Object.entries(ContractType).map(([key, value]) => (
+                      <SelectItem className="capitalize" key={key} value={value}>
+                        {value}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <div>
           <FormField
             control={form.control}

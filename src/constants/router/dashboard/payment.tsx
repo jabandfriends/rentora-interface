@@ -1,0 +1,17 @@
+import { DASHBOARD_ROUTE_ID } from '@/constants'
+import { ROUTES } from '@/constants/router/routes'
+import { TENANT_ROLE } from '@/enum'
+import PaymentPage from '@/pages/Payment'
+import RequireApartmentWrapper from '@/router/RequireApartmentWrapper'
+import type { IRouter } from '@/types'
+
+export const PAYMENT_ROUTES: Array<IRouter> = [
+  {
+    path: ROUTES.payment.path,
+    element: (
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING]} routeId={DASHBOARD_ROUTE_ID}>
+        <PaymentPage />
+      </RequireApartmentWrapper>
+    ),
+  },
+]

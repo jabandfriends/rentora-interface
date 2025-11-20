@@ -4,11 +4,6 @@ import type { IBaseUseMutation } from '@/types'
 export type ICreateUnitRequestPayload = {
   floorId: string
   unitName: string
-  bedrooms: number
-  bathrooms: number
-  squareMeters: number
-  balconyCount: number
-  parkingSpaces: number
 }
 
 export type IUpdateUnitParams = {
@@ -17,11 +12,6 @@ export type IUpdateUnitParams = {
 }
 export type IUpdateUnitRequestPayload = Partial<{
   unitName: string
-  bedrooms: number
-  bathrooms: number
-  squareMeters: number
-  balconyCount: number
-  parkingSpaces: number
   status: UnitStatus
 }>
 
