@@ -18,6 +18,8 @@ const TenantCreatePage = () => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const [errorMessage, setErrorMessage]: [string, Dispatch<SetStateAction<string>>] = useState('')
 
+  // Extract OCR data from location state if available
+
   const { mutateAsync: createTenant, isPending } = useRentoraApiTenantCreate({ apartmentId })
   const onSubmit = useCallback(
     async (data: CREATE_TENANT_FORM_SCHEMA_TYPE) => {
