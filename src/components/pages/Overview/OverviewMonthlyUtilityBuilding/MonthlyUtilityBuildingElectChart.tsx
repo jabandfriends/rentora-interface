@@ -17,6 +17,7 @@ type IMonthlyUtilityBuildElect = {
   item: IMonthlyUtilityBuilding
   isLoading: boolean
 }
+
 const MonthlyUtilityBuildingElectChart = ({ item, isLoading }: IMonthlyUtilityBuildElect) => {
   const chartConfig = useMemo(() => {
     return {
@@ -37,8 +38,12 @@ const MonthlyUtilityBuildingElectChart = ({ item, isLoading }: IMonthlyUtilityBu
 
   return (
     <div className="flex flex-col gap-2">
-      <h4 className="text-start font-semibold"> Electric Utility </h4>
-      <ChartContainer config={chartConfig} className="h-80 w-full">
+      <div>
+        <h4 className="font-semibold"> Electric Utility </h4>
+        <p className="text-theme-secondary text-body-2">Electric Utiltiy</p>
+      </div>
+
+      <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <BarChart accessibilityLayer data={item.utilityGroupName.electric}>
           <CartesianGrid vertical={false} />
           <XAxis

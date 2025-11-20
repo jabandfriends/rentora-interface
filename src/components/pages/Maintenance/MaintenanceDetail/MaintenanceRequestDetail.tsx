@@ -1,23 +1,51 @@
 import { Calendar, Check, Clock, Wrench } from 'lucide-react'
+import { useMemo } from 'react'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
 import { FieldEmpty } from '@/components/ui'
+import type { IMaintenance, Maybe } from '@/types'
 import { formatDate } from '@/utilities'
 
 type IMaintenanceRequestDetailProps = {
-  createdAt: string
-  appointmentDate: string
-  category: string
-  estimatedHours: number
-  completedAt: string
+  maintenance: IMaintenance
 }
-const MaintenanceRequestDetail = ({
-  createdAt,
-  appointmentDate,
-  category,
-  estimatedHours,
-  completedAt,
-}: IMaintenanceRequestDetailProps) => {
+type IMaintenanceRequestDetail = {
+  createdAt: Maybe<string>
+  appointmentDate: Maybe<string>
+  category: Maybe<string>
+  estimatedHours: Maybe<number>
+  completedAt: Maybe<string>
+  predictedSchedule: Maybe<string>
+  predictedRecurringDate: Maybe<string>
+}
+const MaintenanceRequestDetail = ({ maintenance }: IMaintenanceRequestDetailProps) => {
+  // format the data
+  const {
+    createdAt,
+    appointmentDate,
+    category,
+    estimatedHours,
+    completedAt,
+    predictedSchedule,
+    predictedRecurringDate,
+  }: IMaintenanceRequestDetail = useMemo(() => {
+    return {
+      createdAt: maintenance.createdAt ? formatDate(new Date(maintenance.createdAt), 'DD MMM YYYY') : null,
+      appointmentDate: maintenance.appointmentDate
+        ? formatDate(new Date(maintenance.appointmentDate), 'DD MMM YYYY')
+        : null,
+      category: maintenance.category,
+      estimatedHours: maintenance.estimatedHours,
+      completedAt: maintenance.completedAt ? formatDate(new Date(maintenance.completedAt), 'YYYY-MM-DD') : null,
+      predictedSchedule: maintenance.predictedSchedule
+        ? formatDate(new Date(maintenance.predictedSchedule), 'DD MMM YYYY')
+        : null,
+      predictedRecurringDate: maintenance.predictedRecurringDate
+        ? formatDate(new Date(maintenance.predictedRecurringDate), 'DD MMM YYYY')
+        : null,
+    }
+  }, [maintenance])
+
   return (
     <Card className="justify-start space-y-2 rounded-xl shadow-sm">
       <CardHeader>
@@ -29,9 +57,7 @@ const MaintenanceRequestDetail = ({
           <Calendar className="size-4" />
           <div>
             <p className="text-body-2">Created</p>
-            <p className="text-body-2 text-theme-secondary">
-              {createdAt ? formatDate(new Date(createdAt), 'DD MMM YYYY') : <FieldEmpty />}
-            </p>
+            <p className="text-body-2 text-theme-secondary">{createdAt || <FieldEmpty />}</p>
           </div>
         </div>
 
@@ -39,9 +65,7 @@ const MaintenanceRequestDetail = ({
           <Clock className="size-4" />
           <div>
             <p className="text-body-2">Scheduled</p>
-            <p className="text-body-2 text-theme-secondary">
-              {appointmentDate ? formatDate(new Date(appointmentDate), 'DD MMM YYYY') : <FieldEmpty />}
-            </p>
+            <p className="text-body-2 text-theme-secondary">{appointmentDate || <FieldEmpty />}</p>
           </div>
         </div>
 
@@ -49,7 +73,7 @@ const MaintenanceRequestDetail = ({
           <Wrench className="size-4" />
           <div>
             <p className="text-body-2">Category</p>
-            <p className="text-body-2 text-theme-secondary capitalize">{category}</p>
+            <p className="text-body-2 text-theme-secondary capitalize">{category || <FieldEmpty />}</p>
           </div>
         </div>
 
@@ -57,7 +81,9 @@ const MaintenanceRequestDetail = ({
           <Clock className="size-4" />
           <div>
             <p className="text-body-2">Estimated Duration</p>
-            <p className="text-body-2 text-theme-secondary">{estimatedHours || <FieldEmpty />} hours</p>
+            <p className="text-body-2 text-theme-secondary">
+              {estimatedHours ? `${estimatedHours} hours` : <FieldEmpty />}
+            </p>
           </div>
         </div>
 
@@ -65,9 +91,23 @@ const MaintenanceRequestDetail = ({
           <Check className="size-4" />
           <div>
             <p className="text-body-2">Completed At</p>
-            <p className="text-body-2 text-theme-secondary">
-              {completedAt ? formatDate(new Date(completedAt), 'YYYY-MM-DD') : <FieldEmpty />}
-            </p>
+            <p className="text-body-2 text-theme-secondary">{completedAt || <FieldEmpty />}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Calendar className="size-4" />
+          <div>
+            <p className="text-body-2">Predicted Next Maintenance Date</p>
+            <p className="text-body-2 text-theme-secondary">{predictedSchedule || <FieldEmpty />}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Calendar className="size-4" />
+          <div>
+            <p className="text-body-2">Next Recurring Schedule Date</p>
+            <p className="text-body-2 text-theme-secondary">{predictedRecurringDate || <FieldEmpty />}</p>
           </div>
         </div>
       </CardContent>

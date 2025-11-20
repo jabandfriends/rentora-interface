@@ -39,7 +39,7 @@ const MonthlyUitlityFloorElectChart = ({ item, isLoading }: IMonthlyUtilityFloor
   return (
     <div className="flex flex-col gap-2">
       <h4 className="font-semibold"> Electric Utility </h4>
-      <ChartContainer config={chartConfig} className="h-80 w-full">
+      <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <BarChart accessibilityLayer data={item.utilityGroupName.electric}>
           <CartesianGrid vertical={false} />
           <XAxis

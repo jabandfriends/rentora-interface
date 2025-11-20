@@ -1,4 +1,3 @@
-import { Card } from '@/components/common'
 import { LoadingPage, PageTableEmpty } from '@/components/ui'
 import type { IMonthtlyUtilityFloor } from '@/types'
 
@@ -19,15 +18,15 @@ const MonthlyUtilityFloorCard = ({ item, isLoading }: IMonthlyUtilityFloorCard) 
   }
 
   return (
-    <Card className="flex-col gap-6 rounded-2xl shadow-lg hover:shadow-xl">
+    <div className="flex-col gap-6 rounded-2xl">
       <div className="flex justify-start">
-        <h3 className="text-start font-bold">{item.floorName}</h3>
+        <h4 className="text-start font-semibold">{item.floorName}</h4>
       </div>
-      <div className="desktop:grid desktop:grid-cols-2 flex flex-col gap-6">
+      <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
         <MonthlyUtilityFloorElectChart item={item} isLoading={isLoading} />
         <MonthlyUtilityFloorWaterChart item={item} isLoading={isLoading} />
       </div>
-    </Card>
+    </div>
   )
 }
 export default MonthlyUtilityFloorCard

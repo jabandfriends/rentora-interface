@@ -2,29 +2,15 @@ import { ChartColumnBig } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/common'
-import { LoadingPage, PageTableEmpty } from '@/components/ui'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
+import { PaginationBar, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/feature'
+import { PageTableEmpty, PageTableSearchEmpty } from '@/components/ui'
 import { DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA } from '@/constants'
-import {
-  useRentoraApiBuildingListNoPaginate,
-  useRentoraApiFloorList,
-  useRentoraApiMonthlyUtilityBuildings,
-  useRentoraApiMonthlyUtilityFloor,
-} from '@/hooks'
-import type { IBuilding, IFloor, IMonthlyUtilityBuilding, IMonthtlyUtilityFloor } from '@/types'
+import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks'
+import type { ISearchBarProps } from '@/types'
 
-import { MonthlyUtilityBuildingCard } from './OverviewMonthlyUtilityBuilding'
-import { MonthlyUtilityFloorCard } from './OverviewMonthlyUtilityFloor'
+import OverviewMonthlyBuilding from './OverviewMonthlyBuilding'
+import { MonthlyUtilitySelectFloor } from './OverviewMonthlyUtilityFloor'
 
 const OverviewMonthlyUtilityBuilding = () => {
   const [selectedBuildingId, setSelectedBuildingId]: [string, Dispatch<SetStateAction<string>>] = useState('')
@@ -69,6 +55,24 @@ const OverviewMonthlyUtilityBuilding = () => {
 
   const isUtilityDataEmpty = !BuildingSelected || Object.keys(BuildingSelected.utilityGroupName || {}).length === 0
 
+  if (isSearched && monthlyUtiltyBuilding?.length === 0) {
+    return <PageTableSearchEmpty message="No Building Utility" subMessage="No Building Utility found for this search" />
+  }
+
+  if (!monthlyUtiltyBuilding || monthlyUtiltyBuilding.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ChartColumnBig className="h-5 w-5" />
+            Building Utility
+          </CardTitle>
+        </CardHeader>
+        <PageTableEmpty message="No Building Utility found" />
+      </Card>
+    )
+  }
+
   return (
     <Card className="justify-start rounded-2xl">
       <CardHeader>
@@ -76,62 +80,26 @@ const OverviewMonthlyUtilityBuilding = () => {
           <ChartColumnBig className="size-5" />
           Building and Floor Utility
         </CardTitle>
+        <CardDescription>Building Utility Summary</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex flex-row justify-start gap-2">
-          <div>
-            <Select value={selectedBuildingId} onValueChange={setSelectedBuildingId}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Building" />
-              </SelectTrigger>
-              <SelectContent>
-                {buildingNumber?.map((building: IBuilding) => (
-                  <SelectItem key={building.id} value={building.id}>
-                    <div className="flex items-center gap-2">
-                      <span>{building.name}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Select value={selectedFloorId} onValueChange={setSelectedFloorId}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select floor Number" />
-              </SelectTrigger>
-              <SelectContent>
-                {floorNumber.map((floor: IFloor) => (
-                  <SelectItem key={floor.floorId} value={floor.floorId}>
-                    <div className="flex items-center gap-2">
-                      <span>{floor.floorNumber}</span>
-                      <span>{floor.floorName}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {isLoading ? (
-          <p>Loading monthly utility data...</p>
-        ) : isUtilityDataEmpty ? (
-          <PageTableEmpty message="Selected building has no recorded utility data. 📊" />
-        ) : (
-          <div className="space-y-6">
-            <div>
-              {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
-                <MonthlyUtilityBuildingCard key={index} item={item} isloading={isLoading} />
-              ))}
-            </div>
-            <div>
-              {monthlyUtilityFloor?.map((item: IMonthtlyUtilityFloor, index: number) => (
-                <MonthlyUtilityFloorCard key={index} item={item} isLoading={isLoading} />
-              ))}
-            </div>
-          </div>
-        )}
+        <Tabs defaultValue="building">
+          <TabsList className="border-theme-secondary-300 border">
+            <TabsTrigger value="building">Building</TabsTrigger>
+            <TabsTrigger value="floor">Floor</TabsTrigger>
+          </TabsList>
+          <TabsContent value="floor">
+            <MonthlyUtilitySelectFloor props={{ buildingId: monthlyUtiltyBuilding?.[0].buildingID }} />
+          </TabsContent>
+          <TabsContent value="building">
+            <OverviewMonthlyBuilding
+              isSearched={isSearched}
+              isBuildingLoading={isLoading}
+              monthlyUtiltyBuilding={monthlyUtiltyBuilding}
+              handleSearchChange={handleSearchChange}
+            />
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   )

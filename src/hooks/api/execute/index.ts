@@ -1,6 +1,7 @@
 export * from './apartment-payment'
 export * from './apartment-service'
 export * from './contract'
+export * from './invoice'
 export * from './payment'
 export * from './supply'
 export * from './useRentoraApiAuthenticate'
