@@ -81,15 +81,7 @@ export type IRentoraApiClientDeleteMaintenanceResponse = IRentoraApiClientBaseRe
 export type ICreateTenantMaintenanceRequestPayload = {
   title: string
   description: string
-  priority: MAINTENANCE_PRIORITY
-  appointmentDate: string
-  dueDate: string
-  estimatedHours: number
-  estimatedCost: number
   category: MAINTENANCE_CATEGORY
-  isEmergency: boolean
-  isRecurring: boolean
-  recurringSchedule?: string
 }
 
 //hooks type UseRentoraApiCreateTenantMaintenance

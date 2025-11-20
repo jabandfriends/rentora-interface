@@ -1,22 +1,34 @@
 import { Calendar, MapPin } from 'lucide-react'
+import { useCallback } from 'react'
 import type { VariantProps } from 'tailwind-variants'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/common'
 import { Badge } from '@/components/ui'
+import { MAINTENANCE_STATUS } from '@/enum'
 import type { IMaintenanceInfo } from '@/types'
 import { formatDate } from '@/utilities'
 
 type ITenantMaintenanceCardProps = {
   maintenance: IMaintenanceInfo
-  statusBadgeVariant: (status: string) => VariantProps<typeof Badge>['variant']
-  priorityBadgeVariant: (priority: string) => VariantProps<typeof Badge>['variant']
 }
 
-const TenantMaintenanceCard = ({
-  maintenance,
-  statusBadgeVariant,
-  priorityBadgeVariant,
-}: ITenantMaintenanceCardProps) => {
+const TenantMaintenanceCard = ({ maintenance }: ITenantMaintenanceCardProps) => {
+  const statusBadgeVariant = useCallback((maintenanceStatus: string): VariantProps<typeof Badge>['variant'] => {
+    switch (maintenanceStatus) {
+      case MAINTENANCE_STATUS.PENDING:
+        return 'warning'
+      case MAINTENANCE_STATUS.ASSIGNED:
+        return 'success'
+      case MAINTENANCE_STATUS.IN_PROGRESS:
+        return 'default'
+      case MAINTENANCE_STATUS.COMPLETED:
+        return 'success'
+      case MAINTENANCE_STATUS.CANCELLED:
+        return 'error'
+      default:
+        return 'default'
+    }
+  }, [])
   return (
     <Card className="border-theme-secondary-300 rounded-xl border shadow-none hover:shadow">
       <CardContent className="space-y-4">
@@ -28,9 +40,6 @@ const TenantMaintenanceCard = ({
           <div className="flex items-center gap-2">
             <Badge variant={statusBadgeVariant(maintenance.status)} className="capitalize">
               {maintenance.status}
-            </Badge>
-            <Badge variant={priorityBadgeVariant(maintenance.priority)} className="capitalize">
-              {maintenance.priority}
             </Badge>
           </div>
         </div>

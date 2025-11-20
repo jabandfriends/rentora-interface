@@ -17,21 +17,14 @@ const TenantMaintenanceCreate = () => {
 
   const onSubmit = useCallback(
     async (data: TENANT_MAINTENANCE_FORM_SCHEMA_TYPE) => {
+      if (!apartmentId) return
       const payload: ICreateTenantMaintenanceRequestPayload = {
         title: data.title,
         description: data.description ?? '',
-        priority: data.priority,
-        appointmentDate: data.appointmentDate,
-        dueDate: data.dueDate!,
-        estimatedHours: Number(data.estimatedHours) || 0,
         category: data.category,
-        estimatedCost: data.estimatedCost ? Number(data.estimatedCost) : 0,
-        isEmergency: data.isEmergency,
-        isRecurring: data.isRecurring,
-        ...(data.isRecurring && data.recurringSchedule.trim() !== '' && { recurringSchedule: data.recurringSchedule }),
       }
       try {
-        await createTenantMaintenance({ apartmentId: apartmentId ?? '', payload })
+        await createTenantMaintenance({ apartmentId: apartmentId, payload })
         toast.success('Maintenance request created successfully')
 
         setTimeout(() => {
@@ -45,8 +38,11 @@ const TenantMaintenanceCreate = () => {
   )
 
   //navigate before page
-  const navigateBefore = useCallback(() => navigate(ROUTES.tenantMaintenance.getPath(apartmentId ?? '')), [navigate, apartmentId])
-  
+  const navigateBefore = useCallback(() => {
+    if (!apartmentId) return
+    navigate(ROUTES.tenantMaintenance.getPath(apartmentId))
+  }, [navigate, apartmentId])
+
   return (
     <PageSection className="space-y-4">
       <PageHeader
@@ -57,10 +53,14 @@ const TenantMaintenanceCreate = () => {
         actionIcon={<ArrowLeft />}
         actionOnClick={navigateBefore}
       />
-      <TenantMaintenanceForm onSubmit={onSubmit} buttonIcon={<Plus />} buttonLabel="Create Request" isSubmitting={isPending} />
+      <TenantMaintenanceForm
+        onSubmit={onSubmit}
+        buttonIcon={<Plus />}
+        buttonLabel="Create Request"
+        isSubmitting={isPending}
+      />
     </PageSection>
   )
 }
 
 export default TenantMaintenanceCreate
-

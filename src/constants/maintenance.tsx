@@ -218,37 +218,13 @@ export const MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS
 ]
 
 // Tenant Maintenance Form Schema (without suppliesUsage, status, and unitId)
-export const TENANT_MAINTENANCE_FORM_SCHEMA = z
-  .object({
-    title: z.string({ error: 'Task title is required.' }).min(1, 'Task title is required.'),
-    description: z.string().optional(),
-    priority: z.enum(
-      [MAINTENANCE_PRIORITY.LOW, MAINTENANCE_PRIORITY.NORMAL, MAINTENANCE_PRIORITY.HIGH, MAINTENANCE_PRIORITY.URGENT],
-      { error: 'Priority is required' },
-    ),
-    appointmentDate: z.string({ error: 'Appointment date is required.' }).min(1, 'Appointment date is required.'),
-    recurringSchedule: z.string(),
-    dueDate: z.string({ error: 'Due date is wrong format.' }).optional(),
-    category: z.enum([MAINTENANCE_CATEGORY.GENERAL, MAINTENANCE_CATEGORY.PLUMBING, MAINTENANCE_CATEGORY.ELECTRICITY], {
-      error: 'Category is required',
-    }),
-    isEmergency: z.boolean(),
-    isRecurring: z.boolean(),
-    estimatedHours: z.string().optional(),
-    estimatedCost: z.string().optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.isRecurring) {
-        return data.recurringSchedule && data.recurringSchedule.trim() !== ''
-      }
-      return true
-    },
-    {
-      message: 'Recurring schedule is required when recurring is enabled.',
-      path: ['recurringSchedule'],
-    },
-  )
+export const TENANT_MAINTENANCE_FORM_SCHEMA = z.object({
+  title: z.string({ error: 'Task title is required.' }).min(1, 'Task title is required.'),
+  description: z.string().optional(),
+  category: z.enum([MAINTENANCE_CATEGORY.GENERAL, MAINTENANCE_CATEGORY.PLUMBING, MAINTENANCE_CATEGORY.ELECTRICITY], {
+    error: 'Category is required',
+  }),
+})
 
 // Tenant Maintenance Form Fields (without status field and supplies section)
 export const TENANT_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM_FIELDS_TYPE>> = [
@@ -275,20 +251,6 @@ export const TENANT_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM
         maxLength: 200,
       },
       {
-        key: 'priority',
-        label: 'Priority',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'select',
-        isRequired: true,
-        options: [
-          { value: MAINTENANCE_PRIORITY.LOW, label: MAINTENANCE_PRIORITY.LOW },
-          { value: MAINTENANCE_PRIORITY.NORMAL, label: MAINTENANCE_PRIORITY.NORMAL },
-          { value: MAINTENANCE_PRIORITY.HIGH, label: MAINTENANCE_PRIORITY.HIGH },
-          { value: MAINTENANCE_PRIORITY.URGENT, label: MAINTENANCE_PRIORITY.URGENT },
-        ],
-        placeholder: 'Select priority',
-      },
-      {
         key: 'category',
         label: 'Category',
         description: 'Basic information about the maintenance task',
@@ -300,59 +262,6 @@ export const TENANT_MAINTENANCE_FORM_FIELDS: Array<FORM_SECTION<MAINTENANCE_FORM
           { value: MAINTENANCE_CATEGORY.ELECTRICITY, label: MAINTENANCE_CATEGORY.ELECTRICITY },
         ],
         placeholder: 'Select category',
-      },
-    ],
-  },
-  {
-    title: 'Scheduling',
-    description: 'When and how often this task should be completed',
-    fields: [
-      {
-        fieldType: 'layout',
-        layout: 'row',
-        label: 'Scheduling',
-        description: 'When and how often this task should be completed',
-        key: 'appointmentDate',
-        fields: [
-          {
-            key: 'appointmentDate',
-            label: 'Appointment date',
-            description: 'Basic information about the maintenance task',
-            fieldType: 'input',
-            inputType: 'datetime',
-            isRequired: true,
-          },
-          {
-            key: 'dueDate',
-            label: 'Due date',
-            description: 'Basic information about the maintenance task',
-            fieldType: 'input',
-            inputType: 'datetime',
-            isRequired: true,
-          },
-        ],
-      },
-      {
-        key: 'estimatedHours',
-        label: 'Estimated hours',
-        description: 'Basic information about the maintenance task',
-        fieldType: 'input',
-        inputType: 'number',
-        placeholder: 'Enter Estimated Hours',
-        maxLength: 9,
-      },
-      {
-        key: 'estimatedCost',
-        label: 'Estimated Cost',
-        fieldType: 'input',
-        inputType: 'number',
-        placeholder: 'Enter Estimated Cost',
-        maxLength: 9,
-      },
-      {
-        key: 'isEmergency',
-        label: 'Emergency',
-        fieldType: 'switch',
       },
     ],
   },

@@ -41,13 +41,6 @@ const TenantMaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting
     defaultValues: {
       title: '',
       description: '',
-      appointmentDate: '',
-      dueDate: '',
-      estimatedHours: '',
-      estimatedCost: '',
-      isEmergency: false,
-      isRecurring: false,
-      recurringSchedule: '',
     },
     mode: 'onChange',
   })
@@ -218,64 +211,6 @@ const TenantMaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting
           </Card>
         ))}
 
-        {/* Recurring */}
-        <Card className="space-y-4 rounded-xl px-6 py-4 hover:shadow-none">
-          <div>
-            <h3>
-              Recurring <span className="text-theme-error">*</span>
-            </h3>
-            <p className="text-theme-secondary">Select if this task should be recurring</p>
-          </div>
-          <FormField
-            control={form.control}
-            name="isRecurring"
-            render={({ field }) => (
-              <div className="flex gap-x-2">
-                <Switch
-                  id={field.name}
-                  onBlur={field.onBlur}
-                  checked={Boolean(field.value)}
-                  onCheckedChange={field.onChange}
-                />
-                <FormLabel htmlFor={field.name}>Recurring</FormLabel>
-                <FormMessage />
-              </div>
-            )}
-          />
-
-          {form.watch('isRecurring') && (
-            <FormField
-              control={form.control}
-              name="recurringSchedule"
-              render={({ field }) => (
-                <div className="space-y-1">
-                  <FormLabel htmlFor={field.name}>Recurring Schedule</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger className="capitalize">
-                      <SelectValue placeholder="Select recurring schedule" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem className="capitalize" value="weekly">
-                        Weekly
-                      </SelectItem>
-                      <SelectItem className="capitalize" value="monthly">
-                        Monthly
-                      </SelectItem>
-                      <SelectItem className="capitalize" value="quarterly">
-                        Quarterly
-                      </SelectItem>
-                      <SelectItem className="capitalize" value="yearly">
-                        Yearly
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </div>
-              )}
-            />
-          )}
-        </Card>
-
         <div className="flex justify-end">
           <Button className="flex items-center gap-2" type="submit">
             {isSubmitting ? <Spinner /> : buttonLabel}
@@ -288,4 +223,3 @@ const TenantMaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting
 }
 
 export default TenantMaintenanceForm
-
