@@ -74,7 +74,7 @@ const CreateTenantForm = ({ onSubmit, isPending, errorMessage }: ICreateTenantFo
           lastName: ocrData.lastName || '',
           email: ocrData.email || '',
           phoneNumber: ocrData.phoneNumber || '',
-          nationalId: ocrData.nationId || '',
+          nationalId: ocrData.nationalId || '',
           dateOfBirth: ocrData.dateOfBirth || '',
           emergencyContactName: ocrData.emergencyContactName || '',
           emergencyContactPhone: ocrData.emergencyContactPhone || '',

@@ -24,7 +24,6 @@ export type ICreateAdhocInvoiceRequestPayload = {
 export type IUpdateAdhocInvoicePayload = {
   invoiceId: string
   title: string
-  description: string
   category: ADHOC_INVOICE_CATEGORY
   amount: number
   dueDate: string

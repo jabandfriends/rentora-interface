@@ -5,7 +5,7 @@ export type IReadingContract = {
   lastName: string
   email: string
   phoneNumber: string
-  nationId: string
+  nationalId: string
   dateOfBirth: string
   emergencyContactName: string
   emergencyContactPhone: string
