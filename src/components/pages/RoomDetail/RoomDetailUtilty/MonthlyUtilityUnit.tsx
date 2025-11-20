@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 
 import { Card } from '@/components/common'
-import { EmptyPage, LoadingPage } from '@/components/ui'
+import { LoadingPage, PageTableEmpty, Separator } from '@/components/ui'
 import { useRentoraApiMonthlyUtilityUnit } from '@/hooks'
 
 import MonthlyUtilityUnitElectChart from './MonthlyUtilityUnitElectChart'
@@ -20,7 +20,16 @@ const MonthlyUtilityUnit = () => {
   }
 
   if (!monthlyUtilityUnit) {
-    return <EmptyPage title="Monthly Utility not found" description="No Monthly Utility you looking for." />
+    return (
+      <Card className="rounded-2xl shadow-lg hover:shadow-xl">
+        <div>
+          <h3>Utility Usage</h3>
+          <p className="text-body-2 text-theme-secondary">The utility usage of the unit.</p>
+        </div>
+        <Separator />
+        <PageTableEmpty message="Monthly Utility not found" description="No Monthly Utility you looking for." />
+      </Card>
+    )
   }
   return (
     <Card className="rounded-2xl shadow-lg hover:shadow-xl">

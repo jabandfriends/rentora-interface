@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { Card, Select, SelectContent, SelectItem, SelectTrigger } from '@/components/common'
+import { Separator } from '@/components/ui'
 import { DEFAULT_CONTRACT_LIST_DATA } from '@/constants'
 import { useRentoraApiMaintenanceList } from '@/hooks'
 
@@ -54,7 +55,7 @@ const RoomDetailMaintenanceList = () => {
 
   return (
     <Card className="rounded-2xl shadow-lg hover:shadow-xl">
-      <div className="border-theme-secondary-400 desktop:flex-row desktop:items-center flex flex-col justify-between gap-y-2 border-b pb-4">
+      <div className="border-theme-secondary-400 desktop:flex-row desktop:items-center flex flex-col justify-between gap-y-2 pb-4">
         <div className="flex items-center justify-between">
           <div>
             <h3>Maintenance Log </h3>
@@ -71,6 +72,7 @@ const RoomDetailMaintenanceList = () => {
           </SelectContent>
         </Select>
       </div>
+      <Separator />
 
       <RoomDetailMaintenanceTable
         maintenance={maintenanceList}
