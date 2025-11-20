@@ -25,13 +25,10 @@ const MonthlyUtilityUnit = () => {
   return (
     <Card className="rounded-2xl shadow-lg hover:shadow-xl">
       <div>
-        <h2>{monthlyUtilityUnit.unitName}</h2>
-        <div className="desktop:flex-row justify-items-between-start flex flex-col gap-x-2">
-          <p className="text-body-2 text-theme-secondary-600">Floor {monthlyUtilityUnit.floorNumber}</p>
-          <p className="text-body-2 text-theme-secondary-600">Building {monthlyUtilityUnit.buildingName}</p>
-        </div>
+        <h3>Utility Usage</h3>
+        <p className="text-body-2 text-theme-secondary">The utility usage of the unit.</p>
       </div>
-      <div>
+      <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
         <MonthlyUtilityUnitElectChart />
         <MonthlyUtilityUnitWaterChart />
       </div>

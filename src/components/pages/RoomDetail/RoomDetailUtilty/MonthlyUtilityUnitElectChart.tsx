@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import {
   type ChartConfig,
@@ -23,12 +23,12 @@ const MonthlyUtilityUnitElectChart = () => {
     unitId: unitId!,
   })
 
-  const chartConfig = useMemo(
+  const chartConfig: ChartConfig = useMemo(
     () =>
       ({
         usageAmoung: {
           label: 'Usage Amount',
-          color: '#3b82f6',
+          color: 'var(--color-theme-primary)',
         },
       }) satisfies ChartConfig,
     [],
@@ -46,8 +46,9 @@ const MonthlyUtilityUnitElectChart = () => {
 
   return (
     <div>
-      <h3> Electric Utility </h3>
-      <ChartContainer config={chartConfig} className="h-64 w-64">
+      <h4> Electric Utility </h4>
+      <p className="text-body-2 text-theme-secondary">The electricity usage of the unit.</p>
+      <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <BarChart accessibilityLayer data={electricUtility}>
           <CartesianGrid vertical={false} />
           <XAxis
@@ -57,9 +58,10 @@ const MonthlyUtilityUnitElectChart = () => {
             axisLine={false}
             tickFormatter={(value) => value.slice(0, 3)}
           />
+          <YAxis dataKey="usageAmount" tickLine={false} axisLine={false} tickMargin={8} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="usageAmount" fill="#3b82f6" radius={10} />
+          <Bar radius={10} dataKey="usageAmount" fill="var(--color-theme-primary)" />
         </BarChart>
       </ChartContainer>
     </div>
