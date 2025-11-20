@@ -13,7 +13,6 @@ import type {
 
 export const useRentoraApiTenantMaintenanceList = (props: {
   apartmentId: Maybe<string>
-  tenantUserId: Maybe<string>
   params: IRentoraApiTenantMaintenanceListParams
 }): IUseRentoraApiTenantMaintenanceList => {
   const rentoraApiQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
@@ -22,7 +21,6 @@ export const useRentoraApiTenantMaintenanceList = (props: {
     queryKey: [
       rentoraApiQueryClient.key.tenantMaintenanceList,
       props?.apartmentId,
-      props?.tenantUserId,
       props?.params?.page,
       props?.params?.size,
       props?.params?.sortBy,
@@ -36,7 +34,7 @@ export const useRentoraApiTenantMaintenanceList = (props: {
       const { page, size, sortBy, sortDir, status, isRecurring, priority }: IRentoraApiTenantMaintenanceListParams =
         props?.params ?? {}
 
-      return await rentoraApiQueryClient.tenantMaintenanceList(props.apartmentId!, props.tenantUserId!, {
+      return await rentoraApiQueryClient.tenantMaintenanceList(props.apartmentId!, {
         ...(props?.params ?? {}),
         ...(sortBy ? { sortBy } : {}),
         ...(sortDir ? { sortDir } : {}),
@@ -47,7 +45,7 @@ export const useRentoraApiTenantMaintenanceList = (props: {
         size,
       })
     },
-    enabled: !!props?.apartmentId && !!props?.tenantUserId,
+    enabled: !!props?.apartmentId,
     retry: 1,
   })
 

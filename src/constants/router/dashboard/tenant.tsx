@@ -7,6 +7,7 @@ import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
 import TenantUpdatePage from '@/pages/Tenant/TenantUpdate'
 import TenantAdhocInvoice from '@/pages/TenantProfile/TenantAdhocInvoice'
 import TenantMaintenance from '@/pages/TenantProfile/TenantMaintenance'
+import TenantMaintenanceCreate from '@/pages/TenantProfile/TenantMaintenanceCreate'
 import TenantPayment from '@/pages/TenantProfile/TenantPayment'
 import TenantRoom from '@/pages/TenantProfile/TenantRoom'
 import RequireApartmentWrapper from '@/router/RequireApartmentWrapper'
@@ -70,6 +71,14 @@ export const TENANT_ROUTES: Array<IRouter> = [
     element: (
       <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.TENANT]} routeId={DASHBOARD_ROUTE_ID}>
         <TenantMaintenance />
+      </RequireApartmentWrapper>
+    ),
+  },
+  {
+    path: ROUTES.tenantMaintenanceCreate.path,
+    element: (
+      <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.TENANT]} routeId={DASHBOARD_ROUTE_ID}>
+        <TenantMaintenanceCreate />
       </RequireApartmentWrapper>
     ),
   },

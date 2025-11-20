@@ -57,6 +57,7 @@ export type RentoraApiExecuteClientKey =
   | 'setupApartment'
   | 'firstTimePasswordReset'
   | 'createMaintenance'
+  | 'createTenantMaintenance'
   | 'updateMaintenance'
   | 'deleteMaintenance'
   | 'createTenant'

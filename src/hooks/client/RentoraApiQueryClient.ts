@@ -193,12 +193,11 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
 
   async tenantMaintenanceList(
     apartmentId: Maybe<string>,
-    tenantUserId: Maybe<string>,
     params: IRentoraApiTenantMaintenanceListParams,
   ): Promise<IRentoraApiClientTenantMaintenanceListResponse['data']> {
     const response: AxiosResponse<IRentoraApiClientTenantMaintenanceListResponse, unknown> =
       await this.axiosWithAuthInstance.get<IRentoraApiClientTenantMaintenanceListResponse>(
-        `/api/apartment/${apartmentId}/maintenance/tenant/${tenantUserId}`,
+        `/api/apartment/${apartmentId}/maintenance/tenant`,
         {
           params,
         },

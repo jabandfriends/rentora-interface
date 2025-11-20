@@ -60,5 +60,6 @@ export const ROUTES: IRoutes = {
   tenantAdhocInvoice: apartmentRoute('/tenant/adhoc-invoice'),
   tenantPayment: apartmentRoute('/tenant/payment'),
   tenantMaintenance: apartmentRoute('/tenant/maintenance'),
+  tenantMaintenanceCreate: apartmentRoute('/tenant/maintenance/create'),
   tenantRoom: apartmentRoute('/tenant/room'),
 }

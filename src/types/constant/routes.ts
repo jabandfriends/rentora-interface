@@ -54,5 +54,6 @@ export type IRoutes = {
   tenantAdhocInvoice: IRoute
   tenantPayment: IRoute
   tenantMaintenance: IRoute
+  tenantMaintenanceCreate: IRoute
   tenantRoom: IRoute
 }

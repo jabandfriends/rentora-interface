@@ -1,24 +1,29 @@
 import { useDebounce } from '@uidotdev/usehooks'
+import { Plus } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
 
-import { Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
+import { Button, Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
 import { PaginationBar } from '@/components/feature'
 import { Badge, EmptyPage, PageTableHeader } from '@/components/ui'
 import { DEFAULT_MAINTENANCE_LIST_DATA } from '@/constants/pagination'
+import { ROUTES } from '@/constants'
 import { MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
-import { useRentoraApiTenantMaintenanceList, useRentoraApiUser } from '@/hooks'
+import { useRentoraApiTenantMaintenanceList } from '@/hooks'
 import type { IMaintenanceInfo } from '@/types'
 
 import TenantMaintenanceCard from './TenantMaintenanceCard'
 import TenantMaintenanceListSkeleton from './TenantMaintenanceListSkeleton'
 
 const TenantMaintenanceList = () => {
+  const navigate = useNavigate()
   const { apartmentId } = useParams<{ apartmentId: string }>()
-  const { data: userData } = useRentoraApiUser()
-  const tenantUserId = userData?.id
+
+  const handleCreateMaintenance = useCallback(() => {
+    navigate(ROUTES.tenantMaintenanceCreate.getPath(apartmentId ?? ''))
+  }, [navigate, apartmentId])
 
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
     DEFAULT_MAINTENANCE_LIST_DATA.page,
@@ -73,8 +78,7 @@ const TenantMaintenanceList = () => {
     isLoading,
     pagination: { totalPages, totalElements },
   } = useRentoraApiTenantMaintenanceList({
-    apartmentId: apartmentId!,
-    tenantUserId: tenantUserId!,
+    apartmentId: apartmentId,
     params: {
       page: currentPage,
       size: DEFAULT_MAINTENANCE_LIST_DATA.size,
@@ -129,6 +133,11 @@ const TenantMaintenanceList = () => {
       <PageTableHeader
         title="Maintenance Requests"
         description="Here you can view and keep track of all maintenance requests assigned to you as a tenant."
+        actionButton={
+          <Button className="flex items-center gap-2" onClick={handleCreateMaintenance}>
+            <Plus size={18} /> Create Request
+          </Button>
+        }
       />
 
       <div className="flex items-center justify-between gap-x-2">
