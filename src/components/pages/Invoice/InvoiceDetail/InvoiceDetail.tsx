@@ -6,14 +6,13 @@ import {
   CheckCircle,
   Clock,
   DollarSign,
-  Download,
   FileText,
   User,
 } from 'lucide-react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Button, Card } from '@/components/common'
-import { Badge, FieldEmpty, Separator } from '@/components/ui'
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Image } from '@/components/common'
+import { Badge, EmptyPage, FieldEmpty, Separator } from '@/components/ui'
 import { useRentoraApiInvoiceDetails } from '@/hooks'
 import { formatCurrency } from '@/utilities'
 
@@ -94,10 +93,6 @@ const InvoiceDetail = () => {
           <p className="text-theme-secondary text-body-2">Created {formatDate(data.createdAt)}</p>
         </div>
         <div className="flex gap-3">
-          <Button className="flex items-center gap-x-2" variant="outline">
-            <Download className="size-4" />
-            Download PDF
-          </Button>
           <Button className="flex items-center gap-x-2" onClick={handleBackClick}>
             <ArrowLeft className="size-4" />
             Back
@@ -106,54 +101,70 @@ const InvoiceDetail = () => {
       </div>
 
       {/* Invoice Overview */}
-      <Card className="rounded-2xl shadow">
-        <div>
-          <div className="flex items-center gap-2">
-            <FileText className="size-5" />
-            <h4>Invoice Overview</h4>
-          </div>
-        </div>
-        <Separator />
-        <div className="space-y-4">
-          <div className="desktop:grid-cols-2 grid gap-6">
-            <div className="space-y-4">
-              <div>
-                <label className="font-medium">Title</label>
-                <p className="text-body-2">{data.title}</p>
-              </div>
-              <div>
-                <label className="font-medium">Description</label>
-                <p className="text-body-2">{data.description}</p>
-              </div>
-              <div>
-                <label className="font-medium">Category : </label>
-                <Badge variant="warning" className="ml-2 capitalize">
-                  {data.category}
-                </Badge>
-              </div>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <label className="font-medium">Payment Status</label>
-                <StatusBadge status={data.paymentStatus} />
-              </div>
-              <div className="flex items-center justify-between">
-                <label className="font-medium">Priority</label>
-                <PriorityBadge priority={data.priority} />
-              </div>
-              <div className="flex items-center justify-between">
-                <label className="font-medium">Status</label>
-                <Badge variant="default" className="capitalize">
-                  {data.status}
-                </Badge>
-              </div>
+      <div className="desktop:grid-cols-3 grid gap-4">
+        <Card className="col-span-2 justify-start rounded-2xl shadow">
+          <div>
+            <div className="flex items-center gap-2">
+              <FileText className="size-5" />
+              <h4>Invoice Overview</h4>
             </div>
           </div>
-        </div>
-      </Card>
+          <Separator />
+          <div className="space-y-4">
+            <div className="desktop:grid-cols-2 grid gap-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="font-medium">Title</label>
+                  <p className="text-body-2">{data.title}</p>
+                </div>
+                <div>
+                  <label className="font-medium">Description</label>
+                  <p className="text-body-2">{data.description}</p>
+                </div>
+                <div>
+                  <label className="font-medium">Category : </label>
+                  <Badge variant="warning" className="ml-2 capitalize">
+                    {data.category}
+                  </Badge>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <label className="font-medium">Payment Status</label>
+                  <StatusBadge status={data.paymentStatus} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="font-medium">Priority</label>
+                  <PriorityBadge priority={data.priority} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="font-medium">Status</label>
+                  <Badge variant="default" className="capitalize">
+                    {data.status}
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="justify-start rounded-2xl shadow">
+          <CardHeader>
+            <CardTitle>Receipt</CardTitle>
+            <CardDescription>Uploaded receipt </CardDescription>
+            <CardContent>
+              {data.receiptUrls ? (
+                <Image src={data.receiptUrls} alt="receipt image" width={300} />
+              ) : (
+                <EmptyPage title="No receipt uploaded" description="No receipt uploaded" />
+              )}
+            </CardContent>
+          </CardHeader>
+        </Card>
+      </div>
 
       {/* Amount Details */}
-      <Card className="rounded-2xl shadow">
+      <Card className="justify-start rounded-2xl shadow">
         <div>
           <div className="flex items-center gap-2">
             <DollarSign className="size-5" />
@@ -185,7 +196,7 @@ const InvoiceDetail = () => {
       </Card>
 
       {/* Dates */}
-      <Card className="rounded-2xl shadow">
+      <Card className="justify-start rounded-2xl shadow">
         <div>
           <div className="flex items-center gap-2">
             <Calendar className="size-5" />
@@ -209,7 +220,7 @@ const InvoiceDetail = () => {
 
       {/* Property & Tenant Information */}
       <div className="desktop:grid-cols-2 grid gap-6">
-        <Card className="rounded-2xl shadow">
+        <Card className="justify-start rounded-2xl shadow">
           <div>
             <div className="flex items-center gap-2">
               <Building className="size-5" />
@@ -229,7 +240,7 @@ const InvoiceDetail = () => {
           </div>
         </Card>
 
-        <Card className="rounded-2xl shadow">
+        <Card className="justify-start rounded-2xl shadow">
           <div>
             <div className="flex items-center gap-2">
               <User className="size-5" />
@@ -250,26 +261,7 @@ const InvoiceDetail = () => {
         </Card>
       </div>
 
-      {/* Documents & Attachments
-      <Card className="rounded-2xl shadow">
-        <div>
-          <h4>Documents & Attachments</h4>
-        </div>
-        <Separator />
-        <div>
-          <div className="desktop:grid-cols-2 grid gap-3">
-            <div className="hover:bg-theme-primary/50 border-theme-primary hover:text-theme-white flex cursor-pointer items-center gap-3 rounded-lg border p-3 duration-100">
-              <FileText className="text-theme-primary size-5" />
-              <span className="flex-1 truncate">{data.receiptUrls}</span>
-              <Button variant="ghost" size="sm">
-                <Download className="size-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Card> */}
-
-      <Card className="rounded-2xl shadow">
+      <Card className="justify-start rounded-2xl shadow">
         <div>
           <h4>Notes</h4>
         </div>
@@ -280,7 +272,7 @@ const InvoiceDetail = () => {
       </Card>
 
       {/* Administrative Details */}
-      <Card className="rounded-2xl shadow">
+      <Card className="justify-start rounded-2xl shadow">
         <div>
           <h4>Administrative Details</h4>
         </div>

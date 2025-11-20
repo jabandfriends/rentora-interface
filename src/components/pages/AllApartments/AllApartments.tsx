@@ -39,8 +39,8 @@ const AllApartments = ({
   return (
     <div className="w-full space-y-4">
       <div className="desktop:grid-cols-2 grid gap-4">
-        {data.map((item: IApartment, index: number) => (
-          <ApartmentCard key={index} {...item} />
+        {data.map((apartment: IApartment, index: number) => (
+          <ApartmentCard key={apartment.id + index} apartment={apartment} />
         ))}
       </div>
 

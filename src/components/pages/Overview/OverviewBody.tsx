@@ -14,15 +14,8 @@ import {
 
 import { OverviewMaintenanceMainSection } from './Maintenance'
 import { OverviewMainSection, OverviewStats } from './Overview'
-import OverviewLeaseExpiration from './Overview/OverviewLeaseExpiration'
-import OverviewMaintenanceAlert from './Overview/OverviewMaintenanceAlert'
-import OverviewMaintenanceRequest from './Overview/OverviewMaintenanceRequest'
-import OverviewUpcomingRecurringMaintenance from './Overview/OverviewUpcomingRecurringMaintenance'
-import OverviewVacantUnits from './Overview/OverviewVacantUnits'
 import OverviewHeader from './OverviewHeader'
-import OverviewMonthlyUtilityBuildingandFloor from './OverviewMonthlyUtilityBuildingandFloor'
 // import OverviewPaymentStatus from './OverviewPaymentStatus'
-import OverviewApartmentUtility from './OverviewYearlyApartmentUtility'
 import { OverviewPaymentMainSection } from './Payment'
 
 const OverviewBody = () => {
@@ -115,28 +108,6 @@ const OverviewBody = () => {
         occupancyRate={occupancyRate}
         maintenanceRequests={totalMaintenance}
       />
-
-      {/* Vacant Units */}
-      <OverviewVacantUnits totalUnits={totalUnitsAvailable} allRooms={allRooms} />
-
-      {/* Urgent Maintenance Alert */}
-      <OverviewMaintenanceAlert urgentCount={urgentCount} />
-
-      {/* Upcoming Recurring Maintenance */}
-      <OverviewUpcomingRecurringMaintenance maintenance={recurringMaintenance} />
-
-      <div className="desktop:grid-cols-2 grid gap-6">
-        <OverviewMaintenanceRequest maintenanceRequests={maintenanceRequests} />
-
-        <OverviewLeaseExpiration leaseExpirations={contractExpiring} />
-      </div>
-
-      <OverviewApartmentUtility />
-
-      <OverviewMonthlyUtilityBuildingandFloor />
-
-      {/* Payment Status
-      <OverviewPaymentStatus paymentStatus={paymentStatus} /> */}
       <Tabs defaultValue={currentTab}>
         <TabsList>
           <TabsTrigger value="overview" onClick={() => setTab('overview')}>

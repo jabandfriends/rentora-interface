@@ -37,7 +37,7 @@ export const Tenant = () => {
 
   const [search, status]: [string, string] = watch(['search', 'status'])
 
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch = useDebounce(search ? search : undefined, 150)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedSortBy = useDebounce(watch('sortBy') ? watch('sortBy') : undefined, 300)
   const debouncedSortDir = useDebounce(watch('sortDir') ? watch('sortDir') : undefined, 300)
@@ -148,6 +148,7 @@ export const Tenant = () => {
         }
       />
       <PageTableSearch
+        placeholder="🚀 Instantly find any tenant by full name or even just first/last name—typos forgiven, lightning fast, almost magical!"
         statusEnum={TENANT_STATUS}
         sortEnum={TENANT_SORT}
         onSearchChange={handleSearchChange}

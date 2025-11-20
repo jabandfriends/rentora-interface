@@ -43,7 +43,7 @@ const MonthlyInvoice = () => {
     string,
   ] = watch(['unitName', 'buildingName', 'paymentStatus', 'genMonth'])
 
-  const debouncedSearch = useDebounce(unitName || undefined, 500)
+  const debouncedSearch = useDebounce(unitName || undefined, 150)
   const debouncedBuildingName = useDebounce(buildingName || undefined, 500)
   const debouncedGenMonth = useDebounce(genMonth || undefined, 500)
 

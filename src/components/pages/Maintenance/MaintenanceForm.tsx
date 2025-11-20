@@ -66,7 +66,7 @@ const MaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting, defa
     },
   })
   const [search]: [string] = watch(['search'])
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch = useDebounce(search ? search : undefined, 150)
   //get all supplies
   const {
     data: supplies,

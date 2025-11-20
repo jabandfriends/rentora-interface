@@ -1,5 +1,6 @@
 import type { IContractSummary, IMaintenance, IUnit } from '@/types'
 
+import { OverviewMonthlyUtilityBuilding } from '../OverviewMonthlyUtilityBuilding'
 import OverviewLeaseExpiration from './OverviewLeaseExpiration'
 import OverviewMaintenanceAlert from './OverviewMaintenanceAlert'
 import OverviewMaintenanceRequest from './OverviewMaintenanceRequest'
@@ -40,6 +41,7 @@ const OverviewMainSection = ({
 
         <OverviewLeaseExpiration leaseExpirations={contractExpiring} />
       </div>
+      <OverviewMonthlyUtilityBuilding />
     </div>
   )
 }
