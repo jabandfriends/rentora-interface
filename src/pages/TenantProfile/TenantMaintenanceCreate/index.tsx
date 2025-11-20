@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { PageHeader, PageSection } from '@/components/layout'
 import { TenantMaintenanceForm } from '@/components/pages/TenantProfile/TenantMaintenance'
 import { ROUTES } from '@/constants'
+import { MAINTENANCE_PRIORITY } from '@/enum'
 import { useRentoraApiCreateTenantMaintenance } from '@/hooks'
 import type { ICreateTenantMaintenanceRequestPayload, TENANT_MAINTENANCE_FORM_SCHEMA_TYPE } from '@/types'
 import { getErrorMessage } from '@/utilities'
@@ -22,6 +23,7 @@ const TenantMaintenanceCreate = () => {
         title: data.title,
         description: data.description ?? '',
         category: data.category,
+        priority: MAINTENANCE_PRIORITY.NORMAL,
       }
       try {
         await createTenantMaintenance({ apartmentId: apartmentId, payload })

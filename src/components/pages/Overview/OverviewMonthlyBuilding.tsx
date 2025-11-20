@@ -32,9 +32,13 @@ const OverviewMonthlyBuilding = ({
       <TabsContent value="Building">
         <div className="space-y-6">
           <div className="grid-cols grid gap-2">
-            {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
-              <MonthlyUtilityBuildingCard key={index} item={item} isloading={isBuildingLoading} />
-            ))}
+            {monthlyUtiltyBuilding && monthlyUtiltyBuilding.length > 0 ? (
+              monthlyUtiltyBuilding.map((item: IMonthlyUtilityBuilding, index: number) => (
+                <MonthlyUtilityBuildingCard key={index} item={item} isloading={isBuildingLoading} />
+              ))
+            ) : (
+              <PageTableEmpty message="No historical data found for this building" />
+            )}
           </div>
         </div>
       </TabsContent>
