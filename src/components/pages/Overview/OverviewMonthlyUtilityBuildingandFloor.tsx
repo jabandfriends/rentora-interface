@@ -5,13 +5,13 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
-import { PaginationBar, SearchBar } from '@/components/feature'
+import { PaginationBar, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/feature'
 import { PageTableEmpty, PageTableSearchEmpty } from '@/components/ui'
 import { DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA } from '@/constants'
 import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks'
-import type { IMonthlyUtilityBuilding, ISearchBarProps } from '@/types'
+import type { ISearchBarProps } from '@/types'
 
-import { MonthlyUtilityBuildingCard } from './OverviewMonthlyUtilityBuilding'
+import OverviewMonthlyBuilding from './OverviewMonthlyBuilding'
 import { MonthlyUtilitySelectFloor } from './OverviewMonthlyUtilityFloor'
 
 const OverviewMonthlyUtilityBuilding = () => {
@@ -90,24 +90,23 @@ const OverviewMonthlyUtilityBuilding = () => {
         <CardDescription>Building Utility Summary</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <SearchBar onChange={handleSearchChange} placeholder="search for building utility" />
-        {isSearched && monthlyUtiltyBuilding?.length === 0 ? (
-          <PageTableSearchEmpty message="No Building Utility" subMessage="No Building Utility found for this search" />
-        ) : !monthlyUtiltyBuilding || monthlyUtiltyBuilding.length === 0 ? (
-          <PageTableEmpty message="No Building Utility found" />
-        ) : (
-          <div className="space-y-6">
-            <div className="grid-cols grid gap-2">
-              {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
-                <MonthlyUtilityBuildingCard key={index} item={item} isloading={isLoading} />
-              ))}
-            </div>
-
-            <div>
-              <MonthlyUtilitySelectFloor props={{ buildingId: monthlyUtiltyBuilding?.[0].buildingID }} />
-            </div>
-          </div>
-        )}
+        <Tabs defaultValue="building">
+          <TabsList className="border-theme-secondary-300 border">
+            <TabsTrigger value="building">Building</TabsTrigger>
+            <TabsTrigger value="floor">Floor</TabsTrigger>
+          </TabsList>
+          <TabsContent value="floor">
+            <MonthlyUtilitySelectFloor props={{ buildingId: monthlyUtiltyBuilding?.[0].buildingID }} />
+          </TabsContent>
+          <TabsContent value="building">
+            <OverviewMonthlyBuilding
+              isSearched={isSearched}
+              isBuildingLoading={isLoading}
+              monthlyUtiltyBuilding={monthlyUtiltyBuilding}
+              handleSearchChange={handleSearchChange}
+            />
+          </TabsContent>
+        </Tabs>
       </CardContent>
 
       <PaginationBar
