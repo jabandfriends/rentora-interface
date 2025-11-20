@@ -13,6 +13,7 @@ import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
 const NormalInvoice = () => {
   const navigate: NavigateFunction = useNavigate()
+
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState<number>(
     DEFAULT_INVOICE_LIST_DATA.page,
   )
