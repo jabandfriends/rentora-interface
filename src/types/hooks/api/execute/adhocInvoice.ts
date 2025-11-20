@@ -21,6 +21,28 @@ export type ICreateAdhocInvoiceRequestPayload = {
   status: ADHOC_INVOICE_STATUS
 }
 
+export type IUpdateAdhocInvoicePayload = {
+  invoiceId: string
+  title: string
+  description: string
+  category: ADHOC_INVOICE_CATEGORY
+  amount: number
+  dueDate: string
+  paymentStatus: ADHOC_INVOICE_PAYMENT_STATUS
+  invocieStatus: ADHOC_INVOICE_STATUS
+  fileName: string
+  receiptFile?: File
+}
+export type IUpdateAdhocInvoiceResponse = {
+  presignedUrl: string
+  invoiceId: string
+}
+//response
+export type IRentoraBaseApiClientUpdateAdhocInvoiceResponse = IRentoraApiClientBaseResponse<IUpdateAdhocInvoiceResponse>
+
+//hook
+export type IUseRentoraApiUpdateAdhocInvoice = IBaseUseMutation<void, IUpdateAdhocInvoicePayload>
+
 export type IUseRentoraApiCreateAdhocInvoice = IBaseUseMutation<
   IRentoraApiClientCreateAdhocInvoiceResponse['data'],
   { apartmentId: string; payload: ICreateAdhocInvoiceRequestPayload }

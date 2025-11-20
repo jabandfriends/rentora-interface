@@ -54,7 +54,7 @@ const PaymentUpdateModal = ({ selectedPayment, open, onOpenChange }: IPaymentUpd
     defaultValues: {
       receiptImageFile: [],
       verificationStatus: VerifiedStatus.PENDING,
-      paymentStatus: PaymentStatus.PENDING,
+      paymentStatus: PaymentStatus.COMPLETED,
     },
   })
 

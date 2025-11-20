@@ -52,4 +52,14 @@ export const ROUTES: IRoutes = {
   payment: apartmentRoute('/payment'),
   supplyList: apartmentRoute('/supply'),
   supplyTransactions: apartmentRoute('/supply/transactions'),
+
+  // forbidden
+  forbidden: { path: '/forbidden' },
+
+  //tenant
+  tenantAdhocInvoice: apartmentRoute('/tenant/adhoc-invoice'),
+  tenantPayment: apartmentRoute('/tenant/payment'),
+  tenantMaintenance: apartmentRoute('/tenant/maintenance'),
+  tenantMaintenanceCreate: apartmentRoute('/tenant/maintenance/create'),
+  tenantRoom: apartmentRoute('/tenant/room'),
 }

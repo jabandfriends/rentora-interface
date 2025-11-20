@@ -54,38 +54,36 @@ const MeterReadingFilterBar = ({
   }
 
   return (
-    <Card className="rounded-2xl p-6">
-      <div className="desktop:flex-row desktop:items-center flex flex-col items-start gap-x-2 gap-y-2">
-        {/* Filter room */}
-        <SearchBar onChange={onSearchChange} placeholder="Search by room number" />
-        {/* Date filter */}
-        <Select onValueChange={handleReadingDateChange} disabled={isLoadingFilterDates}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select a date" />
-          </SelectTrigger>
-          <SelectContent>
-            {filterDates?.map((date: IReadingUnitUtility) => (
-              <SelectItem key={date.readingDate} value={date.readingDate}>
-                {date.readingDate}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {/* Building filter */}
-        <Select onValueChange={handleBuildingChange} disabled={isLoadingBuildingNames}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select a building" />
-          </SelectTrigger>
-          <SelectContent>
-            {buildingNames?.map((building: IBuilding) => (
-              <SelectItem key={building.name} value={building.name}>
-                {building.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    </Card>
+    <div className="desktop:flex-row desktop:items-center flex flex-col items-start gap-x-2 gap-y-2">
+      {/* Filter room */}
+      <SearchBar onChange={onSearchChange} placeholder="Search by room number" />
+      {/* Date filter */}
+      <Select onValueChange={handleReadingDateChange} disabled={isLoadingFilterDates}>
+        <SelectTrigger>
+          <SelectValue placeholder="Select a date" />
+        </SelectTrigger>
+        <SelectContent>
+          {filterDates?.map((date: IReadingUnitUtility) => (
+            <SelectItem key={date.readingDate} value={date.readingDate}>
+              {date.readingDate}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {/* Building filter */}
+      <Select onValueChange={handleBuildingChange} disabled={isLoadingBuildingNames}>
+        <SelectTrigger>
+          <SelectValue placeholder="Select a building" />
+        </SelectTrigger>
+        <SelectContent>
+          {buildingNames?.map((building: IBuilding) => (
+            <SelectItem key={building.name} value={building.name}>
+              {building.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   )
 }
 

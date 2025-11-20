@@ -13,6 +13,7 @@ import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
 const NormalInvoice = () => {
   const navigate: NavigateFunction = useNavigate()
+
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState<number>(
     DEFAULT_INVOICE_LIST_DATA.page,
   )
@@ -41,7 +42,7 @@ const NormalInvoice = () => {
     'sortDir',
   ])
 
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch = useDebounce(search ? search : undefined, 150)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedSortBy = useDebounce(sortBy ? sortBy : undefined, 300)
   const debouncedSortDir = useDebounce(sortDir ? sortDir : undefined, 300)
