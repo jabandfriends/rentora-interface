@@ -37,6 +37,7 @@ export type RentoraApiQueryClientKey =
   | 'paymentList'
   | 'supplyList'
   | 'supplyTransactionList'
+  | 'monthlyUtilityBuilding'
   | 'monthlyInvoiceListWithFullDetails'
   | 'apartmentPayment'
   | 'paymentAvailableYear'
