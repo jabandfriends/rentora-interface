@@ -1,17 +1,28 @@
 import type { ReactNode } from 'react'
 
-import type { Maybe } from '@/types/utils'
+import type { TENANT_ROLE } from '@/enum'
 
-export type SidebarMenu = {
+export type SidebarBase = {
+  topic?: string // menu topic
   label: string
-  to: string
   icon?: ReactNode
 }
 
-export type SidebarNavMenu = {
-  type: 'item' | 'collapsible'
-  topic?: string
-  title?: string
-  icon?: ReactNode
-  menu: Maybe<Array<SidebarMenu>>
+export type SidebarNavMenu = SidebarBase & {
+  type: 'item'
+  roles: Array<TENANT_ROLE>
+  to: (id?: string) => string
 }
+
+export type SidebarCollapsible = SidebarBase & {
+  type: 'collapsible'
+  collapsibleMenu: Array<SidebarCollapsibleMenu>
+}
+
+export type SidebarCollapsibleMenu = {
+  label: string
+  to: (id?: string) => string
+  roles: Array<TENANT_ROLE>
+}
+
+export type SidebarItems = SidebarNavMenu | SidebarCollapsible
