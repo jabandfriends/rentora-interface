@@ -76,3 +76,16 @@ export type IRentoraApiClientUpdateMaintenanceResponse = IRentoraApiClientBaseRe
 }>
 //delete response type
 export type IRentoraApiClientDeleteMaintenanceResponse = IRentoraApiClientBaseResponse<null>
+
+// Tenant create maintenance payload type (without suppliesUsage, status, and unitId)
+export type ICreateTenantMaintenanceRequestPayload = {
+  title: string
+  description: string
+  category: MAINTENANCE_CATEGORY
+}
+
+//hooks type UseRentoraApiCreateTenantMaintenance
+export type IUseRentoraApiCreateTenantMaintenance = IBaseUseMutation<
+  IRentoraApiClientCreateMaintenanceResponse['data'],
+  { apartmentId: string; payload: ICreateTenantMaintenanceRequestPayload }
+>

@@ -2,63 +2,47 @@ import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-ro
 
 import { Layout } from '@/components/layout'
 import { RENTORA_API_BASE_URL } from '@/config'
-import { ROUTES } from '@/constants'
+import { DASHBOARD_ROUTE_ID, DASHBOARD_ROUTES, ROUTES } from '@/constants'
+import { TENANT_ROLE } from '@/enum'
 import { RentoraApiQueryClient } from '@/hooks'
 import AccountSettingsPage from '@/pages/Account/AccountSetting'
 import AllApartmentPage from '@/pages/AllApartments'
-import AllRoomsPage from '@/pages/AllRooms'
 import ApartmentCreatePage from '@/pages/ApartmentCreate'
-import ApartmentSetting from '@/pages/ApartmentSetting'
 import ApartmentSetup from '@/pages/ApartmentSetup'
 import Authentication from '@/pages/Authentication/Authentication'
 import FirstTimePasswordResetPage from '@/pages/Authentication/FirstTimePasswordReset'
-import ContractCreate from '@/pages/ContractCreate'
-import ContractDetail from '@/pages/ContractDetail'
-import InvoiceCreatePage from '@/pages/Invoice/InvoiceCreate'
-import InvoiceDetailPage from '@/pages/Invoice/InvoiceDetail'
-import MonthlyInvoicePage from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoice'
-import MonthlyInvoiceCreate from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoiceCreate'
-import MonthlyInvoiceDetail from '@/pages/Invoice/MonthlyInvoice/MonthlyInvoiceDetail'
-import NormalInvoicePage from '@/pages/Invoice/NormalInvoice'
-import OverdueInvoicePage from '@/pages/Invoice/OverdueInvoice'
-import ServiceInvoicePage from '@/pages/Invoice/ServiceInvoice'
-import MaintenanceCreate from '@/pages/Maintenance/MaintenanceCreate'
-import MaintenanceDetailPage from '@/pages/Maintenance/MaintenanceDetailPage'
-import MaintenancePage from '@/pages/Maintenance/MaintenanceTask'
-import MaintenanceUpdate from '@/pages/Maintenance/MaintenanceUpdate'
-import MeterReadingCreatePage from '@/pages/MeterReading/MeterReadingCreatePage'
-import MeterReadingListPage from '@/pages/MeterReading/MeterReadingListPage'
-import OverviewPage from '@/pages/Overview'
+import ForbiddenPage from '@/pages/Forbidden'
 import PageNotFound from '@/pages/PageNotFound'
-import PaymentPage from '@/pages/Payment'
-import ElectricWaterReportPage from '@/pages/Report/ElectricWaterReport'
-import RoomDetail from '@/pages/RoomDetail'
-import SupplyList from '@/pages/Supply'
-import SupplyTransactions from '@/pages/SupplyTransactions'
-import TenantPage from '@/pages/Tenant/Tenant'
-import TenantCreatePage from '@/pages/Tenant/TenantCreate'
-import TenantUpdatePassword from '@/pages/Tenant/TenantPasswordUpdate'
-import TenantUpdatePage from '@/pages/Tenant/TenantUpdate'
-import type { Maybe } from '@/types'
+import { type IUserAuthenticationApartmentRole, type IUserAuthenticationResponse, type Maybe } from '@/types'
 import { parseStorageKey } from '@/utilities'
 
 import RequireApartmentWrapper from './RequireApartmentWrapper'
 import RequireAuthWrapper from './RequireAuthWrapper'
 
-const authLoader = async (): Promise<{ valid: boolean; mustChangePassword: boolean }> => {
+const authLoader = async (): Promise<{
+  valid: boolean
+  mustChangePassword: boolean
+  apartmentRoles: Array<IUserAuthenticationApartmentRole>
+  userData: Maybe<IUserAuthenticationResponse>
+}> => {
   const rentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
   const auth: Maybe<string> = localStorage.getItem(parseStorageKey('auth'))
   if (!auth) {
-    return { valid: false, mustChangePassword: false }
+    return { valid: false, mustChangePassword: false, apartmentRoles: [], userData: undefined }
   }
   const { accessToken }: { accessToken: string } = JSON.parse(auth)
 
   try {
-    const { mustChangePassword }: { mustChangePassword: boolean } = await rentoraApiQueryClient.checkAuth(accessToken)
-    return { valid: true, mustChangePassword }
+    const userData: IUserAuthenticationResponse = await rentoraApiQueryClient.checkAuth(accessToken)
+    return {
+      valid: true,
+      mustChangePassword: userData.mustChangePassword,
+      apartmentRoles: userData.apartmentRoles,
+      userData,
+    }
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_: unknown) {
-    return { valid: false, mustChangePassword: false }
+    return { valid: false, mustChangePassword: false, apartmentRoles: [], userData: undefined }
   }
 }
 
@@ -67,20 +51,20 @@ const apartmentStatusLoader = async ({
   params,
 }: {
   params: { apartmentId?: string }
-}): Promise<{ status: Maybe<string>; id: Maybe<string> }> => {
+}): Promise<{ status: Maybe<string>; id: Maybe<string>; userRole: Maybe<TENANT_ROLE> }> => {
   const rentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
 
   try {
     if (!params.apartmentId) {
-      return { status: null, id: null }
+      return { status: null, id: null, userRole: null }
     }
 
     const response = await rentoraApiQueryClient.apartmentDetail({ apartmentId: params.apartmentId })
 
-    return { status: response.status, id: params.apartmentId }
+    return { status: response.status, id: params.apartmentId, userRole: response.userRole }
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_: unknown) {
-    return { status: null, id: null }
+    return { status: null, id: null, userRole: null }
   }
 }
 
@@ -160,7 +144,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     },
     element: (
       <RequireAuthWrapper>
-        <RequireApartmentWrapper>
+        <RequireApartmentWrapper allowedRoles={[TENANT_ROLE.ADMIN]}>
           <ScrollRestoration />
           <Layout isSidebar={false} />
         </RequireApartmentWrapper>
@@ -199,6 +183,7 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   },
 
   {
+    id: 'dashboard',
     path: '/dashboard/:apartmentId',
     loader: async (args) => {
       const [authData, apartmentData] = await Promise.all([authLoader(), apartmentStatusLoader(args)])
@@ -210,131 +195,22 @@ const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     },
     element: (
       <RequireAuthWrapper>
-        <RequireApartmentWrapper>
+        <RequireApartmentWrapper
+          allowedRoles={[TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING, TENANT_ROLE.MAINTENANCE, TENANT_ROLE.TENANT]}
+          routeId={DASHBOARD_ROUTE_ID}
+        >
           <ScrollRestoration />
           <Layout />
         </RequireApartmentWrapper>
       </RequireAuthWrapper>
     ),
-    children: [
-      {
-        path: ROUTES.apartmentSetting.path,
-        element: <ApartmentSetting />,
-      },
-      {
-        path: ROUTES.overview.path,
-        element: <OverviewPage />,
-      },
-      {
-        path: ROUTES.normalInvoice.path,
-        element: <NormalInvoicePage />,
-      },
-      {
-        path: ROUTES.monthlyInvoice.path,
-        element: <MonthlyInvoicePage />,
-      },
-      {
-        path: ROUTES.invoiceCreate.path,
-        element: <InvoiceCreatePage />,
-      },
-      {
-        path: ROUTES.maintenance.path,
-        element: <MaintenancePage />,
-      },
-      {
-        path: ROUTES.maintenanceCreate.path,
-        element: <MaintenanceCreate />,
-      },
-      {
-        path: ROUTES.maintenanceDetail.path,
-        element: <MaintenanceDetailPage />,
-      },
-      {
-        path: ROUTES.maintenanceUpdate.path,
-        element: <MaintenanceUpdate />,
-      },
-      {
-        path: ROUTES.allRoom.path,
-        element: <AllRoomsPage />,
-      },
-      {
-        path: ROUTES.payment.path,
-        element: <PaymentPage />,
-      },
-      {
-        path: ROUTES.roomDetail.path,
-        element: <RoomDetail />,
-      },
+    children: DASHBOARD_ROUTES,
+  },
 
-      {
-        path: ROUTES.electricWaterReport.path,
-        element: <ElectricWaterReportPage />,
-      },
-      {
-        path: ROUTES.overdueInvoice.path,
-        element: <OverdueInvoicePage />,
-      },
-      {
-        path: ROUTES.serviceInvoice.path,
-        element: <ServiceInvoicePage />,
-      },
-      {
-        path: ROUTES.tenantUpdate.path,
-        element: <TenantUpdatePage />,
-      },
-      {
-        path: ROUTES.monthlyInvoiceCreate.path,
-        element: <MonthlyInvoiceCreate />,
-      },
-      {
-        path: ROUTES.monthlyInvoiceDetail.path,
-        element: <MonthlyInvoiceDetail />,
-      },
-      {
-        path: ROUTES.tenant.path,
-        element: <TenantPage />,
-      },
-      {
-        path: ROUTES.tenantCreate.path,
-        element: <TenantCreatePage />,
-      },
-      {
-        path: ROUTES.tenantUpdatePassword.path,
-        element: <TenantUpdatePassword />,
-      },
-      {
-        path: ROUTES.invoiceDetail.path,
-        element: <InvoiceDetailPage />,
-      },
-      {
-        path: ROUTES.contractCreate.path,
-        element: <ContractCreate />,
-      },
-      {
-        path: ROUTES.contractDetail.path,
-        element: <ContractDetail />,
-      },
-      {
-        path: ROUTES.meterReadingList.path,
-        element: <MeterReadingListPage />,
-      },
-      {
-        path: ROUTES.meterReadingCreate.path,
-        element: <MeterReadingCreatePage />,
-      },
-      {
-        path: ROUTES.supplyList.path,
-        element: <SupplyList />,
-      },
-      {
-        path: ROUTES.supplyTransactions.path,
-        element: <SupplyTransactions />,
-      },
-      {
-        path: '*',
-        element: <PageNotFound />,
-      },
-    ],
+  // forbidden
+  {
+    path: ROUTES.forbidden.path,
+    element: <ForbiddenPage />,
   },
 ])
 

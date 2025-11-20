@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLoaderData } from 'react-router-dom'
 
-import { Spinner } from '@/components/common'
-import { useDeviceWatcher, useRentoraApiUser } from '@/hooks'
+import type { TENANT_ROLE } from '@/enum'
+import type { IUserAuthenticationApartmentRole, IUserAuthenticationResponse, Maybe } from '@/types'
 
 import NavBar from './Navbar'
 import { OutletWrapper } from './OutletWrapper'
@@ -13,10 +13,16 @@ type ILayoutProps = {
   isSidebar?: boolean
 }
 const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
+  const loaderData: Maybe<{
+    apartmentRoles: Array<IUserAuthenticationApartmentRole>
+    userRole: TENANT_ROLE
+    id: string
+    userData: Maybe<IUserAuthenticationResponse>
+  }> = useLoaderData()
+
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const toggleRef = useRef(false)
 
-  const { data: userData, isLoading } = useRentoraApiUser()
   const setSidebar = useCallback(() => {
     if (toggleRef.current) return
     toggleRef.current = true
@@ -26,21 +32,26 @@ const Layout = ({ isNavbar = true, isSidebar = true }: ILayoutProps) => {
     }, 300)
   }, [])
 
-  useDeviceWatcher()
-  if (isLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    )
-  }
-
   return (
     <div>
-      {isSidebar && <Sidebar userData={userData} isOpen={sidebarOpen} onClose={setSidebar} />}
-      {isNavbar && (
-        <NavBar userData={userData} sidebarOpen={sidebarOpen} onSidebarToggle={setSidebar} isSidebar={isSidebar} />
+      {isSidebar && (
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={setSidebar}
+          currentUserRole={loaderData?.userRole}
+          userData={loaderData?.userData}
+        />
       )}
+      {isNavbar && (
+        <NavBar
+          currentUserRole={loaderData?.userRole}
+          sidebarOpen={sidebarOpen}
+          onSidebarToggle={setSidebar}
+          isSidebar={isSidebar}
+          userData={loaderData?.userData}
+        />
+      )}
+
       <OutletWrapper isNavbar={isNavbar} isSidebar={isSidebar}>
         <Outlet />
       </OutletWrapper>

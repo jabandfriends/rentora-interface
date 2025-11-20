@@ -1,6 +1,7 @@
 import type {
   IBasePaginateQueryResult,
   IBaseUseQuery,
+  IRentoraApiClientBasePaginateResponse,
   IRentoraApiClientBasePaginateWithMetadataResponse,
   IRentoraApiClientBaseResponse,
 } from '@/types'
@@ -111,3 +112,21 @@ export type IRentoraApiClientOverdueInvoiceListResponse = IRentoraApiClientBaseP
 export type IRentoraApiInvoiceDetailParams = {
   invoiceId: string
 }
+
+//Tenant adhoc invoice list params
+export type IRentoraApiTenantAdhocInvoiceListParams = {
+  page?: number
+  size?: number
+  sortBy?: string
+  sortDir?: string
+  status?: string
+  category?: string
+}
+
+//Tenant adhoc invoice list response
+export type IRentoraApiClientTenantAdhocInvoiceListResponse = IRentoraApiClientBasePaginateResponse<IInvoiceSummary>
+
+//hooks type useRentoraApiTenantAdhocInvoiceList
+export type IUseRentoraApiTenantAdhocInvoiceList = IBasePaginateQueryResult<
+  IRentoraApiClientTenantAdhocInvoiceListResponse['data']
+>

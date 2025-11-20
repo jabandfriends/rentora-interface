@@ -1,4 +1,4 @@
-import type { APARTMENT_LATE_FEE_TYPE } from '@/enum'
+import type { APARTMENT_LATE_FEE_TYPE, TENANT_ROLE } from '@/enum'
 import type {
   IBasePaginateQueryResult,
   IBaseUseQuery,
@@ -26,6 +26,7 @@ export type IApartment = {
   unitCount: number
   activeContractCount: number
   logoPresignedUrl: string
+  userRole: TENANT_ROLE
 }
 
 export type IApartmentDetail = IApartment & {
@@ -39,6 +40,7 @@ export type IApartmentDetail = IApartment & {
   timezone: string
   currency: string
   totalTenants: number
+  userRole: TENANT_ROLE
 }
 
 //metadata
