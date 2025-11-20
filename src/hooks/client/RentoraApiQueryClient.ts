@@ -2,6 +2,7 @@ import type { AxiosResponse } from 'axios'
 
 import type {
   IMaintenanceMonthlySummaryTrendParam,
+  IMonthlyUtilityUnitParams,
   IPaymentMonthlySummaryParam,
   IRentoraApiAllUnitMonthlyInvoiceStatusParams,
   IRentoraApiApartmentDetailParams,
@@ -53,6 +54,7 @@ import type {
   IRentoraApiClientUnitWithUtilityResponse,
   IRentoraApiClientUserResponse,
   IRentoraApiClientUtilityListResponse,
+  IRentoraApiClietMonthlyUtilityUnitResponse,
   IRentoraApiContractListParams,
   IRentoraApiInvoiceListParams,
   IRentoraApiMaintenanceApartmentIdParams,
@@ -112,6 +114,7 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
     unitDetail: 'UNIT_DETAIL',
     contractList: 'CONTRACT_LIST',
     monthlyInvoiceList: 'MONTHLY_INVOICE_LIST',
+    monthlyUtilityUnit: 'MONTHLY_UTILITY_UNIT',
     paymentList: 'PAYMENT_LIST',
     supplyList: 'SUPPLY_LIST',
     supplyTransactionList: 'SUPPLY_TRANSACTION_LIST',
@@ -495,6 +498,15 @@ export class RentoraApiQueryClient extends RentoraApiBaseClient {
       {
         params,
       },
+    )
+    return response.data.data
+  }
+
+  async monthlyUtilityUnit(
+    params: IMonthlyUtilityUnitParams,
+  ): Promise<IRentoraApiClietMonthlyUtilityUnitResponse['data']> {
+    const response = await this.axiosWithAuthInstance.get<IRentoraApiClietMonthlyUtilityUnitResponse>(
+      `/api/apartment/${params.apartmentId}/monthly-utility/${params.unitId}`,
     )
     return response.data.data
   }

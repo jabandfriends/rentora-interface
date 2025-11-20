@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
+import { Separator } from '@/components/ui'
 import { DEFAULT_CONTRACT_LIST_DATA } from '@/constants'
 import { CONTRACT_STATUS } from '@/enum'
 import { useRentoraApiContractList } from '@/hooks'
@@ -54,7 +55,7 @@ const RoomDetailContractList = () => {
 
   return (
     <Card className="rounded-2xl shadow-lg hover:shadow-xl">
-      <div className="border-theme-secondary-400 desktop:flex-row desktop:items-center flex flex-col justify-between gap-y-2 border-b pb-4">
+      <div className="border-theme-secondary-400 desktop:flex-row desktop:items-center flex flex-col justify-between gap-y-2 pb-4">
         <div className="flex items-center justify-between">
           <div>
             <h3>All Contracts</h3>
@@ -76,6 +77,7 @@ const RoomDetailContractList = () => {
           </Select>
         )}
       </div>
+      <Separator />
       <RoomDetailContractTable
         isLoading={isLoadingContracts}
         contracts={allContracts}

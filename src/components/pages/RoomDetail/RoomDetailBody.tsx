@@ -12,6 +12,7 @@ import { getErrorMessage } from '@/utilities'
 import RoomDetailContractList from './RoomDetailContractList'
 import RoomDetailMaintenanceList from './RoomDetailMaintenanceList'
 import RoomDetailServices from './RoomDetailServices'
+import { MonthlyUtilityUnit } from './RoomDetailUtilty'
 
 const RoomDetailBody = () => {
   const [isOpenDeleteModal, setOpenDeleteModal]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
@@ -93,6 +94,7 @@ const RoomDetailBody = () => {
 
       <RoomDetailContractList />
       <RoomDetailMaintenanceList />
+      <MonthlyUtilityUnit />
     </>
   )
 }
