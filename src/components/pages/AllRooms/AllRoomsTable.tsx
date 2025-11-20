@@ -69,7 +69,7 @@ const AllRoomsTable = ({
       case 'renewed':
         return 'default'
       default:
-        return 'default'
+        return 'outline'
     }
   }, [])
 
@@ -82,7 +82,7 @@ const AllRoomsTable = ({
       case 'daily':
         return 'secondary'
       default:
-        return 'default'
+        return 'outline'
     }
   }, [])
 
@@ -101,7 +101,7 @@ const AllRoomsTable = ({
   }
 
   return (
-    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+    <div className="flex flex-col gap-y-3 rounded-lg">
       <Table>
         <TableHeader>
           <TableRow>

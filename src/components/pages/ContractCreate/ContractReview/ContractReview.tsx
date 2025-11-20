@@ -1,8 +1,8 @@
-import { Calendar, CheckCircle2, DollarSign, FileText, Home, Lightbulb, Shield, User } from 'lucide-react'
+import { Calendar, CheckCircle2, DollarSign, FileText, Shield, User } from 'lucide-react'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { Card, CardContent } from '@/components/common'
-import { Badge } from '@/components/ui'
+import { ContractType } from '@/constants'
 import type { MonthlyContractFormData } from '@/types'
 import { formatCurrency, formatDate, getDateDiff } from '@/utilities'
 
@@ -38,20 +38,6 @@ const ContractReview = ({ form }: IContractReview) => {
           <ReviewItem icon={User} label="Tenant Name" value={values.tenantName || 'Not specified'} highlight />
         </SectionCard>
 
-        {/* Property Details */}
-        <SectionCard title="Property Details" description="Rental type and features">
-          <ReviewItem icon={Home} label="Rental Type" value={values.rentalType || 'Not specified'} />
-          <ReviewItem
-            icon={Lightbulb}
-            label="Utilities Included"
-            value={
-              <Badge variant={values.utilitiesIncluded ? 'default' : 'secondary'}>
-                {values.utilitiesIncluded ? 'Yes' : 'No'}
-              </Badge>
-            }
-          />
-        </SectionCard>
-
         {/* Financial Terms */}
         <SectionCard title="Financial Terms" description="Pricing and deposit information">
           {/* Price per unit */}
@@ -84,12 +70,12 @@ const ContractReview = ({ form }: IContractReview) => {
                 (() => {
                   const start = new Date(values.startDate)
                   const end = new Date(values.endDate)
-                  const diffInDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1
+                  const diffInDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
                   const price = Number(values.rentalPrice) || 0
 
-                  if (values.rentalType === 'daily') return price * diffInDays
-                  if (values.rentalType === 'monthly') return price * Math.ceil(diffInDays / 30)
-                  if (values.rentalType === 'yearly') return price * Math.ceil(diffInDays / 365)
+                  if (values.rentalType === ContractType.DAILY) return price * diffInDays
+                  if (values.rentalType === ContractType.MONTHLY) return price * Math.ceil(diffInDays / 30)
+                  if (values.rentalType === ContractType.YEARLY) return price * Math.ceil(diffInDays / 365)
                   return 0
                 })(),
               )}

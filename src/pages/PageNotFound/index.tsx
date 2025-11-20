@@ -5,6 +5,7 @@ import { type NavigateFunction, useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/feature'
+import { PageSection } from '@/components/layout'
 import { ROUTES } from '@/constants'
 
 const PageNotFound = () => {
@@ -31,24 +32,26 @@ const PageNotFound = () => {
     navigate(ROUTES.allApartment.path)
   }, [navigate])
   return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <FolderX />
-        </EmptyMedia>
-        <EmptyTitle>404 - Not Found</EmptyTitle>
-        <EmptyDescription>
-          The page you&apos;re looking for doesn&apos;t exist. Redirecting to the home page in{' '}
-          <strong>{countdown}</strong> seconds... <br />
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        <Button className="flex items-center gap-x-2" size="sm" onClick={handleNavigate}>
-          <Home size={16} />
-          Take Me Home
-        </Button>
-      </EmptyContent>
-    </Empty>
+    <PageSection className="flex min-h-[calc(100dvh-var(--header-height))] items-center justify-center">
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <FolderX />
+          </EmptyMedia>
+          <EmptyTitle>404 - Not Found</EmptyTitle>
+          <EmptyDescription>
+            The page you&apos;re looking for doesn&apos;t exist. Redirecting to the home page in{' '}
+            <strong>{countdown}</strong> seconds... <br />
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button className="flex items-center gap-x-2" size="sm" onClick={handleNavigate}>
+            <Home size={16} />
+            Take Me Home
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </PageSection>
   )
 }
 

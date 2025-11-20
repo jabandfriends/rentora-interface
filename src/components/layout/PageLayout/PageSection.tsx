@@ -6,7 +6,7 @@ type IPageSectionProps = PropsWithChildren<{ className?: string; middle?: boolea
 const PageSection = ({ children, className, middle }: IPageSectionProps) => {
   return (
     <div
-      className={cn('desktop:px-8 flex flex-col gap-y-5 px-4 py-5', className, [
+      className={cn('desktop:px-8 flex h-full flex-col gap-y-5 px-4 py-5', className, [
         middle ? 'container mx-auto' : 'flex w-full',
       ])}
     >

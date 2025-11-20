@@ -5,14 +5,15 @@ import { tv, type VariantProps } from 'tailwind-variants'
 import { cn } from '@/utilities'
 
 const badgeVariants = tv({
-  base: 'focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-theme-primary/20 dark:aria-invalid:ring-theme-primary/40 aria-invalid:border-destructive text-body-4 duration-400 inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-lg border px-2 py-0.5 font-medium focus-visible:ring-[3px] [&>svg]:pointer-events-none [&>svg]:size-3',
+  base: 'focus-visible:border-ring text-theme-white focus-visible:ring-ring/50 aria-invalid:ring-theme-primary/20 dark:aria-invalid:ring-theme-primary/40 aria-invalid:border-theme-error text-body-3 duration-400 inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-md border px-3 py-1 font-medium focus-visible:ring-[3px] [&>svg]:pointer-events-none [&>svg]:size-3',
   variants: {
     variant: {
-      default: 'bg-theme-primary-200 text-theme-primary-600 [a&]:hover:bg-theme-primary/90 border-transparent',
-      secondary: 'bg-theme-secondary-200 text-theme-secondary-600 [a&]:hover:bg-theme-secondary/90 border-transparent',
-      success: 'bg-theme-success-200 text-theme-success-600 [a&]:hover:bg-theme-success/90 border-transparent',
-      error: 'bg-theme-error-200 text-theme-error-600 [a&]:hover:bg-theme-error/90 border-transparent',
-      warning: 'bg-theme-warning-200 text-theme-warning-600 [a&]:hover:bg-theme-warning/90 border-transparent',
+      default: 'bg-theme-primary [a&]:hover:bg-theme-primary/90 border-transparent',
+      secondary: 'bg-theme-secondary [a&]:hover:bg-theme-secondary/90 border-transparent',
+      success: 'bg-theme-success [a&]:hover:bg-theme-success/90 border-transparent',
+      error: 'bg-theme-error [a&]:hover:bg-theme-error/90 border-transparent',
+      warning: 'bg-theme-warning [a&]:hover:bg-theme-warning/90 border-transparent',
+      outline: 'border-theme-secondary-300 text-theme-night [a&]:hover:bg-theme-secondary/90',
     },
   },
   defaultVariants: {

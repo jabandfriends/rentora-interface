@@ -24,11 +24,7 @@ export type IUnit = {
   id: string
   unitName: string
   unitType: string
-  bedrooms: number
-  bathrooms: number
-  squareMeters: number
   unitStatus: UnitStatus
-  furnishingStatus: string
   floorName: string
   buildingName: string
   apartmentName: string
@@ -39,8 +35,6 @@ export type IUnit = {
   contractStatus: string
   contractStartDate: string
   contractEndDate: string
-  balconyCount: number
-  parkingSpaces: number
 }
 
 export type IRentoraApiUnitListParams = {
@@ -69,6 +63,7 @@ export type IRentoraApiAllUnitMonthlyInvoiceStatusParams = {
   roomNumber?: string
   buildingName?: string
   readingDate?: string
+  isExceptDailyContract?: boolean
 }
 //response
 export type IRentoraApiClientAllUnitMonthlyInvoiceStatusResponse =

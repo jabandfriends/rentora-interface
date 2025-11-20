@@ -1,12 +1,24 @@
-import { PackageOpen } from 'lucide-react'
-import { useCallback } from 'react'
+import { FileDown, User, UserCog, Wrench } from 'lucide-react'
+import { type ReactNode, useCallback } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
+import type { VariantProps } from 'tailwind-variants'
 
 import { PaginationBar } from '@/components/feature'
-import { TenantAction, TenantTableLoading } from '@/components/pages/Tenant'
-import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { TenantAction } from '@/components/pages/Tenant'
+import {
+  Badge,
+  PageTableEmpty,
+  PageTableLoading,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui'
 import { ROUTES } from '@/constants'
 import { TENANTS_TABLE_HEADER } from '@/constants/tenantsmanage'
+import { TENANT_ROLE } from '@/enum'
 import type { IPaginate, ITenant } from '@/types'
 import { formatTimestamp } from '@/utilities'
 
@@ -34,21 +46,57 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
     },
     [apartmentId, navigate],
   )
+
+  const occupiedStatusBadgeVariant = useCallback(
+    (occupiedStatus: boolean): { variant: VariantProps<typeof Badge>['variant']; label: string } => {
+      switch (occupiedStatus) {
+        case true:
+          return { variant: 'success', label: 'Occupied' }
+        case false:
+          return { variant: 'error', label: 'Unoccupied' }
+        default:
+          return { variant: 'default', label: 'N/A' }
+      }
+    },
+    [],
+  )
+
+  const userStatusBadgeVariant = useCallback(
+    (userStatus: boolean): { variant: VariantProps<typeof Badge>['variant']; label: string } => {
+      switch (userStatus) {
+        case true:
+          return { variant: 'success', label: 'Active' }
+        case false:
+          return { variant: 'error', label: 'Inactive' }
+      }
+    },
+    [],
+  )
+
+  const roleBadgeVariant = useCallback((role: TENANT_ROLE): { label: string; icon: ReactNode } => {
+    switch (role) {
+      case TENANT_ROLE.TENANT:
+        return { label: 'Tenant', icon: <User size={16} /> }
+      case TENANT_ROLE.ADMIN:
+        return { label: 'Admin', icon: <UserCog size={16} /> }
+      case TENANT_ROLE.MAINTENANCE:
+        return { label: 'Maintenance', icon: <Wrench size={16} /> }
+      case TENANT_ROLE.ACCOUNTING:
+        return { label: 'Accounting', icon: <FileDown size={16} /> }
+      default:
+        return { label: 'N/A', icon: <User size={16} /> }
+    }
+  }, [])
   if (isLoading) {
-    return <TenantTableLoading />
+    return <PageTableLoading />
   }
 
   if (!data || data.length === 0) {
-    return (
-      <div className="bg-theme-light flex h-1/2 flex-col items-center justify-center rounded-lg p-5">
-        <PackageOpen size={50} />
-        <p className="text-theme-secondary text-body-1">No tenants found</p>
-      </div>
-    )
+    return <PageTableEmpty message="No tenants found" />
   }
 
   return (
-    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+    <div className="flex flex-col gap-y-3">
       <Table>
         <TableHeader>
           <TableRow>
@@ -60,25 +108,29 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
         <TableBody>
           {data.map((item, index) => (
             <TableRow key={index}>
-              <TableCell>TENANT-{index + 1}</TableCell>
               <TableCell>{item.fullName ? item.fullName : 'N/A'}</TableCell>
               <TableCell>{item.email ? item.email : 'N/A'}</TableCell>
               <TableCell>{item.unitName ? item.unitName : 'N/A'}</TableCell>
-              <TableCell>{formatTimestamp(item.createdAt)}</TableCell>
+              <TableCell>{formatTimestamp(item.createdAt, 'DD MMM YYYY')}</TableCell>
               <TableCell>
-                {item.accountStatus ? <Badge variant="success">Active</Badge> : <Badge variant="error">Inactive</Badge>}
+                <Badge variant="outline">
+                  {roleBadgeVariant(item.role).icon} {roleBadgeVariant(item.role).label}
+                </Badge>
               </TableCell>
               <TableCell>
-                {item.occupiedStatus ? (
-                  <Badge variant="success">Occupied</Badge>
-                ) : (
-                  <Badge variant="error">Unoccupied</Badge>
-                )}
+                <Badge variant={userStatusBadgeVariant(item.isActive).variant}>
+                  {userStatusBadgeVariant(item.isActive).label}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Badge variant={occupiedStatusBadgeVariant(item.occupiedStatus).variant}>
+                  {occupiedStatusBadgeVariant(item.occupiedStatus).label}
+                </Badge>
               </TableCell>
 
               <TableCell>
                 <TenantAction
-                  userId={item.userId}
+                  userId={item.apartmentUserId}
                   onUpdate={handleUpdateTenant}
                   onPasswordUpdate={handlePasswordUpdateTenant}
                 />

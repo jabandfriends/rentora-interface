@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/common'
 import { MaintenanceTable } from '@/components/pages/Maintenance'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableBody, PageTableHeader, PageTableSearch } from '@/components/ui'
 import { DEFAULT_MAINTENANCE_LIST_DATA, ROUTES } from '@/constants'
 import { MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiMaintenanceList } from '@/hooks'
@@ -41,7 +41,7 @@ const Maintenance = () => {
     [navigate, apartmentId],
   )
 
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch = useDebounce(search ? search : undefined, 150)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedSortBy = useDebounce(sortBy ? sortBy : undefined, 300)
   const debouncedSortDir = useDebounce(sortDir ? sortDir : undefined, 300)
@@ -131,10 +131,10 @@ const Maintenance = () => {
   )
 
   return (
-    <>
+    <PageTableBody className="space-y-8">
       <PageTableHeader
         title="Maintenance"
-        description="Manage maintenance reports"
+        description="Manage maintenance tasks for this apartment"
         stats={maintenanceStats}
         isLoading={isLoading}
         actionButton={<Button onClick={handleCreate}>New Maintenance</Button>}
@@ -155,7 +155,7 @@ const Maintenance = () => {
         totalElements={totalElements}
         onPageChange={handlePageChange}
       />
-    </>
+    </PageTableBody>
   )
 }
 

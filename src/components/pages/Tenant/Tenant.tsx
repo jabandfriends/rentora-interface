@@ -7,7 +7,7 @@ import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 //components
 import { Button } from '@/components/common'
-import { PageTableHeader, PageTableSearch } from '@/components/ui'
+import { PageTableBody, PageTableHeader, PageTableSearch } from '@/components/ui'
 import { DEFAULT_TENANT_LIST_DATA, ROUTES, TENANT_STATUS } from '@/constants'
 import { useRentoraApiTenantList } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps } from '@/types'
@@ -37,12 +37,12 @@ export const Tenant = () => {
 
   const [search, status]: [string, string] = watch(['search', 'status'])
 
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch = useDebounce(search ? search : undefined, 150)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedSortBy = useDebounce(watch('sortBy') ? watch('sortBy') : undefined, 300)
   const debouncedSortDir = useDebounce(watch('sortDir') ? watch('sortDir') : undefined, 300)
   const {
-    data,
+    data: tenants,
     isLoading,
     pagination: { totalPages, totalElements },
     metadata: { totalTenants, totalOccupiedTenants, totalUnoccupiedTenants, totalActiveTenants },
@@ -135,10 +135,10 @@ export const Tenant = () => {
   }
 
   return (
-    <>
+    <PageTableBody className="space-y-4">
       <PageTableHeader
-        title="Tenants Management"
-        description="Manage and view all tenants"
+        title="Users Management"
+        description="Manage and view all users"
         stats={tenantStats}
         isLoading={isLoading}
         actionButton={
@@ -148,6 +148,7 @@ export const Tenant = () => {
         }
       />
       <PageTableSearch
+        placeholder="🚀 Instantly find any tenant by full name or even just first/last name—typos forgiven, lightning fast, almost magical!"
         statusEnum={TENANT_STATUS}
         sortEnum={TENANT_SORT}
         onSearchChange={handleSearchChange}
@@ -155,14 +156,14 @@ export const Tenant = () => {
         onSortChange={handleSortChange}
       />
       <TenantTable
-        data={data}
+        data={tenants}
         isLoading={isLoading}
         currentPage={currentPage}
         totalPages={totalPages}
         totalElements={totalElements}
         onPageChange={handlePageChange}
       />
-    </>
+    </PageTableBody>
   )
 }
 

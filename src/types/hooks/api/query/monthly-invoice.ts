@@ -51,18 +51,43 @@ export type IMonthlyInvoiceDetail = IMonthlyInvoice & {
   createdAt: string
 
   //payment
+  paymentId: string
+  //apartment payment
   apartmentPaymentMethodType: ApartmentPaymentMethodType
   bankName: string
   bankAccountNumber: string
   accountHolderName: string
   promptpayNumber: string
+
+  serviceList: Array<IMonthlyInvoiceService>
+  unitAdhocInvoices: Array<IMonthlyInvoiceUnitAdhocInvoice>
 }
 
+export type IMonthlyInvoiceUnitAdhocInvoice = {
+  adhocId: string
+  adhocNumber: string
+  adhocTitle: string
+  amount: number
+}
+export type IMonthlyInvoiceService = {
+  serviceName: string
+  servicePrice: number
+}
+//params
+export type IRentoraApiMonthlyInvoiceListWithFullDetailsParams = {
+  genMonth: string
+}
 //response
 export type IRentoraApiClientMonthlyInvoiceDetailResponse = IRentoraApiClientBaseResponse<IMonthlyInvoiceDetail>
+export type IRentoraApiClientMonthlyInvoiceListWithFullDetailsResponse = IRentoraApiClientBaseResponse<
+  Array<IMonthlyInvoiceDetail>
+>
 
 //hook
 export type IUseMonthlyInvoiceDetail = IBaseUseQuery<IRentoraApiClientMonthlyInvoiceDetailResponse['data']>
+export type IUseMonthlyInvoiceListWithFullDetails = IBaseUseQuery<
+  IRentoraApiClientMonthlyInvoiceListWithFullDetailsResponse['data']
+>
 
 //monthly invoice-------
 
@@ -74,6 +99,7 @@ export type IRentoraApiMonthlyInvoiceListParams = {
   unitName?: string
   buildingName?: string
   paymentStatus?: MonthlyInvoicePaymentStatus
+  genMonth: string
 }
 //meta data
 export type IMonthlyInvoiceMetaData = {

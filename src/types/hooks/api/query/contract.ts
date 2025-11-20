@@ -17,9 +17,6 @@ export type IContract = {
   tenantName: string
   tenantEmail: string
   tenantPhone: string
-  guarantorName: string
-  guarantorPhone: string
-  guarantorIdNumber: string
   rentalType: CONTRACT_RENTAL_TYPE
   startDate: string
   endDate: string
@@ -32,7 +29,7 @@ export type IContract = {
   specialConditions: string
   status: CONTRACT_STATUS
   autoRenewal: boolean
-  renewalNoticeDays: 5
+  renewalNoticeDays: number
   terminationDate: null
   terminationReason: null
   terminatedByUserName: null
@@ -97,4 +94,10 @@ export type IUseRentoraApiContractTerminate = IBaseUseMutation<void, ITerminateC
 export type IUseRentoraApiContractTerminateParams = {
   apartmentId?: string
   unitId?: string
+}
+
+//param
+export type IUseRentoraApiContractDetailParams = {
+  apartmentId?: string
+  contractId?: string
 }

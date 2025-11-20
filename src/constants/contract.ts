@@ -5,39 +5,39 @@ export enum ContractType {
   DAILY = 'daily',
   YEARLY = 'yearly',
 }
+export const contractUpdateFormSchema = z.object({
+  endDate: z.date().optional(),
+  rentalPrice: z.string().optional(),
+  depositAmount: z.string().optional(),
+  advancePaymentMonths: z.string().optional(),
+  termsAndConditions: z.string().optional(),
+  specialConditions: z.string().optional(),
+})
 
 export const MONTHLY_CONTRACT_SCHEMA = z
   .object({
     unitId: z.string(),
     tenantId: z.string().min(1, 'Tenant is required'),
     tenantName: z.string(),
-    guarantorName: z.string().min(1, 'Guarantor name is required'),
-    guarantorPhone: z
-      .string()
-      .min(10, 'Valid phone number is required')
-      .regex(/^0[0-9]{9}$/, 'Phone number must be 10 digits and start with 0'),
-    guarantorIdNumber: z.string().min(13, 'Valid ID number is required'),
     rentalType: z.enum([ContractType.MONTHLY, ContractType.DAILY, ContractType.YEARLY], {
       error: 'Rental type is required',
     }),
     startDate: z.date({ error: 'Start date is required' }),
     endDate: z.date({ error: 'End date is required' }),
     rentalPrice: z.string().min(1, 'Rental price is required'),
-    depositAmount: z.string().min(1, 'Deposit amount is required'),
-    advancePaymentMonths: z.string().optional(),
-    lateFeeAmount: z.string().min(1, 'Late fee amount is required'),
-    utilitiesIncluded: z.boolean(),
+    depositAmount: z.string(),
+    advancePaymentMonths: z.string(),
     termsAndConditions: z.string().optional(),
     specialConditions: z.string().optional(),
     autoRenewal: z.boolean(),
-    renewalNoticeDays: z.string().min(1, 'Renewal notice days is required'),
-    documentUrl: z.string().url().optional().or(z.literal('')),
+    renewalNoticeDays: z.string(),
+    documentUrl: z.string().optional().or(z.literal('')),
     waterMeterStart: z.string().min(1, 'Water meter is required'),
     electricMeterStart: z.string().min(1, 'Electricity meter is required'),
   })
   .superRefine((data, ctx) => {
-    const start = data.startDate
-    const end = data.endDate
+    const start: Date = data.startDate
+    const end: Date = data.endDate
 
     if (data.autoRenewal) {
       if (Number(data.renewalNoticeDays) < 1) {

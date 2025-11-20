@@ -8,9 +8,12 @@ export type IUnitServiceExecuteBasePayload = {
 export type ICreateUnitServiceRequestPayload = IUnitServiceExecuteBasePayload
 
 //params
-export type ICreateUnitServiceResponseParams = {
-  apartmentId?: string
-  unitId?: string
+export type ICreateUnitServiceParams = {
+  unitId: string
 }
 
-export type IUseRentoraApiCreateUnitService = IBaseUseMutation<void, IUnitServiceExecuteBasePayload>
+export type IUseRentoraApiCreateUnitService = IBaseUseMutation<void, ICreateUnitServiceRequestPayload>
+
+export type IDeleteUnitServiceParams = {
+  unitServiceId: string
+}

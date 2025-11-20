@@ -1,4 +1,5 @@
-import { Plus, Trash2 } from 'lucide-react'
+import { Plus } from 'lucide-react'
+import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
@@ -13,49 +14,64 @@ import {
   SelectValue,
   Spinner,
 } from '@/components/common'
-import { PageTableEmpty, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { useRentoraApiApartmentServiceList, useRentoraApiCreateApartmentService } from '@/hooks'
+import { PageTableEmpty, Table, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { useRentoraApiApartmentServiceList, useRentoraApiCreateUnitService } from '@/hooks'
 import { useRentoraApiUnitServiceList } from '@/hooks/api/queries/useRentoraApiUnitServiceList'
-import type { IApartmentService, IUnitService } from '@/types'
+import type { IApartmentService } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
-type IRoomDetailServicesProps = {
-  selectedService: string
-  setSelectedService: (service: string) => void
-  addService: (id: string) => void
-  removeService: (id: string) => void
-}
+import RoomDetailServiceTableBody from './RoomDetailServiceTableBody'
 
-const RoomDetailServices = ({
-  selectedService,
-  setSelectedService,
-  // addService,
-  removeService,
-}: IRoomDetailServicesProps) => {
+const RoomDetailServices = () => {
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
-  const { data: services, isLoading } = useRentoraApiApartmentServiceList({
-    apartmentId: apartmentId!,
-    unitId: id!,
-  })
-  const { data: unitServices } = useRentoraApiUnitServiceList({
-    apartmentId: apartmentId!,
-    unitId: id!,
-  })
-  const { mutateAsync: createUnitService } = useRentoraApiCreateApartmentService({ apartmentId, unitId: id })
+  const [selectedServiceId, setSelectedServiceId]: [string, Dispatch<SetStateAction<string>>] = useState('')
 
-  const addService = async (serviceId: string) => {
+  //apartment service
+  const { data: apartmentServices, isLoading: isLoadingApartmentServices } = useRentoraApiApartmentServiceList({
+    apartmentId: apartmentId!,
+    activeService: true,
+  })
+
+  //unit services
+  const { data: unitServices, isLoading: isLoadingUnitServices } = useRentoraApiUnitServiceList({ unitId: id! })
+
+  //create unit service
+  const { mutateAsync: createUnitService } = useRentoraApiCreateUnitService({ unitId: id! })
+
+  const isLoading: boolean = useMemo(
+    () => isLoadingApartmentServices || isLoadingUnitServices,
+    [isLoadingApartmentServices, isLoadingUnitServices],
+  )
+
+  const isButtonDisable: boolean = useMemo(() => !selectedServiceId, [selectedServiceId])
+  const addService = useCallback(async () => {
     try {
       await createUnitService({
-        serviceId,
+        serviceId: selectedServiceId,
       })
       toast.success('Service added successfully!')
     } catch (error) {
       toast.error(getErrorMessage(error))
     }
-  }
+  }, [createUnitService, selectedServiceId])
 
-  if (isLoading) return <Spinner />
-  if (!services || services.length === 0) return <PageTableEmpty message="No services found" />
+  if (isLoading)
+    return (
+      <PageTableEmpty
+        className="h-full"
+        message="Loading..."
+        icon={<Spinner />}
+        description="Please wait while we load your data."
+      />
+    )
+  if (!apartmentServices || apartmentServices.length === 0)
+    return (
+      <PageTableEmpty
+        className="h-full"
+        message="No services found in this apartment"
+        description="Please add a service to this apartment"
+      />
+    )
 
   return (
     <Card className="border-border justify-start overflow-auto rounded-2xl shadow-lg hover:shadow-xl">
@@ -70,12 +86,12 @@ const RoomDetailServices = ({
           </Label>
 
           <div className="flex items-center justify-center gap-x-2">
-            <Select value={selectedService} onValueChange={setSelectedService}>
+            <Select value={selectedServiceId} onValueChange={setSelectedServiceId}>
               <SelectTrigger id="service-select" className="flex-1">
                 <SelectValue placeholder="Select service to add" />
               </SelectTrigger>
               <SelectContent>
-                {services?.map((service: IApartmentService) => (
+                {apartmentServices.map((service: IApartmentService) => (
                   <SelectItem key={service.id} value={service.id}>
                     {service.serviceName}
                   </SelectItem>
@@ -84,10 +100,11 @@ const RoomDetailServices = ({
             </Select>
             <Button
               size="icon"
-              onClick={() => addService(selectedService)}
+              disabled={isButtonDisable}
+              onClick={addService}
               className="flex items-center justify-center gap-2"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="size-4" />
             </Button>
           </div>
         </div>
@@ -100,31 +117,7 @@ const RoomDetailServices = ({
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {unitServices?.map((unitServices: IUnitService) => (
-              <TableRow key={unitServices.id}>
-                <TableCell>{unitServices.serviceName}</TableCell>
-                <TableCell className="font-mono text-base font-semibold">฿{unitServices.price.toFixed(2)}</TableCell>
-                <TableCell className="flex w-12 justify-center">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeService(unitServices.id)}
-                    className="text-theme-error-800 hover:bg-theme-error/10 hover:text-theme-error flex items-center"
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-            <TableRow className="border-border border-t p-4">
-              <TableCell className="text-base font-semibold">Total</TableCell>
-              <TableCell />
-              <TableCell className="text-theme-primary font-bold">
-                ${services?.reduce((sum, s) => sum + s.price, 0).toFixed(2)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
+          <RoomDetailServiceTableBody unitServices={unitServices} isLoading={isLoadingUnitServices} />
         </Table>
       </div>
     </Card>

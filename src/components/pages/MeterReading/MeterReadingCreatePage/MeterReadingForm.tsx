@@ -152,7 +152,6 @@ const MeterReadingForm = () => {
 
   return (
     <div className="space-y-6">
-      {/* --- Filter Section --- */}
       <MeterReadingFormFiltered
         debouncedYear={debouncedYear}
         debouncedMonth={debouncedMonth}
@@ -161,8 +160,8 @@ const MeterReadingForm = () => {
         availableYears={availableYears?.years}
         filterForm={filterForm}
         isLoading={isFilterLoading}
+        form={form}
       />
-
       {/* --- Form Section --- */}
       <MeterReadingFormFilterEmpty month={month} year={year} buildingName={buildingName}>
         <MeterReadingFormField

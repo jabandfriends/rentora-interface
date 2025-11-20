@@ -20,7 +20,7 @@ import { MAINTENANCE_TABLE_HEADER, ROUTES } from '@/constants'
 import { MAINTENANCE_PRIORITY, MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiDeleteMaintenance } from '@/hooks/api/execute/useRentoraApiDeleteMaintenance'
 import type { IMaintenance, Maybe } from '@/types'
-import { formatDate, getErrorMessage } from '@/utilities'
+import { formatCurrency, formatDate, getErrorMessage } from '@/utilities'
 
 import { MaintenanceAction } from '.'
 import MaintenanceDeleteAlert from './MaintenanceDeleteAlert'
@@ -121,7 +121,7 @@ const MaintenanceTable = ({
   }
 
   return (
-    <div className="bg-theme-light flex flex-col gap-y-3 rounded-lg p-5">
+    <div className="flex flex-col gap-y-4">
       <MaintenanceDeleteAlert
         isAlertOpen={isAlertOpen}
         setIsAlertOpen={setIsAlertOpen}
@@ -145,7 +145,6 @@ const MaintenanceTable = ({
               <TableCell className="text-theme-primary">{item.ticketNumber}</TableCell>
               <TableCell>{item.title}</TableCell>
               <TableCell>{item.unitName}</TableCell>
-              <TableCell>{item.buildingsName}</TableCell>
               <TableCell>
                 {item.appointmentDate ? formatDate(new Date(item.appointmentDate), 'DD/MM/YYYY') : <FieldEmpty />}
               </TableCell>
@@ -160,6 +159,7 @@ const MaintenanceTable = ({
                 <Badge variant={item.isRecurring ? 'success' : 'default'}>{item.isRecurring ? 'Yes' : 'No'}</Badge>
               </TableCell>
               <TableCell className="capitalize">{item.recurringSchedule ?? <FieldEmpty />}</TableCell>
+              <TableCell>{item.actualCost ? formatCurrency(item.actualCost) : <FieldEmpty />}</TableCell>
               <TableCell>
                 <MaintenanceAction
                   maintenanceId={item.id}

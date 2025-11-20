@@ -198,7 +198,7 @@ const ApartmentInformationSetting = () => {
           </div>
           <div className="flex justify-end">
             <Button disabled={isButtonDisabled} className="desktop:w-auto w-full" type="submit">
-              {isButtonDisabled ? <Spinner /> : 'Submit'}
+              {isButtonDisabled ? <Spinner className="size-4" /> : 'Save Changes'}
             </Button>
           </div>
         </form>

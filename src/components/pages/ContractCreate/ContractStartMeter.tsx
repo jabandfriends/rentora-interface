@@ -8,7 +8,7 @@ type IContractStartMeter = {
 }
 const ContractStartMeter = ({ form }: IContractStartMeter) => {
   return (
-    <>
+    <div className="space-y-4">
       {/* Step 2: Meter Start Readings */}
       <div className="desktop:grid-cols-2 grid gap-4">
         <div>
@@ -47,7 +47,7 @@ const ContractStartMeter = ({ form }: IContractStartMeter) => {
           />
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

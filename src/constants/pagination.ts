@@ -8,6 +8,14 @@ const DEFAULT_PAGINATION_DATA: IPaginate = {
 }
 
 export const DEFAULT_APARTMENT_LIST_DATA: IPaginate = DEFAULT_PAGINATION_DATA
+export const DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA: IPaginate = {
+  page: 1,
+  size: 1,
+  totalPages: 0,
+  totalElements: 0,
+}
+export const DEFAULT_SUPPLY_LIST_DATA: IPaginate = DEFAULT_PAGINATION_DATA
+export const DEFAULT_SUPPLY_TRANSACTION_LIST_DATA: IPaginate = DEFAULT_PAGINATION_DATA
 export const DEFAULT_INVOICE_LIST_DATA: IPaginate = DEFAULT_PAGINATION_DATA
 export const DEFAULT_OVERDUE_INVOICE_LIST_DATA: IPaginate = DEFAULT_PAGINATION_DATA
 export const DEFAULT_TENANT_LIST_DATA: IPaginate = DEFAULT_PAGINATION_DATA
@@ -20,4 +28,12 @@ export const DEFAULT_REPORT_UTILITY_LIST_DATA: IPaginate = {
   totalPages: 0,
   totalElements: 0,
 }
+
+export const DEFAULT_MONTHLY_UTILITY_FLOOR_LIST_DATA: IPaginate = {
+  page: 1,
+  size: 1,
+  totalPages: 0,
+  totalElements: 0,
+}
 export const DEFAULT_MONTHLY_INVOICE_DATA: IPaginate = DEFAULT_PAGINATION_DATA
+export const DEFAULT_PAYMENT_LIST_DATA: IPaginate = DEFAULT_PAGINATION_DATA

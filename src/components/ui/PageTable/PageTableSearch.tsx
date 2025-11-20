@@ -1,7 +1,6 @@
-import { Download } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 
-import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
 import { SearchBar } from '@/components/feature'
 
 type IPageTableSearchProps<StatusEnum extends string, SortEnum extends string> = {
@@ -19,10 +18,10 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
   onSearchChange,
   onStatusChange,
   onSortChange,
-  placeholder,
+  placeholder = 'Search by name',
 }: IPageTableSearchProps<StatusEnum, SortEnum>) => {
   return (
-    <div className="bg-theme-light desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl px-4 py-4">
+    <div className="desktop:flex-row flex flex-col gap-x-4 gap-y-2 rounded-2xl">
       {/* Search */}
       <SearchBar onChange={onSearchChange} placeholder={placeholder} />
 
@@ -60,11 +59,6 @@ const PageTableSearch = <StatusEnum extends string, SortEnum extends string>({
             </Select>
           )}
         </div>
-
-        {/* Export PDF */}
-        <Button className="flex items-center gap-2">
-          <Download size={18} /> Export PDF
-        </Button>
       </div>
     </div>
   )
