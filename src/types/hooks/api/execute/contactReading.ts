@@ -1,6 +1,6 @@
-import type { IBaseUseMutation } from '@/types'
+import type { IBaseUseMutation, IRentoraApiClientBaseResponse } from '@/types'
 
-export type IReadingContact = {
+export type IReadingContract = {
   firstName: string
   lastName: string
   email: string
@@ -11,4 +11,6 @@ export type IReadingContact = {
   emergencyContactPhone: string
 }
 
-export type IUseRentoraApiCreateReadingContact = IBaseUseMutation<IReadingContact, File>
+export type IRentoraApiReadingContractResponse = IRentoraApiClientBaseResponse<IReadingContract>
+
+export type IUseRentoraApiCreateReadingContract = IBaseUseMutation<IRentoraApiReadingContractResponse['data'], File>

@@ -19,9 +19,7 @@ import type {
   IMeterReadingRequestPayload,
   IMeterReadingUpdateRequestPayload,
   IPutPresignedUrlRequest,
-  IReadingContact,
   IRentoraApiClientAuthenticateResponse,
-  IRentoraApiClientBaseResponse,
   IRentoraApiClientCreateAdhocInvoiceResponse,
   IRentoraApiClientCreateApartmentResponse,
   IRentoraApiClientCreateMaintenanceResponse,
@@ -29,6 +27,7 @@ import type {
   IRentoraApiClientUpdateContractResponse,
   IRentoraApiClientUpdateMaintenanceResponse,
   IRentoraApiClientUpdatePaymentResponse,
+  IRentoraApiReadingContractResponse,
   IRentoraBaseApiClientUpdateAdhocInvoiceResponse,
   ISetupApartmentRequestPayload,
   ISupplyCreatePayload,
@@ -436,10 +435,10 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   }
 
   //create reading contact (OCR) - accepts file and returns extracted contact data
-  async createReadingContact(file: File): Promise<IReadingContact> {
+  async createReadingContact(file: File): Promise<IRentoraApiReadingContractResponse['data']> {
     const formData = new FormData()
     formData.append('file', file)
-    const response = await this.axiosWithAuthInstance.post<IRentoraApiClientBaseResponse<IReadingContact>>(
+    const response = await this.axiosWithAuthInstance.post<IRentoraApiReadingContractResponse>(
       `/api/ocr/readcontact`,
       formData,
       {
