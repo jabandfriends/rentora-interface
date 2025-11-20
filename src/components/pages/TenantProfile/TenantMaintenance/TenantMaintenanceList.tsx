@@ -1,16 +1,17 @@
 import { useDebounce } from '@uidotdev/usehooks'
-import { Plus, XIcon } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
-import { Button, Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common'
+import { Button, Card } from '@/components/common'
 import { PageTableHeader } from '@/components/ui'
 import { ROUTES } from '@/constants'
 import { DEFAULT_MAINTENANCE_LIST_DATA } from '@/constants/pagination'
 import { MAINTENANCE_STATUS } from '@/enum'
 import { useRentoraApiTenantMaintenanceList } from '@/hooks'
 
+import TenantMaintenanceFilter from './TenantMaintenanceFilter'
 import TenantMaintenanceSection from './TenantMaintenanceSection'
 
 const TenantMaintenanceList = () => {
@@ -92,23 +93,11 @@ const TenantMaintenanceList = () => {
         }
       />
 
-      <div className="flex items-center justify-between gap-x-2">
-        <Select onValueChange={handleStatusChange}>
-          <SelectTrigger className="capitalize">
-            <SelectValue placeholder="All Status" />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.entries(MAINTENANCE_STATUS).map(([key, value]) => (
-              <SelectItem className="capitalize" key={key} value={value}>
-                {value}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button className="flex items-center" size="icon" variant="outline" onClick={handleClearFilters}>
-          <XIcon />
-        </Button>
-      </div>
+      <TenantMaintenanceFilter
+        isLoadingMaintenanceList={isLoadingMaintenanceList}
+        handleStatusChange={handleStatusChange}
+        handleClearFilters={handleClearFilters}
+      />
       <TenantMaintenanceSection
         isLoading={isLoadingMaintenanceList}
         maintenanceList={maintenanceList}
