@@ -47,20 +47,6 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
     [apartmentId, navigate],
   )
 
-  const occupiedStatusBadgeVariant = useCallback(
-    (occupiedStatus: boolean): { variant: VariantProps<typeof Badge>['variant']; label: string } => {
-      switch (occupiedStatus) {
-        case true:
-          return { variant: 'success', label: 'Occupied' }
-        case false:
-          return { variant: 'error', label: 'Unoccupied' }
-        default:
-          return { variant: 'default', label: 'N/A' }
-      }
-    },
-    [],
-  )
-
   const userStatusBadgeVariant = useCallback(
     (userStatus: boolean): { variant: VariantProps<typeof Badge>['variant']; label: string } => {
       switch (userStatus) {
@@ -110,7 +96,6 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
             <TableRow key={index}>
               <TableCell>{item.fullName ? item.fullName : 'N/A'}</TableCell>
               <TableCell>{item.email ? item.email : 'N/A'}</TableCell>
-              <TableCell>{item.unitName ? item.unitName : 'N/A'}</TableCell>
               <TableCell>{formatTimestamp(item.createdAt, 'DD MMM YYYY')}</TableCell>
               <TableCell>
                 <Badge variant="outline">
@@ -120,11 +105,6 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
               <TableCell>
                 <Badge variant={userStatusBadgeVariant(item.isActive).variant}>
                   {userStatusBadgeVariant(item.isActive).label}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Badge variant={occupiedStatusBadgeVariant(item.occupiedStatus).variant}>
-                  {occupiedStatusBadgeVariant(item.occupiedStatus).label}
                 </Badge>
               </TableCell>
 

@@ -12,6 +12,7 @@ import {
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Image } from '@/components/common'
+import { PageSection } from '@/components/layout'
 import { Badge, EmptyPage, FieldEmpty, Separator } from '@/components/ui'
 import { useRentoraApiInvoiceDetails } from '@/hooks'
 import { formatCurrency } from '@/utilities'
@@ -85,7 +86,7 @@ const InvoiceDetail = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <PageSection className="space-y-6">
       {/* Header */}
       <div className="desktop:flex-row desktop:items-center desktop:justify-between flex flex-col gap-4">
         <div>
@@ -298,7 +299,7 @@ const InvoiceDetail = () => {
           </div>
         </div>
       </Card>
-    </div>
+    </PageSection>
   )
 }
 

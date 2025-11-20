@@ -54,7 +54,6 @@ type INormalInvoiceUpdateModalProps = {
 
 const normalUpdateInvoiceSchema = z.object({
   title: z.string().min(1, 'Title is required').optional(),
-  description: z.string().min(1, 'Description is required').optional(),
   category: z.enum(ADHOC_INVOICE_CATEGORY),
   amount: z.string().optional(),
   dueDate: z.string().optional(),
@@ -81,13 +80,13 @@ const NormalInvoiceUpdateModal = ({ open, onOpenChange, selectedId }: INormalInv
     defaultValues: {
       uploadFile: [],
     },
+    mode: 'onChange',
   })
 
   useEffect(() => {
     if (!invoiceData) return
     form.reset({
       title: invoiceData.title,
-      description: invoiceData.description,
       category: invoiceData.category as ADHOC_INVOICE_CATEGORY,
       amount: invoiceData.finalAmount.toString(),
       dueDate: invoiceData.dueDate,
@@ -102,7 +101,6 @@ const NormalInvoiceUpdateModal = ({ open, onOpenChange, selectedId }: INormalInv
       const payload: IUpdateAdhocInvoicePayload = {
         invoiceId: selectedId,
         title: data.title ?? '',
-        description: data.description ?? '',
         category: data.category,
         amount: Number(data.amount),
         dueDate: data.dueDate ?? '',
