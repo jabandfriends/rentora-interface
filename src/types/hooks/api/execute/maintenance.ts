@@ -82,6 +82,7 @@ export type ICreateTenantMaintenanceRequestPayload = {
   title: string
   description: string
   category: MAINTENANCE_CATEGORY
+  priority: MAINTENANCE_PRIORITY
 }
 
 //hooks type UseRentoraApiCreateTenantMaintenance
