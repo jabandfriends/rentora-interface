@@ -43,7 +43,7 @@ const SelectRoomModal = ({ onRoomSelect, selectedRoomId }: ISelectRoomModalProps
 
   const [search, buildingName]: [string, string] = watch(['search', 'buildingName'])
 
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch = useDebounce(search ? search : undefined, 150)
   const debouncedBuildingName = useDebounce(buildingName ? buildingName : undefined, 200)
 
   //fetch all building

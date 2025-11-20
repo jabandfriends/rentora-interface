@@ -1,4 +1,5 @@
-import { useCallback } from 'react'
+import { FileDown, User, UserCog, Wrench } from 'lucide-react'
+import { type ReactNode, useCallback } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
 
@@ -72,23 +73,20 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
     [],
   )
 
-  const roleBadgeVariant = useCallback(
-    (role: TENANT_ROLE): { variant: VariantProps<typeof Badge>['variant']; label: string } => {
-      switch (role) {
-        case TENANT_ROLE.TENANT:
-          return { variant: 'success', label: 'Tenant' }
-        case TENANT_ROLE.ADMIN:
-          return { variant: 'default', label: 'Admin' }
-        case TENANT_ROLE.MAINTENANCE:
-          return { variant: 'warning', label: 'Maintenance' }
-        case TENANT_ROLE.ACCOUNTING:
-          return { variant: 'error', label: 'Accounting' }
-        default:
-          return { variant: 'default', label: 'N/A' }
-      }
-    },
-    [],
-  )
+  const roleBadgeVariant = useCallback((role: TENANT_ROLE): { label: string; icon: ReactNode } => {
+    switch (role) {
+      case TENANT_ROLE.TENANT:
+        return { label: 'Tenant', icon: <User size={16} /> }
+      case TENANT_ROLE.ADMIN:
+        return { label: 'Admin', icon: <UserCog size={16} /> }
+      case TENANT_ROLE.MAINTENANCE:
+        return { label: 'Maintenance', icon: <Wrench size={16} /> }
+      case TENANT_ROLE.ACCOUNTING:
+        return { label: 'Accounting', icon: <FileDown size={16} /> }
+      default:
+        return { label: 'N/A', icon: <User size={16} /> }
+    }
+  }, [])
   if (isLoading) {
     return <PageTableLoading />
   }
@@ -115,7 +113,9 @@ const TenantTable = ({ data, isLoading, currentPage, totalPages, totalElements, 
               <TableCell>{item.unitName ? item.unitName : 'N/A'}</TableCell>
               <TableCell>{formatTimestamp(item.createdAt, 'DD MMM YYYY')}</TableCell>
               <TableCell>
-                <Badge variant={roleBadgeVariant(item.role).variant}>{roleBadgeVariant(item.role).label}</Badge>
+                <Badge variant="outline">
+                  {roleBadgeVariant(item.role).icon} {roleBadgeVariant(item.role).label}
+                </Badge>
               </TableCell>
               <TableCell>
                 <Badge variant={userStatusBadgeVariant(item.isActive).variant}>

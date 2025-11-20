@@ -1,0 +1,30 @@
+import { Card, CardContent, Skeleton } from '@/components/common'
+
+const TenantMaintenanceListSkeleton = () => {
+  return (
+    <div className="space-y-4">
+      <div className="desktop:grid-cols-2 grid gap-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Card key={index} className="border-theme-secondary-300 rounded-xl border shadow-none">
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+                <div className="flex gap-2">
+                  <Skeleton className="h-6 w-20" />
+                  <Skeleton className="h-6 w-20" />
+                </div>
+              </div>
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-2/3" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default TenantMaintenanceListSkeleton

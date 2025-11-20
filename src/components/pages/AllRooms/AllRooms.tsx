@@ -31,7 +31,7 @@ const AllRooms = () => {
 
   const [search, status, buildingName]: [string, UnitStatus, string] = watch(['search', 'status', 'buildingName'])
 
-  const debouncedSearch = useDebounce(search ? search : undefined, 500)
+  const debouncedSearch = useDebounce(search ? search : undefined, 150)
   const debouncedStatus = useDebounce(status ? status : undefined, 300)
   const debouncedBuildingName = useDebounce(buildingName ? buildingName : undefined, 300)
 

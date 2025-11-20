@@ -52,7 +52,7 @@ const MaintenanceDetail = () => {
           <MaintenanceSupplyUsage suppliesUsage={maintenance.suppliesUsage || []} />
 
           <div className="desktop:grid-cols-2 grid gap-4">
-            <MaintenanceRequestDetail {...maintenance} />
+            <MaintenanceRequestDetail maintenance={maintenance} />
             <MaintenanceTenantInformation {...maintenance} />
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { ArrowLeft, Building, Calendar, DollarSign, Download, FileText, User } from 'lucide-react'
+import { ArrowLeft, Building, Calendar, DollarSign, FileText, User } from 'lucide-react'
 
 import { Button, Card, Skeleton } from '@/components/common'
 import { Badge, Separator } from '@/components/ui'
@@ -16,10 +16,6 @@ const invocieDetailLoading = () => {
           </div>
         </div>
         <div className="flex gap-3">
-          <Button className="flex items-center gap-x-2" variant="outline">
-            <Download className="size-4" />
-            Download PDF
-          </Button>
           <Button className="flex items-center gap-x-2">
             <ArrowLeft className="size-4" />
             Back

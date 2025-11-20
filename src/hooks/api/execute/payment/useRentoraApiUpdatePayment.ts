@@ -35,6 +35,10 @@ export const useRentoraApiUpdatePayment = (): IUseRentoraApiUpdatePayment => {
         queryKey: [rentoraApiQueryClient.key.paymentList],
         exact: false,
       })
+      queryClient.invalidateQueries({
+        queryKey: [rentoraApiQueryClient.key.tenantPayment],
+        exact: false,
+      })
     },
   })
 }

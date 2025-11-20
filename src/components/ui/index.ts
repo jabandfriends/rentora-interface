@@ -1,5 +1,5 @@
 export * from './Alert'
-export * from './Avartar'
+export * from './Avatar'
 export * from './Badge'
 export * from './Breadcrumb'
 export * from './Calendar'
