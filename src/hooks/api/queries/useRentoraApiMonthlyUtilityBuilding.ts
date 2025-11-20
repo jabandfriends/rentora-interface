@@ -22,15 +22,15 @@ export const useRentoraApiMonthlyUtilityBuildings = (props: {
       props.apartmentId,
       props?.params?.page,
       props?.params?.size,
-      props?.params?.buildingId,
+      props?.params?.search,
       props?.params?.sortBy,
       props?.params?.sortDir,
     ],
     queryFn: async () => {
-      const { page, size, buildingId, sortBy, sortDir }: IRentoraApiMonthlyUtilityDetailParams = props?.params ?? {}
+      const { page, size, search, sortBy, sortDir }: IRentoraApiMonthlyUtilityDetailParams = props?.params ?? {}
       return await rentoraApiQueryClient.monthlyUtilityBuilding(props?.apartmentId, {
         ...(props?.params ?? {}),
-        ...(buildingId ? { buildingId } : {}),
+        ...(search ? { search } : {}),
         ...(sortBy ? { sortBy } : {}),
         ...(sortDir ? { sortDir } : {}),
         page,

@@ -1,77 +1,64 @@
+import { useDebounce } from '@uidotdev/usehooks'
 import { ChartColumnBig } from 'lucide-react'
-import { type Dispatch, type SetStateAction, useState } from 'react'
+import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
-import { PaginationBar, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/feature'
-import { PageTableEmpty, PageTableSearchEmpty } from '@/components/ui'
+import { PaginationBar, SearchBar } from '@/components/feature'
 import { DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA } from '@/constants'
 import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks'
 import type { ISearchBarProps } from '@/types'
 
 import OverviewMonthlyBuilding from './OverviewMonthlyBuilding'
-import { MonthlyUtilitySelectFloor } from './OverviewMonthlyUtilityFloor'
 
 const OverviewMonthlyUtilityBuilding = () => {
-  const [selectedBuildingId, setSelectedBuildingId]: [string, Dispatch<SetStateAction<string>>] = useState('')
-  const [selectedFloorId, setSelectedFloorId]: [string, Dispatch<SetStateAction<string>>] = useState('')
+  const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
+    DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA.page,
+  )
+
+  const { watch, setValue } = useForm({
+    defaultValues: {
+      search: '',
+    },
+  })
+
+  const [search]: [string] = watch(['search'])
+
+  const debouncedSearch = useDebounce(search ? search : undefined, 500)
 
   const { apartmentId } = useParams<{ apartmentId: string }>()
 
-  const { data: monthlyUtiltyBuilding, isLoading } = useRentoraApiMonthlyUtilityBuildings({
+  const {
+    data: monthlyUtiltyBuilding,
+    isLoading,
+    metadata: { totalUtilityBuildings },
+  } = useRentoraApiMonthlyUtilityBuildings({
     apartmentId: apartmentId!,
     params: {
+      page: currentPage,
       size: DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA.size,
-      buildingId: selectedBuildingId,
+      search: debouncedSearch,
     },
   })
 
-  //building select data
-  const { data: buildingNumber } = useRentoraApiBuildingListNoPaginate({
-    apartmentId: apartmentId!,
-  })
-
-  const BuildingSelected = monthlyUtiltyBuilding[0]
-
-  const { data: floorNumber } = useRentoraApiFloorList({
-    buildingId: BuildingSelected?.buildingID,
-  })
-
-  const { data: monthlyUtilityFloor } = useRentoraApiMonthlyUtilityFloor({
-    apartmentId: apartmentId!,
-    params: {
-      buildingId: BuildingSelected?.buildingID,
-      floorId: selectedFloorId,
+  const handleSearchChange: ISearchBarProps['onChange'] = useCallback(
+    ({ target: { value } }: Parameters<ISearchBarProps['onChange']>[0]) => {
+      setValue('search', value)
+      setCurrentPage(DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA.page)
     },
-  })
+    [setValue, setCurrentPage],
+  )
 
-  if (isLoading) {
-    return <LoadingPage />
-  }
+  const handlePageChange = useCallback(
+    (page: number) => {
+      if (page < 1) return
+      setCurrentPage(page)
+    },
+    [setCurrentPage],
+  )
 
-  if (!floorNumber || floorNumber.length === 0) {
-    return <PageTableEmpty message="No floors available in this building yet 🏢" />
-  }
-
-  const isUtilityDataEmpty = !BuildingSelected || Object.keys(BuildingSelected.utilityGroupName || {}).length === 0
-
-  if (isSearched && monthlyUtiltyBuilding?.length === 0) {
-    return <PageTableSearchEmpty message="No Building Utility" subMessage="No Building Utility found for this search" />
-  }
-
-  if (!monthlyUtiltyBuilding || monthlyUtiltyBuilding.length === 0) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <ChartColumnBig className="h-5 w-5" />
-            Building Utility
-          </CardTitle>
-        </CardHeader>
-        <PageTableEmpty message="No Building Utility found" />
-      </Card>
-    )
-  }
+  const isSearched: boolean = useMemo(() => !!debouncedSearch, [debouncedSearch])
 
   return (
     <Card className="justify-start rounded-2xl">
@@ -83,24 +70,21 @@ const OverviewMonthlyUtilityBuilding = () => {
         <CardDescription>Building Utility Summary</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Tabs defaultValue="building">
-          <TabsList className="border-theme-secondary-300 border">
-            <TabsTrigger value="building">Building</TabsTrigger>
-            <TabsTrigger value="floor">Floor</TabsTrigger>
-          </TabsList>
-          <TabsContent value="floor">
-            <MonthlyUtilitySelectFloor props={{ buildingId: monthlyUtiltyBuilding?.[0].buildingID }} />
-          </TabsContent>
-          <TabsContent value="building">
-            <OverviewMonthlyBuilding
-              isSearched={isSearched}
-              isBuildingLoading={isLoading}
-              monthlyUtiltyBuilding={monthlyUtiltyBuilding}
-              handleSearchChange={handleSearchChange}
-            />
-          </TabsContent>
-        </Tabs>
+        <SearchBar onChange={handleSearchChange} placeholder="Search for building utility" />
+        <OverviewMonthlyBuilding
+          isSearched={isSearched}
+          isBuildingLoading={isLoading}
+          monthlyUtiltyBuilding={monthlyUtiltyBuilding}
+        />
       </CardContent>
+
+      <PaginationBar
+        onPageChange={handlePageChange}
+        isLoading={isLoading}
+        page={currentPage}
+        totalPages={totalUtilityBuildings}
+        totalElements={totalUtilityBuildings}
+      />
     </Card>
   )
 }

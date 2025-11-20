@@ -42,7 +42,6 @@ const MonthlyUtilityApartmentSelect = ({
 
   return (
     <div className="justify-center space-y-4 rounded-2xl">
-      <p> Select a year to view this apartment's monthly utility summary </p>
       <div>
         <Select value={selectedYear} onValueChange={(value) => setSelectedYear(value)}>
           <SelectTrigger className="w-[150px]">

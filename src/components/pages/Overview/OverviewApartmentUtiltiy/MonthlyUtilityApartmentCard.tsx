@@ -1,4 +1,4 @@
-import { Card, CardContent } from '@/components/common'
+import { CardContent } from '@/components/common'
 import { LoadingPage, PageTableEmpty } from '@/components/ui'
 import type { IApartmentUtility } from '@/types'
 
@@ -20,14 +20,14 @@ const MonthlyUtilityApartmentCard = ({ item, isLoading }: IMonthlyApartmentUtili
   }
 
   return (
-    <Card className="flex-col gap-6 rounded-2xl p-6 shadow-lg hover:shadow-xl">
+    <div className="flex-col gap-6 rounded-2xl">
       <CardContent>
         <div className="desktop:grid desktop:grid-cols-2 flex flex-col gap-6">
           <MonthlyUtilityApartmentElect item={item} isLoading={isLoading} />
           <MonthlyUtilityApartmentWater item={item} isLoading={isLoading} />
         </div>
       </CardContent>
-    </Card>
+    </div>
   )
 }
 

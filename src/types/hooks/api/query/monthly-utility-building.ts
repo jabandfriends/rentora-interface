@@ -36,6 +36,7 @@ export type IRentoraApiMonthlyUtilityDetailParams = {
   size?: number
   sortBy?: 'name' | 'createdAt' | 'updatedAt'
   sortDir?: 'asc' | 'desc'
+  search?: string
 }
 
 export type IuseRentoraApiMonthlyUtilityBuildingList = IBaseUseQuery<

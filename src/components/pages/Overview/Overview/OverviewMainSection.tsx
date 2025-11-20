@@ -1,6 +1,7 @@
 import type { IContractSummary, IMaintenance, IUnit } from '@/types'
 
 import OverviewMonthlyUtilityBuildingandFloor from '../OverviewMonthlyUtilityBuildingandFloor'
+import OverviewYearlyApartmentUtility from '../OverviewYearlyApartmentUtility'
 import OverviewLeaseExpiration from './OverviewLeaseExpiration'
 import OverviewMaintenanceAlert from './OverviewMaintenanceAlert'
 import OverviewMaintenanceRequest from './OverviewMaintenanceRequest'
@@ -26,6 +27,8 @@ const OverviewMainSection = ({
   return (
     <div className="space-y-4">
       {/* Stats Grid */}
+      <OverviewYearlyApartmentUtility />
+
       <OverviewMonthlyUtilityBuildingandFloor />
 
       {/* Vacant Units */}

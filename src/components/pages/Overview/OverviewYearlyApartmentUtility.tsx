@@ -1,7 +1,7 @@
 import { ChartColumnBig } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/common'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
 import { useRentoraApiYearlyApartmentUtility } from '@/hooks'
 
 import { MonthlyUtilityApartmentSelect } from './OverviewApartmentUtiltiy'
@@ -19,6 +19,7 @@ const OverviewYearlyApartmentUtility = () => {
           <ChartColumnBig className="size-5" />
           Apartment's Utility
         </CardTitle>
+        <CardDescription> Select a year to view this apartment's monthly utility summary </CardDescription>
       </CardHeader>
       <CardContent className="desktop:space-y-10 space-y-6">
         <MonthlyUtilityApartmentSelect item={yearlyApartmentUtility} isLoading={isLoading} />
