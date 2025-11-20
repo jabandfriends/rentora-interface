@@ -42,6 +42,8 @@ export type IMaintenance = {
   recurringSchedule: RecurringSchedule
   createdAt: string
   updatedAt: string
+  predictedSchedule: string
+  predictedRecurringDate: string
 }
 
 //hooks type useRentoraApiMaintenanceList
