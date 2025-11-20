@@ -5,13 +5,14 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
-import { PaginationBar, SearchBar } from '@/components/feature'
+import { PaginationBar, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/feature'
 import { PageTableEmpty, PageTableSearchEmpty } from '@/components/ui'
 import { DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA } from '@/constants'
 import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks'
-import type { IMonthlyUtilityBuilding, ISearchBarProps } from '@/types'
+import type { ISearchBarProps } from '@/types'
 
-import MonthlyUtilityBuildingCard from './MonthlyUtilityBuildingCard'
+import OverviewMonthlyBuilding from './OverviewMonthlyBuilding'
+import { MonthlyUtilitySelectFloor } from './OverviewMonthlyUtilityFloor'
 
 const OverviewMonthlyUtilityBuilding = () => {
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
@@ -43,7 +44,7 @@ const OverviewMonthlyUtilityBuilding = () => {
     },
   })
 
-  const handleSearchChange = useCallback(
+  const handleSearchChange: ISearchBarProps['onChange'] = useCallback(
     ({ target: { value } }: Parameters<ISearchBarProps['onChange']>[0]) => {
       setValue('search', value)
       setCurrentPage(DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA.page)
@@ -83,18 +84,29 @@ const OverviewMonthlyUtilityBuilding = () => {
     <Card className="justify-start rounded-2xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ChartColumnBig className="h-5 w-5" />
-          Building Utility
+          <ChartColumnBig className="size-5" />
+          Building and Floor Utility
         </CardTitle>
         <CardDescription>Building Utility Summary</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <SearchBar onChange={handleSearchChange} />
-        <div className="desktop:grid-cols-1 grid gap-4">
-          {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
-            <MonthlyUtilityBuildingCard key={index} item={item} isloading={isLoading} />
-          ))}
-        </div>
+        <Tabs defaultValue="building">
+          <TabsList className="border-theme-secondary-300 border">
+            <TabsTrigger value="building">Building</TabsTrigger>
+            <TabsTrigger value="floor">Floor</TabsTrigger>
+          </TabsList>
+          <TabsContent value="floor">
+            <MonthlyUtilitySelectFloor props={{ buildingId: monthlyUtiltyBuilding?.[0].buildingID }} />
+          </TabsContent>
+          <TabsContent value="building">
+            <OverviewMonthlyBuilding
+              isSearched={isSearched}
+              isBuildingLoading={isLoading}
+              monthlyUtiltyBuilding={monthlyUtiltyBuilding}
+              handleSearchChange={handleSearchChange}
+            />
+          </TabsContent>
+        </Tabs>
       </CardContent>
 
       <PaginationBar

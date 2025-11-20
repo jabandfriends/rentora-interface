@@ -4,6 +4,7 @@ import type {
   IMaintenanceListMetadata,
   IMonthlyInvoiceMetaData,
   IMonthlyUtilityBuildingMetadata,
+  IMonthtlyUtilityFloorMetadata,
   IOverdueInvoiceListMetadata,
   IPaymentListMetadata,
   IReportUtilityListMetadata,
@@ -83,4 +84,8 @@ export const DEFAULT_PAYMENT_LIST_METADATA: IPaymentListMetadata = {
 
 export const DEFAULT_MONTHLY_UTILITY_BUILDING_METADATA: IMonthlyUtilityBuildingMetadata = {
   totalUtilityBuildings: 0,
+}
+
+export const DEFAULT_MONTHLY_UTILITY_FLOOR_METADATA: IMonthtlyUtilityFloorMetadata = {
+  totalUtilityFloor: 0,
 }
