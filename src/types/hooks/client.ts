@@ -91,3 +91,4 @@ export type RentoraApiExecuteClientKey =
   | 'updateApartmentService'
   | 'updateApartmentPaymentService'
   | 'updatePayment'
+  | 'adhocInvoiceUpdate'

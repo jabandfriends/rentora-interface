@@ -13,7 +13,7 @@ const InvoiceAction = ({
 }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
-      <Button variant="vanilla">
+      <Button className="flex items-center" variant="ghost" size="icon">
         <Ellipsis size={18} />
       </Button>
     </DropdownMenuTrigger>
