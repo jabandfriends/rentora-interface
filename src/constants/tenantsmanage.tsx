@@ -1,1 +1,1 @@
-export const TENANTS_TABLE_HEADER = ['Name', 'Email', 'Unit', 'Joined On', 'Role', 'Status', 'Occupation', 'Actions']
+export const TENANTS_TABLE_HEADER = ['Name', 'Email', 'Joined On', 'Role', 'Status', 'Actions']
