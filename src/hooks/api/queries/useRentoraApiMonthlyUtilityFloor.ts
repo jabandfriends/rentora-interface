@@ -40,6 +40,7 @@ export const useRentoraApiMonthlyUtilityFloor = (props: {
       })
     },
     retry: 1,
+    enabled: !!props.params.buildingId,
   })
 
   const result: IRentoraApiMonthlyUtilityFloorListResponse['data'] = useMemo(() => {

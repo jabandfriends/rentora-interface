@@ -5,14 +5,12 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
-import { PaginationBar, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/feature'
-import { PageTableEmpty, PageTableSearchEmpty } from '@/components/ui'
+import { PaginationBar, SearchBar } from '@/components/feature'
 import { DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA } from '@/constants'
 import { useRentoraApiMonthlyUtilityBuildings } from '@/hooks'
 import type { ISearchBarProps } from '@/types'
 
 import OverviewMonthlyBuilding from './OverviewMonthlyBuilding'
-import { MonthlyUtilitySelectFloor } from './OverviewMonthlyUtilityFloor'
 
 const OverviewMonthlyUtilityBuilding = () => {
   const [currentPage, setCurrentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
@@ -62,24 +60,6 @@ const OverviewMonthlyUtilityBuilding = () => {
 
   const isSearched: boolean = useMemo(() => !!debouncedSearch, [debouncedSearch])
 
-  if (isSearched && monthlyUtiltyBuilding?.length === 0) {
-    return <PageTableSearchEmpty message="No Building Utility" subMessage="No Building Utility found for this search" />
-  }
-
-  if (!monthlyUtiltyBuilding || monthlyUtiltyBuilding.length === 0) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <ChartColumnBig className="h-5 w-5" />
-            Building Utility
-          </CardTitle>
-        </CardHeader>
-        <PageTableEmpty message="No Building Utility found" />
-      </Card>
-    )
-  }
-
   return (
     <Card className="justify-start rounded-2xl">
       <CardHeader>
@@ -90,23 +70,12 @@ const OverviewMonthlyUtilityBuilding = () => {
         <CardDescription>Building Utility Summary</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Tabs defaultValue="building">
-          <TabsList className="border-theme-secondary-300 border">
-            <TabsTrigger value="building">Building</TabsTrigger>
-            <TabsTrigger value="floor">Floor</TabsTrigger>
-          </TabsList>
-          <TabsContent value="floor">
-            <MonthlyUtilitySelectFloor props={{ buildingId: monthlyUtiltyBuilding?.[0].buildingID }} />
-          </TabsContent>
-          <TabsContent value="building">
-            <OverviewMonthlyBuilding
-              isSearched={isSearched}
-              isBuildingLoading={isLoading}
-              monthlyUtiltyBuilding={monthlyUtiltyBuilding}
-              handleSearchChange={handleSearchChange}
-            />
-          </TabsContent>
-        </Tabs>
+        <SearchBar onChange={handleSearchChange} placeholder="Search for building utility" />
+        <OverviewMonthlyBuilding
+          isSearched={isSearched}
+          isBuildingLoading={isLoading}
+          monthlyUtiltyBuilding={monthlyUtiltyBuilding}
+        />
       </CardContent>
 
       <PaginationBar

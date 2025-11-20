@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import {
   type ChartConfig,
@@ -42,8 +42,8 @@ const MonthlyUtilityApartmentElect = ({ item, isLoading }: IApartmentUtilityElec
   return (
     <div className="flex flex-col gap-2">
       <h4 className="text-start font-semibold"> Electric Utility </h4>
-      <ChartContainer config={chartConfig} className="h-80 w-80">
-        <AreaChart accessibilityLayer data={item.monthlyBreakdown?.electric}>
+      <ChartContainer config={chartConfig} className="h-80 w-full">
+        <BarChart accessibilityLayer data={item.monthlyBreakdown?.electric}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="month"
@@ -55,8 +55,8 @@ const MonthlyUtilityApartmentElect = ({ item, isLoading }: IApartmentUtilityElec
           <YAxis tickLine={false} tickMargin={10} axisLine={false} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Area dataKey="usageAmount" fill="#3b82f6" radius={10} />
-        </AreaChart>
+          <Bar dataKey="usageAmount" fill="#3b82f6" radius={10} />
+        </BarChart>
       </ChartContainer>
     </div>
   )

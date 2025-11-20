@@ -5,17 +5,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { LoadingPage, PageTableEmpty } from '@/components/ui'
 import { DEFAULT_MONTHLY_UTILITY_FLOOR_LIST_DATA } from '@/constants'
 import { useRentoraApiFloorList, useRentoraApiMonthlyUtilityFloor } from '@/hooks'
-import type { IFloor, IMonthtlyUtilityFloor, IRentoraApiMonthlyUtilityFloorParams } from '@/types'
+import type { IFloor, IMonthtlyUtilityFloor, Maybe } from '@/types'
 
 import MonthlyUtilityFloorCard from './MonthlyUtilityFloorCard'
 
-const MonthlyUtilitySelectFloor = ({ props }: { props: IRentoraApiMonthlyUtilityFloorParams }) => {
+type IMonthlyUtilitySelectFloor = {
+  buildingId: Maybe<string>
+}
+const MonthlyUtilitySelectFloor = ({ buildingId }: IMonthlyUtilitySelectFloor) => {
   const [currentPage]: [number, Dispatch<SetStateAction<number>>] = useState(
     DEFAULT_MONTHLY_UTILITY_FLOOR_LIST_DATA.page,
   )
   const [selectedFloorId, setSelectedFloorId]: [string, Dispatch<SetStateAction<string>>] = useState('')
-
-  const { buildingId } = props
 
   //floor data
   const { data: floorNumber } = useRentoraApiFloorList({
@@ -62,7 +63,7 @@ const MonthlyUtilitySelectFloor = ({ props }: { props: IRentoraApiMonthlyUtility
         </Select>
       </div>
       <div>
-        {monthlyUtilityFloor?.map((item: IMonthtlyUtilityFloor, index: number) => (
+        {monthlyUtilityFloor.map((item: IMonthtlyUtilityFloor, index: number) => (
           <MonthlyUtilityFloorCard key={index} item={item} isLoading={isLoading} />
         ))}
       </div>

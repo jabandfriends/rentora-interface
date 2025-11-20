@@ -1,10 +1,10 @@
 import { ChartColumnBig } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/common'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
 import { useRentoraApiYearlyApartmentUtility } from '@/hooks'
 
-import { MonthlyUtilityApartmentSelect, YearlyApartmentUtilityCard } from './OverviewApartmentUtiltiy'
+import { MonthlyUtilityApartmentSelect } from './OverviewApartmentUtiltiy'
 
 const OverviewYearlyApartmentUtility = () => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
@@ -15,13 +15,13 @@ const OverviewYearlyApartmentUtility = () => {
   return (
     <Card className="justify-start rounded-2xl">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="desktop:flex-row flex flex-col items-center gap-2">
           <ChartColumnBig className="size-5" />
           Apartment's Utility
         </CardTitle>
+        <CardDescription> Select a year to view this apartment's monthly utility summary </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-10">
-        <YearlyApartmentUtilityCard item={yearlyApartmentUtility} isLoading={isLoading} />
+      <CardContent className="desktop:space-y-10 space-y-6">
         <MonthlyUtilityApartmentSelect item={yearlyApartmentUtility} isLoading={isLoading} />
       </CardContent>
     </Card>

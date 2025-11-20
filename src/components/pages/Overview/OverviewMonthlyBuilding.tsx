@@ -1,20 +1,19 @@
-import { SearchBar } from '@/components/feature'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/feature'
 import { PageTableEmpty, PageTableSearchEmpty } from '@/components/ui'
 import type { IMonthlyUtilityBuilding } from '@/types'
 
 import { MonthlyUtilityBuildingCard } from './OverviewMonthlyUtilityBuilding'
+import { MonthlyUtilitySelectFloor } from './OverviewMonthlyUtilityFloor'
 
 type IOverviewMonthlyBuilding = {
   isBuildingLoading: boolean
   isSearched: boolean
   monthlyUtiltyBuilding: Array<IMonthlyUtilityBuilding>
-  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 const OverviewMonthlyBuilding = ({
   isSearched,
   monthlyUtiltyBuilding,
   isBuildingLoading,
-  handleSearchChange,
 }: IOverviewMonthlyBuilding) => {
   if (!monthlyUtiltyBuilding || monthlyUtiltyBuilding.length == 0) {
     return <PageTableEmpty message="No Building Utility found" />
@@ -25,16 +24,24 @@ const OverviewMonthlyBuilding = ({
   }
 
   return (
-    <div className="space-y-2">
-      <SearchBar onChange={handleSearchChange} placeholder="Search for building utility" />
-      <div className="space-y-6">
-        <div className="grid-cols grid gap-2">
-          {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
-            <MonthlyUtilityBuildingCard key={index} item={item} isloading={isBuildingLoading} />
-          ))}
+    <Tabs defaultValue="Building">
+      <TabsList className="border-theme-secondary-300 border">
+        <TabsTrigger value="Building">Building</TabsTrigger>
+        <TabsTrigger value="Floor">Floor</TabsTrigger>
+      </TabsList>
+      <TabsContent value="Building">
+        <div className="space-y-6">
+          <div className="grid-cols grid gap-2">
+            {monthlyUtiltyBuilding?.map((item: IMonthlyUtilityBuilding, index: number) => (
+              <MonthlyUtilityBuildingCard key={index} item={item} isloading={isBuildingLoading} />
+            ))}
+          </div>
         </div>
-      </div>
-    </div>
+      </TabsContent>
+      <TabsContent value="Floor">
+        <MonthlyUtilitySelectFloor buildingId={monthlyUtiltyBuilding[0].buildingID} />
+      </TabsContent>
+    </Tabs>
   )
 }
 
