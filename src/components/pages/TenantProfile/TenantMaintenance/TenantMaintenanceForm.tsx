@@ -68,7 +68,7 @@ const TenantMaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting
                     return (
                       <FormField
                         key={'form-maintenance-switch' + item.key + index + item.fieldType}
-                        name={item.key}
+                        name={item.key as keyof TENANT_MAINTENANCE_FORM_SCHEMA_TYPE}
                         control={form.control}
                         render={({ field }) => (
                           <FormItem className="border-theme-secondary-300 flex flex-row items-center justify-between rounded-lg border p-4">
@@ -94,7 +94,7 @@ const TenantMaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting
                       <FormField
                         key={'form-maintenance-field' + item.key + index}
                         control={form.control}
-                        name={item.key}
+                        name={item.key as keyof TENANT_MAINTENANCE_FORM_SCHEMA_TYPE}
                         render={({ field, fieldState }) => (
                           <div className="space-y-1">
                             <p>
@@ -188,7 +188,7 @@ const TenantMaintenanceForm = ({ buttonLabel, buttonIcon, onSubmit, isSubmitting
                             <FormField
                               key={'form-maintenance-field' + fieldItem.key + i2}
                               control={form.control}
-                              name={fieldItem.key}
+                              name={fieldItem.key as keyof TENANT_MAINTENANCE_FORM_SCHEMA_TYPE}
                               render={({ field, fieldState }) => (
                                 <div className="space-y-1">
                                   <p>
