@@ -4,7 +4,7 @@ import { type Dispatch, type SetStateAction, useCallback, useMemo, useState } fr
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/common'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/common'
 import { PaginationBar, SearchBar } from '@/components/feature'
 import { PageTableEmpty, PageTableSearchEmpty } from '@/components/ui'
 import { DEFAULT_MONTHLY_UTILITY_BUILDING_LIST_DATA } from '@/constants'
@@ -66,7 +66,17 @@ const OverviewMonthlyUtilityBuilding = () => {
   }
 
   if (!monthlyUtiltyBuilding || monthlyUtiltyBuilding.length === 0) {
-    return <PageTableEmpty message="No Building Utility found" />
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ChartColumnBig className="h-5 w-5" />
+            Building Utility
+          </CardTitle>
+        </CardHeader>
+        <PageTableEmpty message="No Building Utility found" />
+      </Card>
+    )
   }
 
   return (
@@ -76,6 +86,7 @@ const OverviewMonthlyUtilityBuilding = () => {
           <ChartColumnBig className="h-5 w-5" />
           Building Utility
         </CardTitle>
+        <CardDescription>Building Utility Summary</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <SearchBar onChange={handleSearchChange} />

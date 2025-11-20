@@ -37,8 +37,12 @@ const MonthlyUtilityBuildingWaterChart = ({ item, isLoading }: IMonthlyUtilityBu
 
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="text-start text-lg font-semibold"> Water Utility </h3>
-      <ChartContainer config={chartConfig} className="h-80 w-80">
+      <div>
+        <h4 className="text-start font-semibold"> Water Utility </h4>
+        <p className="text-body-2 text-theme-secondary">Water utility</p>
+      </div>
+
+      <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <BarChart accessibilityLayer data={item.utilityGroupName.water}>
           <CartesianGrid vertical={false} />
           <XAxis

@@ -1,4 +1,3 @@
-import { Card } from '@/components/common'
 import { LoadingPage } from '@/components/ui'
 import type { IMonthlyUtilityBuilding } from '@/types'
 
@@ -15,15 +14,15 @@ const MonthlyUtilityBuildingCard = ({ item, isloading }: IMonthlyUtilityBuildCar
   }
 
   return (
-    <Card className="flex-col gap-6 rounded-2xl shadow-lg hover:shadow-xl">
+    <div className="flex-col gap-6 rounded-2xl">
       <div className="flex justify-start">
-        <h2 className="text-start font-bold">{item.buildingName}</h2>
+        <h4 className="text-start font-bold">{item.buildingName}</h4>
       </div>
-      <div className="desktop:flex-col justify-items-between-start flex flex-row gap-2">
+      <div className="justify-items-between-start desktop:grid-cols-2 grid grid-cols-1 gap-2">
         <MonthlyUtilityBuildingElectChart item={item} isLoading={isloading} />
         <MonthlyUtilityBuildingWaterChart item={item} isLoading={isloading} />
       </div>
-    </Card>
+    </div>
   )
 }
 export default MonthlyUtilityBuildingCard
