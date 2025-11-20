@@ -1,5 +1,4 @@
-import { useCallback } from 'react'
-import toast from 'react-hot-toast'
+import { type Dispatch, type SetStateAction, useCallback, useState } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import type { VariantProps } from 'tailwind-variants'
 
@@ -22,6 +21,7 @@ import type { IInvoiceSummary, IPaginate } from '@/types'
 import { formatCurrency } from '@/utilities'
 
 import InvoiceAction from './NormalInvoiceAction'
+import NormalInvoiceUpdateModal from './NormalInvoiceUpdateModal'
 
 type INormalInvoiceTableProps = {
   data: Array<IInvoiceSummary>
@@ -42,12 +42,13 @@ const NormalInvoiceTable = ({
 }: INormalInvoiceTableProps) => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
   const navigate: NavigateFunction = useNavigate()
-  const handleUpdateInvoice = useCallback(() => {
-    toast.success('Need invoice Update Page here')
-  }, [])
 
-  const handleDeleteInvoice = useCallback(() => {
-    toast.success('Need invoice Invoice Delete here')
+  const [isUpdateModalOpen, setIsUpdateModalOpen]: [boolean, Dispatch<SetStateAction<boolean>>] =
+    useState<boolean>(false)
+  const [selectedId, setSelectedId]: [string, Dispatch<SetStateAction<string>>] = useState<string>('')
+
+  const handleUpdateModalOpen = useCallback(() => {
+    setIsUpdateModalOpen(true)
   }, [])
 
   const handleDetailInvoice = useCallback(
@@ -85,6 +86,7 @@ const NormalInvoiceTable = ({
 
   return (
     <div className="space-y-4">
+      <NormalInvoiceUpdateModal selectedId={selectedId} open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen} />
       <Table>
         <TableHeader>
           <TableRow>
@@ -108,7 +110,7 @@ const NormalInvoiceTable = ({
                 <Badge variant={maintenanceStatusBadgeVariant(item.status)}>{item.status}</Badge>
               </TableCell>
               <TableCell>
-                <InvoiceAction id={item.id} onUpdate={handleUpdateInvoice} onDelete={handleDeleteInvoice} />
+                <InvoiceAction id={item.id} onUpdateModalOpen={handleUpdateModalOpen} onSelectedId={setSelectedId} />
               </TableCell>
             </TableRow>
           ))}

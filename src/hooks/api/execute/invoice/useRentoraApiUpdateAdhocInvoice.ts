@@ -1,7 +1,7 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { RENTORA_API_BASE_URL } from '@/config'
-import { RentoraApiExecuteClient } from '@/hooks'
+import { RentoraApiExecuteClient, RentoraApiQueryClient } from '@/hooks'
 import type {
   IRentoraBaseApiClientUpdateAdhocInvoiceResponse,
   IUpdateAdhocInvoicePayload,
@@ -10,10 +10,34 @@ import type {
 
 export const useRentoraApiUpdateAdhocInvoice = (params: { apartmentId: string }): IUseRentoraApiUpdateAdhocInvoice => {
   const rentoraExecuteClient: RentoraApiExecuteClient = new RentoraApiExecuteClient(RENTORA_API_BASE_URL)
+  const rentoraQueryClient: RentoraApiQueryClient = new RentoraApiQueryClient(RENTORA_API_BASE_URL)
+  const queryClient = useQueryClient()
 
-  return useMutation<IRentoraBaseApiClientUpdateAdhocInvoiceResponse['data'], Error, IUpdateAdhocInvoicePayload>({
+  return useMutation<void, Error, IUpdateAdhocInvoicePayload>({
     mutationKey: [rentoraExecuteClient.key.adhocInvoiceUpdate],
-    mutationFn: (payload: IUpdateAdhocInvoicePayload) =>
-      rentoraExecuteClient.updateAdhocInvoice(params.apartmentId, payload),
+    mutationFn: async (payload: IUpdateAdhocInvoicePayload) => {
+      const { receiptFile, ...rest } = payload
+
+      const sentPayload = {
+        ...rest,
+      }
+      const result: IRentoraBaseApiClientUpdateAdhocInvoiceResponse['data'] =
+        await rentoraExecuteClient.updateAdhocInvoice(params.apartmentId, sentPayload)
+
+      if (!receiptFile) return
+      if (!result.presignedUrl) return
+
+      await rentoraExecuteClient.putPresignedUrl({
+        imgFile: receiptFile,
+        presignedUrl: result.presignedUrl,
+      })
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [rentoraQueryClient.key.invoiceList],
+        exact: false,
+      })
+    },
   })
 }
