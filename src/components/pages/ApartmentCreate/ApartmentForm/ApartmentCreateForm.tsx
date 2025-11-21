@@ -41,8 +41,8 @@ const ApartmentCreateForm = () => {
 
   //button status
   const isButtonDisabled: boolean = useMemo(() => {
-    return isPending || !form.formState.isDirty || !form.formState.isValid
-  }, [isPending, form.formState.isDirty, form.formState.isValid])
+    return isPending
+  }, [isPending])
 
   //create apartment
   const onSubmit = useCallback(

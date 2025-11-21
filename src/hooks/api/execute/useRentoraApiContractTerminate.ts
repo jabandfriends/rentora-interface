@@ -22,6 +22,10 @@ export const useRentoraApiContractTerminate = (
       queryClient.invalidateQueries({
         queryKey: [rentoraQueryClient.key.contractDetail, param.apartmentId, param.unitId],
       })
+      queryClient.invalidateQueries({
+        queryKey: [rentoraQueryClient.key.contractList],
+        exact: false,
+      })
     },
   })
 }

@@ -149,35 +149,37 @@ const ApartmentCard = ({ apartment }: { apartment: IApartment }) => {
         </div>
 
         <div className="flex flex-col justify-between gap-y-2">
-          <div className="bg-theme-secondary-200/30 desktop:px-8 grid grid-cols-2 gap-y-2 rounded-xl px-4 py-4">
-            <div>
-              <h5>Address </h5>
-              <p className="text-body-2">{apartment.address || <FieldEmpty />}</p>
-            </div>
-            <div>
-              <h5>City </h5>
-              <p className="text-body-2">{apartment.city || <FieldEmpty />}</p>
-            </div>
-            <div>
-              <h5>State </h5>
-              <p className="text-body-2">{apartment.state || <FieldEmpty />}</p>
-            </div>
-            <div>
-              <h5>Phone Number </h5>
-              <p className="text-body-2">{apartment.phoneNumber || <FieldEmpty />}</p>
-            </div>
+          <div className="bg-theme-secondary-200/30 desktop:px-8 space-y-2 px-4 py-4">
+            <div className="grid grid-cols-2 gap-y-2 rounded-xl">
+              <div>
+                <h5>Address </h5>
+                <p className="text-body-2">{apartment.address || <FieldEmpty />}</p>
+              </div>
+              <div>
+                <h5>City </h5>
+                <p className="text-body-2">{apartment.city || <FieldEmpty />}</p>
+              </div>
+              <div>
+                <h5>State </h5>
+                <p className="text-body-2">{apartment.state || <FieldEmpty />}</p>
+              </div>
+              <div>
+                <h5>Phone Number </h5>
+                <p className="text-body-2">{apartment.phoneNumber || <FieldEmpty />}</p>
+              </div>
 
-            <div>
-              <h5> Building Count </h5>
-              <p className="text-body-2 flex items-center gap-x-2">
-                <Building size={16} /> {apartment.buildingCount}
-              </p>
-            </div>
-            <div>
-              <h5> Unit Count </h5>
-              <p className="text-body-2 flex items-center gap-x-2">
-                <Sofa size={16} /> {apartment.unitCount}
-              </p>
+              <div>
+                <h5> Building Count </h5>
+                <p className="text-body-2 flex items-center gap-x-2">
+                  <Building size={16} /> {apartment.buildingCount}
+                </p>
+              </div>
+              <div>
+                <h5> Unit Count </h5>
+                <p className="text-body-2 flex items-center gap-x-2">
+                  <Sofa size={16} /> {apartment.unitCount}
+                </p>
+              </div>
             </div>
             <div>
               <h5> Active Contract Count </h5>
