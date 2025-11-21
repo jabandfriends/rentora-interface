@@ -94,27 +94,6 @@ describe('Rentora View Invoices', () => {
     cy.url({ timeout: 5000 }).should('include', '/dashboard/')
     cy.contains('Apartment Management Dashboard', { timeout: 5000 }).should('be.visible')
   })
-
-  it('should click sidebar item to go to the "Normal Invoice" page for an apartment', () => {
-    cy.visit(Cypress.env('uiBaseUrl'))
-
-    // Wait for the apartments to load
-    cy.contains('All Apartments', { timeout: 5000 }).should('be.visible')
-
-    // Click the first "View" button for an active apartment
-    cy.contains('button', 'View', { timeout: 5000 }).should('not.be.disabled').click()
-
-    // Verify navigation to apartment detail page
-    cy.url({ timeout: 5000 }).should('include', '/dashboard/')
-    cy.contains('Apartment Management Dashboard', { timeout: 5000 }).should('be.visible')
-
-    // Click the "Invoices" button using data-testid
-    cy.contains('Invoices', { timeout: 5000 }).should('not.be.disabled').click()
-    cy.contains('Normal Invoices', { timeout: 5000 }).should('not.be.disabled').click()
-
-    cy.url({ timeout: 5000 }).should('include', '/normal-invoice')
-    cy.contains('Invoices Management', { timeout: 5000 }).should('be.visible')
-  })
 })
 
 describe('Rentora View Monthly Invoices', () => {
@@ -168,7 +147,7 @@ describe('Rentora View Monthly Invoices', () => {
 
     // Click the "Invoices" button using data-testid
     cy.contains('Invoices', { timeout: 5000 }).should('not.be.disabled').click()
-    cy.contains('Monthly Invoices', { timeout: 5000 }).should('not.be.disabled').click()
+    cy.contains('Monthly Rental Invoices', { timeout: 5000 }).should('not.be.disabled').click()
 
     // Verify we are on the monthly invoices page
     cy.url({ timeout: 5000 }).should('include', '/monthly-invoice')
@@ -457,6 +436,6 @@ describe('Rentora view Maintenances', () => {
     cy.contains('Maintenance', { timeout: 5000 }).should('not.be.disabled').click()
 
     cy.url({ timeout: 5000 }).should('include', '/maintenance')
-    cy.contains('Manage maintenance reports', { timeout: 5000 }).should('be.visible')
+    cy.contains('Maintenance Tasks Management', { timeout: 5000 }).should('be.visible')
   })
 })

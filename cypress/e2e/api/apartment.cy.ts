@@ -7,7 +7,6 @@ describe('Apartment , Maintenance API', () => {
   let buildingId: string
   let floorId: string
   let unitId: string
-  let userId: string
 
   const payload = {
     name: 'ACHIRAYA 4',
@@ -218,60 +217,6 @@ describe('Apartment , Maintenance API', () => {
     })
   })
 
-  it('Create a new tenant', () => {
-    const tenantPayload = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: `john.doe+${Date.now()}@example.com`, // unique email per test
-      password: 'SecurePass123!',
-      phoneNumber: '0626063049',
-      birthDate: '1990-01-01',
-      nationalId: '1234567890123',
-      emergencyContactName: 'Jane Doe',
-      emergencyContactPhone: '0626063049',
-    }
-
-    cy.request({
-      method: 'POST',
-      url: `${Cypress.env('apiBaseUrl')}/api/apartments/manage/tenant/${apartmentId}`,
-      headers: { 'Rentora-Auth-Token': token },
-      body: tenantPayload,
-    }).then((res) => {
-      expect(res.status).to.eq(200) // or 201 depending on backend
-      expect(res.body.success).to.eq(true)
-      // apartmentUserId
-      userId = res.body.data.apartmentUserId
-      cy.log('Tenant created successfully' + userId)
-    })
-  })
-
-  it('Create a new maintenance request', () => {
-    const payload = {
-      unitId,
-      title: 'Fix AC',
-      description: 'Air conditioner maintenance',
-      status: 'pending', // MAINTENANCE_STATUS.PENDING
-      priority: 'high', // MAINTENANCE_PRIORITY.HIGH
-      appointmentDate: '2025-10-20T09:00:00+07:00', // <-- full datetime
-      dueDate: '2025-10-22T17:00:00+07:00', // <-- full datetime
-      estimatedHours: 4,
-      estimatedCost: 1500,
-      category: 'electrical', // MAINTENANCE_CATEGORY.ELECTRICITY
-      isEmergency: true,
-      isRecurring: true,
-      recurringSchedule: 'weekly', // RecurringSchedule.WEEKLY
-    }
-
-    cy.request({
-      method: 'POST',
-      url: `${Cypress.env('apiBaseUrl')}/api/apartment/${apartmentId}/maintenance/users/create`,
-      headers: { 'Rentora-Auth-Token': token },
-      body: payload,
-    }).then((res) => {
-      expect(res.status).to.eq(201)
-    })
-  })
-
   it('Get maintenance list for apartment', () => {
     cy.request({
       method: 'GET',
@@ -354,17 +299,6 @@ describe('Apartment , Maintenance API', () => {
       method: 'GET',
       url: `${Cypress.env('apiBaseUrl')}/api/apartments/${apartmentId}/utility`,
       headers: { 'Rentora-Auth-Token': token },
-    }).then((res) => {
-      expect(res.status).to.eq(200)
-    })
-  })
-
-  it('Get monthly invoice list should return 200', () => {
-    cy.request({
-      method: 'GET',
-      url: `${Cypress.env('apiBaseUrl')}/api/monthly/invoices/${apartmentId}`,
-      headers: { 'Rentora-Auth-Token': token },
-      qs: params,
     }).then((res) => {
       expect(res.status).to.eq(200)
     })

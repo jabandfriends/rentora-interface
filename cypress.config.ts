@@ -4,8 +4,8 @@ export default defineConfig({
   trashAssetsBeforeRuns: false,
   e2e: {
     env: {
-      apiBaseUrl: 'http://localhost:8081', // backend
-      uiBaseUrl: 'http://localhost:5173', // frontend
+      apiBaseUrl: 'https://renapie2e.teamforge.cloud', // backend
+      uiBaseUrl: 'https://rentorae2e.teamforge.cloud', // frontend
     },
     viewportWidth: 1920,
     viewportHeight: 1080,
