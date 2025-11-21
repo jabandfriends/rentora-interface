@@ -85,6 +85,10 @@ const SupplyBody = () => {
     return !!debouncedSearch || !!category
   }, [debouncedSearch, category])
 
+  const isLowStock: boolean = useMemo(() => {
+    return totalLowStockSupplies > 0
+  }, [totalLowStockSupplies])
+
   const supplyStats: Array<IStatsCardProps> = useMemo(() => {
     return [
       {
@@ -113,26 +117,38 @@ const SupplyBody = () => {
 
       <PageTableBody className="space-y-4">
         <div className="flex flex-col gap-y-8">
-          <PageTableHeader
-            title="Supplies Inventory"
-            description="This is your inventory. You can view, update, delete, and create supplies here."
-            stats={supplyStats}
-            isLoading={isSuppliesLoading}
-            actionButton={
-              <div className="flex items-center gap-2">
-                <Button className="flex w-auto items-center gap-2" onClick={openCreateModal}>
-                  <Plus size={18} /> New Supply
-                </Button>
-                <Button
-                  variant="secondary"
-                  className="flex w-auto items-center gap-2"
-                  onClick={navigateToSupplyTransactions}
-                >
-                  <Eye size={18} /> Transactions
-                </Button>
+          <div className="space-y-2">
+            <PageTableHeader
+              title="Supplies Inventory"
+              description="This is your inventory. You can view, update, delete, and create supplies here."
+              stats={supplyStats}
+              isLoading={isSuppliesLoading}
+              actionButton={
+                <div className="flex items-center gap-2">
+                  <Button className="flex w-auto items-center gap-2" onClick={openCreateModal}>
+                    <Plus size={18} /> New Supply
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="flex w-auto items-center gap-2"
+                    onClick={navigateToSupplyTransactions}
+                  >
+                    <Eye size={18} /> Transactions
+                  </Button>
+                </div>
+              }
+            />
+            {isLowStock && (
+              <div className="border-theme-warning-400 bg-theme-warning-100 text-theme-warning-800 flex items-center gap-2 rounded-lg border-l-4 p-4">
+                <PackageOpen className="text-theme-warning-500 size-4" />
+                <span className="font-medium">
+                  Warning: Some supplies are running low on stock. Please review your inventory and consider restocking
+                  soon.
+                </span>
               </div>
-            }
-          />
+            )}
+          </div>
+
           <PageTableSearch
             placeholder="Search by supply name"
             statusEnum={SupplyCategory}
