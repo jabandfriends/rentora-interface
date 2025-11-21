@@ -15,12 +15,13 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh """
-                    export NVM_DIR="\\$HOME/.nvm"
-                    [ -s "\\$NVM_DIR/nvm.sh" ] && . "\\$NVM_DIR/nvm.sh"
-                    nvm use 22.21.1
+                sh '''
+                    # Make sure npm is available
+                    npm install -g pnpm
+
+                    # Install project dependencies
                     pnpm install --frozen-lockfile
-                """
+                '''
             }
         }
 
