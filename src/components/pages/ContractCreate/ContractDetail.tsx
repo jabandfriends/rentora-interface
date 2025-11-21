@@ -184,45 +184,40 @@ const ContractDetail = ({ form }: IContractDetail) => {
           />
         </div>
 
-        {rentalType !== ContractType.DAILY && (
-          <div>
-            <FormField
-              control={form.control}
-              name="depositAmount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Deposit Amount <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <InputNumber maxLength={8} decimal placeholder="24000.00" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        )}
-
-        {rentalType !== ContractType.DAILY && (
-          <div>
-            <FormField
-              control={form.control}
-              name="advancePaymentMonths"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Advance Payment (Months) <span className="text-theme-error">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <InputNumber maxLength={2} placeholder="1" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        )}
+        <div>
+          <FormField
+            control={form.control}
+            name="depositAmount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Deposit Amount <span className="text-theme-error">*</span>
+                </FormLabel>
+                <FormControl>
+                  <InputNumber maxLength={8} decimal placeholder="24000.00" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div>
+          <FormField
+            control={form.control}
+            name="advancePaymentMonths"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Advance Payment (Months) <span className="text-theme-error">*</span>
+                </FormLabel>
+                <FormControl>
+                  <InputNumber maxLength={2} placeholder="1" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
       </div>
     </div>
   )

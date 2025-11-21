@@ -12,14 +12,18 @@ type IPageTableEmptyProps = {
 const PageTableEmpty = ({
   message = 'No data to show right now.',
   description = 'Everything looks quiet here — try again later or check your filters.',
-  icon = <PackageOpen size={50} />,
+  icon = <PackageOpen size={35} />,
   className = '',
 }: IPageTableEmptyProps) => {
   return (
-    <div className={cn('bg-theme-light flex h-60 flex-col items-center justify-center rounded-lg p-5', className)}>
-      {icon}
-      <h4>{message}</h4>
-      <p className="text-theme-secondary text-body-2 text-center">{description}</p>
+    <div
+      className={cn('bg-theme-light flex h-60 flex-col items-center justify-center gap-y-2 rounded-lg p-5', className)}
+    >
+      <div className="bg-theme-secondary-200 rounded p-2">{icon}</div>
+      <div>
+        <h4 className="text-center">{message}</h4>
+        <p className="text-theme-secondary text-body-2 text-center">{description}</p>
+      </div>
     </div>
   )
 }
