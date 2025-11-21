@@ -17,6 +17,7 @@ import {
 import { ROUTES } from '@/constants'
 import { CONTRACT_STATUS } from '@/enum'
 import type { IContractSummary } from '@/types'
+import { formatCurrency } from '@/utilities'
 
 type IRoomDetailContractTableProps = {
   contracts: Array<IContractSummary>
@@ -69,6 +70,7 @@ const RoomDetailContractTable = ({
             <TableHead>End Date</TableHead>
             <TableHead>Rental Type</TableHead>
             <TableHead>Tenant Name</TableHead>
+            <TableHead>Rental Price</TableHead>
             <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
@@ -83,6 +85,7 @@ const RoomDetailContractTable = ({
               <TableCell>{contract.endDate}</TableCell>
               <TableCell className="capitalize">{contract.rentalType}</TableCell>
               <TableCell>{contract.tenantName}</TableCell>
+              <TableCell>{formatCurrency(contract.rentalPrice)}</TableCell>
               <TableCell className="capitalize">
                 <Badge variant={contractStatusBadgeVariant(contract.status)}>{contract.status}</Badge>
               </TableCell>

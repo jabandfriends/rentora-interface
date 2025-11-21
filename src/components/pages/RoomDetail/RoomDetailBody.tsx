@@ -37,7 +37,7 @@ const RoomDetailBody = () => {
     unitId: unitId!,
   })
 
-  const handleSubmit = useCallback(
+  const handleTerminateContract = useCallback(
     (data: TerminationFormValues) => {
       try {
         terminateContract({ terminationReason: data.terminationReason })
@@ -82,8 +82,9 @@ const RoomDetailBody = () => {
       <ContractDeleteModal
         isOpenDeleteModal={isOpenDeleteModal}
         handleOpenModal={setOpenDeleteModal}
-        handleSubmit={handleSubmit}
+        handleSubmit={handleTerminateContract}
       />
+
       <div className="desktop:grid-cols-2 grid gap-2">
         {/* Left Column - Contract Details */}
         <ContractDetail
