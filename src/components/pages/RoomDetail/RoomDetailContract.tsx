@@ -1,15 +1,24 @@
-import { Calendar, CalendarRange } from 'lucide-react'
-import { type ReactNode, useCallback, useState } from 'react'
+import { AlertCircleIcon, Calendar, CalendarRange } from 'lucide-react'
+import { type ReactNode, useCallback, useMemo, useState } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
 import { Button, Card, Label } from '@/components/common'
 import { Tabs, TabsList, TabsTrigger } from '@/components/feature'
 import { ContractType, ROUTES } from '@/constants'
+import { UnitStatus } from '@/enum'
 
-const RoomDetailContract = () => {
+type IRoomDetailContract = {
+  unitStatus: UnitStatus
+}
+const RoomDetailContract = ({ unitStatus }: IRoomDetailContract) => {
   const navigate: NavigateFunction = useNavigate()
   const { apartmentId, id } = useParams<{ apartmentId: string; id: string }>()
   const [billingType, setBillingType] = useState<ContractType>(ContractType.MONTHLY)
+
+  const isUnitMaintenance: boolean = useMemo(() => {
+    if (unitStatus == UnitStatus.maintenance) return true
+    return false
+  }, [unitStatus])
 
   const handleNavigateCreateContract = useCallback(() => {
     navigate(ROUTES.contractCreate.getPath(apartmentId, id))
@@ -21,7 +30,13 @@ const RoomDetailContract = () => {
         <p className="text-body-2 text-theme-secondary-600">Select the billing cycle for this room</p>
       </div>
 
-      <div>
+      <div className="space-y-2">
+        {isUnitMaintenance && (
+          <div className="border-theme-error text-theme-error-600 bg-theme-error-100 flex items-center gap-x-2 rounded-md border p-2">
+            <AlertCircleIcon className="desktop:block hidden size-4" /> You cannot create contract for this unit because
+            this unit is under maintenance.
+          </div>
+        )}
         <div className="space-y-4">
           <Label className="font-semibold">Contract Type</Label>
           <Tabs value={billingType} onValueChange={(val) => setBillingType(val as ContractType)} className="w-full">
@@ -66,7 +81,9 @@ const RoomDetailContract = () => {
           </div>
 
           <div className="flex items-center justify-end">
-            <Button onClick={handleNavigateCreateContract}>Create {billingType} contract</Button>
+            <Button disabled={isUnitMaintenance} onClick={handleNavigateCreateContract}>
+              Create {billingType} contract
+            </Button>
           </div>
         </div>
       </div>
