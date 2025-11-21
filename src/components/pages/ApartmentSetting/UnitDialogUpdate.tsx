@@ -80,8 +80,8 @@ const UnitDialogUpdate = ({ open, onOpenChange, unit }: UnitDialogProps) => {
   )
 
   const isButtonDisable: boolean = useMemo(() => {
-    return isUpdateUnitPending || !form.formState.isValid || !form.formState.isDirty
-  }, [isUpdateUnitPending, form])
+    return isUpdateUnitPending
+  }, [isUpdateUnitPending])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
