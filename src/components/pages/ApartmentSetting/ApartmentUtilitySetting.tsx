@@ -3,7 +3,6 @@ import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
-import { z } from 'zod'
 
 import {
   Button,
@@ -21,21 +20,11 @@ import {
   Spinner,
 } from '@/components/common'
 import { PageTableEmpty } from '@/components/ui'
+import { apartmentUtilityFormSchema } from '@/constants'
 import { useRentoraApiUpdateUtility, useRentoraApiUtilityList } from '@/hooks'
-import type { IUpdateUnitServiceRequestPayload, Maybe } from '@/types'
+import type { ApartmentUtilityFormSchema, IUpdateUnitServiceRequestPayload, Maybe } from '@/types'
 import { getErrorMessage } from '@/utilities'
 
-const apartmentUtilityFormSchema = z.object({
-  waterUtilityId: z.string(),
-  waterUtilityType: z.string().optional(),
-  waterUtilityUnitPrice: z.string().optional(),
-  waterUtilityFixedPrice: z.string().optional(),
-  electricUtilityId: z.string(),
-  electricUtilityType: z.string().optional(),
-  electricUtilityUnitPrice: z.string().optional(),
-  electricUtilityFixedPrice: z.string().optional(),
-})
-type ApartmentUtilityFormSchema = z.infer<typeof apartmentUtilityFormSchema>
 const ApartmentUtilitySetting = () => {
   const { apartmentId } = useParams<{ apartmentId: string }>()
 
@@ -148,7 +137,7 @@ const ApartmentUtilitySetting = () => {
                 name="waterUtilityUnitPrice"
                 render={({ field }) => (
                   <div className="space-y-2">
-                    <Label htmlFor="gracePeriodDays">Water Utility Price (THB/Unit)</Label>
+                    <Label htmlFor="gracePeriodDays">Water Utility Price </Label>
                     <InputNumber decimal maxLength={8} placeholder="Enter water utility price" {...field} />
                     <FormMessage />
                   </div>
@@ -161,7 +150,7 @@ const ApartmentUtilitySetting = () => {
                 name="waterUtilityFixedPrice"
                 render={({ field }) => (
                   <div className="space-y-2">
-                    <Label htmlFor="gracePeriodDays">Water Utility Fixed Price (THB)</Label>
+                    <Label htmlFor="gracePeriodDays">Water Utility Fixed Price </Label>
                     <InputNumber decimal maxLength={8} placeholder="Enter water utility fixed price" {...field} />
                     <FormMessage />
                   </div>
@@ -195,7 +184,7 @@ const ApartmentUtilitySetting = () => {
                 name="electricUtilityUnitPrice"
                 render={({ field }) => (
                   <div className="space-y-2">
-                    <Label htmlFor="gracePeriodDays">Electric Utility Price (THB/Unit)</Label>
+                    <Label htmlFor="gracePeriodDays">Electric Utility Price </Label>
                     <InputNumber decimal maxLength={8} placeholder="Enter electric utility price" {...field} />
                   </div>
                 )}
@@ -207,7 +196,7 @@ const ApartmentUtilitySetting = () => {
                 name="electricUtilityFixedPrice"
                 render={({ field }) => (
                   <div className="space-y-2">
-                    <Label htmlFor="gracePeriodDays">Electric Utility Fixed Price (THB)</Label>
+                    <Label htmlFor="gracePeriodDays">Electric Utility Fixed Price </Label>
                     <InputNumber maxLength={8} placeholder="Enter electric utility fixed price" {...field} />
                   </div>
                 )}
