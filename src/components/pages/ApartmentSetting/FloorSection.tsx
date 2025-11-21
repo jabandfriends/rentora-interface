@@ -90,7 +90,7 @@ const FloorSection = ({ floor, buildingId }: IFloorSectionProps) => {
   return (
     <>
       <div className="bg-card border-theme-secondary-300 rounded-lg border p-4">
-        <div className="mb-4 flex items-center justify-between">
+        <div className="desktop:flex-row desktop:items-center mb-4 flex flex-col justify-between gap-y-2">
           <div className="flex items-center gap-3">
             <div className="bg-theme-secondary/30 rounded p-1.5">
               <Layers className="text-theme-secondary h-4 w-4" />
@@ -125,9 +125,9 @@ const FloorSection = ({ floor, buildingId }: IFloorSectionProps) => {
             </Button>
           </div>
         ) : (
-          <div>
+          <div className="space-y-2">
             {units?.length > 0 ? (
-              <div className="desktop:grid-cols-3 grid grid-cols-2 gap-3">
+              <div className="desktop:grid-cols-3 grid grid-cols-1 gap-3">
                 {units?.map((unit: IUnit) => (
                   <UnitCard key={unit.id} unit={unit} />
                 ))}
