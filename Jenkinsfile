@@ -13,9 +13,10 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+       stage('Install Dependencies') {
             steps {
                 sh """
+                    export PATH=/root/.nvm/versions/node/v22.21.1/bin:$PATH
                     pnpm install --frozen-lockfile
                 """
             }
