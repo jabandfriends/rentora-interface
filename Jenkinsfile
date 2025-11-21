@@ -16,8 +16,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh """
-                    export NVM_DIR="$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+                    export NVM_DIR="\\$HOME/.nvm"
+                    [ -s "\\$NVM_DIR/nvm.sh" ] && . "\\$NVM_DIR/nvm.sh"
                     nvm use 22.21.1
                     pnpm install --frozen-lockfile
                 """
