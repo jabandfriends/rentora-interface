@@ -43,13 +43,7 @@ const ContractReview = ({ form }: IContractReview) => {
           {/* Price per unit */}
           <ReviewItem
             icon={DollarSign}
-            label={
-              values.rentalType === 'daily'
-                ? 'Price per Night'
-                : values.rentalType === 'monthly'
-                  ? 'Price per Month'
-                  : 'Price per Year'
-            }
+            label={values.rentalType === ContractType.MONTHLY ? 'Price per Month' : 'Price per Year'}
             value={formatCurrency(Number(values.rentalPrice) || 0)}
             highlight
           />
@@ -73,7 +67,6 @@ const ContractReview = ({ form }: IContractReview) => {
                   const diffInDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
                   const price = Number(values.rentalPrice) || 0
 
-                  if (values.rentalType === ContractType.DAILY) return price * diffInDays
                   if (values.rentalType === ContractType.MONTHLY) return price * Math.ceil(diffInDays / 30)
                   if (values.rentalType === ContractType.YEARLY) return price * Math.ceil(diffInDays / 365)
                   return 0
@@ -97,11 +90,9 @@ const ContractReview = ({ form }: IContractReview) => {
                   const { days, months, years } = getDateDiff(values.startDate, values.endDate)
 
                   switch (values.rentalType) {
-                    case 'daily':
-                      return `${days} day${days > 1 ? 's' : ''}`
-                    case 'monthly':
+                    case ContractType.MONTHLY:
                       return `${months} month${months > 1 ? 's' : ''}`
-                    case 'yearly':
+                    case ContractType.YEARLY:
                       return `${years} year${years > 1 ? 's' : ''}`
                     default:
                       return `${days} day${days > 1 ? 's' : ''}`

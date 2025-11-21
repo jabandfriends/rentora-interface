@@ -1,8 +1,7 @@
 import { SelectValue } from '@radix-ui/react-select'
-import { Download } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 
-import { Button, Select, SelectContent, SelectItem, SelectTrigger } from '@/components/common'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/common'
 import { SearchBar } from '@/components/feature'
 
 type IPageTableSearchWithoutStatusProps<SortEnum extends string> = {
@@ -38,11 +37,6 @@ const PageTableSearchWithoutStatus = <SortEnum extends string>({
             </SelectContent>
           </Select>
         </div>
-
-        {/* Export PDF */}
-        <Button className="flex items-center gap-2">
-          <Download size={18} /> Export PDF
-        </Button>
       </div>
     </div>
   )
