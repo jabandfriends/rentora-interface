@@ -4,6 +4,7 @@ pipeline {
     environment {
         REGISTRY = "docker.io/chanathipcha24"
         IMAGE_NAME = "rentora-interface"
+        IMAGE_NAME_E2E = "rentora-interface-e2e"
     }
 
     stages {
@@ -54,12 +55,16 @@ pipeline {
                 }
                 withCredentials([
                     string(credentialsId: 'VITE_RENTORA_API_BASE_URL', variable: 'VITE_RENTORA_API_BASE_URL'),
+                    string(credentialsId: 'VITE_RENTORA_API_BASE_URL_E2E', variable: 'VITE_RENTORA_API_BASE_URL_E2E')
                 ]) {
                     sh """
                         echo "Building Docker image $IMAGE_TAG securely..."
                         docker build --no-cache \
                         --build-arg VITE_RENTORA_API_BASE_URL=$VITE_RENTORA_API_BASE_URL \
                         -t $REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
+                        docker build --no-cache \
+                        --build-arg VITE_RENTORA_API_BASE_URL=$VITE_RENTORA_API_BASE_URL_E2E \
+                        -t $REGISTRY/$IMAGE_NAME_E2E:$IMAGE_TAG .
                     """
                 }
             }
@@ -71,6 +76,7 @@ pipeline {
                     sh """
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
                         docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+                        docker push $REGISTRY/$IMAGE_NAME_E2E:$IMAGE_TAG
                     """
                 }
             }
