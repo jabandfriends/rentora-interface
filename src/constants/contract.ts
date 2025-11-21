@@ -2,7 +2,6 @@ import z from 'zod'
 
 export enum ContractType {
   MONTHLY = 'monthly',
-  DAILY = 'daily',
   YEARLY = 'yearly',
 }
 export const contractUpdateFormSchema = z.object({
@@ -19,7 +18,7 @@ export const MONTHLY_CONTRACT_SCHEMA = z
     unitId: z.string(),
     tenantId: z.string().min(1, 'Tenant is required'),
     tenantName: z.string(),
-    rentalType: z.enum([ContractType.MONTHLY, ContractType.DAILY, ContractType.YEARLY], {
+    rentalType: z.enum(ContractType, {
       error: 'Rental type is required',
     }),
     startDate: z.date({ error: 'Start date is required' }),
@@ -61,22 +60,7 @@ export const MONTHLY_CONTRACT_SCHEMA = z
 
     const diffInDays = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
 
-    if (data.rentalType === 'daily') {
-      if (diffInDays < 1) {
-        ctx.addIssue({
-          path: ['endDate'],
-          message: 'Daily rental must be at least 1 day',
-          code: 'custom',
-        })
-      }
-      if (diffInDays > 30) {
-        ctx.addIssue({
-          path: ['endDate'],
-          message: 'Daily rental cannot exceed 30 days',
-          code: 'custom',
-        })
-      }
-    } else if (data.rentalType === 'monthly') {
+    if (data.rentalType === ContractType.MONTHLY) {
       if (diffInDays < 28) {
         ctx.addIssue({
           path: ['endDate'],
@@ -91,7 +75,7 @@ export const MONTHLY_CONTRACT_SCHEMA = z
           code: 'custom',
         })
       }
-    } else if (data.rentalType === 'yearly') {
+    } else if (data.rentalType === ContractType.YEARLY) {
       if (diffInDays < 31 * 12 + 1) {
         ctx.addIssue({
           path: ['endDate'],
