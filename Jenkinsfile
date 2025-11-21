@@ -21,6 +21,11 @@ pipeline {
                 '''
             }
         }
+        stage('Install Cypress Binary') {
+            steps {
+                sh 'pnpm cypress install'
+            }
+        }
 
 
         stage('Lint') {
