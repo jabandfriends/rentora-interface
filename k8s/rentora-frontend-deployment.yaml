@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rentora-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rentora-frontend
+  template:
+    metadata:
+      labels:
+        app: rentora-frontend
+    spec:
+      containers:
+        - name: frontend
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rentora-frontend
+spec:
+  selector:
+    app: rentora-frontend
+  ports:
+    - protocol: TCP
+      port: 80       # internal port
+      targetPort: 80 # container port
+  type: ClusterIP
