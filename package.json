@@ -7,7 +7,8 @@
     "dev": "vite --port 5173",
     "build": "tsc -b && vite build",
     "lint": "eslint . --fix",
-    "preview": "vite preview --port 5173"
+    "preview": "vite preview --port 5173",
+    "cypress:unit": "pnpm cypress run --e2e --spec 'cypress/e2e/unit/**/*.cy.{js,ts,jsx,tsx}'"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
