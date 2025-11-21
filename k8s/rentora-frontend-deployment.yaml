@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
+          image: chanathipcha24/rentora-interface:latest
           ports:
             - containerPort: 80
 ---
