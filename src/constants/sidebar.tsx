@@ -1,10 +1,12 @@
 import {
+  BookOpenText,
   BookUser,
   DollarSign,
   FileSpreadsheet,
-  FileText,
+  Grid2x2,
   Home,
   Package,
+  Receipt,
   Settings,
   Table,
   Wrench,
@@ -86,14 +88,14 @@ export const SIDEBAR_CONFIG: Array<SidebarItems> = [
   {
     type: 'item',
     label: 'Payments',
-    icon: <DollarSign size={16} />,
+    icon: <Receipt size={16} />,
     roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING],
     to: (id?: string) => ROUTES.payment.getPath(id),
   },
   {
     type: 'item',
     label: 'All Rooms',
-    icon: <Table size={16} />,
+    icon: <Grid2x2 size={16} />,
     roles: [TENANT_ROLE.ADMIN, TENANT_ROLE.ACCOUNTING],
     to: (id?: string) => ROUTES.allRoom.getPath(id),
   },
@@ -114,7 +116,7 @@ export const SIDEBAR_CONFIG: Array<SidebarItems> = [
   {
     type: 'collapsible',
     label: 'Reports',
-    icon: <FileText size={16} />,
+    icon: <BookOpenText size={16} />,
     collapsibleMenu: [
       {
         label: 'Electric & Water Report',
