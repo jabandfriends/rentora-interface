@@ -5,7 +5,7 @@ import type { VariantProps } from 'tailwind-variants'
 
 import { Card } from '@/components/common'
 import { Badge } from '@/components/ui'
-import { CONTRACT_STATUS } from '@/enum'
+import { CONTRACT_STATUS, UnitStatus } from '@/enum'
 import { type IContract, type Maybe } from '@/types'
 import { contractHandlePDFDownload, formatCurrency, formatDate } from '@/utilities'
 
@@ -22,9 +22,10 @@ type IContractDetailProps = {
   data: Maybe<IContract>
   isLoading: boolean
   handleOpenDeleteModal: () => void
+  unitStatus: UnitStatus
 }
 
-const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDetailProps) => {
+const ContractDetail = ({ data, unitStatus, isLoading, handleOpenDeleteModal }: IContractDetailProps) => {
   const [isCollapse, setIsCollapse]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
   const [isExporting, setIsExporting]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false)
   const [isContractUpdateModalOpen, setIsContractUpdateModalOpen]: [boolean, Dispatch<SetStateAction<boolean>>] =
@@ -76,7 +77,7 @@ const ContractDetail = ({ data, isLoading, handleOpenDeleteModal }: IContractDet
   }
 
   if (!data) {
-    return <RoomDetailContract />
+    return <RoomDetailContract unitStatus={unitStatus} />
   }
 
   return (

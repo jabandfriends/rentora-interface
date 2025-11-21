@@ -86,7 +86,12 @@ const RoomDetailBody = () => {
       />
       <div className="desktop:grid-cols-2 grid gap-2">
         {/* Left Column - Contract Details */}
-        <ContractDetail handleOpenDeleteModal={handleOpenModal} data={currentContract} isLoading={isLoading} />
+        <ContractDetail
+          unitStatus={unitData.unitStatus}
+          handleOpenDeleteModal={handleOpenModal}
+          data={currentContract}
+          isLoading={isLoading}
+        />
 
         {/* Right Column - Service Addition */}
         <RoomDetailServices />
