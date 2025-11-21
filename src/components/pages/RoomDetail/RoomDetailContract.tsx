@@ -1,4 +1,4 @@
-import { Calendar, CalendarRange, Moon } from 'lucide-react'
+import { Calendar, CalendarRange } from 'lucide-react'
 import { type ReactNode, useCallback, useState } from 'react'
 import { type NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 
@@ -25,7 +25,7 @@ const RoomDetailContract = () => {
         <div className="space-y-4">
           <Label className="font-semibold">Contract Type</Label>
           <Tabs value={billingType} onValueChange={(val) => setBillingType(val as ContractType)} className="w-full">
-            <TabsList className="bg-theme-secondary-100/80 grid h-auto w-full grid-cols-3 p-1">
+            <TabsList className="bg-theme-secondary-100/80 grid h-auto w-full grid-cols-2 p-1">
               <TabsTrigger
                 value={ContractType.MONTHLY}
                 className="text-theme-secondary-500 data-[state=active]:text-theme-white data-[state=active]:bg-theme-primary flex flex-col items-center gap-2 py-4 data-[state=active]:shadow-md"
@@ -34,14 +34,7 @@ const RoomDetailContract = () => {
                 <span className="font-semibold">Monthly</span>
                 <span className="text-body-2 opacity-90">Standard billing</span>
               </TabsTrigger>
-              <TabsTrigger
-                value={ContractType.DAILY}
-                className="text-theme-secondary-500 data-[state=active]:text-theme-white data-[state=active]:bg-theme-primary flex flex-col items-center gap-2 py-4 data-[state=active]:shadow-md"
-              >
-                <Moon className="h-5 w-5" />
-                <span className="font-semibold">Daily</span>
-                <span className="text-body-2 opacity-90">Short-term</span>
-              </TabsTrigger>
+
               <TabsTrigger
                 value={ContractType.YEARLY}
                 className="text-theme-secondary-500 data-[state=active]:text-theme-white data-[state=active]:bg-theme-primary flex flex-col items-center gap-2 py-4 data-[state=active]:shadow-md"
@@ -63,13 +56,6 @@ const RoomDetailContract = () => {
               />
             )}
 
-            {billingType === ContractType.DAILY && (
-              <ContractDescription
-                icon={<Moon className="h-5 w-5" />}
-                title="Daily Contract"
-                description="Short-term daily rentals. Perfect for guests and temporary stays."
-              />
-            )}
             {billingType === ContractType.YEARLY && (
               <ContractDescription
                 icon={<CalendarRange className="h-5 w-5" />}

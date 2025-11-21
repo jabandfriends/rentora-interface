@@ -16,7 +16,7 @@ const AllApartmentHeader = ({ totalApartments, totalActiveApartments, isLoading 
         type: 'success',
       },
       {
-        title: 'Total Inactive Apartments',
+        title: 'Total Unready Apartments',
         count: totalApartments - totalActiveApartments,
         icon: <Building className="text-theme-error" />,
         type: 'error',

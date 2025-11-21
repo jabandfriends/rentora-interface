@@ -26,6 +26,8 @@ import { useRentoraApiAuthenticate } from '@/hooks'
 import type { AUTHENTICATION_FORM_SCHEMA_TYPE, IRentoraApiClientAuthenticateResponse, SetAtom } from '@/types'
 import { cn, getErrorMessage } from '@/utilities'
 
+import UserPasswordDialog from './UserPasswordDialog'
+
 const Authentication = () => {
   const [apiErrorMsg, setApiErrorMsg]: [string, Dispatch<SetStateAction<string>>] = useState('')
   const navigate: NavigateFunction = useNavigate()
@@ -126,12 +128,16 @@ const Authentication = () => {
         <div className="desktop:w-1/2 desktop:p-16 flex w-full flex-col justify-center space-y-10 p-8">
           {/* Logo/Brand */}
           <div className="space-y-8">
-            <div className="flex items-center gap-2">
-              <div className="bg-theme-primary flex size-10 items-center justify-center rounded-lg">
-                <Building2 className="text-theme-white size-5" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="bg-theme-primary flex size-10 items-center justify-center rounded-lg">
+                  <Building2 className="text-theme-white size-5" />
+                </div>
+                <h4>Rentora</h4>
               </div>
-              <h4>Rentora</h4>
+              <UserPasswordDialog />
             </div>
+
             <div className="space-y-2">
               <h2>Welcome back</h2>
               <p className="text-body-2 text-theme-secondary-600">Enter your credentials to access your account</p>
