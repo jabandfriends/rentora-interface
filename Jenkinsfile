@@ -16,7 +16,9 @@ pipeline {
        stage('Install Dependencies') {
             steps {
                 sh """
-                    export PATH=/root/.nvm/versions/node/v22.21.1/bin:$PATH
+                    export NVM_DIR="$HOME/.nvm"
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                    nvm use 22
                     pnpm install --frozen-lockfile
                 """
             }
