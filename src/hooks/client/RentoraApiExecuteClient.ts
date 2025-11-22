@@ -19,6 +19,7 @@ import type {
   IMeterReadingRequestPayload,
   IMeterReadingUpdateRequestPayload,
   IPutPresignedUrlRequest,
+  IRegisterPayload,
   IRentoraApiClientAuthenticateResponse,
   IRentoraApiClientCreateAdhocInvoiceResponse,
   IRentoraApiClientCreateApartmentResponse,
@@ -55,6 +56,8 @@ import { RentoraApiBaseClient } from './RentoraApiBaseClient'
 
 export class RentoraApiExecuteClient extends RentoraApiBaseClient {
   readonly key: Record<RentoraApiExecuteClientKey, string> = {
+    //register
+    register: 'REGISTER',
     authenticate: 'AUTHENTICATE',
     createApartment: 'CREATE_APARTMENT',
     putPresignedUrl: 'PUT_PRESIGNED_URL',
@@ -119,6 +122,11 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     const response: AxiosResponse<IRentoraApiClientAuthenticateResponse, unknown> =
       await this.axiosInstance.post<IRentoraApiClientAuthenticateResponse>(`/api/auth/login`, payload)
     return response.data.data
+  }
+
+  async userRegister(payload: IRegisterPayload): Promise<void> {
+    const response = await this.axiosInstance.post<void>('/api/auth/register', payload)
+    return response.data
   }
 
   async createApartment(

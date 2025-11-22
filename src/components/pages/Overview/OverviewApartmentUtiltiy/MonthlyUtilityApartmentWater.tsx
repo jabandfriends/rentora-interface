@@ -5,7 +5,6 @@ import {
   type ChartConfig,
   ChartContainer,
   ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
   EmptyPage,
@@ -54,7 +53,7 @@ const MonthlyUtilityApartmentWater = ({ item, isLoading }: IApartmentUtilityElec
           />
           <YAxis tickLine={false} tickMargin={10} axisLine={false} />
           <ChartTooltip content={<ChartTooltipContent />} />
-          <ChartLegend content={<ChartLegendContent />} />
+          <ChartLegend />
           <Bar dataKey="usageAmount" fill="#3b82f6" radius={10} />
         </BarChart>
       </ChartContainer>
