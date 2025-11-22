@@ -146,9 +146,9 @@ const MaintenanceTable = ({
               <TableCell>{item.title}</TableCell>
               <TableCell>{item.unitName}</TableCell>
               <TableCell>
-                {item.appointmentDate ? formatDate(new Date(item.appointmentDate), 'DD/MM/YYYY') : <FieldEmpty />}
+                {item.appointmentDate ? formatDate(new Date(item.appointmentDate), 'DD-MM-YYYY') : <FieldEmpty />}
               </TableCell>
-              <TableCell>{item.dueDate ? formatDate(new Date(item.dueDate), 'DD/MM/YYYY') : <FieldEmpty />}</TableCell>
+              <TableCell>{item.dueDate ? formatDate(new Date(item.dueDate), 'DD-MM-YYYY') : <FieldEmpty />}</TableCell>
               <TableCell className="capitalize">
                 <Badge variant={priorityBadgeVariant(item.priority)}>{item.priority}</Badge>
               </TableCell>

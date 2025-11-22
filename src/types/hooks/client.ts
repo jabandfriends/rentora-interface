@@ -98,3 +98,4 @@ export type RentoraApiExecuteClientKey =
   | 'updatePayment'
   | 'createReadingContact'
   | 'adhocInvoiceUpdate'
+  | 'register'

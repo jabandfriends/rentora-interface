@@ -6,6 +6,17 @@ export interface IAuthRequest {
   password: string
 }
 
+export type IRegisterPayload = {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  phoneNumber: string
+  isRegistered: boolean
+}
+
+export type IUseRentoraApiRegister = IBaseUseMutation<void, IRegisterPayload>
+
 //hooks type useRentoraApiAuthenticate
 export type IUseRentoraApiAuthenticate = IBaseUseMutation<IRentoraApiClientAuthenticateResponse['data'], IAuthRequest>
 
