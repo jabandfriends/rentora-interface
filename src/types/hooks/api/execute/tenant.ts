@@ -13,6 +13,15 @@ type ITenantExecuteBasePayload = {
   emergencyContactPhone: string
   role: TENANT_ROLE
 }
+
+export type IInviteUserPayload = {
+  email: string
+  role?: TENANT_ROLE
+}
+
+//hook
+export type IUseRentoraInviteUser = IBaseUseMutation<void, IInviteUserPayload>
+
 //hooks type useRentoraApiTenantCreate
 export type IUseRentoraApiTenantCreate = IBaseUseMutation<void, ICreateTenantRequestPayload>
 
