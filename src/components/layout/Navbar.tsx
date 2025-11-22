@@ -74,12 +74,12 @@ const NavBar = ({
 
         {/* Right Profile*/}
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-          <DropdownMenuTrigger className="desktop:block hidden" onClick={handleSetDropdown}>
+          <DropdownMenuTrigger className="" onClick={handleSetDropdown}>
             <div className="hover:bg-theme-night-800/15 text-theme-secondary flex cursor-pointer items-center space-x-4 rounded-lg px-2 py-1 duration-200 focus:outline-none">
               <Avatar>
                 <AvatarFallback>{userData?.firstName.charAt(0)}</AvatarFallback>
               </Avatar>
-              <div className="text-body-2 flex flex-col">
+              <div className="text-body-2 desktop:flex hidden flex-col">
                 <p className="capitalize">{userName}</p>
                 {currentUserRole && (
                   <Badge variant="outline" className="text-body-4 capitalize">
