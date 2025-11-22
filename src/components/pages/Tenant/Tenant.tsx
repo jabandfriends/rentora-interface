@@ -12,6 +12,7 @@ import { DEFAULT_TENANT_LIST_DATA, ROUTES, TENANT_STATUS } from '@/constants'
 import { useRentoraApiTenantList } from '@/hooks'
 import type { ISearchBarProps, IStatsCardProps } from '@/types'
 
+import InviteModal from './InviteModal'
 import TenantTable from './TenantTable'
 
 export const Tenant = () => {
@@ -93,6 +94,7 @@ export const Tenant = () => {
   //   },
   //   [setValue, setCurrentPage],
   // )
+
   const handlePageChange = useCallback(
     (page: number) => {
       if (page < 1) return
@@ -142,9 +144,12 @@ export const Tenant = () => {
         stats={tenantStats}
         isLoading={isLoading}
         actionButton={
-          <Button onClick={navigateToCreateTenant} className="flex items-center gap-2">
-            <Plus size={18} /> New Tenant
-          </Button>
+          <div className="flex items-center gap-x-2">
+            <InviteModal />
+            <Button onClick={navigateToCreateTenant} className="flex items-center gap-2">
+              <Plus size={18} /> New Tenant
+            </Button>
+          </div>
         }
       />
       <PageTableSearch

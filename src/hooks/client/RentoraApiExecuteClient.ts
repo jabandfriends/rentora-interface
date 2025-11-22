@@ -16,6 +16,7 @@ import type {
   IDeleteUnitServiceParams,
   IFirsttimePasswordResetRequestPayload,
   IGenerateMonthlyInvoiceRequestPayload,
+  IInviteUserPayload,
   IMeterReadingRequestPayload,
   IMeterReadingUpdateRequestPayload,
   IPutPresignedUrlRequest,
@@ -116,6 +117,9 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
     createReadingContact: 'CREATE_READING_CONTACT',
     //adhoc invoice update
     adhocInvoiceUpdate: 'ADHOC_INVOICE_UPDATE',
+
+    //invite
+    inviteUser: 'INVITE_USER',
   }
 
   async authenticate(payload: IAuthRequest): Promise<IRentoraApiClientAuthenticateResponse['data']> {
@@ -467,5 +471,13 @@ export class RentoraApiExecuteClient extends RentoraApiBaseClient {
       payload,
     )
     return response.data.data
+  }
+
+  async inviteUser(apartmentId: string, payload: IInviteUserPayload): Promise<void> {
+    const response = await this.axiosWithAuthInstance.post<void>(
+      `/api/apartments/manage/tenant/${apartmentId}/invite`,
+      payload,
+    )
+    return response.data
   }
 }
