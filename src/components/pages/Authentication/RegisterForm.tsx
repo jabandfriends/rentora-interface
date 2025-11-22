@@ -65,7 +65,7 @@ const RegisterForm = ({ setTab }: IRegisterForm) => {
   }, [isRegisterPending])
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleRegister)} className="space-y-5">
+      <form onSubmit={form.handleSubmit(handleRegister)} className="space-y-2">
         {REGISTER_FIELDS.map(({ key, label, placeholder, type }) => (
           <FormField
             control={form.control}
